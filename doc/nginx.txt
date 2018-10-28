@@ -1,0 +1,22 @@
+1.关闭SELinux。
+
+    vi /etc/selinux/config
+
+        SELINUX=disabled
+
+    reboot
+
+2.yum -y install gcc zlib zlib-devel openssl openssl-devel pcre pcre-devel
+
+3. cd /opt
+
+   mkdir nginx
+
+   tar -zxvf nginx-1.12.2.tar.gz
+
+4. ./configure --with-http_stub_status_module  --without-http-cache  --with-http_ssl_module  --with-http_realip_module && make && make install
+
+5. 查看nginx安装状态。
+
+    /usr/local/nginx/sbin/nginx -t
+

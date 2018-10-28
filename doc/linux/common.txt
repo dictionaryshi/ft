@@ -1,0 +1,167 @@
+# ls -alhS /opt/ (长格式展示目录下所有文件, 并合理显示文件大小, 并按照文件大小排序)
+    - (代表文件)
+    d (代表目录)
+    l (软链接文件)
+
+# ls -dlh /etc/ (查看某个目录的权限信息)
+
+# ls -alhi /opt/ (查看目录和文件的i节点号)
+
+# pwd (查看当前所在目录的绝对路径)
+
+ls -l |grep "^-"|wc -l (查看文件夹下文件的个数)
+ls -lR /root | grep "^d" | wc -l (递归查看文件夹个数)
+
+# mkdir -p /tmp/com/guazi/ft/java (递归创建目录)
+
+# mkdir -p /tmp/com/guazi/java /tmp/com/guazi/php (一次创建多个目录)
+
+# cp -p install.log install.log.syslog /tmp/ (复制文件保留文件属性)
+
+# cp -rp /root/ /tmp/ft (复制文件夹并改名)
+
+# mv ft.txt /root/chunyang.txt (移动文件)
+
+# rm -rf chunyang.txt (删除文件)
+
+# touch ft.txt (创建文件)
+
+# cat -n /etc/issue (显示文件内容, 并显示行号)
+
+# tac /etc/issue (倒叙显示文件内容)
+
+# less /etc/services (分页查看文件内容, 可以查找指定字符串)
+
+# cat -n /etc/services | less (control + f, control + b)
+
+# head -n 20 /etc/services (查看文件前20行内容)
+
+# tail -n 20 /etc/services (查看文件后20行内容)
+
+# tail -n 20 -f ft.txt (动态查看文件末尾内容)
+
+# ln -s /etc/sysconfig/network-scripts/ifcfg-eth0 /tmp/eth0.soft (创建文件软链接)
+# ln -s /etc/sysconfig/network-scripts/ /tmp/network-scripts.dir.soft (创建目录软链接)
+
+# ping www.baidu.com (测试网络连通性)
+
+# ifconfig (查看本机IP)
+
+# netstat -tlun (查看本机开启的端口)
+
+# netstat -anp (查看正在连接本机的IP)
+
+# netstat -rn (查看网关)
+
+# service network restart (重启网络服务)
+
+# setup (修改IP地址)
+
+# cat /etc/sysconfig/network-scripts/ifcfg-eth0 (查看网络配置)
+
+    ONBOOT=yes
+    BOOTPROTO=static
+    IPADDR=192.168.199.224
+    NETMASK=255.255.255.0
+    GATEWAY=192.168.199.1
+    DNS1=114.114.114.114
+
+# mount /dev/sr0 /mnt/cdroom/ (挂载光盘)
+# umount /dev/sr0 (卸载光盘)
+
+# shutdown -r now (重启服务器)
+
+# logout (退出远程登陆)
+
+# df -Th (查看文件系统使用情况)
+
+# ll -h (查看文件大小)
+
+# du -sh /opt/ (查看目录总大小)
+
+# fdisk -l (查看设备)
+
+# lsblk -f (查看分区挂载情况)
+
+# free -h (查看内存使用情况)
+
+常用命令目录:
+
+    cd /bin
+    cd /usr/bin
+    cd /usr/local/bin
+
+管理员命令目录:
+
+    cd /sbin
+    cd /usr/sbin
+    cd /usr/local/sbin
+
+普通用户家目录:
+
+    cd /home/
+
+管理员目录:
+
+    cd /root/
+
+系统配置文件目录:
+
+    cd /etc/
+
+用户应用程序目录:
+
+    cd /usr/
+
+引导linux的核心文件目录:
+
+    cd /boot/
+
+系统临时文件目录:
+
+    cd /tmp/
+
+设备文件目录:
+
+    cd /dev/
+
+挂载目录:
+
+    cd /mnt/
+
+软件存放目录:
+
+    cd /opt/
+
+软件安装后的目录:
+
+    cd /usr/local/
+
+经常变化的文件存放目录:
+
+    cd /var/
+
+安全相关目录:
+
+     cd /selinux/
+
+查看linux发行版本:
+
+    cat /etc/redhat-release
+
+date (显示系统时间)
+
+date '+%Y-%m-%d %H:%M:%S' (年月日 时分秒)
+
+cal (查看当前月日历)
+cal 2018 (查看全年日历)
+
+ps -ef | grep ft-0.0.1-SNAPSHOT.jar (可以查看父进程)
+ps aux | grep ft-0.0.1-SNAPSHOT.jar (可以查看进程对CPU和内存的使用情况)
+
+ps aux | grep sshd (配合kill将用户踢下线)
+
+top (P:按CPU使用排序, M:按内存使用排序)
+
+sudo passwd (Mac设置初始root密码)
+

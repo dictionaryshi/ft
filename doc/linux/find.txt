@@ -1,0 +1,29 @@
+# find / -name '*fcfg*' (根据文件名称模糊查找文件)
+
+# find / -name 'ifcfg?????' (?代表字符的个数)
+
+# find / -iname '*IFCFG*' (查找并忽略文件名大小写)
+
+1个数据块:512字节(0.5K), 100MB = 1024K * 100 * 2 个数据块
+
+# find / -size +100M (查询大于100MB的文件)
+
+# find /home/ -user xuting (查找指定用户的文件)
+
+# find /home/ -group chunyang (查找指定用户组的文件)
+
+# find /home/ -name '*ft*' -type f (查找文件)
+# find /home/ -name '*ft*' -type d (查找目录)
+
+# find /home/ -name '*ft*' -type f -exec ls -lh {} \; (查找并对结果集进行操作)
+
+# find / -inum 655376 -exec rm -rf {} \; (根据i节点查询并删除文件)
+
+# which ifconfig (查看系统命令所在目录)
+
+# grep -in "Multiuser" /etc/inittab (查找文件内容并忽略大小写)
+# grep -vn "^#" /etc/inittab (查看文件并排除注释)
+
+#统计访问平均时长
+grep 'url==>http://127.0.0.1/add' sql.txt  | grep -aoP '(?<=cost==>)\d+' | awk '{a++; b+=$1} END {print a, b, b/a}'
+

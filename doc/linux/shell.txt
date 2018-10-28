@@ -1,0 +1,65 @@
+# echo 'Hello World!' (向控制台输出字符串)
+
+\n (换行符)
+\r (回车键)
+\t (制表符)
+
+# echo -e 'a\tb\tc\nd\te\tf' (输出转义字符)
+
+# echo -e '\e[1;31m 史春阳 \e[0m' (输出红色字体)
+# echo -e '\e[1;32m 史春阳 \e[0m' (输出绿色字体)
+
+#!/bin/sh (shell文件开头)
+
+# history (查看历史命令)
+
+$ vi .bash_profile
+# vi /root/.bashrc
+
+    alias ali='ssh root@47.98.144.225' (为命令定义别名)
+    alias vi='vim'
+
+$ source .bash_profile (重新加载环境文件)
+# source /root/.bashrc
+
+终端快捷键:
+
+    control + A (将光标移动到命令开头)
+
+    control + E (将光标移动到命令结尾)
+
+    control + C (强制中断当前执行命令)
+
+    control + U (剪切光标之前的命令)
+    control + K (前切光标之后的命令)
+    control + Y (粘贴剪切内容)
+
+    control + R (搜索历史命令)
+
+    control + D (退出终端)
+
+    control + S (暂停屏幕输出)
+    control + Q (恢复屏幕输出)
+
+将命令执行结果输出到文件:
+
+    # du -sh &>> temp.out (追加式)
+    # ll -h &> temp.out (覆盖式)
+    # date &> temp.out
+
+# ll && echo 'yes' || echo 'no' (判断命令执行是否成功)
+
+# ll -h /etc/ | less (命令1的输出作为命令2的输入)
+
+# netstat -an | grep --color=auto 'ESTABLISHED' (查看网络连接)
+
+# username=scy
+# echo $username (输出变量)
+
+export JAVA_HOME="/opt/jdk/jdk1.8.0_152"
+export PATH="$JAVA_HOME/bin:$PATH" (声明环境变量)
+# echo $PATH
+
+# date;httpCode=$(curl -s -o /dev/null -m 10 --connect-timeout 10 http://127.0.0.1:80/ -w %{http_code});date (检测url并获取响应码)
+# echo $httpCode
+

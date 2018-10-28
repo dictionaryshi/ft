@@ -1,0 +1,21 @@
+1.cd /opt/
+
+2.mkdir jdk
+
+3.cd jdk
+
+4.tar -zxvf jdk-8u152-linux-x64.tar.gz
+
+5.vi /etc/profile
+
+    export JAVA_HOME="/opt/jdk/jdk1.8.0_152"
+    export PATH="$JAVA_HOME/bin:$PATH"
+
+6.source /etc/profile
+
+7.echo $PATH
+
+8.java -version
+
+9.echo $JAVA_HOME
+

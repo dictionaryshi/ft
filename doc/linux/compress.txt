@@ -1,0 +1,9 @@
+# gzip ft.txt (压缩文件, 不保留原文件, 不能压缩目录)
+# gzip -d ft.txt.gz (解压.gz文件, 不保留原文件)
+
+# tar -zcvf etc.tar.gz /etc/ (将/etc目录打包并压缩, 并保存在当前目录中)
+# tar -zxvf etc.tar.gz (解压缩, 并解包)
+
+zip -r etc.zip /etc/ (压缩etc目录)
+unzip -d /tmp etc.zip (解压到指定目录中)
+

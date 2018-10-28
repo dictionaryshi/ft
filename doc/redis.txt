@@ -1,0 +1,14 @@
+1.cd /opt
+
+2.mkdir redis
+
+3.tar -zxvf redis-3.0.7.tar.gz
+
+4.yum install -y gcc
+
+5.cd /opt/redis/redis-3.0.7
+
+6.make (如果出错make distclean)
+
+7.make install
+
