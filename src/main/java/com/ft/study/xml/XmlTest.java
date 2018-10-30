@@ -1,14 +1,19 @@
-package com.ft.xml;
+package com.ft.study.xml;
 
+import com.ft.model.mdo.City;
+import com.ft.model.mdo.Province;
 import com.thoughtworks.xstream.XStream;
-import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class XstreamTest {
-	@Test
-	public void model2Xml() {
+/**
+ * XmlTest
+ *
+ * @author shichunyang
+ */
+public class XmlTest {
+	public static void main(String[] args) {
 		Province ln = new Province(1, "辽宁省");
 		ln.addCity(new City(30, "沈阳", "shenyang"));
 		ln.addCity(new City(31, "大连", "dalian"));

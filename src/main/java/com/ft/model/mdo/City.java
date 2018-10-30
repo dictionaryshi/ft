@@ -1,4 +1,4 @@
-package com.ft.xml;
+package com.ft.model.mdo;
 
 import lombok.Data;
 
