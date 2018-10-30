@@ -1,6 +1,6 @@
 package com.ft.java8;
 
-import com.ft.java8.model.Employee;
+import com.ft.model.mdo.Employee;
 import com.ft.util.JsonUtil;
 import org.junit.Test;
 

@@ -1,4 +1,4 @@
-package com.ft.java8.model;
+package com.ft.model.mdo;
 
 import lombok.Data;
 

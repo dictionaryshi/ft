@@ -1,4 +1,4 @@
-package com.ft.basic;
+package com.ft.study.dom4j;
 
 import com.ft.util.Dom4jUtil;
 import org.dom4j.Document;
@@ -9,7 +9,12 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.util.List;
 
-public class Dom4jUtilTest {
+/**
+ * Dom4j
+ *
+ * @author shichunyang
+ */
+public class Dom4jTest {
 	public static final String CHINA_FILE_PATH = "src/main/resources/china.xml";
 	public static final String DATABASE_FILE_PATH = "src/main/resources/database.xml";
 
