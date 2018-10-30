@@ -18,14 +18,6 @@ public class BasicTest {
 	}
 
 	@Test
-	public void InnerClass() {
-		Body body = new Body();
-		body.bodyFunction();
-
-		Body.InnerClass.show2();
-	}
-
-	@Test
 	public void charTest() {
 		char[] chs = new char[2];
 		chs[1] = 'a';

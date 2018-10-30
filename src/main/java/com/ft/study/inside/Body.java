@@ -1,4 +1,4 @@
-package com.ft.basic;
+package com.ft.study.inside;
 
 /**
  * 外部类
@@ -36,5 +36,12 @@ public class Body {
 		public static void show2() {
 			System.out.println("InnerClass static method");
 		}
+	}
+
+	public static void main(String[] args) {
+		Body body = new Body();
+		body.bodyFunction();
+
+		Body.InnerClass.show2();
 	}
 }
