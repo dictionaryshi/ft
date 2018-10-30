@@ -1,7 +1,6 @@
 package com.ft.basic;
 
 import com.ft.db.dbutil.TxDataSourcePool;
-import com.ft.model.mdo.UserDO;
 import org.junit.Test;
 
 import java.lang.management.ManagementFactory;
@@ -16,11 +15,6 @@ public class BasicTest {
 		System.out.println(result);
 
 		System.out.println(2 << 3);
-	}
-
-	@Test
-	public void extendsTest() {
-		new Son();
 	}
 
 	@Test
@@ -94,11 +88,6 @@ public class BasicTest {
 	}
 
 	@Test
-	public void base() {
-		new A();
-	}
-
-	@Test
 	public void connection() throws Exception {
 		Connection conn = new TxDataSourcePool().getConnection();
 		// 读未提交
@@ -109,54 +98,5 @@ public class BasicTest {
 		conn.setTransactionIsolation(Connection.TRANSACTION_REPEATABLE_READ);
 		// 串行化
 		conn.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
-	}
-}
-
-class A extends Base<UserDO> {
-}
-
-class Grandfather {
-	static {
-		System.out.println("Grandfather静态代码块");
-	}
-
-	{
-		System.out.println("Grandfather构造代码块");
-	}
-
-	public Grandfather() {
-		super();
-		System.out.println("Grandfather默认构造方法");
-	}
-}
-
-class Father extends Grandfather {
-
-	static {
-		System.out.println("Father静态代码块");
-	}
-
-	{
-		System.out.println("Father构造代码块");
-	}
-
-	public Father() {
-		super();
-		System.out.println("Father默认构造方法");
-	}
-}
-
-class Son extends Father {
-	static {
-		System.out.println("Son静态代码块");
-	}
-
-	{
-		System.out.println("Son构造代码块");
-	}
-
-	public Son() {
-		super();
-		System.out.println("Son默认构造方法");
 	}
 }
