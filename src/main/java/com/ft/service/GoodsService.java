@@ -124,7 +124,7 @@ public class GoodsService {
 		int count = goodsMapper.countPaging(goodsDTO);
 		if (count == 0) {
 			pageResult.setTotal(0);
-			pageResult.setDataList(new ArrayList<>());
+			pageResult.setList(new ArrayList<>());
 			return pageResult;
 		}
 
@@ -135,7 +135,7 @@ public class GoodsService {
 		this.format(goods);
 
 		pageResult.setTotal(count);
-		pageResult.setDataList(goods);
+		pageResult.setList(goods);
 
 		return pageResult;
 	}

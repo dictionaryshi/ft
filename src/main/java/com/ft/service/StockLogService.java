@@ -60,7 +60,7 @@ public class StockLogService {
 		int count = stockLogMapper.countPagination(stockLogDTO);
 		if (count == 0) {
 			pageResult.setTotal(0);
-			pageResult.setDataList(new ArrayList<>());
+			pageResult.setList(new ArrayList<>());
 			return pageResult;
 		}
 
@@ -71,7 +71,7 @@ public class StockLogService {
 		this.format(stockLogs);
 
 		pageResult.setTotal(count);
-		pageResult.setDataList(stockLogs);
+		pageResult.setList(stockLogs);
 
 		return pageResult;
 	}

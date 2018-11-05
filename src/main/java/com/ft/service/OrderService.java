@@ -56,7 +56,7 @@ public class OrderService {
 		int count = orderMapper.countPagination(orderDTO);
 		if (count == 0) {
 			pageResult.setTotal(0);
-			pageResult.setDataList(new ArrayList<>());
+			pageResult.setList(new ArrayList<>());
 			return pageResult;
 		}
 
@@ -67,7 +67,7 @@ public class OrderService {
 		orders.forEach(this::format);
 
 		pageResult.setTotal(count);
-		pageResult.setDataList(orders);
+		pageResult.setList(orders);
 
 		return pageResult;
 	}
