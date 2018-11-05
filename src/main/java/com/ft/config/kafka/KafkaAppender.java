@@ -52,14 +52,14 @@ public class KafkaAppender extends AppenderBase<ILoggingEvent> {
 			@SuppressWarnings("unchecked")
 			KafkaTemplate<String, String> kafkaTemplate = SpringContextUtil.getBean("consignKafkaTemplate", KafkaTemplate.class);
 			String topic = SpringContextUtil.getApplicationContext().getEnvironment().getProperty("kafka.consign.topic");
-			if (!StringUtil.isNull(topic)) {
-				kafkaTemplate.send(topic, "log_" + RandomUtils.nextDouble(), JsonUtil.object2Json(log));
-			}
 
 			String cost = "cost==>";
 			if (log.getLevel().equals(ERROR)) {
 				LogMapper logMapper = SpringContextUtil.getBean(LogMapper.class);
 				logMapper.insertSelective(log);
+				if (!StringUtil.isNull(topic)) {
+					kafkaTemplate.send(topic, "log_" + RandomUtils.nextDouble(), JsonUtil.object2Json(log));
+				}
 			} else if (log.getMessage().contains(cost)) {
 				long targetTime = 3000;
 				String regex = cost + "[\\d]+";
