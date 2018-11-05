@@ -20,5 +20,6 @@ public class ConsignListener {
 		log.info("kafka consumer start");
 		log.info("kafka key==>{}, value==>{}", record.key(), record.value());
 		log.info("kafka consumer finish");
+		MDC.remove(ControllerAspect.REQUEST_ID);
 	}
 }

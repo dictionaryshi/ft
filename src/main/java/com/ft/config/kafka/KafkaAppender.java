@@ -2,11 +2,15 @@ package com.ft.config.kafka;
 
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.AppenderBase;
-import com.ft.util.SpringContextUtil;
-import com.ft.web.plugin.ControllerAspect;
-import com.ft.model.mdo.LogDO;
 import com.ft.dao.LogMapper;
+import com.ft.model.mdo.LogDO;
+import com.ft.util.JsonUtil;
+import com.ft.util.SpringContextUtil;
+import com.ft.util.StringUtil;
+import com.ft.web.plugin.ControllerAspect;
+import org.apache.commons.lang3.RandomUtils;
 import org.slf4j.MDC;
+import org.springframework.kafka.core.KafkaTemplate;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -45,10 +49,12 @@ public class KafkaAppender extends AppenderBase<ILoggingEvent> {
 		log.setRequestId(requestId);
 
 		if (SpringContextUtil.getApplicationContext() != null) {
-			//@SuppressWarnings("unchecked")
-			//KafkaTemplate<String, String> kafkaTemplate = SpringContextUtil.getBean("consignKafkaTemplate", KafkaTemplate.class);
-			//String topic = SpringContextUtil.getApplicationContext().getEnvironment().getProperty("kafka.consign.topic");
-			//kafkaTemplate.send(topic, "log", JsonUtil.object2Json(log));
+			@SuppressWarnings("unchecked")
+			KafkaTemplate<String, String> kafkaTemplate = SpringContextUtil.getBean("consignKafkaTemplate", KafkaTemplate.class);
+			String topic = SpringContextUtil.getApplicationContext().getEnvironment().getProperty("kafka.consign.topic");
+			if (!StringUtil.isNull(topic)) {
+				kafkaTemplate.send(topic, "log_" + RandomUtils.nextDouble(), JsonUtil.object2Json(log));
+			}
 
 			String cost = "cost==>";
 			if (log.getLevel().equals(ERROR)) {
