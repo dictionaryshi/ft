@@ -45,10 +45,6 @@ public class LogSqlProvider {
 			sql.VALUES("request_id", "#{requestId,jdbcType=CHAR}");
 		}
 
-		if (record.getUserName() != null) {
-			sql.VALUES("user_name", "#{userName,jdbcType=VARCHAR}");
-		}
-
 		if (record.getMessage() != null) {
 			sql.VALUES("message", "#{message,jdbcType=LONGVARCHAR}");
 		}

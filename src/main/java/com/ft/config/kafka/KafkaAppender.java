@@ -29,7 +29,6 @@ public class KafkaAppender extends AppenderBase<ILoggingEvent> {
 	public void append(ILoggingEvent event) {
 
 		String requestId = MDC.get(ControllerAspect.REQUEST_ID);
-		String userName = MDC.get(ControllerAspect.USER_NAME);
 
 		LogDO log = new LogDO();
 		log.setTime(event.getTimeStamp());
@@ -44,7 +43,6 @@ public class KafkaAppender extends AppenderBase<ILoggingEvent> {
 		log.setLineNumber(stackTraceElement.getLineNumber());
 
 		log.setRequestId(requestId);
-		log.setUserName(userName);
 
 		if (SpringContextUtil.getApplicationContext() != null) {
 			//@SuppressWarnings("unchecked")

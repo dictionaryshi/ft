@@ -61,11 +61,6 @@ public class LogDO implements Serializable {
 	 */
 	private String requestId;
 
-	/**
-	 * 操作人
-	 */
-	private String userName;
-
 	private static final long serialVersionUID = 1L;
 }
 /*
@@ -80,7 +75,6 @@ public class LogDO implements Serializable {
       `line_number` int(11) NOT NULL DEFAULT '0' COMMENT '行号',
       `message` longtext COMMENT '日志信息',
       `request_id` char(32) NOT NULL DEFAULT '0' COMMENT '请求id',
-      `user_name` varchar(50) NOT NULL DEFAULT '0' COMMENT '操作人',
       PRIMARY KEY (`id`)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
  */
