@@ -30,7 +30,7 @@ druid:
       maxActive: 20
 
 redis:
-  hostName: 47.104.242.69
+  hostName: 118.24.44.169
   port: 6379
   password:
   database: 0
