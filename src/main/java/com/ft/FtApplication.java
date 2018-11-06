@@ -38,6 +38,7 @@ import org.springframework.retry.annotation.EnableRetry;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.util.unit.DataSize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -194,9 +195,9 @@ public class FtApplication {
 	public MultipartConfigElement multipartConfigElement() {
 		MultipartConfigFactory factory = new MultipartConfigFactory();
 		// 单个文件最大
-		factory.setMaxFileSize("5MB");
+		factory.setMaxFileSize(DataSize.parse("5MB"));
 		/// 设置总上传数据总大小
-		factory.setMaxRequestSize("20MB");
+		factory.setMaxRequestSize(DataSize.parse("20MB"));
 		return factory.createMultipartConfig();
 	}
 
