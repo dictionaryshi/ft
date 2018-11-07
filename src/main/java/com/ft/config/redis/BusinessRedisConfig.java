@@ -4,6 +4,7 @@ import com.ft.redis.base.HashOperationsCache;
 import com.ft.redis.base.ListOperationsCache;
 import com.ft.redis.base.SetOperationsCache;
 import com.ft.redis.base.ValueOperationsCache;
+import com.ft.redis.lock.RedisLock;
 import com.ft.redis.model.RedisDO;
 import com.ft.redis.util.RedisUtil;
 import com.ft.util.JsonUtil;
@@ -87,5 +88,10 @@ public class BusinessRedisConfig {
 	@Bean("hashOperationsCache")
 	public HashOperationsCache getHashOperationsCache(@Qualifier("redisTemplate") RedisTemplate<String, String> redisTemplate) {
 		return new HashOperationsCache(redisTemplate);
+	}
+
+	@Bean
+	public RedisLock redisLock(@Qualifier("valueOperationsCache") ValueOperationsCache valueOperationsCache) {
+		return new RedisLock(valueOperationsCache);
 	}
 }
