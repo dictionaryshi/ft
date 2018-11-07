@@ -9,6 +9,7 @@ import com.ft.util.NumberUtil;
 import com.ft.util.SpringContextUtil;
 import com.ft.web.cloud.hystrix.ThreadLocalHystrixConcurrencyStrategy;
 import com.ft.web.exception.FtException;
+import com.google.common.collect.ImmutableMap;
 import com.netflix.hystrix.strategy.HystrixPlugins;
 import com.netflix.loadbalancer.IRule;
 import com.netflix.loadbalancer.RoundRobinRule;
@@ -86,10 +87,22 @@ public class FtApplication {
 	@Autowired
 	private GoodsService goodsService;
 
+	@Value("${spring.cloud.client.ip-address}")
+	private String ip;
+
+	@Value("${server.port}")
+	private Integer port;
+
 	@GetMapping("/")
 	public String helloWorld() {
-		log.info(proFile.proFile());
-		return "<h1>Hello World!, 环境==>" + propertiesConstants.getConstant() + "</h1>";
+		return JsonUtil.object2Json(
+				ImmutableMap.of(
+						"pro_file", proFile.proFile(),
+						"env", propertiesConstants.getConstant(),
+						"ip", ip,
+						"port", port
+				)
+		);
 	}
 
 	@GetMapping("/db")
