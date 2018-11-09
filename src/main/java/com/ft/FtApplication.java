@@ -219,13 +219,12 @@ public class FtApplication {
 	 * nohup java -jar ft-0.0.1-SNAPSHOT.jar > /root/temp.out 2>&1 &
 	 */
 	public static void main(String[] args) {
+		System.setProperty("java.util.concurrent.ForkJoinPool.common.parallelism", "20");
 
 		// 托管hystrix线程池
 		HystrixPlugins.getInstance().registerConcurrencyStrategy(new ThreadLocalHystrixConcurrencyStrategy());
 
 		ApplicationContext applicationContext = SpringApplication.run(FtApplication.class, args);
 		SpringContextUtil.setApplicationContext(applicationContext);
-
-		System.setProperty("java.util.concurrent.ForkJoinPool.common.parallelism", "20");
 	}
 }
