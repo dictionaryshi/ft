@@ -32,6 +32,10 @@ management:
   health:
     defaults:
       enabled: false
+  endpoints:
+    web:
+      exposure:
+        include: [health,info]
 
 kafka:
   servers: 127.0.0.1:9092
