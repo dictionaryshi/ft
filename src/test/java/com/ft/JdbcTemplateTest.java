@@ -1,8 +1,7 @@
 package com.ft;
 
-import com.ft.util.JsonUtil;
 import com.ft.model.mdo.UserDO;
-import org.junit.Assert;
+import com.ft.util.JsonUtil;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +27,6 @@ public class JdbcTemplateTest {
 		String sql = "UPDATE `user` SET username = ? WHERE id = ?";
 		int result = jdbcTemplate.update(sql, "zgl", 1);
 		System.out.println(result);
-		Assert.assertTrue(result >= 0);
 	}
 
 	@Test
@@ -60,7 +58,7 @@ public class JdbcTemplateTest {
 	@Test
 	public void queryForObjectCount() {
 		String sql = "SELECT count(1) FROM `user` WHERE id > ?";
-		long count = jdbcTemplate.queryForObject(sql, Long.class, 0);
+		Long count = jdbcTemplate.queryForObject(sql, Long.class, 0);
 		System.out.println(count);
 	}
 }
