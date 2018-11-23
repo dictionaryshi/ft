@@ -1,8 +1,7 @@
 package com.ft.java8;
 
 import com.ft.util.JsonUtil;
-import com.google.common.base.Joiner;
-import com.google.common.base.Splitter;
+import com.ft.util.StringUtil;
 import com.google.common.collect.Lists;
 import org.junit.Assert;
 import org.junit.Test;
@@ -15,19 +14,15 @@ public class GuavaTest {
 
 	@Test
 	public void joiner() {
-		System.out.println(Joiner.on(",")
-				.skipNulls()
-				.join(Arrays.asList(1, 2, 3, 4, 5, null, 6)));
+		List<Integer> list = Arrays.asList(1, 2, 3, 4, 5, null, 6);
+		System.out.println(StringUtil.join(list, ","));
 	}
 
 	@Test
 	public void comma() {
-		Pattern pattern = Pattern.compile("[,，]+");
-		List<Integer> numbers = Splitter.on(pattern)
-				.trimResults()
-				.omitEmptyStrings()
-				.splitToList(",1，,，  2,，，,  3，,")
-				.stream().map(Integer::parseInt).collect(Collectors.toCollection(LinkedList::new));
+		Pattern pattern = StringUtil.COMMA_PATTERN;
+		List<Integer> numbers = StringUtil.split(",1，,，  2,，，,  3，,", pattern)
+				.stream().map(Integer::parseInt).collect(Collectors.toList());
 		numbers.forEach(System.out::println);
 	}
 
@@ -57,7 +52,7 @@ public class GuavaTest {
 		chars.add("f");
 		chars.add("g");
 		// 将list分组, 每组3个元素
-		List<List<String>> partitions = Lists.partition(new ArrayList<>(chars), 3);
+		List<List<String>> partitions = Lists.partition(chars, 3);
 		System.out.println(JsonUtil.object2Json(partitions));
 	}
 
