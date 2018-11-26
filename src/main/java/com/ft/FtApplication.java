@@ -9,12 +9,14 @@ import com.ft.util.NumberUtil;
 import com.ft.util.SpringContextUtil;
 import com.ft.web.cloud.hystrix.ThreadLocalHystrixConcurrencyStrategy;
 import com.ft.web.exception.FtException;
+import com.ft.web.plugin.ControllerAspect;
 import com.google.common.collect.ImmutableMap;
 import com.netflix.hystrix.strategy.HystrixPlugins;
 import com.netflix.loadbalancer.IRule;
 import com.netflix.loadbalancer.RoundRobinRule;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
+import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -220,6 +222,8 @@ public class FtApplication {
 	 */
 	public static void main(String[] args) {
 		System.setProperty("java.util.concurrent.ForkJoinPool.common.parallelism", "20");
+
+		MDC.put(ControllerAspect.REQUEST_ID, "application start");
 
 		// 托管hystrix线程池
 		HystrixPlugins.getInstance().registerConcurrencyStrategy(new ThreadLocalHystrixConcurrencyStrategy());
