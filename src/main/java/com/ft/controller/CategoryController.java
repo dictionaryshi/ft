@@ -41,6 +41,9 @@ public class CategoryController {
 	}
 
 	@ApiOperation("添加分类信息")
+	@ApiImplicitParams({
+			@ApiImplicitParam(name = "name", value = "分类名称", required = true, dataType = SwaggerConstant.DATA_TYPE_STRING, paramType = SwaggerConstant.PARAM_TYPE_QUERY)
+	})
 	/**
 	 * 添加分类信息
 	 *
@@ -90,6 +93,9 @@ public class CategoryController {
 	}
 
 	@ApiOperation("根据id查询分类信息")
+	@ApiImplicitParams({
+			@ApiImplicitParam(name = "id", value = "分类id", required = true, dataType = SwaggerConstant.DATA_TYPE_INT, paramType = SwaggerConstant.PARAM_TYPE_QUERY, example = "0"),
+	})
 	/**
 	 * 根据主键查询分类信息
 	 *
