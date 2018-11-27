@@ -65,8 +65,9 @@ public class GoodsService {
 			throw new FtException(RestResult.ERROR_CODE, "商品分类不存在,无法修改");
 		}
 
-		if (goodsMapper.getGoodsByName(name) != null && goodsDO.getCategory() == categoryId) {
-			throw new FtException(RestResult.ERROR_CODE, "商品名称已经存在");
+		GoodsDO dbGoods = goodsMapper.getGoodsByName(name);
+		if (dbGoods != null && dbGoods.getCategory() == categoryId) {
+			throw new FtException(RestResult.ERROR_CODE, "商品已经存在");
 		}
 
 		goodsDO = new GoodsDO();

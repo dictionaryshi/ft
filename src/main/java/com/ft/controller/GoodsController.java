@@ -1,11 +1,14 @@
 package com.ft.controller;
 
-import com.ft.db.model.PageParam;
-import com.ft.util.JsonUtil;
-import com.ft.web.model.RestResult;
 import com.ft.annotation.LoginCheck;
+import com.ft.db.model.PageParam;
 import com.ft.service.GoodsService;
+import com.ft.util.JsonUtil;
+import com.ft.web.constant.SwaggerConstant;
+import com.ft.web.model.RestResult;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +30,9 @@ public class GoodsController {
 	private GoodsService goodsService;
 
 	@ApiOperation("根据id查询商品信息")
+	@ApiImplicitParams({
+			@ApiImplicitParam(name = "id", value = "商品id", required = true, dataType = SwaggerConstant.DATA_TYPE_INT, paramType = SwaggerConstant.PARAM_TYPE_QUERY, example = "0"),
+	})
 	/**
 	 * 根据id查询商品信息
 	 *
@@ -40,6 +46,11 @@ public class GoodsController {
 	}
 
 	@ApiOperation("修改商品信息")
+	@ApiImplicitParams({
+			@ApiImplicitParam(name = "id", value = "商品id", required = true, dataType = SwaggerConstant.DATA_TYPE_INT, paramType = SwaggerConstant.PARAM_TYPE_FORM, example = "0"),
+			@ApiImplicitParam(name = "name", value = "商品名称", required = true, dataType = SwaggerConstant.DATA_TYPE_STRING, paramType = SwaggerConstant.PARAM_TYPE_FORM),
+			@ApiImplicitParam(name = "category_id", value = "分类id", required = true, dataType = SwaggerConstant.DATA_TYPE_INT, paramType = SwaggerConstant.PARAM_TYPE_FORM, example = "0"),
+	})
 	/**
 	 * 修改商品信息
 	 *
@@ -59,6 +70,10 @@ public class GoodsController {
 	}
 
 	@ApiOperation("添加商品信息")
+	@ApiImplicitParams({
+			@ApiImplicitParam(name = "name", value = "商品名称", required = true, dataType = SwaggerConstant.DATA_TYPE_STRING, paramType = SwaggerConstant.PARAM_TYPE_FORM),
+			@ApiImplicitParam(name = "category_id", value = "分类id", required = true, dataType = SwaggerConstant.DATA_TYPE_INT, paramType = SwaggerConstant.PARAM_TYPE_FORM, example = "0"),
+	})
 	/**
 	 * 添加商品信息
 	 *
@@ -76,6 +91,10 @@ public class GoodsController {
 	}
 
 	@ApiOperation("分页查询商品")
+	@ApiImplicitParams({
+			@ApiImplicitParam(name = "category_id", value = "分类id", required = true, dataType = SwaggerConstant.DATA_TYPE_INT, paramType = SwaggerConstant.PARAM_TYPE_QUERY, example = "0", defaultValue = "0"),
+			@ApiImplicitParam(name = "current_page", value = "查询页码", required = true, dataType = SwaggerConstant.DATA_TYPE_INT, paramType = SwaggerConstant.PARAM_TYPE_QUERY, example = "0"),
+	})
 	/**
 	 * 分页查询商品
 	 *
@@ -93,6 +112,9 @@ public class GoodsController {
 	}
 
 	@ApiOperation("根据分类查询所有商品")
+	@ApiImplicitParams({
+			@ApiImplicitParam(name = "category_id", value = "分类id", required = true, dataType = SwaggerConstant.DATA_TYPE_INT, paramType = SwaggerConstant.PARAM_TYPE_QUERY, example = "0"),
+	})
 	/**
 	 * 根据分类查询所有商品
 	 *
