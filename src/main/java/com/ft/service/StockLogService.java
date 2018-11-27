@@ -156,10 +156,12 @@ public class StockLogService {
 				goodsMapper.updateNumber(goodsId, goodsNumber * -1);
 				stockLogDO.setTypeDetail(StockConstant.TYPE_DETAIL_OUT_PERSON);
 				stockLogMapper.insert(stockLogDO);
+
+				redisLock.unlock(lockKey);
 			} else {
+				redisLock.unlock(lockKey);
 				return false;
 			}
-			redisLock.unlock(lockKey);
 		} else {
 			throw new FtException(RestResult.ERROR_CODE, "未知操作仓库类型");
 		}
