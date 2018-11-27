@@ -10,7 +10,6 @@ import com.ft.util.SpringContextUtil;
 import com.ft.web.cloud.hystrix.ThreadLocalHystrixConcurrencyStrategy;
 import com.ft.web.exception.FtException;
 import com.ft.web.plugin.ControllerAspect;
-import com.google.common.collect.ImmutableMap;
 import com.netflix.hystrix.strategy.HystrixPlugins;
 import com.netflix.loadbalancer.IRule;
 import com.netflix.loadbalancer.RoundRobinRule;
@@ -51,6 +50,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.lang.management.ManagementFactory;
 import java.util.*;
 
 /**
@@ -97,13 +97,20 @@ public class FtApplication {
 
 	@GetMapping("/")
 	public String helloWorld() {
+		com.sun.management.OperatingSystemMXBean osmb = (com.sun.management.OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean();
 		return JsonUtil.object2Json(
-				ImmutableMap.of(
-						"pro_file", proFile.proFile(),
-						"env", propertiesConstants.getConstant(),
-						"ip", ip,
-						"port", port
-				)
+				new HashMap<String, Object>(16) {
+					{
+						put("pro_file", proFile.proFile());
+						put("env", propertiesConstants.getConstant());
+						put("ip", ip);
+						put("port", port);
+						put("cpu", osmb.getAvailableProcessors());
+						put("os", osmb.getName());
+						put("totalCache", osmb.getTotalPhysicalMemorySize() / 1024 / 1024);
+						put("freeCache", osmb.getFreePhysicalMemorySize() / 1024 / 1024);
+					}
+				}
 		);
 	}
 

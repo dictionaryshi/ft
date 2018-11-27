@@ -3,7 +3,6 @@ package com.ft.basic;
 import com.ft.db.dbutil.TxDataSourcePool;
 import org.junit.Test;
 
-import java.lang.management.ManagementFactory;
 import java.net.URL;
 import java.sql.Connection;
 import java.util.Arrays;
@@ -53,23 +52,9 @@ public class BasicTest {
 	@Test
 	public void cache() {
 		Runtime runtime = Runtime.getRuntime();
-		com.sun.management.OperatingSystemMXBean osmb = (com.sun.management.OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean();
 
 		// CPU核数
-		System.out.println(osmb.getAvailableProcessors());
 		System.out.println(runtime.availableProcessors());
-
-		// 系统版本
-		System.out.println(osmb.getName());
-
-		long totalPhysicalMemorySize = osmb.getTotalPhysicalMemorySize();
-		long totalCache = totalPhysicalMemorySize / 1024 / 1024;
-		// 内存 总量
-		System.out.println(totalCache);
-
-		long freeCache = osmb.getFreePhysicalMemorySize() / 1024 / 1024;
-		// 可用内存
-		System.out.println(freeCache);
 	}
 
 	@Test
