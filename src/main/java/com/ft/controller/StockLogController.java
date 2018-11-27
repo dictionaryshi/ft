@@ -1,14 +1,17 @@
 package com.ft.controller;
 
-import com.ft.db.model.PageParam;
-import com.ft.util.JsonUtil;
-import com.ft.web.model.RestResult;
 import com.ft.annotation.LoginCheck;
-import com.ft.util.LoginUtil;
+import com.ft.db.model.PageParam;
 import com.ft.model.dto.StockLogDTO;
 import com.ft.model.mdo.StockLogDO;
 import com.ft.service.StockLogService;
+import com.ft.util.JsonUtil;
+import com.ft.util.LoginUtil;
+import com.ft.web.constant.SwaggerConstant;
+import com.ft.web.model.RestResult;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +35,14 @@ public class StockLogController {
 	private StockLogService stockLogService;
 
 	@ApiOperation("库存列表")
+	@ApiImplicitParams({
+			@ApiImplicitParam(name = "current_page", value = "查询页码", required = true, dataType = SwaggerConstant.DATA_TYPE_INT, paramType = SwaggerConstant.PARAM_TYPE_QUERY, example = "0"),
+			@ApiImplicitParam(name = "type", value = "操作类型", dataType = SwaggerConstant.DATA_TYPE_INT, paramType = SwaggerConstant.PARAM_TYPE_QUERY, example = "0"),
+			@ApiImplicitParam(name = "goods_id", value = "商品id", dataType = SwaggerConstant.DATA_TYPE_INT, paramType = SwaggerConstant.PARAM_TYPE_QUERY, example = "0"),
+			@ApiImplicitParam(name = "order_id", value = "订单id", dataType = SwaggerConstant.DATA_TYPE_STRING, paramType = SwaggerConstant.PARAM_TYPE_QUERY),
+			@ApiImplicitParam(name = "start_time", value = "开始时间", dataType = SwaggerConstant.DATA_TYPE_STRING, paramType = SwaggerConstant.PARAM_TYPE_QUERY),
+			@ApiImplicitParam(name = "end_time", value = "结束时间", dataType = SwaggerConstant.DATA_TYPE_STRING, paramType = SwaggerConstant.PARAM_TYPE_QUERY),
+	})
 	@RequestMapping(value = "/list", method = RequestMethod.POST)
 	@LoginCheck
 	public String list(
@@ -59,6 +70,13 @@ public class StockLogController {
 	}
 
 	@ApiOperation("出/入库操作")
+	@ApiImplicitParams({
+			@ApiImplicitParam(name = "type", value = "操作类型", required = true, dataType = SwaggerConstant.DATA_TYPE_INT, paramType = SwaggerConstant.PARAM_TYPE_FORM, example = "0"),
+			@ApiImplicitParam(name = "goods_id", value = "商品id", required = true, dataType = SwaggerConstant.DATA_TYPE_INT, paramType = SwaggerConstant.PARAM_TYPE_FORM, example = "0"),
+			@ApiImplicitParam(name = "order_id", value = "订单id", dataType = SwaggerConstant.DATA_TYPE_STRING, paramType = SwaggerConstant.PARAM_TYPE_FORM),
+			@ApiImplicitParam(name = "goods_number", value = "商品数量", required = true, dataType = SwaggerConstant.DATA_TYPE_INT, paramType = SwaggerConstant.PARAM_TYPE_FORM, example = "0"),
+			@ApiImplicitParam(name = "remark", value = "操作备注", dataType = SwaggerConstant.DATA_TYPE_STRING, paramType = SwaggerConstant.PARAM_TYPE_FORM),
+	})
 	@RequestMapping(value = "/storage", method = RequestMethod.POST)
 	@LoginCheck
 	public String storage(
