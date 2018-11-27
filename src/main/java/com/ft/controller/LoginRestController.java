@@ -1,19 +1,18 @@
 package com.ft.controller;
 
+import com.ft.annotation.LoginCheck;
+import com.ft.constant.LoginConstant;
+import com.ft.model.dto.UserDTO;
 import com.ft.redis.base.ValueOperationsCache;
-import com.ft.util.CommonUtil;
-import com.ft.util.ImageUtil;
-import com.ft.util.JsonUtil;
-import com.ft.util.StringUtil;
+import com.ft.service.LoginService;
+import com.ft.util.*;
+import com.ft.web.constant.SwaggerConstant;
 import com.ft.web.exception.FtException;
 import com.ft.web.model.RestResult;
 import com.ft.web.util.CookieUtil;
-import com.ft.annotation.LoginCheck;
-import com.ft.util.LoginUtil;
-import com.ft.constant.LoginConstant;
-import com.ft.model.dto.UserDTO;
-import com.ft.service.LoginService;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,6 +48,12 @@ public class LoginRestController {
 	private String cookieDomain;
 
 	@ApiOperation("登录")
+	@ApiImplicitParams({
+			@ApiImplicitParam(name = "username", value = "用户名", required = true, dataType = SwaggerConstant.DATA_TYPE_STRING, paramType = SwaggerConstant.PARAM_TYPE_FORM),
+			@ApiImplicitParam(name = "password", value = "密码", required = true, dataType = SwaggerConstant.DATA_TYPE_STRING, paramType = SwaggerConstant.PARAM_TYPE_FORM),
+			@ApiImplicitParam(name = "code", value = "验证码", required = true, dataType = SwaggerConstant.DATA_TYPE_STRING, paramType = SwaggerConstant.PARAM_TYPE_FORM),
+			@ApiImplicitParam(name = "code_id", value = "验证码绑定id", required = true, dataType = SwaggerConstant.DATA_TYPE_STRING, paramType = SwaggerConstant.PARAM_TYPE_FORM),
+	})
 	/**
 	 * 登录
 	 *
