@@ -1,18 +1,20 @@
 package com.ft.service;
 
+import com.ft.constant.OrderConstant;
+import com.ft.constant.StockConstant;
 import com.ft.dao.*;
 import com.ft.db.annotation.DataSource;
 import com.ft.db.model.PageParam;
 import com.ft.db.model.PageResult;
-import com.ft.model.mdo.*;
-import com.ft.util.NumberUtil;
-import com.ft.web.exception.FtException;
-import com.ft.web.model.RestResult;
-import com.ft.constant.OrderConstant;
-import com.ft.constant.StockConstant;
 import com.ft.model.dto.OrderDTO;
+import com.ft.model.mdo.*;
 import com.ft.model.vo.ItemVO;
 import com.ft.model.vo.OrderVO;
+import com.ft.redis.base.ValueOperationsCache;
+import com.ft.util.NumberUtil;
+import com.ft.util.StringUtil;
+import com.ft.web.exception.FtException;
+import com.ft.web.model.RestResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,6 +22,7 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,6 +49,9 @@ public class OrderService {
 
 	@Autowired
 	private StockLogMapper stockLogMapper;
+
+	@Resource(name = "valueOperationsCache")
+	private ValueOperationsCache valueOperationsCache;
 
 	@DataSource(DataSource.slave)
 	public PageResult<OrderVO> list(OrderDTO orderDTO, PageParam pageParam) {
@@ -289,6 +295,12 @@ public class OrderService {
 			throw new FtException(RestResult.ERROR_CODE, "订单确认失败, 还没有添加订单详情");
 		}
 
+		String lockKey = StringUtil.append(StringUtil.REDIS_SPLIT, "confirm", "orderId", orderId);
+		Boolean flag = valueOperationsCache.setNX(lockKey, orderId, 5_000L);
+		if (!flag) {
+			throw new FtException(RestResult.ERROR_CODE, "订单确认失败, 请不要重复确认");
+		}
+
 		items.forEach(this::checkConfirmItem);
 
 		OrderDO update = new OrderDO();
@@ -370,6 +382,12 @@ public class OrderService {
 
 		if (order.getStatus() != OrderConstant.STATUS_CONFIRM) {
 			throw new FtException(RestResult.ERROR_CODE, "确认订单fail失败, 订单已经不是已确认状态了");
+		}
+
+		String lockKey = StringUtil.append(StringUtil.REDIS_SPLIT, "fail", "orderId", orderId);
+		Boolean flag = valueOperationsCache.setNX(lockKey, orderId, 5_000L);
+		if (!flag) {
+			throw new FtException(RestResult.ERROR_CODE, "确认订单fail失败, 请不要重复确认");
 		}
 
 		OrderDO update = new OrderDO();
