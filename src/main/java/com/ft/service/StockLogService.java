@@ -1,27 +1,31 @@
 package com.ft.service;
 
-import com.ft.db.annotation.DataSource;
-import com.ft.db.model.PageParam;
-import com.ft.db.model.PageResult;
-import com.ft.web.exception.FtException;
-import com.ft.web.model.RestResult;
 import com.ft.constant.StockConstant;
 import com.ft.dao.GoodsMapper;
 import com.ft.dao.OrderMapper;
 import com.ft.dao.StockLogMapper;
 import com.ft.dao.UserMapper;
+import com.ft.db.annotation.DataSource;
+import com.ft.db.model.PageParam;
+import com.ft.db.model.PageResult;
 import com.ft.model.dto.StockLogDTO;
 import com.ft.model.mdo.GoodsDO;
 import com.ft.model.mdo.StockLogDO;
 import com.ft.model.mdo.UserDO;
 import com.ft.model.vo.OrderVO;
 import com.ft.model.vo.StockLogVO;
+import com.ft.redis.base.ValueOperationsCache;
+import com.ft.redis.lock.RedisLock;
+import com.ft.util.StringUtil;
+import com.ft.web.exception.FtException;
+import com.ft.web.model.RestResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,6 +48,9 @@ public class StockLogService {
 
 	@Autowired
 	private OrderMapper orderMapper;
+
+	@Resource(name = "valueOperationsCache")
+	private ValueOperationsCache valueOperationsCache;
 
 	/**
 	 * 分页查询出入库记录
@@ -140,9 +147,19 @@ public class StockLogService {
 			if (goodsNumber > goodsDO.getNumber()) {
 				throw new FtException(RestResult.ERROR_CODE, "出库失败, 商品库存数量不足");
 			}
-			goodsMapper.updateNumber(goodsId, goodsNumber * -1);
-			stockLogDO.setTypeDetail(StockConstant.TYPE_DETAIL_OUT_PERSON);
-			stockLogMapper.insert(stockLogDO);
+
+			String lockKey = StringUtil.append(StringUtil.REDIS_SPLIT, "storage", "goods", goodsId + "");
+			RedisLock redisLock = new RedisLock(valueOperationsCache);
+			redisLock.lock(lockKey, 10_000L);
+			goodsDO = goodsMapper.getGoodsById(goodsId);
+			if (goodsNumber <= goodsDO.getNumber()) {
+				goodsMapper.updateNumber(goodsId, goodsNumber * -1);
+				stockLogDO.setTypeDetail(StockConstant.TYPE_DETAIL_OUT_PERSON);
+				stockLogMapper.insert(stockLogDO);
+			} else {
+				return false;
+			}
+			redisLock.unlock(lockKey);
 		} else {
 			throw new FtException(RestResult.ERROR_CODE, "未知操作仓库类型");
 		}
