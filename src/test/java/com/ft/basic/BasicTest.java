@@ -1,11 +1,14 @@
 package com.ft.basic;
 
 import com.ft.db.dbutil.TxDataSourcePool;
+import com.ft.study.juc.ThreadPoolUtil;
 import org.junit.Test;
 
 import java.net.URL;
 import java.sql.Connection;
 import java.util.Arrays;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class BasicTest {
 	@Test
@@ -50,14 +53,6 @@ public class BasicTest {
 	}
 
 	@Test
-	public void cache() {
-		Runtime runtime = Runtime.getRuntime();
-
-		// CPU核数
-		System.out.println(runtime.availableProcessors());
-	}
-
-	@Test
 	public void sortStr() {
 		String[] arr = {"d", "a", "c", "g", "e", "b", "f"};
 		Arrays.sort(arr, String.CASE_INSENSITIVE_ORDER);
@@ -75,5 +70,27 @@ public class BasicTest {
 		conn.setTransactionIsolation(Connection.TRANSACTION_REPEATABLE_READ);
 		// 串行化
 		conn.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
+	}
+
+	@Test
+	public void getThreadPool() throws Exception {
+		ExecutorService threadPool = ThreadPoolUtil.getThreadPool();
+		int number = 6;
+		for (int i = 1; i <= number; i++) {
+			int finalNumber = i;
+			threadPool.execute(() -> {
+				try {
+					Thread.sleep(5_000L);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				System.out.println(finalNumber);
+			});
+		}
+		threadPool.shutdown();
+
+		while (!threadPool.awaitTermination(1, TimeUnit.SECONDS)) {
+			System.out.println("线程池中仍然有线程执行");
+		}
 	}
 }
