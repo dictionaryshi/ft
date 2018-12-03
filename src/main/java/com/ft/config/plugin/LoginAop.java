@@ -1,13 +1,14 @@
 package com.ft.config.plugin;
 
+import com.ft.model.mdo.UserDO;
 import com.ft.util.JsonUtil;
+import com.ft.util.LoginUtil;
 import com.ft.util.StringUtil;
 import com.ft.web.util.HttpUtil;
-import com.ft.util.LoginUtil;
-import com.ft.model.mdo.UserDO;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
+import org.springframework.core.annotation.Order;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -18,6 +19,7 @@ import javax.servlet.http.HttpServletRequest;
  *
  * @author shichunyang
  */
+@Order(0)
 @Aspect
 @Slf4j
 public class LoginAop {
