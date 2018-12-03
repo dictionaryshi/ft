@@ -11,7 +11,7 @@ server_test_array=(
 )
 
 server_start_array=(
-    'java -jar ft-0.0.1-SNAPSHOT.jar'
+    'java -jar -Xms128m -Xmx128m -Xss256k ft-0.0.1-SNAPSHOT.jar'
 )
 
 server_log_array=(
