@@ -1,0 +1,22 @@
+1.yum -y install epel-release
+
+2.yum -y install docker-io
+
+3.vim /etc/sysconfig/docker
+    other_args="--registry-mirror=https://5g6jftt7.mirror.aliyuncs.com"
+
+4.docker version
+
+5.service docker start
+
+6.docker run hello-world
+
+7.docker info
+
+8.查看本地所有镜像:docker images
+
+    docker images -qa
+
+9.删除镜像:docker rmi hello-world:latest
+    docker rmi -f $(docker images -qa)
+

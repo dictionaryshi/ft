@@ -149,6 +149,9 @@ ls -lR /root | grep "^d" | wc -l (递归查看文件夹个数)
 
     cat /etc/redhat-release
 
+查看linux内核版本:
+    # uname -r
+
 date (显示系统时间)
 
 date '+%Y-%m-%d %H:%M:%S' (年月日 时分秒)
