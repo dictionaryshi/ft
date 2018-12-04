@@ -15,7 +15,7 @@ server_start_array=(
 )
 
 server_log_array=(
-    '/root/temp.out'
+    '/root/ft_log.out'
 )
 
 server(){
