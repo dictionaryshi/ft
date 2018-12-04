@@ -75,7 +75,7 @@ server(){
 
 		    echo -e "\e[1;32m ${server_start}, 请稍候... \e[0m"
 
-		    nohup ${server_start} > ${server_log_file} 2>&1 &
+		    nohup java -jar ${gc_params} ${server_start} > ${server_log_file} 2>&1 &
 
             sleep 60
 
