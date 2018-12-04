@@ -2,6 +2,12 @@
 
 log_file=~/server.log
 
+gc_params="-XX:+UseConcMarkSweepGC -XX:+ExplicitGCInvokesConcurrentAndUnloadsClasses \
+           -XX:+UseCMSInitiatingOccupancyOnly -XX:CMSInitiatingOccupancyFraction=50 -XX:+CMSScavengeBeforeRemark \
+           -XX:ParallelGCThreads=4 \
+           -XX:+PrintFlagsFinal -XX:+PrintGCDetails -XX:+PrintGCDateStamps  \
+           -XX:+UseGCLogFileRotation -XX:NumberOfGCLogFiles=10 -XX:GCLogFileSize=10M -XX:+PrintStringTableStatistics -XX:+DisableExplicitGC "
+
 server_name_array=(
     'ft-0.0.1-SNAPSHOT.jar'
 )
@@ -11,7 +17,7 @@ server_test_array=(
 )
 
 server_start_array=(
-    'java -jar -Xms128m -Xmx128m -Xss256k ft-0.0.1-SNAPSHOT.jar'
+    'java -jar -Xms128m -Xmx128m -Xss256k ${gc_params} -Xloggc:/data/gc/gc_ft_%t-log ft-0.0.1-SNAPSHOT.jar'
 )
 
 server_log_array=(
