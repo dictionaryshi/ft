@@ -17,7 +17,7 @@ server_test_array=(
 )
 
 server_start_array=(
-    'java -jar -Xms128m -Xmx128m -Xss256k ${gc_params} -Xloggc:/data/gc/gc_ft_%t-log ft-0.0.1-SNAPSHOT.jar'
+    '-Xms128m -Xmx128m -Xss256k -Xloggc:/data/gc/gc_ft_%t-log ft-0.0.1-SNAPSHOT.jar'
 )
 
 server_log_array=(
@@ -63,7 +63,7 @@ server(){
 
 				sleep 3
 
-				nohup ${server_start} > ${server_log_file} 2>&1 &
+				nohup java -jar ${gc_params} ${server_start} > ${server_log_file} 2>&1 &
 
 				sleep 90
 
