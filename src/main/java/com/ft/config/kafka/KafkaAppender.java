@@ -2,6 +2,7 @@ package com.ft.config.kafka;
 
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.AppenderBase;
+import com.ft.db.plugin.DataSourceAspect;
 import com.ft.model.mdo.LogDO;
 import com.ft.redis.base.ListOperationsCache;
 import com.ft.util.JsonUtil;
@@ -55,7 +56,7 @@ public class KafkaAppender extends AppenderBase<ILoggingEvent> {
 		String cost = "cost==>";
 		if (log.getLevel().equals(ERROR)) {
 			listOperationsCache.leftPushAll(LogDO.LOG_QUEUE, JsonUtil.object2Json(log));
-		} else if (log.getMessage().contains(cost)) {
+		} else if (log.getMessage().contains(cost) && !event.getLoggerName().equals(DataSourceAspect.class.getName())) {
 			long targetTime = 3000;
 			String regex = cost + RegexUtil.REGEX_NUMBER;
 			List<String> finds = RegexUtil.search(log.getMessage(), regex);
