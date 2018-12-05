@@ -2,18 +2,14 @@ package com.ft.config.kafka;
 
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.AppenderBase;
-import com.ft.dao.LogMapper;
 import com.ft.model.mdo.LogDO;
-import com.ft.util.JsonUtil;
+import com.ft.util.RegexUtil;
 import com.ft.util.SpringContextUtil;
 import com.ft.util.StringUtil;
 import com.ft.web.plugin.ControllerAspect;
-import org.apache.commons.lang3.RandomUtils;
 import org.slf4j.MDC;
-import org.springframework.kafka.core.KafkaTemplate;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.List;
 
 /**
  * KafkaAppender
@@ -48,29 +44,21 @@ public class KafkaAppender extends AppenderBase<ILoggingEvent> {
 
 		log.setRequestId(requestId);
 
-		if (SpringContextUtil.getApplicationContext() != null) {
-			@SuppressWarnings("unchecked")
-			KafkaTemplate<String, String> kafkaTemplate = SpringContextUtil.getBean("consignKafkaTemplate", KafkaTemplate.class);
-			String topic = SpringContextUtil.getApplicationContext().getEnvironment().getProperty("kafka.consign.topic");
+		if (SpringContextUtil.getApplicationContext() == null) {
+			return;
+		}
 
-			String cost = "cost==>";
-			if (log.getLevel().equals(ERROR)) {
-				LogMapper logMapper = SpringContextUtil.getBean(LogMapper.class);
-				logMapper.insertSelective(log);
-				if (!StringUtil.isNull(topic)) {
-					kafkaTemplate.send(topic, "log_" + RandomUtils.nextDouble(), JsonUtil.object2Json(log));
-				}
-			} else if (log.getMessage().contains(cost)) {
-				long targetTime = 3000;
-				String regex = cost + "[\\d]+";
-				Matcher matcher = Pattern.compile(regex).matcher(log.getMessage());
-				while (matcher.find()) {
-					long number = Long.parseLong(matcher.group().replace(cost, ""));
-					if (number > targetTime) {
-						LogMapper logMapper = SpringContextUtil.getBean(LogMapper.class);
-						logMapper.insertSelective(log);
-					}
-				}
+		String cost = "cost==>";
+		if (log.getLevel().equals(ERROR)) {
+		} else if (log.getMessage().contains(cost)) {
+			long targetTime = 3000;
+			String regex = cost + RegexUtil.REGEX_NUMBER;
+			List<String> finds = RegexUtil.search(log.getMessage(), regex);
+			if (StringUtil.isEmpty(finds)) {
+				return;
+			}
+			long number = Long.parseLong(finds.get(0).replace(cost, ""));
+			if (number > targetTime) {
 			}
 		}
 	}

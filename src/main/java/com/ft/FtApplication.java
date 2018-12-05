@@ -5,7 +5,6 @@ import com.ft.constant.PropertiesConstant;
 import com.ft.service.GoodsService;
 import com.ft.util.ExcelUtil;
 import com.ft.util.JsonUtil;
-import com.ft.util.NumberUtil;
 import com.ft.util.SpringContextUtil;
 import com.ft.web.cloud.hystrix.ThreadLocalHystrixConcurrencyStrategy;
 import com.ft.web.exception.FtException;
@@ -17,7 +16,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -32,7 +30,6 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.io.ByteArrayResource;
-import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.retry.annotation.Backoff;
@@ -117,20 +114,6 @@ public class FtApplication {
 	@GetMapping("/db")
 	public String db() {
 		return JsonUtil.object2Json(goodsService.get(1L));
-	}
-
-	@Autowired
-	@Qualifier("consignKafkaTemplate")
-	private KafkaTemplate<String, String> kafkaTemplate;
-	@Value("${kafka.consign.topic}")
-	private String topic;
-
-	@GetMapping("/kafka")
-	public String kafka() {
-		String key = System.currentTimeMillis() + "";
-		String value = "最新工单id" + "_" + NumberUtil.getRandomNumber();
-		kafkaTemplate.send(topic, key, value);
-		return "success";
 	}
 
 	private ThreadLocal<Long> threadTime = new ThreadLocal<>();

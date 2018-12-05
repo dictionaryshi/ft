@@ -19,8 +19,7 @@ public class ConsignKafkaConfig {
 
 	@Value("${kafka.servers}")
 	private String servers;
-	@Value("${kafka.consign.topic}")
-	private String topic;
+
 	@Value("${kafka.consign.groupId}")
 	private String groupId;
 
