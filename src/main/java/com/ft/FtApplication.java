@@ -3,12 +3,11 @@ package com.ft;
 import com.ft.config.study.ProFile;
 import com.ft.constant.PropertiesConstant;
 import com.ft.service.GoodsService;
-import com.ft.util.ExcelUtil;
-import com.ft.util.JsonUtil;
-import com.ft.util.SpringContextUtil;
+import com.ft.util.*;
 import com.ft.web.cloud.hystrix.ThreadLocalHystrixConcurrencyStrategy;
 import com.ft.web.exception.FtException;
 import com.ft.web.plugin.ControllerAspect;
+import com.ft.web.util.HttpUtil;
 import com.netflix.hystrix.strategy.HystrixPlugins;
 import com.netflix.loadbalancer.IRule;
 import com.netflix.loadbalancer.RoundRobinRule;
@@ -38,8 +37,7 @@ import org.springframework.retry.annotation.Retryable;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.util.unit.DataSize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.mail.internet.MimeMessage;
 import javax.servlet.MultipartConfigElement;
@@ -92,8 +90,18 @@ public class FtApplication {
 	@Value("${server.port}")
 	private Integer port;
 
+	@Value("${http-test-url}")
+	private String httpTestUrl;
+
 	@GetMapping("/")
 	public String helloWorld() {
+		Map<String, String> params = new HashMap<>(16);
+		params.put("username", EncodeUtil.urlEncode("春阳"));
+		params.put("age", "28");
+		String get = HttpUtil.get(httpTestUrl, params, 2_000, 2_000);
+		String post = HttpUtil.post(httpTestUrl, params, 2_000, 2_000);
+		log.info("get==>{}", get);
+		log.info("post==>{}", post);
 		com.sun.management.OperatingSystemMXBean osmb = (com.sun.management.OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean();
 		return JsonUtil.object2Json(
 				new HashMap<String, Object>(16) {
@@ -114,6 +122,14 @@ public class FtApplication {
 	@GetMapping("/db")
 	public String db() {
 		return JsonUtil.object2Json(goodsService.get(1L));
+	}
+
+	@RequestMapping(value = "/http", method = {RequestMethod.GET, RequestMethod.POST})
+	public String http(
+			@RequestParam String username,
+			@RequestParam int age
+	) {
+		return username + "_" + age;
 	}
 
 	private ThreadLocal<Long> threadTime = new ThreadLocal<>();
