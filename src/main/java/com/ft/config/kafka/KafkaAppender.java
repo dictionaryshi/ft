@@ -3,6 +3,8 @@ package com.ft.config.kafka;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.AppenderBase;
 import com.ft.model.mdo.LogDO;
+import com.ft.redis.base.ListOperationsCache;
+import com.ft.util.JsonUtil;
 import com.ft.util.RegexUtil;
 import com.ft.util.SpringContextUtil;
 import com.ft.util.StringUtil;
@@ -48,8 +50,11 @@ public class KafkaAppender extends AppenderBase<ILoggingEvent> {
 			return;
 		}
 
+		ListOperationsCache listOperationsCache = SpringContextUtil.getBean("listOperationsCache", ListOperationsCache.class);
+
 		String cost = "cost==>";
 		if (log.getLevel().equals(ERROR)) {
+			listOperationsCache.leftPushAll(LogDO.LOG_QUEUE, JsonUtil.object2Json(log));
 		} else if (log.getMessage().contains(cost)) {
 			long targetTime = 3000;
 			String regex = cost + RegexUtil.REGEX_NUMBER;
@@ -59,6 +64,7 @@ public class KafkaAppender extends AppenderBase<ILoggingEvent> {
 			}
 			long number = Long.parseLong(finds.get(0).replace(cost, ""));
 			if (number > targetTime) {
+				listOperationsCache.leftPushAll(LogDO.LOG_QUEUE, JsonUtil.object2Json(log));
 			}
 		}
 	}

@@ -11,6 +11,8 @@ import java.io.Serializable;
  */
 @Data
 public class LogDO implements Serializable {
+	public static final String LOG_QUEUE = "ft_log_queue";
+
 	/**
 	 * 主键(id)
 	 */
