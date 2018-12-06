@@ -4,3 +4,9 @@ awk -F "\"" '{print $2}' | \
 awk -F "-" '{if (NF > 1) {line = ""; i = 1; while (i < NF) {line = (line "" $i); i++;}; print line} else {print $0}}' | \
 uniq -c | sort -nr
 
+// 打印16进制
+printf "%x\n" 15
+
+// 查看进程内线程使用情况
+top -H -p 4941
+
