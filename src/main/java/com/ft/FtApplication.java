@@ -92,9 +92,6 @@ public class FtApplication {
 	@Value("${server.port}")
 	private Integer port;
 
-	@Value("${http-test-url}")
-	private String httpTestUrl;
-
 	@GetMapping("/")
 	public String helloWorld() {
 		com.sun.management.OperatingSystemMXBean osmb = (com.sun.management.OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean();

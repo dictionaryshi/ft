@@ -43,5 +43,3 @@ cookieDomain: ft.com
 logging:
   config: classpath:log-dev.xml
 
-http-test-url: http://47.98.144.225/http
-
