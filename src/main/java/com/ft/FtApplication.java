@@ -2,19 +2,18 @@ package com.ft;
 
 import com.ft.config.study.ProFile;
 import com.ft.constant.PropertiesConstant;
-import com.ft.model.mdo.UserDO;
 import com.ft.service.GoodsService;
-import com.ft.util.*;
+import com.ft.util.ExcelUtil;
+import com.ft.util.JsonUtil;
+import com.ft.util.SpringContextUtil;
 import com.ft.web.cloud.hystrix.ThreadLocalHystrixConcurrencyStrategy;
 import com.ft.web.exception.FtException;
 import com.ft.web.plugin.ControllerAspect;
-import com.ft.web.util.HttpUtil;
 import com.netflix.hystrix.strategy.HystrixPlugins;
 import com.netflix.loadbalancer.IRule;
 import com.netflix.loadbalancer.RoundRobinRule;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.RandomUtils;
 import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -39,7 +38,8 @@ import org.springframework.retry.annotation.Retryable;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.util.unit.DataSize;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.mail.internet.MimeMessage;
 import javax.servlet.MultipartConfigElement;
@@ -97,13 +97,6 @@ public class FtApplication {
 
 	@GetMapping("/")
 	public String helloWorld() {
-		Map<String, String> params = new HashMap<>(16);
-		params.put("username", EncodeUtil.urlEncode("春阳_" + NumberUtil.getRandomNumber()));
-		params.put("age", RandomUtils.nextInt() + "");
-		String get = HttpUtil.get(httpTestUrl, params, 2_000, 2_000);
-		String post = HttpUtil.post(httpTestUrl, params, 2_000, 2_000);
-		log.info("get==>{}", JsonUtil.json2Object(get, UserDO.class));
-		log.info("post==>{}", JsonUtil.json2Object(post, UserDO.class));
 		com.sun.management.OperatingSystemMXBean osmb = (com.sun.management.OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean();
 		return JsonUtil.object2Json(
 				new HashMap<String, Object>(16) {
@@ -124,19 +117,6 @@ public class FtApplication {
 	@GetMapping("/db")
 	public String db() {
 		return JsonUtil.object2Json(goodsService.get(1L));
-	}
-
-	@RequestMapping(value = "/http", method = {RequestMethod.GET, RequestMethod.POST})
-	public String http(
-			@RequestParam String username,
-			@RequestParam int age
-	) {
-		UserDO userDO = new UserDO();
-		userDO.setId(RandomUtils.nextLong());
-		userDO.setUsername(username);
-		userDO.setPassword(age + "");
-		userDO.setCreatedAt(DateUtil.getCurrentDate());
-		return JsonUtil.object2Json(userDO);
 	}
 
 	private ThreadLocal<Long> threadTime = new ThreadLocal<>();
