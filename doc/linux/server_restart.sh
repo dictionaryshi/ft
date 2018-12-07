@@ -3,7 +3,7 @@
 log_file=~/server.log
 
 gc_params="-XX:+UseConcMarkSweepGC -XX:+ExplicitGCInvokesConcurrentAndUnloadsClasses \
-           -XX:+UseCMSInitiatingOccupancyOnly -XX:CMSInitiatingOccupancyFraction=70 -XX:+CMSScavengeBeforeRemark \
+           -XX:+UseCMSInitiatingOccupancyOnly -XX:CMSInitiatingOccupancyFraction=50 -XX:+CMSScavengeBeforeRemark \
            -XX:ParallelGCThreads=4 \
            -XX:+PrintFlagsFinal -XX:+PrintGCDetails -XX:+PrintGCDateStamps  \
            -XX:+UseGCLogFileRotation -XX:NumberOfGCLogFiles=10 -XX:GCLogFileSize=10M -XX:+PrintStringTableStatistics -XX:+DisableExplicitGC "
@@ -17,7 +17,7 @@ server_test_array=(
 )
 
 server_start_array=(
-    '-Xms128m -Xmx128m -Xmn64m -Xss256k -Xloggc:/data/gc/gc_ft_%t-log ft-0.0.1-SNAPSHOT.jar'
+    '-Xms256m -Xmx256m -Xmn128m -Xss256k -Xloggc:/data/gc/gc_ft_%t-log ft-0.0.1-SNAPSHOT.jar'
 )
 
 server_log_array=(
