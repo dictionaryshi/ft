@@ -29,7 +29,7 @@ public class ThreadCheck {
 		try {
 			countDownLatch.await();
 
-			for (FutureTask<Boolean> task : checkFutureTasks) {
+			for (CheckFutureTask task : checkFutureTasks) {
 				task.cancel(true);
 			}
 
