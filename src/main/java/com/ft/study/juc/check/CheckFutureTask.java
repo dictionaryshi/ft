@@ -3,7 +3,6 @@ package com.ft.study.juc.check;
 import com.ft.util.JsonUtil;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.concurrent.Callable;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.FutureTask;
 
@@ -20,7 +19,7 @@ public class CheckFutureTask extends FutureTask<Boolean> {
 
 	private final String currentTaskName;
 
-	public CheckFutureTask(Callable<Boolean> callable, CountDownLatch countDownLatch, int taskNumber, String currentTaskName) {
+	public CheckFutureTask(CheckCallable callable, CountDownLatch countDownLatch, int taskNumber, String currentTaskName) {
 		super(callable);
 		this.countDownLatch = countDownLatch;
 		this.taskNumber = taskNumber;
