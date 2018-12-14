@@ -3,6 +3,7 @@ package com.ft.study.juc.check;
 import com.ft.util.JsonUtil;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.concurrent.CancellationException;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.FutureTask;
 
@@ -32,11 +33,16 @@ public class CheckFutureTask extends FutureTask<Boolean> {
 			if (!super.get()) {
 				afterFail();
 				log.warn("currentTaskName==>{}, 未通过", currentTaskName);
+			} else {
+				log.info("currentTaskName==>{}, 已通过", currentTaskName);
 			}
-			log.info("currentTaskName==>{}, 已通过", currentTaskName);
 		} catch (Exception e) {
 			this.afterFail();
-			log.error("currentTaskName==>{}, exception==>{}", currentTaskName, JsonUtil.object2Json(e), e);
+			if (e instanceof CancellationException) {
+				log.warn("taskName==>{}, 被取消", currentTaskName);
+			} else {
+				log.error("currentTaskName==>{}, exception==>{}", currentTaskName, JsonUtil.object2Json(e), e);
+			}
 		} finally {
 			countDownLatch.countDown();
 		}
