@@ -1,0 +1,22 @@
+tar -zxvf zookeeper-3.4.13.tar.gz
+
+cd zookeeper-3.4.13/conf
+
+cp -p zoo_sample.cfg zoo.cfg
+
+cd /opt/zookeeper/zookeeper-3.4.13/bin
+
+./zkServer.sh start
+
+cd /opt/kafka/
+
+tar -zxvf kafka_2.12-2.1.0.tgz
+
+cd /opt/kafka/kafka_2.12-2.1.0/bin
+
+vim kafka-server-start.sh
+
+    export KAFKA_HEAP_OPTS="-Xmx256m -Xms256m"
+
+./kafka-server-start.sh -daemon ../config/server.properties
+
