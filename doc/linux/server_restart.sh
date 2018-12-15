@@ -116,7 +116,7 @@ stop() {
 
 getProcessId(){
     process=`ps aux | grep ${1} | grep -v grep | awk '{print $2}'`
-    return ${process};
+    echo ${process}
 }
 
 while true
