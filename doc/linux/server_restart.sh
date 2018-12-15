@@ -88,6 +88,35 @@ server(){
 
 stop() {
     server_name=${1}
+
+    count=0
+    endTime=90
+    forceKillTime=60
+    while (( "${count} < ${endTime}" ))
+    do
+        process=$(getProcessId ${server_name})
+        if [[ "${process}" == "" ]]
+        then
+            echo "${server_name} already stopped"
+            return 0
+        fi
+        echo "stop ${process} ,time use ${count} seconds"
+        if (( ${count} < ${forceKillTime} ))
+        then
+            echo "kill ${process}"
+            kill ${process}
+        else
+            echo "force kill ${process}"
+            kill -9 ${process}
+        fi
+        let "count+=5"
+        sleep 5
+    done
+}
+
+getProcessId(){
+    process=`ps aux | grep ${1} | grep -v grep | awk '{print $2}'`
+    return ${process};
 }
 
 while true
