@@ -59,11 +59,13 @@ server(){
 
 				echo -e "\e[1;31m ${server_name}宕机, 开始自动重启... \e[0m"
 
-                kill -9 ${serverId}
+                stop ${server_name}
 
 				sleep 3
 
 				nohup java -jar ${gc_params} ${server_start} > ${server_log_file} 2>&1 &
+
+				echo -e "\e[1;31m ${server_name}启动完毕... \e[0m"
 
 				sleep 90
 
@@ -82,6 +84,10 @@ server(){
 	    fi
 
     done
+}
+
+stop() {
+    server_name=${1}
 }
 
 while true
