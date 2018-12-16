@@ -1,6 +1,6 @@
 #!/bin/sh
 
-log_file=~/server.log
+log_file=~/boot/server.log
 
 gc_params="-XX:+UseConcMarkSweepGC -XX:+ExplicitGCInvokesConcurrentAndUnloadsClasses \
            -XX:+UseCMSInitiatingOccupancyOnly -XX:CMSInitiatingOccupancyFraction=50 -XX:+CMSScavengeBeforeRemark \
@@ -21,7 +21,7 @@ server_start_array=(
 )
 
 server_log_array=(
-    '/root/ft_log.out'
+    '/root/boot/ft_log.out'
 )
 
 server(){
