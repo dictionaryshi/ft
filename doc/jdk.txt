@@ -22,4 +22,17 @@
 yum -y install git
 yum -y install zsh
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+cd
+vim .zshrc
+source ~/.bash_profile
+alias ll='ls -l'
+alias ali='ssh root@47.98.144.225'
+alias build='mvn clean package -Pstag -DskipTests=true'
+alias push='scp ft-0.0.1-SNAPSHOT.jar root@47.98.144.225:~/boot'
+alias vi='vim'
+alias diff='git diff'
+alias branch='git branch'
+alias checkout='git checkout'
+alias status='git status'
+alias add='git add -A'
 
