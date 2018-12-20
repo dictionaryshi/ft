@@ -19,6 +19,8 @@
 5. 查看nginx安装状态。
 
     /usr/local/nginx/sbin/nginx -t
+    ./nginx -s quit
+    ./nginx -s reload
 
 proxy_set_header Host $host;
 proxy_set_header X-Real-IP $remote_addr;
