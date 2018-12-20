@@ -3,7 +3,7 @@ com:
     constant: stag-xuting
 
 server:
-  port: 80
+  port: 9001
 
 druid:
   consign:
