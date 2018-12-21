@@ -28,7 +28,7 @@ public class CategoryController {
 	@Autowired
 	private CategoryService categoryService;
 
-	@ApiOperation(value = "查询所有分类信息")
+	@ApiOperation("查询所有分类信息")
 	/**
 	 * 查询所有分类信息
 	 *
@@ -40,7 +40,7 @@ public class CategoryController {
 		return JsonUtil.object2Json(RestResult.getSuccessRestResult(categoryService.listAll()));
 	}
 
-	@ApiOperation(value = "添加分类信息")
+	@ApiOperation("添加分类信息")
 	@ApiImplicitParams({
 			@ApiImplicitParam(name = "name", value = "分类名称", required = true, dataType = SwaggerConstant.DATA_TYPE_STRING, paramType = SwaggerConstant.PARAM_TYPE_QUERY)
 	})
@@ -63,7 +63,7 @@ public class CategoryController {
 		return JsonUtil.object2Json(RestResult.getSuccessRestResult(result));
 	}
 
-	@ApiOperation(value = "根据id修改分类信息")
+	@ApiOperation("根据id修改分类信息")
 	@ApiImplicitParams({
 			@ApiImplicitParam(name = "id", value = "分类id", required = true, dataType = SwaggerConstant.DATA_TYPE_INT, paramType = SwaggerConstant.PARAM_TYPE_QUERY, example = "0"),
 			@ApiImplicitParam(name = "name", value = "分类名称", required = true, dataType = SwaggerConstant.DATA_TYPE_STRING, defaultValue = "默认分类名称", paramType = SwaggerConstant.PARAM_TYPE_QUERY)
@@ -92,7 +92,7 @@ public class CategoryController {
 		return JsonUtil.object2Json(RestResult.getSuccessRestResult(result));
 	}
 
-	@ApiOperation(value = "根据id查询分类信息")
+	@ApiOperation("根据id查询分类信息")
 	@ApiImplicitParams({
 			@ApiImplicitParam(name = "id", value = "分类id", required = true, dataType = SwaggerConstant.DATA_TYPE_INT, paramType = SwaggerConstant.PARAM_TYPE_QUERY, example = "0"),
 	})

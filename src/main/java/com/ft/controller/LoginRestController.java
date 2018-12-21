@@ -47,7 +47,7 @@ public class LoginRestController {
 	@Value("${cookieDomain}")
 	private String cookieDomain;
 
-	@ApiOperation(value = "登录")
+	@ApiOperation("登录")
 	@ApiImplicitParams({
 			@ApiImplicitParam(name = "username", value = "用户名", required = true, dataType = SwaggerConstant.DATA_TYPE_STRING, paramType = SwaggerConstant.PARAM_TYPE_FORM),
 			@ApiImplicitParam(name = "password", value = "密码", required = true, dataType = SwaggerConstant.DATA_TYPE_STRING, paramType = SwaggerConstant.PARAM_TYPE_FORM),
@@ -90,7 +90,7 @@ public class LoginRestController {
 		return JsonUtil.object2Json(RestResult.getSuccessRestResult(result));
 	}
 
-	@ApiOperation(value = "图片验证码")
+	@ApiOperation("图片验证码")
 	/**
 	 * 图片验证码
 	 */
@@ -112,7 +112,7 @@ public class LoginRestController {
 		return JsonUtil.object2Json(RestResult.getSuccessRestResult(result));
 	}
 
-	@ApiOperation(value = "查询当前登录用户信息")
+	@ApiOperation("查询当前登录用户信息")
 	/**
 	 * 查询当前登录用户信息
 	 *

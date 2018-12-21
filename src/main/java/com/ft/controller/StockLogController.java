@@ -34,7 +34,7 @@ public class StockLogController {
 	@Autowired
 	private StockLogService stockLogService;
 
-	@ApiOperation(value = "库存列表")
+	@ApiOperation("库存列表")
 	@ApiImplicitParams({
 			@ApiImplicitParam(name = "current_page", value = "查询页码", required = true, dataType = SwaggerConstant.DATA_TYPE_INT, paramType = SwaggerConstant.PARAM_TYPE_QUERY, example = "0"),
 			@ApiImplicitParam(name = "type", value = "操作类型", dataType = SwaggerConstant.DATA_TYPE_INT, paramType = SwaggerConstant.PARAM_TYPE_QUERY, example = "0"),
@@ -69,7 +69,7 @@ public class StockLogController {
 		return JsonUtil.object2Json(RestResult.getSuccessRestResult(stockLogService.list(stockLogDTO, pageParam)));
 	}
 
-	@ApiOperation(value = "出/入库操作")
+	@ApiOperation("出/入库操作")
 	@ApiImplicitParams({
 			@ApiImplicitParam(name = "type", value = "操作类型", required = true, dataType = SwaggerConstant.DATA_TYPE_INT, paramType = SwaggerConstant.PARAM_TYPE_FORM, example = "0"),
 			@ApiImplicitParam(name = "goods_id", value = "商品id", required = true, dataType = SwaggerConstant.DATA_TYPE_INT, paramType = SwaggerConstant.PARAM_TYPE_FORM, example = "0"),
