@@ -44,5 +44,5 @@ upstream war_news {
     server 127.0.0.1:9001 weight=1 max_fails=2 fail_timeout=120s;
 }
 
-log_format misc '[$remote_addr] [$host] [$server_addr] [$time_local] [$request] [$request_time] [$upstream_response_time] [$status] [$body_bytes_sent] [$http_referer] [$http_user_agent] [$upstream_addr] [$upstream_response_time] [$upstream_status]';
+log_format misc '[$remote_addr] [$host] [$server_addr] [$time_local] [$request] [$request_time] [$upstream_response_time] [$status] [$body_bytes_sent] [$http_referer] [$http_user_agent] [$upstream_addr] [$upstream_response_time] [$upstream_status] [$request_body]';
 
