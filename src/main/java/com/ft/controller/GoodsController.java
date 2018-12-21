@@ -6,6 +6,7 @@ import com.ft.service.GoodsService;
 import com.ft.util.JsonUtil;
 import com.ft.web.constant.SwaggerConstant;
 import com.ft.web.model.RestResult;
+import com.ft.web.util.HttpUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -29,7 +30,7 @@ public class GoodsController {
 	@Autowired
 	private GoodsService goodsService;
 
-	@ApiOperation("根据id查询商品信息")
+	@ApiOperation(value = "根据id查询商品信息", consumes = HttpUtil.CONTENT_TYPE_TEXT)
 	@ApiImplicitParams({
 			@ApiImplicitParam(name = "id", value = "商品id", required = true, dataType = SwaggerConstant.DATA_TYPE_INT, paramType = SwaggerConstant.PARAM_TYPE_QUERY, example = "0"),
 	})
@@ -45,7 +46,7 @@ public class GoodsController {
 		return JsonUtil.object2Json(RestResult.getSuccessRestResult(goodsService.get(id)));
 	}
 
-	@ApiOperation("修改商品信息")
+	@ApiOperation(value = "修改商品信息", consumes = HttpUtil.CONTENT_TYPE_TEXT)
 	@ApiImplicitParams({
 			@ApiImplicitParam(name = "id", value = "商品id", required = true, dataType = SwaggerConstant.DATA_TYPE_INT, paramType = SwaggerConstant.PARAM_TYPE_FORM, example = "0"),
 			@ApiImplicitParam(name = "name", value = "商品名称", required = true, dataType = SwaggerConstant.DATA_TYPE_STRING, paramType = SwaggerConstant.PARAM_TYPE_FORM),
@@ -69,7 +70,7 @@ public class GoodsController {
 		return JsonUtil.object2Json(RestResult.getSuccessRestResult(goodsService.update(id, name, categoryId)));
 	}
 
-	@ApiOperation("添加商品信息")
+	@ApiOperation(value = "添加商品信息", consumes = HttpUtil.CONTENT_TYPE_TEXT)
 	@ApiImplicitParams({
 			@ApiImplicitParam(name = "name", value = "商品名称", required = true, dataType = SwaggerConstant.DATA_TYPE_STRING, paramType = SwaggerConstant.PARAM_TYPE_FORM),
 			@ApiImplicitParam(name = "category_id", value = "分类id", required = true, dataType = SwaggerConstant.DATA_TYPE_INT, paramType = SwaggerConstant.PARAM_TYPE_FORM, example = "0"),
@@ -90,7 +91,7 @@ public class GoodsController {
 		return JsonUtil.object2Json(RestResult.getSuccessRestResult(goodsService.add(name, categoryId)));
 	}
 
-	@ApiOperation("分页查询商品")
+	@ApiOperation(value = "分页查询商品", consumes = HttpUtil.CONTENT_TYPE_TEXT)
 	@ApiImplicitParams({
 			@ApiImplicitParam(name = "category_id", value = "分类id", required = true, dataType = SwaggerConstant.DATA_TYPE_INT, paramType = SwaggerConstant.PARAM_TYPE_QUERY, example = "0", defaultValue = "0"),
 			@ApiImplicitParam(name = "current_page", value = "查询页码", required = true, dataType = SwaggerConstant.DATA_TYPE_INT, paramType = SwaggerConstant.PARAM_TYPE_QUERY, example = "0"),
@@ -111,7 +112,7 @@ public class GoodsController {
 		return JsonUtil.object2Json(RestResult.getSuccessRestResult(goodsService.list(categoryId, new PageParam(currentPage, 10))));
 	}
 
-	@ApiOperation("根据分类查询所有商品")
+	@ApiOperation(value = "根据分类查询所有商品", consumes = HttpUtil.CONTENT_TYPE_TEXT)
 	@ApiImplicitParams({
 			@ApiImplicitParam(name = "category_id", value = "分类id", required = true, dataType = SwaggerConstant.DATA_TYPE_INT, paramType = SwaggerConstant.PARAM_TYPE_QUERY, example = "0"),
 	})

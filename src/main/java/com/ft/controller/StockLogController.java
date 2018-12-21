@@ -9,6 +9,7 @@ import com.ft.util.JsonUtil;
 import com.ft.util.LoginUtil;
 import com.ft.web.constant.SwaggerConstant;
 import com.ft.web.model.RestResult;
+import com.ft.web.util.HttpUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -34,7 +35,7 @@ public class StockLogController {
 	@Autowired
 	private StockLogService stockLogService;
 
-	@ApiOperation("库存列表")
+	@ApiOperation(value = "库存列表", consumes = HttpUtil.CONTENT_TYPE_TEXT)
 	@ApiImplicitParams({
 			@ApiImplicitParam(name = "current_page", value = "查询页码", required = true, dataType = SwaggerConstant.DATA_TYPE_INT, paramType = SwaggerConstant.PARAM_TYPE_QUERY, example = "0"),
 			@ApiImplicitParam(name = "type", value = "操作类型", dataType = SwaggerConstant.DATA_TYPE_INT, paramType = SwaggerConstant.PARAM_TYPE_QUERY, example = "0"),
@@ -69,7 +70,7 @@ public class StockLogController {
 		return JsonUtil.object2Json(RestResult.getSuccessRestResult(stockLogService.list(stockLogDTO, pageParam)));
 	}
 
-	@ApiOperation("出/入库操作")
+	@ApiOperation(value = "出/入库操作", consumes = HttpUtil.CONTENT_TYPE_TEXT)
 	@ApiImplicitParams({
 			@ApiImplicitParam(name = "type", value = "操作类型", required = true, dataType = SwaggerConstant.DATA_TYPE_INT, paramType = SwaggerConstant.PARAM_TYPE_FORM, example = "0"),
 			@ApiImplicitParam(name = "goods_id", value = "商品id", required = true, dataType = SwaggerConstant.DATA_TYPE_INT, paramType = SwaggerConstant.PARAM_TYPE_FORM, example = "0"),

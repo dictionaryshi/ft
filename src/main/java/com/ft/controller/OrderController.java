@@ -10,6 +10,7 @@ import com.ft.util.LoginUtil;
 import com.ft.util.StringUtil;
 import com.ft.web.constant.SwaggerConstant;
 import com.ft.web.model.RestResult;
+import com.ft.web.util.HttpUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -35,7 +36,7 @@ public class OrderController {
 	@Autowired
 	private OrderService orderService;
 
-	@ApiOperation("分页查询订单信息")
+	@ApiOperation(value = "分页查询订单信息", consumes = HttpUtil.CONTENT_TYPE_TEXT)
 	/**
 	 * 分页查询订单信息
 	 *
@@ -82,7 +83,7 @@ public class OrderController {
 		return JsonUtil.object2Json(RestResult.getSuccessRestResult(orderService.list(orderDTO, pageParam)));
 	}
 
-	@ApiOperation("获取某个订单信息")
+	@ApiOperation(value = "获取某个订单信息", consumes = HttpUtil.CONTENT_TYPE_TEXT)
 	/**
 	 * 获取某个订单信息
 	 *
@@ -98,7 +99,7 @@ public class OrderController {
 		return JsonUtil.object2Json(RestResult.getSuccessRestResult(orderService.get(id)));
 	}
 
-	@ApiOperation("查询订单项")
+	@ApiOperation(value = "查询订单项", consumes = HttpUtil.CONTENT_TYPE_TEXT)
 	/**
 	 * 查询订单项
 	 *
@@ -114,7 +115,7 @@ public class OrderController {
 		return JsonUtil.object2Json(RestResult.getSuccessRestResult(orderService.listItems(id)));
 	}
 
-	@ApiOperation("添加订单信息")
+	@ApiOperation(value = "添加订单信息", consumes = HttpUtil.CONTENT_TYPE_TEXT)
 	/**
 	 * 添加订单信息
 	 *
@@ -154,7 +155,7 @@ public class OrderController {
 		return JsonUtil.object2Json(RestResult.getSuccessRestResult(flag));
 	}
 
-	@ApiOperation("修改订单")
+	@ApiOperation(value = "修改订单", consumes = HttpUtil.CONTENT_TYPE_TEXT)
 	/**
 	 * 修改订单
 	 *
@@ -203,7 +204,7 @@ public class OrderController {
 		return JsonUtil.object2Json(RestResult.getSuccessRestResult(flag));
 	}
 
-	@ApiOperation("添加订单项")
+	@ApiOperation(value = "添加订单项", consumes = HttpUtil.CONTENT_TYPE_TEXT)
 	/**
 	 * 添加订单项
 	 *
@@ -228,7 +229,7 @@ public class OrderController {
 		return JsonUtil.object2Json(RestResult.getSuccessRestResult(flag));
 	}
 
-	@ApiOperation("删除订单项")
+	@ApiOperation(value = "删除订单项", consumes = HttpUtil.CONTENT_TYPE_TEXT)
 	/**
 	 * 删除订单项目
 	 *
@@ -249,7 +250,7 @@ public class OrderController {
 		return JsonUtil.object2Json(RestResult.getSuccessRestResult(flag));
 	}
 
-	@ApiOperation("修改订单项")
+	@ApiOperation(value = "修改订单项", consumes = HttpUtil.CONTENT_TYPE_TEXT)
 	/**
 	 * 修改订单项
 	 *
@@ -273,7 +274,7 @@ public class OrderController {
 		return JsonUtil.object2Json(RestResult.getSuccessRestResult(flag));
 	}
 
-	@ApiOperation("确认订单")
+	@ApiOperation(value = "确认订单", consumes = HttpUtil.CONTENT_TYPE_TEXT)
 	/**
 	 * 确认订单
 	 *
@@ -294,7 +295,7 @@ public class OrderController {
 		return JsonUtil.object2Json(RestResult.getSuccessRestResult(flag));
 	}
 
-	@ApiOperation("确认订单成功")
+	@ApiOperation(value = "确认订单成功", consumes = HttpUtil.CONTENT_TYPE_TEXT)
 	/**
 	 * 确认订单成功
 	 *
@@ -314,7 +315,7 @@ public class OrderController {
 		return JsonUtil.object2Json(RestResult.getSuccessRestResult(flag));
 	}
 
-	@ApiOperation("确认订单失败")
+	@ApiOperation(value = "确认订单失败", consumes = HttpUtil.CONTENT_TYPE_TEXT)
 	/**
 	 * 确认订单失败
 	 *

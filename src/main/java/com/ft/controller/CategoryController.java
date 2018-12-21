@@ -5,6 +5,7 @@ import com.ft.service.CategoryService;
 import com.ft.util.JsonUtil;
 import com.ft.web.constant.SwaggerConstant;
 import com.ft.web.model.RestResult;
+import com.ft.web.util.HttpUtil;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +29,7 @@ public class CategoryController {
 	@Autowired
 	private CategoryService categoryService;
 
-	@ApiOperation("查询所有分类信息")
+	@ApiOperation(value = "查询所有分类信息", consumes = HttpUtil.CONTENT_TYPE_TEXT)
 	/**
 	 * 查询所有分类信息
 	 *
@@ -40,7 +41,7 @@ public class CategoryController {
 		return JsonUtil.object2Json(RestResult.getSuccessRestResult(categoryService.listAll()));
 	}
 
-	@ApiOperation("添加分类信息")
+	@ApiOperation(value = "添加分类信息", consumes = HttpUtil.CONTENT_TYPE_TEXT)
 	@ApiImplicitParams({
 			@ApiImplicitParam(name = "name", value = "分类名称", required = true, dataType = SwaggerConstant.DATA_TYPE_STRING, paramType = SwaggerConstant.PARAM_TYPE_QUERY)
 	})
@@ -63,7 +64,7 @@ public class CategoryController {
 		return JsonUtil.object2Json(RestResult.getSuccessRestResult(result));
 	}
 
-	@ApiOperation("根据id修改分类信息")
+	@ApiOperation(value = "根据id修改分类信息", consumes = HttpUtil.CONTENT_TYPE_TEXT)
 	@ApiImplicitParams({
 			@ApiImplicitParam(name = "id", value = "分类id", required = true, dataType = SwaggerConstant.DATA_TYPE_INT, paramType = SwaggerConstant.PARAM_TYPE_QUERY, example = "0"),
 			@ApiImplicitParam(name = "name", value = "分类名称", required = true, dataType = SwaggerConstant.DATA_TYPE_STRING, defaultValue = "默认分类名称", paramType = SwaggerConstant.PARAM_TYPE_QUERY)
@@ -92,7 +93,7 @@ public class CategoryController {
 		return JsonUtil.object2Json(RestResult.getSuccessRestResult(result));
 	}
 
-	@ApiOperation("根据id查询分类信息")
+	@ApiOperation(value = "根据id查询分类信息", consumes = HttpUtil.CONTENT_TYPE_TEXT)
 	@ApiImplicitParams({
 			@ApiImplicitParam(name = "id", value = "分类id", required = true, dataType = SwaggerConstant.DATA_TYPE_INT, paramType = SwaggerConstant.PARAM_TYPE_QUERY, example = "0"),
 	})
