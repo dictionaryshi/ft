@@ -1,0 +1,38 @@
+1.cd /opt/
+
+2.mkdir jdk
+
+3.cd jdk
+
+4.tar -zxvf jdk-8u152-linux-x64.tar.gz
+
+5.vi /etc/profile
+
+    export JAVA_HOME="/opt/jdk/jdk1.8.0_152"
+    export PATH="$JAVA_HOME/bin:$PATH"
+
+6.source /etc/profile
+
+7.echo $PATH
+
+8.java -version
+
+9.echo $JAVA_HOME
+
+yum -y install git
+yum -y install zsh
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+cd
+vim .zshrc
+source ~/.bash_profile
+alias ll='ls -l'
+alias ali='ssh root@47.98.144.225'
+alias build='mvn clean package -Pstag -DskipTests=true'
+alias push='scp ft-0.0.1-SNAPSHOT.jar root@47.98.144.225:~/boot'
+alias vi='vim'
+alias diff='git diff'
+alias branch='git branch'
+alias checkout='git checkout'
+alias status='git status'
+alias add='git add -A'
+

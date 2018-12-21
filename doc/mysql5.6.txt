@@ -1,0 +1,53 @@
+1.rpm -qa | grep mysql
+
+2.rpm -e --nodeps mysql-libs-5.1.73-5.el6_6.x86_64
+
+3.rpm -Uvh http://dev.mysql.com/get/mysql-community-release-el6-5.noarch.rpm
+
+4.yum list | grep mysql
+
+5.yum -y install mysql-community-server
+
+6.rpm -qi mysql-community-server
+
+7.service mysqld start
+
+8.service mysqld restart
+
+9.chkconfig mysqld off
+
+10.chkconfig --list | grep mysqld
+
+11.service mysqld stop
+
+12.vi /etc/my.cnf
+
+    skip-grant-tables
+
+13.service mysqld start
+
+14.mysql
+
+15.use mysql;
+
+16.update user set password=PASSWORD('naodian12300') where user='root';
+
+17.GRANT ALL PRIVILEGES ON *.* TO root@"%" IDENTIFIED BY 'naodian12300' WITH GRANT OPTION;
+
+18.exit;
+
+19.service mysqld stop
+
+20.vi /etc/my.cnf
+
+    删除skip-grant-tables
+
+[client]
+default-character-set=utf8mb4
+
+[mysqld]
+character-set-server=utf8mb4
+
+[mysql]
+default-character-set=utf8mb4
+

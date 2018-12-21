@@ -1,0 +1,45 @@
+com:
+  ft:
+    constant: stag-xuting
+
+server:
+  port: 9001
+
+druid:
+  consign:
+    master:
+      url: jdbc:mysql://127.0.0.1:3306/stock
+      username: root
+      password: naodian12300
+      minIdle: 10
+      initialSize: 10
+      maxActive: 20
+    slave1:
+      url: jdbc:mysql://127.0.0.1:3306/stock
+      username: root
+      password: naodian12300
+      minIdle: 10
+      initialSize: 10
+      maxActive: 20
+    slave2:
+      url: jdbc:mysql://127.0.0.1:3306/stock
+      username: root
+      password: naodian12300
+      minIdle: 10
+      initialSize: 10
+      maxActive: 20
+
+redis:
+  hostName: 127.0.0.1
+  port: 6379
+  password:
+  database: 0
+  minIdle: 20
+  maxIdle: 20
+  maxTotal: 50
+
+cookieDomain: ft.com
+
+logging:
+  config: classpath:log-dev.xml
+

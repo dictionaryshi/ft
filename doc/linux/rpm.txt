@@ -1,0 +1,27 @@
+# rpm -q mysql-libs (查询软件包是否安装)
+
+# rpm -qa (查询安装的所有软件包)
+# rpm -qa 'mysql*' (查看安装的所有mysql软件包)
+# rpm -qa | grep mysql
+
+# rpm -qi mysql-libs (查看软件包详细信息)
+
+# rpm -ql mysql-libs (查看软件包的安装位置)
+
+# rpm -qf /sbin/ifconfig (查看文件属于哪个软件包)
+
+# cat /etc/yum.repos.d/CentOS-Base.repo (查看默认网络yum源)
+
+# yum list (查询所有可用软件包列表)
+
+# yum list | grep mysql (查看mysql的可用软件包)
+
+# yum search mysql (根据关键字搜索软件包)
+
+# yum -y install gcc (使用yum安装软件)
+
+# yum -y update gcc (升级软件包)
+
+# /etc/rc.d/init.d/iptables restart
+# /etc/rc.d/init.d/network  restart (使用绝对路径重启服务)
+

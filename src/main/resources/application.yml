@@ -1,0 +1,86 @@
+#动态选择配置文件
+spring:
+  profiles:
+    active: @mvn.active@
+  http:
+    encoding:
+      enabled: true
+      charset: utf-8
+      force: true
+  thymeleaf:
+    mode: HTML
+    cache: false
+  mail:
+    username: 903031015@qq.com
+    password: wxkalbwatwsvbbdg
+    host: smtp.qq.com
+    properties:
+      mail:
+        smtp:
+          ssl:
+            enable: true
+  application:
+    name: business
+  cloud:
+    loadbalancer:
+      retry:
+        enabled: true
+
+debug: false
+
+management:
+  health:
+    defaults:
+      enabled: false
+  endpoints:
+    web:
+      exposure:
+        include: [health,info]
+
+kafka:
+  servers: 127.0.0.1:9092
+  consign:
+    topic: test_ft
+    groupId: test_ft_group
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://eureka1:7001/eureka/,http://eureka2:7002/eureka/,http://eureka3:7003/eureka/
+    register-with-eureka: false
+    fetch-registry: false
+  instance:
+    instance-id: business-9001 #微服务别名
+    prefer-ip-address: true #显示IP
+    status-page-url-path: /actuator #服务管理界面直接进入指定位置
+    health-check-url-path: /actuator/health
+    lease-renewal-interval-in-seconds: 20 #心跳发送频率
+
+feign:
+  hystrix:
+    enabled: true
+
+ribbon:
+  ReadTimeout: 60_000
+  ConnectTimeout: 60_000
+  MaxAutoRetries: 0
+  MaxAutoRetriesNextServer: 3
+  OkToRetryOnAllOperations: true
+
+hystrix:
+  threadpool:
+    default:
+      coreSize: 20
+      maximumSize: 50
+      maxQueueSize: 100
+      queueSizeRejectionThreshold: 80
+      keepAliveTimeMinutes: 5
+      allowMaximumSizeToDivergeFromCoreSize: true
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 30_000
+          strategy: SEMAPHORE
+

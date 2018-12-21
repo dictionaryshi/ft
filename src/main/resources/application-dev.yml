@@ -1,0 +1,45 @@
+com:
+  ft:
+    constant: dev-chunyang
+
+server:
+  port: 9001
+
+druid:
+  consign:
+    master:
+      url: jdbc:mysql://localhost:3306/consign
+      username: root
+      password:
+      minIdle: 10
+      initialSize: 10
+      maxActive: 20
+    slave1:
+      url: jdbc:mysql://localhost:3306/consign_slave1
+      username: root
+      password:
+      minIdle: 10
+      initialSize: 10
+      maxActive: 20
+    slave2:
+      url: jdbc:mysql://localhost:3306/consign_slave2
+      username: root
+      password:
+      minIdle: 10
+      initialSize: 10
+      maxActive: 20
+
+redis:
+  hostName: localhost
+  port: 6379
+  password:
+  database: 0
+  minIdle: 20
+  maxIdle: 20
+  maxTotal: 50
+
+cookieDomain: ft.com
+
+logging:
+  config: classpath:log-dev.xml
+

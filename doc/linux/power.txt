@@ -1,0 +1,30 @@
+只有文件的所有者和root用户可以更改文件的权限。
+
+u (所有者)
+g (所属组)
+o (其他人)
+a (所有人)
+
+# chmod u+x ft.txt (给所有者添加可执行权限)
+
+# chmod a-rwx ft.txt (撤销所有人的权限)
+
+# chmod u=rw,g=r,o=r ft.txt (给文件分配权限)
+
+r(4)
+w(2)
+x(1)
+
+# chmod -R 777 ft/ (递归修改权限)
+
+                    文件                                  目录
+r   (查看文件内容, cat, less, head, tail)          (可以列出目录中的内容, ls, ll)
+w   (修改文件内容, vim)                            (可以在目录中创建或删除文件, mkdir, touch, rm)
+x   (可以执行文件)                                 (可以进入目录, cd)
+
+# chown chunyang ft.txt (改变文件所有者)
+
+# chgrp guazi ft.txt (改变文件所属组)
+
+# umask -S (查看创建目录的缺省权限)
+

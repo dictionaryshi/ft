@@ -1,0 +1,45 @@
+# useradd chunyang (添加用户)
+
+# passwd chunyang (修改/设置 用户密码)
+
+# w (查看登陆用户的信息)
+
+# cat /etc/passwd (查看用户信息文件)
+
+    root:x:0:0:root:/root:/bin/bash
+    chunyang:x:500:500::/home/chunyang:/bin/bash
+    xuting:x:501:501::/home/xuting:/bin/bash
+    (用户名称):(密码标识):(UID):(GID):(用户说明, 默认缺省):(用户家目录):(登陆之后使用的Shell)
+
+# cat /etc/shadow (查看用户影子文件, 用户密码存放文件)
+
+# cat /etc/group (查看用户组信息)
+
+    root:x:0:
+    chunyang:x:500:
+    xuting:x:501:
+    (组名称):(组密码标识):(GID):(组中附加用户)
+
+# useradd -c "诸葛亮" -G chunyang,xuting zgl (添加用户指定备注和附加组)
+
+# chage -d 0 chunyang (要求用户登陆后强行修改密码)
+
+# userdel -r chunyang (删除用户)
+
+# id zgl (查看用户信息)
+
+# env (查看用户的环境变量)
+
+$ su - root (切换用户)
+
+# groupadd mysql (添加用户组)
+
+# groupdel chunyang (删除组)
+
+# gpasswd -a zgl mysql (将用户添加到指定组中)
+# gpasswd -d zgl mysql (将用户从指定组中删除)
+
+# whoami (查看当前用户是谁)
+
+# vim /etc/inittab (修改系统运行级别)
+
