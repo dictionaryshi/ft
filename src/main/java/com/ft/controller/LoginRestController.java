@@ -10,7 +10,6 @@ import com.ft.web.constant.SwaggerConstant;
 import com.ft.web.exception.FtException;
 import com.ft.web.model.RestResult;
 import com.ft.web.util.CookieUtil;
-import com.ft.web.util.HttpUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -48,7 +47,7 @@ public class LoginRestController {
 	@Value("${cookieDomain}")
 	private String cookieDomain;
 
-	@ApiOperation(value = "登录", consumes = HttpUtil.CONTENT_TYPE_TEXT)
+	@ApiOperation(value = "登录")
 	@ApiImplicitParams({
 			@ApiImplicitParam(name = "username", value = "用户名", required = true, dataType = SwaggerConstant.DATA_TYPE_STRING, paramType = SwaggerConstant.PARAM_TYPE_FORM),
 			@ApiImplicitParam(name = "password", value = "密码", required = true, dataType = SwaggerConstant.DATA_TYPE_STRING, paramType = SwaggerConstant.PARAM_TYPE_FORM),
@@ -91,7 +90,7 @@ public class LoginRestController {
 		return JsonUtil.object2Json(RestResult.getSuccessRestResult(result));
 	}
 
-	@ApiOperation(value = "图片验证码", consumes = HttpUtil.CONTENT_TYPE_TEXT)
+	@ApiOperation(value = "图片验证码")
 	/**
 	 * 图片验证码
 	 */
@@ -113,7 +112,7 @@ public class LoginRestController {
 		return JsonUtil.object2Json(RestResult.getSuccessRestResult(result));
 	}
 
-	@ApiOperation(value = "查询当前登录用户信息", consumes = HttpUtil.CONTENT_TYPE_TEXT)
+	@ApiOperation(value = "查询当前登录用户信息")
 	/**
 	 * 查询当前登录用户信息
 	 *
