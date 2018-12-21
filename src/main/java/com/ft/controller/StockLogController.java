@@ -71,11 +71,11 @@ public class StockLogController {
 
 	@ApiOperation("出/入库操作")
 	@ApiImplicitParams({
-			@ApiImplicitParam(name = "type", value = "操作类型", required = true, dataType = SwaggerConstant.DATA_TYPE_INT, paramType = SwaggerConstant.PARAM_TYPE_FORM, example = "0"),
-			@ApiImplicitParam(name = "goods_id", value = "商品id", required = true, dataType = SwaggerConstant.DATA_TYPE_INT, paramType = SwaggerConstant.PARAM_TYPE_FORM, example = "0"),
-			@ApiImplicitParam(name = "order_id", value = "订单id", dataType = SwaggerConstant.DATA_TYPE_STRING, paramType = SwaggerConstant.PARAM_TYPE_FORM),
-			@ApiImplicitParam(name = "goods_number", value = "商品数量", required = true, dataType = SwaggerConstant.DATA_TYPE_INT, paramType = SwaggerConstant.PARAM_TYPE_FORM, example = "0"),
-			@ApiImplicitParam(name = "remark", value = "操作备注", dataType = SwaggerConstant.DATA_TYPE_STRING, paramType = SwaggerConstant.PARAM_TYPE_FORM),
+			@ApiImplicitParam(name = "type", value = "操作类型", required = true, dataType = SwaggerConstant.DATA_TYPE_INT, paramType = SwaggerConstant.PARAM_TYPE_QUERY, example = "0"),
+			@ApiImplicitParam(name = "goods_id", value = "商品id", required = true, dataType = SwaggerConstant.DATA_TYPE_INT, paramType = SwaggerConstant.PARAM_TYPE_QUERY, example = "0"),
+			@ApiImplicitParam(name = "order_id", value = "订单id", dataType = SwaggerConstant.DATA_TYPE_STRING, paramType = SwaggerConstant.PARAM_TYPE_QUERY),
+			@ApiImplicitParam(name = "goods_number", value = "商品数量", required = true, dataType = SwaggerConstant.DATA_TYPE_INT, paramType = SwaggerConstant.PARAM_TYPE_QUERY, example = "0"),
+			@ApiImplicitParam(name = "remark", value = "操作备注", dataType = SwaggerConstant.DATA_TYPE_STRING, paramType = SwaggerConstant.PARAM_TYPE_QUERY),
 	})
 	@RequestMapping(value = "/storage", method = RequestMethod.POST)
 	@LoginCheck

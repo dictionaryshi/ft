@@ -47,9 +47,9 @@ public class GoodsController {
 
 	@ApiOperation("修改商品信息")
 	@ApiImplicitParams({
-			@ApiImplicitParam(name = "id", value = "商品id", required = true, dataType = SwaggerConstant.DATA_TYPE_INT, paramType = SwaggerConstant.PARAM_TYPE_FORM, example = "0"),
-			@ApiImplicitParam(name = "name", value = "商品名称", required = true, dataType = SwaggerConstant.DATA_TYPE_STRING, paramType = SwaggerConstant.PARAM_TYPE_FORM),
-			@ApiImplicitParam(name = "category_id", value = "分类id", required = true, dataType = SwaggerConstant.DATA_TYPE_INT, paramType = SwaggerConstant.PARAM_TYPE_FORM, example = "0"),
+			@ApiImplicitParam(name = "id", value = "商品id", required = true, dataType = SwaggerConstant.DATA_TYPE_INT, paramType = SwaggerConstant.PARAM_TYPE_QUERY, example = "0"),
+			@ApiImplicitParam(name = "name", value = "商品名称", required = true, dataType = SwaggerConstant.DATA_TYPE_STRING, paramType = SwaggerConstant.PARAM_TYPE_QUERY),
+			@ApiImplicitParam(name = "category_id", value = "分类id", required = true, dataType = SwaggerConstant.DATA_TYPE_INT, paramType = SwaggerConstant.PARAM_TYPE_QUERY, example = "0"),
 	})
 	/**
 	 * 修改商品信息
@@ -71,8 +71,8 @@ public class GoodsController {
 
 	@ApiOperation("添加商品信息")
 	@ApiImplicitParams({
-			@ApiImplicitParam(name = "name", value = "商品名称", required = true, dataType = SwaggerConstant.DATA_TYPE_STRING, paramType = SwaggerConstant.PARAM_TYPE_FORM),
-			@ApiImplicitParam(name = "category_id", value = "分类id", required = true, dataType = SwaggerConstant.DATA_TYPE_INT, paramType = SwaggerConstant.PARAM_TYPE_FORM, example = "0"),
+			@ApiImplicitParam(name = "name", value = "商品名称", required = true, dataType = SwaggerConstant.DATA_TYPE_STRING, paramType = SwaggerConstant.PARAM_TYPE_QUERY),
+			@ApiImplicitParam(name = "category_id", value = "分类id", required = true, dataType = SwaggerConstant.DATA_TYPE_INT, paramType = SwaggerConstant.PARAM_TYPE_QUERY, example = "0"),
 	})
 	/**
 	 * 添加商品信息

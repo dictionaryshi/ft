@@ -49,10 +49,10 @@ public class LoginRestController {
 
 	@ApiOperation("登录")
 	@ApiImplicitParams({
-			@ApiImplicitParam(name = "username", value = "用户名", required = true, dataType = SwaggerConstant.DATA_TYPE_STRING, paramType = SwaggerConstant.PARAM_TYPE_FORM),
-			@ApiImplicitParam(name = "password", value = "密码", required = true, dataType = SwaggerConstant.DATA_TYPE_STRING, paramType = SwaggerConstant.PARAM_TYPE_FORM),
-			@ApiImplicitParam(name = "code", value = "验证码", required = true, dataType = SwaggerConstant.DATA_TYPE_STRING, paramType = SwaggerConstant.PARAM_TYPE_FORM),
-			@ApiImplicitParam(name = "code_id", value = "验证码绑定id", required = true, dataType = SwaggerConstant.DATA_TYPE_STRING, paramType = SwaggerConstant.PARAM_TYPE_FORM),
+			@ApiImplicitParam(name = "username", value = "用户名", required = true, dataType = SwaggerConstant.DATA_TYPE_STRING, paramType = SwaggerConstant.PARAM_TYPE_QUERY),
+			@ApiImplicitParam(name = "password", value = "密码", required = true, dataType = SwaggerConstant.DATA_TYPE_STRING, paramType = SwaggerConstant.PARAM_TYPE_QUERY),
+			@ApiImplicitParam(name = "code", value = "验证码", required = true, dataType = SwaggerConstant.DATA_TYPE_STRING, paramType = SwaggerConstant.PARAM_TYPE_QUERY),
+			@ApiImplicitParam(name = "code_id", value = "验证码绑定id", required = true, dataType = SwaggerConstant.DATA_TYPE_STRING, paramType = SwaggerConstant.PARAM_TYPE_QUERY),
 	})
 	/**
 	 * 登录

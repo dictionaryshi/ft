@@ -126,11 +126,11 @@ public class OrderController {
 	 * @return 添加结果
 	 */
 	@ApiImplicitParams({
-			@ApiImplicitParam(name = "total_amount", value = "订单总金额", required = true, dataType = SwaggerConstant.DATA_TYPE_INT, paramType = SwaggerConstant.PARAM_TYPE_FORM, example = "0"),
-			@ApiImplicitParam(name = "username", value = "客户姓名", dataType = SwaggerConstant.DATA_TYPE_STRING, paramType = SwaggerConstant.PARAM_TYPE_FORM),
-			@ApiImplicitParam(name = "phone", value = "客户电话", dataType = SwaggerConstant.DATA_TYPE_STRING, paramType = SwaggerConstant.PARAM_TYPE_FORM),
-			@ApiImplicitParam(name = "address", value = "客户地址", dataType = SwaggerConstant.DATA_TYPE_STRING, paramType = SwaggerConstant.PARAM_TYPE_FORM),
-			@ApiImplicitParam(name = "remark", value = "订单备注", dataType = SwaggerConstant.DATA_TYPE_STRING, paramType = SwaggerConstant.PARAM_TYPE_FORM),
+			@ApiImplicitParam(name = "total_amount", value = "订单总金额", required = true, dataType = SwaggerConstant.DATA_TYPE_INT, paramType = SwaggerConstant.PARAM_TYPE_QUERY, example = "0"),
+			@ApiImplicitParam(name = "username", value = "客户姓名", dataType = SwaggerConstant.DATA_TYPE_STRING, paramType = SwaggerConstant.PARAM_TYPE_QUERY),
+			@ApiImplicitParam(name = "phone", value = "客户电话", dataType = SwaggerConstant.DATA_TYPE_STRING, paramType = SwaggerConstant.PARAM_TYPE_QUERY),
+			@ApiImplicitParam(name = "address", value = "客户地址", dataType = SwaggerConstant.DATA_TYPE_STRING, paramType = SwaggerConstant.PARAM_TYPE_QUERY),
+			@ApiImplicitParam(name = "remark", value = "订单备注", dataType = SwaggerConstant.DATA_TYPE_STRING, paramType = SwaggerConstant.PARAM_TYPE_QUERY),
 	})
 	@RequestMapping(value = "/add", method = RequestMethod.POST)
 	@LoginCheck
@@ -168,12 +168,12 @@ public class OrderController {
 	 * @return 修改结果
 	 */
 	@ApiImplicitParams({
-			@ApiImplicitParam(name = "id", value = "订单id", required = true, dataType = SwaggerConstant.DATA_TYPE_STRING, paramType = SwaggerConstant.PARAM_TYPE_FORM),
-			@ApiImplicitParam(name = "total_amount", value = "订单总金额", dataType = SwaggerConstant.DATA_TYPE_INT, paramType = SwaggerConstant.PARAM_TYPE_FORM, example = "0"),
-			@ApiImplicitParam(name = "username", value = "客户姓名", dataType = SwaggerConstant.DATA_TYPE_STRING, paramType = SwaggerConstant.PARAM_TYPE_FORM),
-			@ApiImplicitParam(name = "phone", value = "客户电话", dataType = SwaggerConstant.DATA_TYPE_STRING, paramType = SwaggerConstant.PARAM_TYPE_FORM),
-			@ApiImplicitParam(name = "address", value = "客户地址", dataType = SwaggerConstant.DATA_TYPE_STRING, paramType = SwaggerConstant.PARAM_TYPE_FORM),
-			@ApiImplicitParam(name = "remark", value = "订单备注", dataType = SwaggerConstant.DATA_TYPE_STRING, paramType = SwaggerConstant.PARAM_TYPE_FORM),
+			@ApiImplicitParam(name = "id", value = "订单id", required = true, dataType = SwaggerConstant.DATA_TYPE_STRING, paramType = SwaggerConstant.PARAM_TYPE_QUERY),
+			@ApiImplicitParam(name = "total_amount", value = "订单总金额", dataType = SwaggerConstant.DATA_TYPE_INT, paramType = SwaggerConstant.PARAM_TYPE_QUERY, example = "0"),
+			@ApiImplicitParam(name = "username", value = "客户姓名", dataType = SwaggerConstant.DATA_TYPE_STRING, paramType = SwaggerConstant.PARAM_TYPE_QUERY),
+			@ApiImplicitParam(name = "phone", value = "客户电话", dataType = SwaggerConstant.DATA_TYPE_STRING, paramType = SwaggerConstant.PARAM_TYPE_QUERY),
+			@ApiImplicitParam(name = "address", value = "客户地址", dataType = SwaggerConstant.DATA_TYPE_STRING, paramType = SwaggerConstant.PARAM_TYPE_QUERY),
+			@ApiImplicitParam(name = "remark", value = "订单备注", dataType = SwaggerConstant.DATA_TYPE_STRING, paramType = SwaggerConstant.PARAM_TYPE_QUERY),
 	})
 	@RequestMapping(value = "/update", method = RequestMethod.POST)
 	@LoginCheck
@@ -213,9 +213,9 @@ public class OrderController {
 	 * @return 添加订单项结果
 	 */
 	@ApiImplicitParams({
-			@ApiImplicitParam(name = "order_id", value = "订单id", required = true, dataType = SwaggerConstant.DATA_TYPE_STRING, paramType = SwaggerConstant.PARAM_TYPE_FORM),
-			@ApiImplicitParam(name = "goods_id", value = "商品id", required = true, dataType = SwaggerConstant.DATA_TYPE_INT, paramType = SwaggerConstant.PARAM_TYPE_FORM, example = "0"),
-			@ApiImplicitParam(name = "goods_number", value = "商品数量", required = true, dataType = SwaggerConstant.DATA_TYPE_INT, paramType = SwaggerConstant.PARAM_TYPE_FORM, example = "0"),
+			@ApiImplicitParam(name = "order_id", value = "订单id", required = true, dataType = SwaggerConstant.DATA_TYPE_STRING, paramType = SwaggerConstant.PARAM_TYPE_QUERY),
+			@ApiImplicitParam(name = "goods_id", value = "商品id", required = true, dataType = SwaggerConstant.DATA_TYPE_INT, paramType = SwaggerConstant.PARAM_TYPE_QUERY, example = "0"),
+			@ApiImplicitParam(name = "goods_number", value = "商品数量", required = true, dataType = SwaggerConstant.DATA_TYPE_INT, paramType = SwaggerConstant.PARAM_TYPE_QUERY, example = "0"),
 	})
 	@LoginCheck
 	@RequestMapping(value = "/add-item", method = RequestMethod.POST)
@@ -236,8 +236,8 @@ public class OrderController {
 	 * @return 删除结果
 	 */
 	@ApiImplicitParams({
-			@ApiImplicitParam(name = "order_id", value = "订单id", required = true, dataType = SwaggerConstant.DATA_TYPE_STRING, paramType = SwaggerConstant.PARAM_TYPE_FORM),
-			@ApiImplicitParam(name = "id", value = "订单项id", required = true, dataType = SwaggerConstant.DATA_TYPE_INT, paramType = SwaggerConstant.PARAM_TYPE_FORM, example = "0"),
+			@ApiImplicitParam(name = "order_id", value = "订单id", required = true, dataType = SwaggerConstant.DATA_TYPE_STRING, paramType = SwaggerConstant.PARAM_TYPE_QUERY),
+			@ApiImplicitParam(name = "id", value = "订单项id", required = true, dataType = SwaggerConstant.DATA_TYPE_INT, paramType = SwaggerConstant.PARAM_TYPE_QUERY, example = "0"),
 	})
 	@RequestMapping(value = "/delete-item", method = RequestMethod.POST)
 	@LoginCheck
@@ -258,9 +258,9 @@ public class OrderController {
 	 * @return 修改订单项结果
 	 */
 	@ApiImplicitParams({
-			@ApiImplicitParam(name = "order_id", value = "订单id", required = true, dataType = SwaggerConstant.DATA_TYPE_STRING, paramType = SwaggerConstant.PARAM_TYPE_FORM),
-			@ApiImplicitParam(name = "goods_number", value = "商品数量", required = true, dataType = SwaggerConstant.DATA_TYPE_INT, paramType = SwaggerConstant.PARAM_TYPE_FORM, example = "0"),
-			@ApiImplicitParam(name = "id", value = "订单项id", required = true, dataType = SwaggerConstant.DATA_TYPE_INT, paramType = SwaggerConstant.PARAM_TYPE_FORM, example = "0"),
+			@ApiImplicitParam(name = "order_id", value = "订单id", required = true, dataType = SwaggerConstant.DATA_TYPE_STRING, paramType = SwaggerConstant.PARAM_TYPE_QUERY),
+			@ApiImplicitParam(name = "goods_number", value = "商品数量", required = true, dataType = SwaggerConstant.DATA_TYPE_INT, paramType = SwaggerConstant.PARAM_TYPE_QUERY, example = "0"),
+			@ApiImplicitParam(name = "id", value = "订单项id", required = true, dataType = SwaggerConstant.DATA_TYPE_INT, paramType = SwaggerConstant.PARAM_TYPE_QUERY, example = "0"),
 	})
 	@RequestMapping(value = "/update-item", method = RequestMethod.POST)
 	@LoginCheck
@@ -281,7 +281,7 @@ public class OrderController {
 	 * @return 确认订单结果
 	 */
 	@ApiImplicitParams({
-			@ApiImplicitParam(name = "order_id", value = "订单id", required = true, dataType = SwaggerConstant.DATA_TYPE_STRING, paramType = SwaggerConstant.PARAM_TYPE_FORM),
+			@ApiImplicitParam(name = "order_id", value = "订单id", required = true, dataType = SwaggerConstant.DATA_TYPE_STRING, paramType = SwaggerConstant.PARAM_TYPE_QUERY),
 	})
 	@LoginCheck
 	@RequestMapping(value = "/confirm", method = RequestMethod.POST)
@@ -301,7 +301,7 @@ public class OrderController {
 	 * @return 订单确认结果
 	 */
 	@ApiImplicitParams({
-			@ApiImplicitParam(name = "order_id", value = "订单id", required = true, dataType = SwaggerConstant.DATA_TYPE_STRING, paramType = SwaggerConstant.PARAM_TYPE_FORM),
+			@ApiImplicitParam(name = "order_id", value = "订单id", required = true, dataType = SwaggerConstant.DATA_TYPE_STRING, paramType = SwaggerConstant.PARAM_TYPE_QUERY),
 	})
 	@LoginCheck
 	@RequestMapping(value = "/success", method = RequestMethod.POST)
@@ -321,7 +321,7 @@ public class OrderController {
 	 * @return 订单确认失败结果
 	 */
 	@ApiImplicitParams({
-			@ApiImplicitParam(name = "order_id", value = "订单id", required = true, dataType = SwaggerConstant.DATA_TYPE_STRING, paramType = SwaggerConstant.PARAM_TYPE_FORM),
+			@ApiImplicitParam(name = "order_id", value = "订单id", required = true, dataType = SwaggerConstant.DATA_TYPE_STRING, paramType = SwaggerConstant.PARAM_TYPE_QUERY),
 	})
 	@LoginCheck
 	@RequestMapping(value = "/fail", method = RequestMethod.POST)
