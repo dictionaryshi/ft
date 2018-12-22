@@ -12,3 +12,6 @@
 
 7.墨绿:458383
 
+http://idea.lanyus.com/
+-javaagent:JetbrainsCrack-3.1-release-enc.jar
+
