@@ -4,3 +4,14 @@ export MAVEN_HOME="/opt/maven/apache-maven-3.6.0"
 
 export PATH="$MAVEN_HOME/bin:$JAVA_HOME/bin:$PATH"
 
+mvn -v
+
+<mirrors>
+    <mirror>
+        <id>alimaven</id>
+        <name>aliyun maven</name>
+        <url>http://maven.aliyun.com/nexus/content/groups/public/</url>
+        <mirrorOf>central</mirrorOf>
+    </mirror>
+</mirrors>
+
