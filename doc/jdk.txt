@@ -21,6 +21,7 @@
 
 yum -y install git
 yum -y install zsh
+yum -y update nss curl libcurl
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
 cd
 vim .zshrc
