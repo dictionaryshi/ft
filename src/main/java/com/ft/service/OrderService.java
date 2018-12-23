@@ -11,7 +11,8 @@ import com.ft.model.mdo.*;
 import com.ft.model.vo.ItemVO;
 import com.ft.model.vo.OrderVO;
 import com.ft.redis.base.ValueOperationsCache;
-import com.ft.util.NumberUtil;
+import com.ft.redis.lock.RedisLock;
+import com.ft.redis.util.OrderNumberUtil;
 import com.ft.util.StringUtil;
 import com.ft.web.exception.FtException;
 import com.ft.web.model.RestResult;
@@ -150,7 +151,7 @@ public class OrderService {
 	public boolean add(OrderDTO orderDTO) {
 
 		OrderDO orderDO = new OrderDO();
-		String orderId = NumberUtil.getRandomNumber();
+		String orderId = OrderNumberUtil.getRandomNumber(new RedisLock(valueOperationsCache));
 		orderDO.setId(orderId);
 		orderDO.setOperator(orderDTO.getOperator());
 		orderDO.setStatus(OrderConstant.STATUS_READY);
