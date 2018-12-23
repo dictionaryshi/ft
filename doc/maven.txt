@@ -1,0 +1,6 @@
+tar -zxvf apache-maven-3.6.0-bin.tar.gz
+
+export MAVEN_HOME="/opt/maven/apache-maven-3.6.0"
+
+export PATH="$MAVEN_HOME/bin:$JAVA_HOME/bin:$PATH"
+
