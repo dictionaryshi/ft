@@ -17,8 +17,6 @@
 
 # find /home/ -name '*ft*' -type f -exec ls -lh {} \; (查找并对结果集进行操作)
 
-# find / -inum 655376 -exec rm -rf {} \; (根据i节点查询并删除文件)
-
 # which ifconfig (查看系统命令所在目录)
 
 # grep -in "Multiuser" /etc/inittab (查找文件内容并忽略大小写)
