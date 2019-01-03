@@ -30,9 +30,12 @@ $ source .bash_profile (重新加载环境文件)
 
     control + C (强制中断当前执行命令)
 
-    control + U (剪切光标之前的命令)
-    control + K (前切光标之后的命令)
+    control + U (剪切当前行)
+    control + W (前切光标之前的内容)
+    control + K (前切从光标到行尾的内容)
     control + Y (粘贴剪切内容)
+    control + h (删除当前光标所在字符)
+    control + d (删除当前光标之前字符)
 
     control + R (搜索历史命令)
 
