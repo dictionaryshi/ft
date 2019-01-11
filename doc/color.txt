@@ -15,3 +15,9 @@
 http://idea.lanyus.com/
 -javaagent:JetbrainsCrack-3.1-release-enc.jar
 
+UI插件:Material Theme UI
+
+setter方法生成插件:GenerateAllSetter
+
+get/set方法生成插件:Lombok plugin
+
