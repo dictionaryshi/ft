@@ -36,4 +36,5 @@ alias branch='git branch'
 alias checkout='git checkout'
 alias status='git status'
 alias add='git add -A'
+alias merge='git merge --no-ff'
 
