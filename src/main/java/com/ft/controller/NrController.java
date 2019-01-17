@@ -5,6 +5,7 @@ import com.ft.util.JsonUtil;
 import com.ft.feign.RemoteService;
 import com.ft.model.mdo.UserDO;
 import com.ft.model.dto.ValidParent;
+import com.ft.web.annotation.SignCheck;
 import com.ft.websocket.OrderWebSocket;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,6 +49,7 @@ public class NrController {
 		return JsonUtil.object2Json(validParent);
 	}
 
+	@SignCheck
 	@PostMapping("/socket/push")
 	public String push(
 			@RequestParam Integer oid,
