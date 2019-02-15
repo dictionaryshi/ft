@@ -38,3 +38,6 @@ alias status='git status'
 alias add='git add -A'
 alias merge='git merge --no-ff'
 
+mkdir -p /root/boot /root/project
+mkdir -p /data/gc /data/web /data/service_logs/nginx
+
