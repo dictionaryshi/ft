@@ -16,7 +16,12 @@ public class RemoteServiceFallbackFactory implements FallbackFactory<RemoteServi
 		return new RemoteService() {
 			@Override
 			public String user(UserDO userDO) {
-				return "feign down";
+				return "feign user down";
+			}
+
+			@Override
+			public String get(String username, int age) {
+				return "feign get down";
 			}
 		};
 	}

@@ -39,9 +39,10 @@ public class NrController {
 		user.setCreatedAt(new Date());
 		user.setUpdatedAt(new Date(System.currentTimeMillis() * 10L));
 
-		String json = remoteService.user(user);
-		log.info("springCloud==>{}", json);
-		return json;
+		String userResult = remoteService.user(user);
+		String getResult = remoteService.get(null, 29);
+		log.info("userResult==>{}, getResult==>{}", userResult, getResult);
+		return userResult + "_" + getResult;
 	}
 
 	@PutMapping("/valid-model")
