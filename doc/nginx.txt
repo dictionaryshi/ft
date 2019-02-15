@@ -40,7 +40,7 @@ if ($request_uri ~ ^/news/) {
     proxy_pass http://war_news;
 }
 
-upstream war_news {
+upstream ft {
     server 127.0.0.1:9001 weight=1 max_fails=2 fail_timeout=120s;
 }
 
