@@ -1,13 +1,12 @@
 package com.ft.config.filter;
 
-import com.alibaba.druid.support.http.ResourceServlet;
-import com.alibaba.druid.support.http.StatViewServlet;
-import com.alibaba.druid.support.http.WebStatFilter;
+import com.ft.controller.DemoServlet;
 import com.netflix.hystrix.contrib.metrics.eventstream.HystrixMetricsStreamServlet;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.filter.CharacterEncodingFilter;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -20,27 +19,26 @@ import java.util.Map;
  */
 @Configuration
 public class FilterServletRegistrationBeanConfig {
-	@Bean("statViewServlet")
-	public ServletRegistrationBean statViewServlet() {
-		ServletRegistrationBean<StatViewServlet> statViewServlet = new ServletRegistrationBean<>(new StatViewServlet(), "/druid/*");
+	@Bean
+	public ServletRegistrationBean demoServlet() {
+		ServletRegistrationBean<DemoServlet> demoServlet = new ServletRegistrationBean<>(new DemoServlet(), "/demo/*");
 		Map<String, String> parameters = new HashMap<>(16);
-		parameters.put(ResourceServlet.PARAM_NAME_USERNAME, "root");
-		parameters.put(ResourceServlet.PARAM_NAME_PASSWORD, "naodian12300");
-		statViewServlet.setInitParameters(parameters);
-		return statViewServlet;
+		parameters.put("username", "root");
+		parameters.put("password", "一只飞的猪");
+		demoServlet.setInitParameters(parameters);
+		return demoServlet;
 	}
 
-	@Bean("webStatFilter")
-	public FilterRegistrationBean webStatFilter() {
-		FilterRegistrationBean<WebStatFilter> webStatFilter = new FilterRegistrationBean<>();
-		webStatFilter.setFilter(new WebStatFilter());
+//	@Bean
+	public FilterRegistrationBean characterEncodingFilter() {
+		FilterRegistrationBean<CharacterEncodingFilter> characterEncodingFilter = new FilterRegistrationBean<>();
+		characterEncodingFilter.setFilter(new CharacterEncodingFilter("UTF-8", true, true));
 
 		Map<String, String> parameters = new HashMap<>(16);
-		parameters.put(WebStatFilter.PARAM_NAME_EXCLUSIONS, "*.js,*.gif,*.jpg,*.png,*.css,*.ico,/druid/*");
-		webStatFilter.setInitParameters(parameters);
+		characterEncodingFilter.setInitParameters(parameters);
 
-		webStatFilter.setUrlPatterns(Collections.singletonList("/*"));
-		return webStatFilter;
+		characterEncodingFilter.setUrlPatterns(Collections.singletonList("/*"));
+		return characterEncodingFilter;
 	}
 
 	@Bean
