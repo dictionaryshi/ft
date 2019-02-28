@@ -6,6 +6,10 @@ package com.ft.study.inherit;
  * @author shichunyang
  */
 public class Son extends Father {
+	private String i = i();
+
+	private static String j = j();
+
 	static {
 		System.out.println("Son静态代码块");
 	}
@@ -17,6 +21,19 @@ public class Son extends Father {
 	public Son() {
 		super();
 		System.out.println("Son默认构造方法");
+	}
+
+	@Override
+	public String i() {
+		String result = "Son 普通属性";
+		System.out.println(result);
+		return result;
+	}
+
+	public static String j() {
+		String result = "Son 静态属性";
+		System.out.println(result);
+		return result;
 	}
 
 	public static void main(String[] args) {
