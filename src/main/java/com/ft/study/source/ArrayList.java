@@ -1,14 +1,14 @@
 package com.ft.study.source;
 
-import java.util.*;
-import java.util.function.Consumer;
+import java.util.Arrays;
+import java.util.Collection;
 
 /**
  * ArrayList
  *
  * @author shichunyang
  */
-public class ArrayList<E> implements Iterable<E> {
+public class ArrayList<E> {
 
 	/**
 	 * 数据结构改变的次数
@@ -459,92 +459,5 @@ public class ArrayList<E> implements Iterable<E> {
 		System.arraycopy(a, 0, elementData, index, numNew);
 		size += numNew;
 		return numNew != 0;
-	}
-
-	@Override
-	public Iterator<E> iterator() {
-		return new Itr();
-	}
-
-	private class Itr implements Iterator<E> {
-		/**
-		 * 下一个元素的索引
-		 */
-		int cursor;
-		/**
-		 * 当前元素索引
-		 */
-		int lastRet = -1;
-		int expectedModCount = modCount;
-
-		@Override
-		public boolean hasNext() {
-			return cursor != size;
-		}
-
-		@SuppressWarnings("unchecked")
-		@Override
-		public E next() {
-			checkForComodification();
-			int i = cursor;
-			if (i >= size) {
-				throw new NoSuchElementException();
-			}
-			Object[] elementData = ArrayList.this.elementData;
-			if (i >= elementData.length) {
-				throw new ConcurrentModificationException();
-			}
-			// 下一个元素索引
-			cursor = i + 1;
-			// 当前元素索引
-			return (E) elementData[lastRet = i];
-		}
-
-		@Override
-		public void remove() {
-			if (lastRet < 0) {
-				throw new IllegalStateException();
-			}
-			checkForComodification();
-
-			try {
-				// 用当前元素索引删除当前元素
-				ArrayList.this.remove(lastRet);
-				// 删除后, 其它元素上前补位, 那么下一个元素索引不变, 继续遍历当前索引位置
-				cursor = lastRet;
-				// 重置当前索引
-				lastRet = -1;
-				expectedModCount = modCount;
-			} catch (IndexOutOfBoundsException ex) {
-				throw new ConcurrentModificationException();
-			}
-		}
-
-		@Override
-		@SuppressWarnings("unchecked")
-		public void forEachRemaining(Consumer<? super E> consumer) {
-			Objects.requireNonNull(consumer);
-			final int size = ArrayList.this.size;
-			int i = cursor;
-			if (i >= size) {
-				return;
-			}
-			final Object[] elementData = ArrayList.this.elementData;
-			if (i >= elementData.length) {
-				throw new ConcurrentModificationException();
-			}
-			while (i != size && modCount == expectedModCount) {
-				consumer.accept((E) elementData[i++]);
-			}
-			cursor = i;
-			lastRet = i - 1;
-			checkForComodification();
-		}
-
-		final void checkForComodification() {
-			if (modCount != expectedModCount) {
-				throw new ConcurrentModificationException();
-			}
-		}
 	}
 }
