@@ -23,3 +23,5 @@ setter方法生成插件:GenerateAllSetter
 
 get/set方法生成插件:Lombok plugin
 
+/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+
