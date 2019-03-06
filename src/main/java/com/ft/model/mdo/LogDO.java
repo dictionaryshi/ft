@@ -76,6 +76,7 @@ public class LogDO implements Serializable {
       `method` varchar(255) NOT NULL DEFAULT '0' COMMENT '方法名称',
       `line_number` int(11) NOT NULL DEFAULT '0' COMMENT '行号',
       `message` longtext COMMENT '日志信息',
+      `cost` int(11) NOT NULL DEFAULT '-1' COMMENT '耗时',
       `request_id` char(32) NOT NULL DEFAULT '0' COMMENT '请求id',
       `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
       PRIMARY KEY (`id`)
