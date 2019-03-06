@@ -76,7 +76,6 @@ public class KafkaAppender extends AppenderBase<ILoggingEvent> {
 			}
 		}
 
-		log.setTime(null);
 		ElasticsearchTemplate elasticsearchTemplate = SpringContextUtil.getBean(ElasticsearchTemplate.class);
 		IndexQuery indexQuery = new IndexQueryBuilder().withId(CommonUtil.get32UUID()).withObject(log).build();
 		elasticsearchTemplate.index(indexQuery);
