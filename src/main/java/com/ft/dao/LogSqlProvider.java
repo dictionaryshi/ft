@@ -41,6 +41,10 @@ public class LogSqlProvider {
 			sql.VALUES("line_number", "#{lineNumber,jdbcType=INTEGER}");
 		}
 
+		if (record.getCost() != null) {
+			sql.VALUES("cost", "#{cost,jdbcType=INTEGER}");
+		}
+
 		if (record.getRequestId() != null) {
 			sql.VALUES("request_id", "#{requestId,jdbcType=CHAR}");
 		}

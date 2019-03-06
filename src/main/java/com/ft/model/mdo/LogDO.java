@@ -54,6 +54,11 @@ public class LogDO implements Serializable {
 	private Integer lineNumber;
 
 	/**
+	 * 耗时
+	 */
+	private Integer cost;
+
+	/**
 	 * 日志信息(message)
 	 */
 	private String message;
