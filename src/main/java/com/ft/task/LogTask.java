@@ -3,7 +3,12 @@ package com.ft.task;
 import com.ft.model.mdo.LogDO;
 import com.ft.redis.base.ListOperationsCache;
 import org.apache.commons.lang3.RandomUtils;
+import org.elasticsearch.index.query.QueryBuilder;
+import org.elasticsearch.index.query.QueryBuilders;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
+import org.springframework.data.elasticsearch.core.query.DeleteQuery;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -26,9 +31,20 @@ public class LogTask {
 	@Resource(name = "listOperationsCache")
 	private ListOperationsCache listOperationsCache;
 
+	@Autowired
+	private ElasticsearchTemplate elasticsearchTemplate;
+
 	@Scheduled(cron = "0/5 * * * * ?")
 	public void log() {
 		while (true) {
+			long limitTime = 0L;
+			DeleteQuery deleteQuery = new DeleteQuery();
+			deleteQuery.setIndex("consign");
+			deleteQuery.setType("log");
+			QueryBuilder queryBuilder = QueryBuilders.rangeQuery("time").lt(limitTime);
+			deleteQuery.setQuery(queryBuilder);
+			elasticsearchTemplate.delete(deleteQuery);
+
 			String logJson = listOperationsCache.rightPop(LogDO.LOG_QUEUE);
 			if (logJson == null) {
 				break;
