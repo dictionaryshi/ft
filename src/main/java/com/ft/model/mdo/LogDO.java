@@ -20,6 +20,8 @@ public class LogDO implements Serializable {
 	 */
 	private Integer id;
 
+	private String timestamp;
+
 	/**
 	 * 时间戳(time)
 	 */
