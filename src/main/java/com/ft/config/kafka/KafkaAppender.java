@@ -68,6 +68,7 @@ public class KafkaAppender extends AppenderBase<ILoggingEvent> {
 				return;
 			}
 			long number = Long.parseLong(finds.get(0).replace(cost, ""));
+			log.setCost(Math.toIntExact(number));
 			if (number > targetTime) {
 				listOperationsCache.leftPushAll(LogDO.LOG_QUEUE, JsonUtil.object2Json(log));
 			}
