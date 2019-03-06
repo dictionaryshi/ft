@@ -1,6 +1,7 @@
 package com.ft.model.mdo;
 
 import lombok.Data;
+import org.springframework.data.elasticsearch.annotations.Document;
 
 import java.io.Serializable;
 
@@ -9,6 +10,7 @@ import java.io.Serializable;
  *
  * @author shichunyang
  */
+@Document(indexName = "consign", type = "log")
 @Data
 public class LogDO implements Serializable {
 	public static final String LOG_QUEUE = "ft_log_queue";

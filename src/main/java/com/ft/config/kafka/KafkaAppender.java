@@ -6,12 +6,12 @@ import com.ft.db.plugin.AutoSwitchDatasourceInterceptor;
 import com.ft.db.plugin.DataSourceAspect;
 import com.ft.model.mdo.LogDO;
 import com.ft.redis.base.ListOperationsCache;
-import com.ft.util.JsonUtil;
-import com.ft.util.RegexUtil;
-import com.ft.util.SpringContextUtil;
-import com.ft.util.StringUtil;
+import com.ft.util.*;
 import com.ft.web.plugin.ControllerAspect;
 import org.slf4j.MDC;
+import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
+import org.springframework.data.elasticsearch.core.query.IndexQuery;
+import org.springframework.data.elasticsearch.core.query.IndexQueryBuilder;
 
 import java.util.List;
 
@@ -73,5 +73,9 @@ public class KafkaAppender extends AppenderBase<ILoggingEvent> {
 				listOperationsCache.leftPushAll(LogDO.LOG_QUEUE, JsonUtil.object2Json(log));
 			}
 		}
+
+		ElasticsearchTemplate elasticsearchTemplate = SpringContextUtil.getBean(ElasticsearchTemplate.class);
+		IndexQuery indexQuery = new IndexQueryBuilder().withId(CommonUtil.get32UUID()).withObject(log).build();
+		elasticsearchTemplate.index(indexQuery);
 	}
 }
