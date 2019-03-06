@@ -13,6 +13,7 @@ import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
 import org.springframework.data.elasticsearch.core.query.IndexQuery;
 import org.springframework.data.elasticsearch.core.query.IndexQueryBuilder;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -36,6 +37,7 @@ public class KafkaAppender extends AppenderBase<ILoggingEvent> {
 
 		LogDO log = new LogDO();
 		log.setTime(event.getTimeStamp());
+		log.setTimestamp(DateUtil.date2Str(new Date(log.getTime()), DateUtil.DEFAULT_DATE_FORMAT));
 		log.setApplication(event.getLoggerContextVO().getName());
 		log.setThread(event.getThreadName());
 		log.setLevel(event.getLevel().levelStr);
@@ -74,6 +76,7 @@ public class KafkaAppender extends AppenderBase<ILoggingEvent> {
 			}
 		}
 
+		log.setTime(null);
 		ElasticsearchTemplate elasticsearchTemplate = SpringContextUtil.getBean(ElasticsearchTemplate.class);
 		IndexQuery indexQuery = new IndexQueryBuilder().withId(CommonUtil.get32UUID()).withObject(log).build();
 		elasticsearchTemplate.index(indexQuery);
