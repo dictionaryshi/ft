@@ -43,3 +43,7 @@ cookieDomain: ft.com
 logging:
   config: classpath:log-dev.xml
 
+spring:
+  data:
+    elasticsearch:
+      cluster-nodes: localhost:9300
