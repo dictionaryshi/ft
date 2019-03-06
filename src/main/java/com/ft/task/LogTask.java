@@ -2,6 +2,7 @@ package com.ft.task;
 
 import com.ft.model.mdo.LogDO;
 import com.ft.redis.base.ListOperationsCache;
+import com.ft.util.DateUtil;
 import org.apache.commons.lang3.RandomUtils;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
@@ -14,6 +15,8 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
+import java.util.Calendar;
+import java.util.Date;
 
 /**
  * LogTask
@@ -37,7 +40,8 @@ public class LogTask {
 	@Scheduled(cron = "0/5 * * * * ?")
 	public void log() {
 		while (true) {
-			long limitTime = 0L;
+			Date expireLimit = DateUtil.getDateAddAmount(DateUtil.getCurrentDate(), Calendar.DAY_OF_MONTH, -31);
+			long limitTime = expireLimit.getTime();
 			DeleteQuery deleteQuery = new DeleteQuery();
 			deleteQuery.setIndex("consign");
 			deleteQuery.setType("log");
