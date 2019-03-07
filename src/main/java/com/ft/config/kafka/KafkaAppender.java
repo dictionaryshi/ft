@@ -9,9 +9,6 @@ import com.ft.redis.base.ListOperationsCache;
 import com.ft.util.*;
 import com.ft.web.plugin.ControllerAspect;
 import org.slf4j.MDC;
-import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
-import org.springframework.data.elasticsearch.core.query.IndexQuery;
-import org.springframework.data.elasticsearch.core.query.IndexQueryBuilder;
 
 import java.util.Date;
 import java.util.List;
@@ -76,8 +73,10 @@ public class KafkaAppender extends AppenderBase<ILoggingEvent> {
 			}
 		}
 
+/*
 		ElasticsearchTemplate elasticsearchTemplate = SpringContextUtil.getBean(ElasticsearchTemplate.class);
 		IndexQuery indexQuery = new IndexQueryBuilder().withId(CommonUtil.get32UUID()).withObject(log).build();
 		elasticsearchTemplate.index(indexQuery);
+		*/
 	}
 }
