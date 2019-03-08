@@ -8,6 +8,7 @@ import java.util.Collection;
  *
  * @author shichunyang
  */
+@SuppressWarnings("unchecked")
 public class ArrayList<E> {
 
 	/**
