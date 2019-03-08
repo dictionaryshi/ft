@@ -9,6 +9,7 @@ import java.util.Objects;
  *
  * @author shichunyang
  */
+@SuppressWarnings("unchecked")
 public class HashMap<K, V> {
 	/**
 	 * 默认初始容量(必须是2的N次幂), 16
