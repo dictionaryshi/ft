@@ -265,3 +265,33 @@ InnoDB存储引擎:update的时候如果索引失效会变表锁。(where后索�
 
 锁定某一行数据:for update。 // 该行不允许被其它用户 进行读/写操作。(排它锁)
 
+EXPLAIN SELECT * FROM br_user t WHERE t.username = '春阳' AND t.age>20 ORDER BY t.crt_time DESC; 最优的索引创建方式==> username和crt_time。
+
+左外连接在右表建索引, 右外连接在左表建立索引(因为始终会有一张表被全表扫描, 另一张表只查询出部分结果与之匹配)
+
+防止索引失效:
+    1)复合索引的第一个列必须使用, 否则索引失效。
+    2)使用复合索引, 必须按顺序使用(不能跳过某一列)。否则索引部分生效。
+    3)不能在索引列上做任何操作(计算, 函数, 自动/手动 类型转换)。否则索引失效。
+    4)范围条件右边的索引列会失效。(like 除外)
+    5)尽量使用覆盖索引(不写SELECT *, 查询列和索引列 顺序和个数保持一致)。
+    6)使用!= 或 <> 的时候 索引失效, 全表扫描。
+    7)可以使用IS NULL 或 IS NOT NULL, 不会让索引失效。
+    8)like是range(范围查询), 但书写格式必须是:like '值%', 否则索引失效。
+    9)如果想要实现 like '%值%' 索引不失效, 那么解决方案是查询列使用覆盖索引。
+    10)字符串不加单引号索引会失效。(不写引号, mysql会自动类型转换导致索引失效)
+    11)少用or连接, or连接也可能引起索引失效, 使用UNION和IN替换or。
+    12)Mysql优化器, 会调整索引列的位置, 但是我们还是要按索引列的顺序使用。
+
+给 c1 c2 c3 c4 添加复合索引。
+EXPLAIN
+SELECT * FROM idx_table t
+WHERE t.c1 ='c1' AND t.c2='c2' AND t.c4 = 'c4'
+ORDER BY t.c3;
+
+上述SQL:索引使用了 c1, c2, c3(参与排序)。  c4失效。
+
+EXPLAIN SELECT * FROM idx_table t WHERE t.c1 = 'c1' ORDER BY t.c3,t.c2; // 使用索引c1。(order by后, 优化器不会调整索引列位置)
+
+若ORDER BY 后面参与排序的列是常量, 则不会产生文件内排序, 不影响性能。
+
