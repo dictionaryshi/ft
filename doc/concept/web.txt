@@ -62,19 +62,43 @@
 
 14.DQL的语法:
 
-    SELECT selection_list
+    SELECT DISTINCT <selection_list>
 
-    FROM   table_list
+    FROM   <left_table>
 
-    WHERE  CONDITION
+    <join_type> JOIN <right_table> ON <join_condition>
 
-    GROUP BY table_column
+    WHERE <where_condition>
 
-    HAVING CONDITION
+    GROUP BY <table_column>
 
-    ORDER BY table_column ASC/DESC
+    HAVING <having_condition>
+
+    ORDER BY <table_column> ASC/DESC
 
     LIMIT start_row,count_rows;
+
+机器读取顺序:
+
+    FROM:对左表和右表计算笛卡尔积。产生虚拟表VT1。
+
+    ON:对虚拟表VT1进行ON筛选,符合<join-condition>的行会被记录在虚拟表VT2中。
+
+    JOIN_TYPE:主表中不符合<join-condition>的数据也会加入到VT2中,作为外部行,生成虚拟表VT3。
+
+    WHERE:对虚拟表VT3进行WHERE条件过滤。只有符合<where-condition>的记录才会被插入到虚拟表VT4中。
+
+    GROUP BY:对VT4中的记录进行分组操作,生成VT5。
+
+    HAVING:对虚拟表VT5使用having过滤,只有符合<having-condition>的记录才会被插入到虚拟表VT6中。
+
+    SELECT:执行select操作,选择指定的列,插入到虚拟表VT7中。
+
+    DISTINCT:对VT7中的记录进行去重。产生虚拟表VT8。
+
+    ORDER BY:将虚拟表VT8中的记录按照<order_by_list>进行排序操作,产生虚拟表VT9。
+
+    LIMIT:取出指定行的记录,产生虚拟表VT10,并将结果返回。
 
 15.模糊查询:
     SELECT t.REAL_NAME FROM tgs_sys_user t WHERE t.REAL_NAME LIKE CONCAT ('%','波','%');
