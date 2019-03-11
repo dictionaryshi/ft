@@ -213,3 +213,40 @@
     1)REQUIRED:如果当前有事务就在当前事务运行, 如果没有, 则新开一个事务。(默认传播行为)
     2)SUPPORTS:当前有事务就在事务中运行, 否则在非事务中运行。
 
+// 查出A中不包含在B中的元素
+SELECT * FROM tablea A LEFT JOIN  tableb B ON A.id = B.id WHERE B.id IS NULL;
+
+// 查出B中不包含在A中的所有元素
+SELECT * FROM tablea A RIGHT JOIN  tableb B ON A.id = B.id WHERE A.id IS NULL;
+
+// 查询两张表全部数据(不包含交集)
+(SELECT * FROM tablea A LEFT JOIN  tableb B ON A.id = B.id WHERE B.id IS NULL)
+UNION
+(SELECT * FROM tablea A RIGHT JOIN  tableb B ON A.id = B.id WHERE A.id IS NULL)
+
+索引(index):是一种数据结构(排好序的, 快速查找数据结构), 用来帮助mysql提高查询效率。
+
+索引主要用来提升:where condition, order by column和group by column。(查询 + 排序)
+
+索引以指针的方式引用真实数据的物理地址。
+
+索引:提高数据检索效率, 降低IO成本。提高数据排序速度, 降低CPU消耗。
+
+索引提高查询速度, 但是会降低更新速度。(insert, update, delete时, 不仅改变数据, 还会改变索引的信息)
+
+单值索引:一个索引只包含单个列。
+唯一索引:索引列的值必须唯一, 但是允许NULL值。
+复合索引:一个索引包含多个列。
+
+一个查询语句只能挑选一个索引使用。
+
+主键自动建立唯一索引。
+频繁作为条件查询的字段应该建立索引。
+查询中与其它表关联的字段要建立索引。
+频繁更新的字段不适合建立索引。(会使更新的性能降低)
+高并发下更倾向于复合索引。
+查询中排序的字段应该建立索引。
+group by后面的字段也要建立索引。
+表记录太少不需要建立索引。
+列数据大量重复, 尽量不建索引。
+
