@@ -54,3 +54,7 @@ default-character-set=utf8mb4
 CREATE USER sd@'%' IDENTIFIED BY 'naodian12300';
 GRANT SELECT ON *.* TO sd@'%';
 
+查看数据库编码:mysql> SHOW VARIABLES LIKE '%char%';
+
+InnoDB:支持事务和行锁(适合高并发), 支持外键。缓存区域不仅缓存索引, 还缓存真实数据, 对内存要求较高。
+
