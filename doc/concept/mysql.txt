@@ -295,3 +295,55 @@ EXPLAIN SELECT * FROM idx_table t WHERE t.c1 = 'c1' ORDER BY t.c3,t.c2; // 使�
 
 若ORDER BY 后面参与排序的列是常量, 则不会产生文件内排序, 不影响性能。
 
+使用EXPLAIN可以得知:
+    1)表的读取顺序。
+    2)数据读取的操作类型。
+    3)可以使用的索引。
+    4)实际使用的索引。
+    5)表之间的引用。
+
+id:表的读取顺序。
+    1)id相同:顺序由上置下。
+    2)id不同:id值越大, 优先级越高, 优先被执行。
+    3)id为null的就表示这是一个结果集,不需要使用它来进行查询。
+
+select_type:数据读取的操作类型。
+    1)SIMPLE:最简单的SELECT查询, 没有使用UNION或子查询。
+    2)PRIMARY:在嵌套查询中是最外层的SELECT语句, 在UNION查询中是最前面的SELECT语句。
+    3)SUBQUERY:子查询。
+    4)DEPENDENT SUBQUERY:子查询并且依赖外部查询。
+    5)DERIVED:派生表, FROM子句中的SELECT语句。
+    6)UNION:UNION中第二个SELECT语句。
+    7)UNION RESULT:合并的结果集。
+    8)DEPENDENT UNION:UNION中第二个SELECT语句, 并且依赖外部查询。
+
+table:这一行的数据是关于哪张表的。
+
+type:访问表的类型。
+    1)system:表中只有一行数据或者是空表(InnoDB为index)。
+    2)const:通过索引一次就查到了(主键或者唯一索引查询时)。
+    3)eq_ref:唯一性索引扫描(主键或者唯一索引)。
+    4)ref:非唯一性索引扫描(普通索引)。
+    5)range:索引范围扫描。
+    6)index:遍历索引树。
+    7)all:全表扫描。
+
+索引优化:至少要达到range级别, 最好能到ref。
+
+possible_keys:可能使用到的索引。
+
+key:实际使用的索引。 若查询中出现了覆盖索引, 则该索引只出现在key列。
+
+key_len:实际使用的索引长度。
+
+ref:帮助查询的索引列(如果是const, 说明帮助查询的是一个常量)
+
+rows:大致估算, 找到所需记录要读取的行数。(越少越好)
+
+Extra:重要的额外信息。
+    1)Using filesort:排序时没有使用索引。(order by和group by 会引起此问题)
+    2)Using temporary:产生临时表。(group by 会引起此问题)
+    3)Using index:使用了覆盖索引, 没有访问数据行。(若同时出现Using where, 表明索引被用来查找索引键值, 否则只是读取索引数据)
+    4)Using where:使用了where过滤。
+    5)using join buffer:使用了连接缓存。
+
