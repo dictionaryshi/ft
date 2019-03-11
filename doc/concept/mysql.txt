@@ -250,3 +250,18 @@ group by后面的字段也要建立索引。
 表记录太少不需要建立索引。
 列数据大量重复, 尽量不建索引。
 
+给age,crt_time添加复合索引。
+EXPLAIN SELECT * FROM idx_user t ORDER BY t.age; // 无法使用索引排序。
+EXPLAIN SELECT * FROM idx_user t WHERE t.age>20 ORDER BY t.age; // 可以使用索引排序
+EXPLAIN SELECT * FROM idx_user t WHERE t.age>20 ORDER BY t.crt_time; // 无法使用索引排序
+EXPLAIN SELECT * FROM idx_user t WHERE t.age=20 ORDER BY t.crt_time; // 可以使用索引
+使用order by 尽量不用select *
+
+对MyISAM表的读操作, 不会阻塞其他用户对同一表的读请求, 但会阻塞对同一表的写请求。
+对MyISAM表的写操作, 则会阻塞其他用户对同一表的读和写操作。
+读锁:偏向MyISAM, 开销小, 加锁快, 无死锁, 锁定力度大(表锁), 发生锁冲突概率高, 并发度最低。
+行锁:偏向InnoDB, 开销大, 加锁慢, 会出现死锁, 锁定力度小, 发生锁冲突概率低, 并发度最高。
+InnoDB存储引擎:update的时候如果索引失效会变表锁。(where后索引失效)
+
+锁定某一行数据:for update。 // 该行不允许被其它用户 进行读/写操作。(排它锁)
+
