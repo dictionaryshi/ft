@@ -1,0 +1,215 @@
+11.关系结构模型数据库(简称关系型数据库):使用二维表格来存储数据。
+
+13.sql语句的分类:
+
+    1)DDL:数据定义语言(CREATE, DROP, ALTER)。
+    2)DML:数据操作语言(INSERT, UPDATE, DELETE)。
+    3)DCL:数据控制语言(GRANT, REVOKE)。
+    4)DQL:数据查询语言(SELECT)。
+
+14.DQL的语法:
+
+    SELECT DISTINCT <selection_list>
+
+    FROM   <left_table>
+
+    <join_type> JOIN <right_table> ON <join_condition>
+
+    WHERE <where_condition>
+
+    GROUP BY <table_column>
+
+    HAVING <having_condition>
+
+    ORDER BY <table_column> ASC/DESC
+
+    LIMIT start_row,count_rows;
+
+机器读取顺序:
+
+    FROM:对左表和右表计算笛卡尔积。产生虚拟表VT1。
+
+    ON:对虚拟表VT1进行ON筛选, 符合<join-condition>的行会被记录在虚拟表VT2中。
+
+    JOIN_TYPE:主表中不符合<join-condition>的数据也会加入到VT2中, 作为外部行, 生成虚拟表VT3。
+
+    WHERE:对虚拟表VT3进行WHERE条件过滤。只有符合<where-condition>的记录才会被插入到虚拟表VT4中。
+
+    GROUP BY:对VT4中的记录进行分组操作, 生成VT5。
+
+    HAVING:对虚拟表VT5使用having过滤, 只有符合<having-condition>的记录才会被插入到虚拟表VT6中。
+
+    SELECT:执行select操作, 选择指定的列, 插入到虚拟表VT7中。
+
+    DISTINCT:对VT7中的记录进行去重。产生虚拟表VT8。
+
+    ORDER BY:将虚拟表VT8中的记录按照<order_by_list>进行排序操作, 产生虚拟表VT9。
+
+    LIMIT:取出指定行的记录, 产生虚拟表VT10, 并将结果返回。
+
+15.模糊查询:
+    SELECT t.REAL_NAME FROM tgs_sys_user t WHERE t.REAL_NAME LIKE CONCAT ('%','波','%');
+    SELECT t.REAL_NAME FROM tgs_sys_user t WHERE t.REAL_NAME LIKE '_春%';
+
+16.如果每页查n条, 要查第m页。
+
+    SELECT * FROM tgs_sys_user LIMIT (m - 1) * n, n;
+
+17.合并结果集:
+
+    SELECT * FROM emp UNION ALL SELECT * FROM emp; // 保留重复结果集
+    SELECT * FROM emp UNION SELECT * FROM emp;     // 去除重复结果集
+
+18.子查询:
+
+    SELECT
+        *
+    FROM emp t
+    WHERE t.sal > (SELECT t2.sal FROM emp t2 WHERE t2.ename='甘宁');
+
+    SELECT
+        *
+    FROM emp t1
+    WHERE (t1.job, t1.sal) IN
+    (SELECT t2.job, t2.sal FROM emp t2 WHERE t2.ename = '殷天正');
+
+    SELECT
+        *
+    FROM emp t1
+    WHERE t1.sal > ALL (SELECT t2.sal FROM emp t2 WHERE t2.deptno = 30);
+
+    SELECT
+        t1.empno, t1.ename, t1.sal, t2.dname, t2.loc
+    FROM
+        emp t1, (SELECT dname, loc, deptno FROM dept) t2
+    WHERE t1.deptno = t2.deptno;
+
+19.decimal(5,2)表示长度是5其中两位是小数, 如:999.99。
+
+20.查看mysql进程:SHOW PROCESSLIST;
+
+21.查看所有的表:SHOW TABLES;
+
+22.查看指定表的创建语句:SHOW CREATE TABLE tgs_order_main;
+
+23.查看表结构(字段和类型):DESC tgs_order_main;
+
+25.TRUNCATE是DDL语句, 原理是先将表drop掉然后重新再创建表,
+相比delete而言truncate的效率更高, 但是truncate删除的数据是无法回滚的。
+
+26.查看MySQL数据库的所有管理员信息。
+
+    USE mysql;
+    SELECT * FROM `user`;
+
+27.创建mysql用户
+
+    CREATE USER sd@localhost IDENTIFIED BY '123456';
+    CREATE USER sd@'%' IDENTIFIED BY '123456';
+
+28.删除mysql用户
+
+    DROP USER sd@localhost;
+    DROP USER sd@'%';
+
+29.查看用户的权限:
+
+    SHOW GRANTS FOR sd@'%';
+
+30.给用户授权:
+
+    GRANT CREATE,ALTER,DROP,INSERT,UPDATE,DELETE,SELECT ON car.* TO sd@'%';
+
+31.给用户分配某个数据库的所有权限。
+
+    GRANT ALL ON car.* TO sd@'%';
+
+32.撤销用户权限:
+
+    REVOKE ALL ON car.* FROM sd@'%';
+    REVOKE  INSERT, UPDATE, DELETE, CREATE, DROP, ALTER ON car.* FROM sd@'%';
+
+33.修改用户密码:
+
+    USE mysql;
+    UPDATE `user` t SET
+        PASSWORD = PASSWORD('789')
+    WHERE
+        t.User = 'sd' AND t.Host = '%';
+
+    FLUSH PRIVILEGES;
+
+34.MySql的备份与恢复。
+
+    mysqldump -uroot -p car > /opt/car.sql
+    mysql -uroot -p car < /opt/car.sql (无需登录就恢复数据库中的数据的方式)
+
+35.事务就是对数据库的一组操作, 但是这些操作必须要么全部成功, 要么全部失败。例如:银行转账。
+
+36.事务的四大特性(ACID):
+
+    1)原子性(A):事务中包含了很多数据库的操作, 但是事务是原子单位不能分割。事务只能成功或失败。
+    2)一致性(C):事务执行后, 数据库状态和业务期望的结果一致。
+    3)隔离性(I):指的是在并发操作数据库时, 不同事务之间有隔离性, 事务与事务之间不会受到干扰。
+    4)持久性(D):一旦事务提交成功, 事务中对数据的所有操作都会同步到数据库中。
+    即使提交事务后, 数据库马上崩溃, 在数据库重启时, 也必须能保证通过某种机制恢复数据。
+
+37.MySQL中的事务:
+
+    1)默认情况下, 在MySQL中执行的每条SQL都可以单独看成一个事务。
+    2)在MySQL中开启事务, 让事务中含有多条sql语句:
+
+        START TRANSACTION;
+            sql1;
+            sql2;
+        COMMIT;
+
+38.MySQL的事务默认是关闭的, 需要手动开启, Oracle中的事务默认是开启的。
+
+39.JDBC认为同一个事务中的所有操作都是由同一个Connection对象完成的。
+    // 开启事务(设置非自动提交)
+    conn.setAutoCommit(false);
+
+40.同一个事务中Connection对象必须保持唯一。(Connection只能获取一次)
+
+41.为了获得更好的运行性能, 数据库允许多个事务同时运行, 当事务并发访问数据库中相同的数据时,
+通常需要采取必要的隔离机制, 反之会出现各种并发问题。
+
+42.事务并发的读问题:
+
+    1)脏读:即一个事务读取到另一事务未提交的更新数据(随时可能回滚), 这种情况要坚决避免。
+    2)不可重复读:在同一事务中, 多次读取同一数据返回的结果有所不同。
+    也就是说, 后续的读取, 可以读取到另一事务已提交的更新数据。(一般允许这种情况)
+
+    3)虚读(幻读):一个事务读取到另一事务已提交的insert数据。(对同一张表的两次查询不一致)
+
+43.事务的四大隔离级别:不同事务隔离级别能够解决的数据并发问题的能力是不同的。
+
+    1)SERIALIZABLE(串行化):不会出现任何并发问题, 一个事务执行时, 不会受到任何事务影响。
+    数据库的执行效率最差。 能处理幻读问题。
+
+    2)REPEATABLE READ(可重复读):防止脏读和不可重复读, 不能处理幻读。
+    数据库的执行效率比SERIALIZABLE好。(MySQL默认是这种隔离级别)
+
+    3)READ COMMITTED(读已提交数据):只能防止脏读。
+    数据库执行效率比REPEATABLE READ要好。(Oracle默认是这种隔离级别, mysql也需要改成这种隔离级别)
+
+    4)READ UNCOMMITTED(读未提交数据):没有任何防止并发问题的措施。(数据库执行效率最高)
+
+44.查看MySQL的隔离级别:
+
+    SELECT @@tx_isolation;
+
+45.数据库连接池:
+
+    1)数据库连接池:用来管理Connection对象的, 使Connection对象可以重复使用,
+    防止频繁的创建和销毁带来不必要的资源开销。
+
+    2)当我们需要Connection对象操作数据库时, 就从数据库连接池中获得该对象,
+    使用完毕后调用conn.close()把Connection对象归还给连接池而不是销毁。
+
+46.事务的传播行为:事务方法被另一个事务方法调用的现象。
+
+    1)REQUIRED:如果当前有事务就在当前事务运行, 如果没有, 则新开一个事务。(默认传播行为)
+    2)SUPPORTS:当前有事务就在事务中运行, 否则在非事务中运行。
+
