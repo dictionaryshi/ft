@@ -56,11 +56,15 @@ public class ThreadCheck {
 				add(new CheckCallable("用户信用校验") {
 					@Override
 					public Boolean call() {
-						try {
-							Thread.sleep(10_000L);
-							Thread.sleep(10_000L);
-						} catch (InterruptedException e) {
+						int length = 6_0000;
+						for (int a = 0; a < length; a++) {
+							for (int b = 0; b < length; b++) {
+								for (int c = 0; c < length; c++) {
+								}
+							}
 						}
+
+						System.out.println("用户信用校验完毕");
 						return Boolean.TRUE;
 					}
 				});
@@ -68,10 +72,7 @@ public class ThreadCheck {
 				add(new CheckCallable("用户身份校验") {
 					@Override
 					public Boolean call() {
-						try {
-							Thread.sleep(5_000L);
-						} catch (InterruptedException e) {
-						}
+						System.out.println("用户身份校验完毕");
 						return Boolean.FALSE;
 					}
 				});
@@ -79,12 +80,14 @@ public class ThreadCheck {
 				add(new CheckCallable("银行校验") {
 					@Override
 					public Boolean call() {
-						try {
-							Thread.sleep(10_000L);
-							Thread.sleep(10_000L);
-							Thread.sleep(10_000L);
-						} catch (InterruptedException e) {
+						int length = 10_0000;
+						for (int a = 0; a < length; a++) {
+							for (int b = 0; b < length; b++) {
+								for (int c = 0; c < length; c++) {
+								}
+							}
 						}
+						System.out.println("银行校验完毕");
 						return Boolean.TRUE;
 					}
 				});
