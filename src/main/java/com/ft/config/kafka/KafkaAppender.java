@@ -6,6 +6,7 @@ import com.ft.db.plugin.AutoSwitchDatasourceInterceptor;
 import com.ft.db.plugin.DataSourceAspect;
 import com.ft.model.mdo.LogDO;
 import com.ft.redis.base.ListOperationsCache;
+import com.ft.redis.plugin.KafkaAop;
 import com.ft.util.*;
 import org.slf4j.MDC;
 
@@ -55,7 +56,8 @@ public class KafkaAppender extends AppenderBase<ILoggingEvent> {
 		String cost = "cost==>";
 		if (log.getLevel().equals(ERROR)) {
 			listOperationsCache.leftPushAll(LogDO.LOG_QUEUE, JsonUtil.object2Json(log));
-		} else if (log.getMessage().contains(cost) && !event.getLoggerName().equals(DataSourceAspect.class.getName())) {
+		} else if (log.getMessage().contains(cost) && !event.getLoggerName().equals(DataSourceAspect.class.getName())
+				&& !event.getLoggerName().equals(KafkaAop.class.getName())) {
 			long targetTime = 10_000;
 			if (event.getLoggerName().equals(AutoSwitchDatasourceInterceptor.class.getName())) {
 				targetTime = 3_000;

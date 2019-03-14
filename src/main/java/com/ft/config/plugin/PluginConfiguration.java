@@ -1,9 +1,9 @@
 package com.ft.config.plugin;
 
 import com.ft.db.plugin.DataSourceAspect;
+import com.ft.redis.plugin.KafkaAop;
 import com.ft.redis.plugin.RedisAop;
 import com.ft.web.plugin.ControllerAspect;
-import com.ft.config.plugin.LoginAop;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
@@ -56,5 +56,11 @@ public class PluginConfiguration {
 	public ControllerAspect controllerAspect() {
 		log.info("插件初始化==>ControllerAspect");
 		return new ControllerAspect();
+	}
+
+	@Bean
+	@ConditionalOnMissingBean(KafkaAop.class)
+	public KafkaAop kafkaAop() {
+		return new KafkaAop();
 	}
 }
