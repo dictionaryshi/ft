@@ -1,5 +1,6 @@
 package com.ft.study.juc;
 
+import com.ft.web.cloud.hystrix.ThreadLocalThreadPoolExecutor;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 
 import java.util.concurrent.*;
@@ -45,7 +46,7 @@ public class ThreadPoolUtil {
 
 					int cpuNumber = getCpuNumber();
 
-					threadPool = new ThreadPoolExecutor(
+					threadPool = new ThreadLocalThreadPoolExecutor(
 							cpuNumber * 3,
 							cpuNumber * 5,
 							300,
