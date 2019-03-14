@@ -7,7 +7,6 @@ import com.ft.db.plugin.DataSourceAspect;
 import com.ft.model.mdo.LogDO;
 import com.ft.redis.base.ListOperationsCache;
 import com.ft.util.*;
-import com.ft.web.plugin.ControllerAspect;
 import org.slf4j.MDC;
 
 import java.util.Date;
@@ -30,7 +29,7 @@ public class KafkaAppender extends AppenderBase<ILoggingEvent> {
 	@Override
 	public void append(ILoggingEvent event) {
 
-		String requestId = MDC.get(ControllerAspect.REQUEST_ID);
+		String requestId = MDC.get(LogHolder.REQUEST_ID);
 
 		LogDO log = new LogDO();
 		log.setTime(event.getTimeStamp());
