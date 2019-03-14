@@ -5,10 +5,10 @@ import com.ft.constant.PropertiesConstant;
 import com.ft.service.GoodsService;
 import com.ft.util.ExcelUtil;
 import com.ft.util.JsonUtil;
+import com.ft.util.LogHolder;
 import com.ft.util.SpringContextUtil;
 import com.ft.web.cloud.hystrix.ThreadLocalHystrixConcurrencyStrategy;
 import com.ft.web.exception.FtException;
-import com.ft.web.plugin.ControllerAspect;
 import com.netflix.hystrix.strategy.HystrixPlugins;
 import com.netflix.loadbalancer.IRule;
 import com.netflix.loadbalancer.RoundRobinRule;
@@ -213,7 +213,7 @@ public class FtApplication {
 	public static void main(String[] args) {
 		System.setProperty("java.util.concurrent.ForkJoinPool.common.parallelism", "20");
 
-		MDC.put(ControllerAspect.REQUEST_ID, "application start");
+		MDC.put(LogHolder.REQUEST_ID, "application start");
 
 		// 托管hystrix线程池
 		HystrixPlugins.getInstance().registerConcurrencyStrategy(new ThreadLocalHystrixConcurrencyStrategy());
