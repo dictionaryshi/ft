@@ -114,17 +114,7 @@ public class StreamTest {
 
 	@Test
 	public void groupingBy() {
-		List<Employee> list = Arrays.asList(
-				new Employee("张三", 30),
-				new Employee("张三", 30),
-				new Employee("徐婷", 30),
-				new Employee("李四", 20),
-				new Employee("春阳", 20),
-				new Employee("王五", 60),
-				new Employee("张三", 30),
-				new Employee("王五", 60),
-				new Employee("赵六", 50),
-				new Employee("田七", 40));
+		List<Employee> list = Employee.LIST;
 
 		Map<Integer, List<Employee>> listMap = list.stream().collect(Collectors.groupingBy(Employee::getAge));
 		System.out.println(JsonUtil.object2Json(listMap));
