@@ -1,13 +1,13 @@
 package com.ft;
 
-import com.ft.util.JsonUtil;
 import com.ft.model.mdo.UserDO;
+import com.ft.util.JsonUtil;
+import com.ft.util.SpringContextUtil;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.support.AbstractApplicationContext;
-import org.springframework.core.env.ConfigurableEnvironment;
+import org.springframework.context.ApplicationContext;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Map;
@@ -17,7 +17,7 @@ import java.util.Map;
 public class SpringTest {
 
 	@Autowired
-	private AbstractApplicationContext applicationContext;
+	private ApplicationContext applicationContext;
 
 	@Test
 	public void count() {
@@ -35,23 +35,15 @@ public class SpringTest {
 
 	@Test
 	public void getEnvironment() {
-		// 获取系统环境
-		ConfigurableEnvironment configurableEnvironment = applicationContext.getEnvironment();
-		String osName = configurableEnvironment.getProperty("os.name");
-		System.out.println(osName);
-
 		// 获取配置文件中的内容
-		String cookieDomain = configurableEnvironment.getProperty("cookieDomain");
+		String cookieDomain = SpringContextUtil.getProperty(applicationContext.getEnvironment(), "cookieDomain");
 		System.out.println(cookieDomain);
 	}
 
 	@Test
 	public void isSingleton() {
-		UserDO user1 = applicationContext.getBean("scy", UserDO.class);
-		UserDO user2 = applicationContext.getBean("scy", UserDO.class);
-		System.out.println(user1 == user2);
-
-		boolean isSingleton = applicationContext.isSingleton("scy");
+		SpringContextUtil.setApplicationContext(applicationContext);
+		boolean isSingleton = SpringContextUtil.isSingleton("scy");
 		System.out.println(isSingleton);
 	}
 
