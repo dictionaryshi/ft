@@ -1,12 +1,15 @@
 package com.ft.java8;
 
+import com.ft.util.CollectionUtil;
 import com.ft.util.JsonUtil;
 import com.ft.util.StringUtil;
-import com.google.common.collect.Lists;
+import com.ft.web.exception.FtException;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -42,7 +45,7 @@ public class GuavaTest {
 		numberList2.add("5");
 		numberList2.add("6");
 		// 集合无交集返回true
-		boolean flag = Collections.disjoint(numberList1, numberList2);
+		boolean flag = CollectionUtil.disjoint(numberList1, numberList2);
 		Assert.assertTrue(flag);
 	}
 
@@ -57,12 +60,12 @@ public class GuavaTest {
 		chars.add("f");
 		chars.add("g");
 		// 将list分组, 每组3个元素
-		List<List<String>> partitions = Lists.partition(chars, 3);
+		List<List<String>> partitions = CollectionUtil.partition(chars, 3);
 		System.out.println(JsonUtil.object2Json(partitions));
 	}
 
 	@Test
 	public void assertTest() {
-		org.springframework.util.Assert.isTrue(true, "参数必须为true");
+		FtException.assertCheck(true, "参数必须为true");
 	}
 }
