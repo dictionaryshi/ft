@@ -1,4 +1,4 @@
-package com.ft;
+package com.ft.db;
 
 import com.ft.db.dbutil.TxQueryRunner;
 import com.ft.util.JsonUtil;

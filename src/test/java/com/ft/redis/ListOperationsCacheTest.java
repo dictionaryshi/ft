@@ -1,4 +1,4 @@
-package com.ft;
+package com.ft.redis;
 
 import com.ft.redis.base.ListOperationsCache;
 import com.ft.util.JsonUtil;
