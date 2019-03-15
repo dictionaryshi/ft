@@ -5,6 +5,7 @@ package com.ft.study.algorithm.sort;
  *
  * @author shichunyang
  */
+@SuppressWarnings("unchecked")
 public class Sort {
 	/**
 	 * 没有排序的数组
