@@ -8,10 +8,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
-import java.util.function.Consumer;
-import java.util.function.Function;
-import java.util.function.Predicate;
-import java.util.function.Supplier;
+import java.util.function.*;
 
 public class LambdaTest {
 	private void forEachAccept(Employee employee) {
@@ -37,18 +34,11 @@ public class LambdaTest {
 
 	@Test
 	public void quote() {
-		Consumer<Object> consumer = obj -> System.out.println(JsonUtil.object2Json(obj));
-		System.out.println(consumer);
-
 		Comparator<String> comparator = String::compareTo;
 		System.out.println(comparator);
 
 		Supplier<Employee> supplier = Employee::new;
 		System.out.println(supplier);
-
-		Function<Integer, String[]> function = String[]::new;
-		String[] arr = function.apply(10);
-		System.out.println(arr.length);
 	}
 
 	/**
