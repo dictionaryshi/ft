@@ -11,6 +11,11 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class GuavaTest {
+	@Test
+	public void charTest() {
+		char[] chs = new char[2];
+		System.out.println('\u0000' == chs[0]);
+	}
 
 	@Test
 	public void joiner() {
