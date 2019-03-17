@@ -1,5 +1,6 @@
 package com.ft.db;
 
+import com.ft.db.dbutil.JdbcTemplateUtil;
 import com.ft.model.mdo.UserDO;
 import com.ft.util.JsonUtil;
 import org.junit.Test;
@@ -25,7 +26,7 @@ public class JdbcTemplateTest {
 	@Test
 	public void update() {
 		String sql = "UPDATE `user` SET username = ? WHERE id = ?";
-		int result = jdbcTemplate.update(sql, "zgl", 1);
+		int result = JdbcTemplateUtil.update(jdbcTemplate, sql, "zgl", 1);
 		System.out.println(result);
 	}
 
@@ -35,7 +36,7 @@ public class JdbcTemplateTest {
 		List<Object[]> batchArgs = new ArrayList<>();
 		batchArgs.add(new Object[]{"zgl", "963721"});
 		batchArgs.add(new Object[]{"smy", "dianNao"});
-		int[] result = jdbcTemplate.batchUpdate(sql, batchArgs);
+		int[] result = JdbcTemplateUtil.batchUpdate(jdbcTemplate, sql, batchArgs);
 		System.out.println(JsonUtil.object2Json(result));
 	}
 
@@ -43,7 +44,7 @@ public class JdbcTemplateTest {
 	public void queryForObject() {
 		String sql = "SELECT id, username, password, created_at createdAt, updated_at updatedAt FROM `user` WHERE id = ?";
 		RowMapper<UserDO> rowMapper = new BeanPropertyRowMapper<>(UserDO.class);
-		UserDO userDO = jdbcTemplate.queryForObject(sql, rowMapper, 1);
+		UserDO userDO = JdbcTemplateUtil.queryForObject(jdbcTemplate, sql, rowMapper, 1);
 		System.out.println(JsonUtil.object2Json(userDO));
 	}
 
@@ -51,14 +52,14 @@ public class JdbcTemplateTest {
 	public void query() {
 		String sql = "SELECT id, username, password, created_at createdAt, updated_at updatedAt FROM `user` WHERE id > ?";
 		RowMapper<UserDO> rowMapper = new BeanPropertyRowMapper<>(UserDO.class);
-		List<UserDO> userList = jdbcTemplate.query(sql, rowMapper, 0);
+		List<UserDO> userList = JdbcTemplateUtil.query(jdbcTemplate, sql, rowMapper, 0);
 		System.out.println(JsonUtil.object2Json(userList));
 	}
 
 	@Test
 	public void queryForObjectCount() {
 		String sql = "SELECT count(1) FROM `user` WHERE id > ?";
-		Long count = jdbcTemplate.queryForObject(sql, Long.class, 0);
+		Long count = JdbcTemplateUtil.queryForObject(jdbcTemplate, sql, Long.class, 0);
 		System.out.println(count);
 	}
 }
