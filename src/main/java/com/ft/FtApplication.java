@@ -20,7 +20,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
-import org.springframework.boot.web.servlet.MultipartConfigFactory;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
@@ -37,12 +36,10 @@ import org.springframework.retry.annotation.EnableRetry;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-import org.springframework.util.unit.DataSize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.mail.internet.MimeMessage;
-import javax.servlet.MultipartConfigElement;
 import javax.servlet.http.HttpServletRequest;
 import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
@@ -191,19 +188,6 @@ public class FtApplication {
 		System.out.println(JsonUtil.object2Json(services));
 		List<ServiceInstance> serviceInstances = discoveryClient.getInstances("business");
 		return JsonUtil.object2Json(serviceInstances);
-	}
-
-	/**
-	 * 文件上传配置
-	 */
-	@Bean
-	public MultipartConfigElement multipartConfigElement() {
-		MultipartConfigFactory factory = new MultipartConfigFactory();
-		// 单个文件最大
-		factory.setMaxFileSize(DataSize.parse("5MB"));
-		/// 设置总上传数据总大小
-		factory.setMaxRequestSize(DataSize.parse("20MB"));
-		return factory.createMultipartConfig();
 	}
 
 	/**

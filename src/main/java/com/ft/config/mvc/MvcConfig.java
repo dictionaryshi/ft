@@ -3,12 +3,14 @@ package com.ft.config.mvc;
 import com.ft.util.JsonUtil;
 import com.ft.web.plugin.ControllerAspect;
 import org.apache.commons.collections.CollectionUtils;
+import org.springframework.boot.web.servlet.MultipartConfigFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.util.unit.DataSize;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.ModelAndView;
@@ -16,6 +18,7 @@ import org.springframework.web.servlet.config.annotation.*;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 import org.springframework.web.socket.server.standard.ServerEndpointExporter;
 
+import javax.servlet.MultipartConfigElement;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedWriter;
@@ -115,6 +118,19 @@ public class MvcConfig extends WebMvcConfigurationSupport {
 				response.addHeader("X-Frame-Options", "DENY");
 			}
 		});
+	}
+
+	/**
+	 * 文件上传配置
+	 */
+	@Bean
+	public MultipartConfigElement multipartConfigElement() {
+		MultipartConfigFactory factory = new MultipartConfigFactory();
+		// 单个文件最大
+		factory.setMaxFileSize(DataSize.parse("5MB"));
+		/// 设置总上传数据总大小
+		factory.setMaxRequestSize(DataSize.parse("20MB"));
+		return factory.createMultipartConfig();
 	}
 
 	/**
