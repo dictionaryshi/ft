@@ -83,3 +83,6 @@ hystrix:
           thread:
             timeoutInMilliseconds: 30_000
 
+dubbo:
+  port: 20881
+
