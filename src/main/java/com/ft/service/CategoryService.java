@@ -1,10 +1,10 @@
 package com.ft.service;
 
-import com.ft.db.annotation.DataSource;
-import com.ft.web.exception.FtException;
-import com.ft.web.model.RestResult;
 import com.ft.dao.CategoryMapper;
+import com.ft.db.annotation.DataSource;
 import com.ft.model.mdo.CategoryDO;
+import com.ft.util.model.RestResult;
+import com.ft.web.exception.FtException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

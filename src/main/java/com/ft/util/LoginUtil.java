@@ -1,14 +1,11 @@
 package com.ft.util;
 
-import com.ft.redis.base.ValueOperationsCache;
-import com.ft.util.JsonUtil;
-import com.ft.util.SpringContextUtil;
-import com.ft.util.StringUtil;
-import com.ft.web.exception.FtException;
-import com.ft.web.model.RestResult;
-import com.ft.web.util.CookieUtil;
 import com.ft.constant.LoginConstant;
 import com.ft.model.mdo.UserDO;
+import com.ft.redis.base.ValueOperationsCache;
+import com.ft.util.model.RestResult;
+import com.ft.web.exception.FtException;
+import com.ft.web.util.CookieUtil;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.servlet.http.HttpServletRequest;
