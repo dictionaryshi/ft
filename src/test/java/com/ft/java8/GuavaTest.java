@@ -3,7 +3,7 @@ package com.ft.java8;
 import com.ft.util.CollectionUtil;
 import com.ft.util.JsonUtil;
 import com.ft.util.StringUtil;
-import com.ft.web.exception.FtException;
+import com.ft.util.exception.FtException;
 import org.junit.Assert;
 import org.junit.Test;
 
