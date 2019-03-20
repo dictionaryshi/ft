@@ -3,8 +3,8 @@ package com.ft.util;
 import com.ft.constant.LoginConstant;
 import com.ft.model.mdo.UserDO;
 import com.ft.redis.base.ValueOperationsCache;
+import com.ft.util.exception.FtException;
 import com.ft.util.model.RestResult;
-import com.ft.web.exception.FtException;
 import com.ft.web.util.CookieUtil;
 import lombok.extern.slf4j.Slf4j;
 
