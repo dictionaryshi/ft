@@ -1,8 +1,10 @@
 package com.ft.study.juc;
 
+import com.ft.util.thread.ThreadPoolUtil;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.TimeUnit;
 
 /**
  * VolatileTest
@@ -19,9 +21,9 @@ public class VolatileTest {
 	 * 2.volatile修饰类的成员变量、类的静态成员变量。
 	 * 3.内存可见性问题:多个线程操作共享数据时, 彼此不可见。
 	 */
-	public static void main(String[] args) {
-
-		ExecutorService threadPool = ThreadPoolUtil.getThreadPool();
+	public static void main(String[] args) throws Exception {
+		String poolName = "volatile";
+		ExecutorService threadPool = ThreadPoolUtil.getThreadPool(poolName, 10, 20, 300, TimeUnit.SECONDS, 50, null);
 
 		for (int i = 0; i < 100; i++) {
 
@@ -42,6 +44,6 @@ public class VolatileTest {
 			}
 		}
 
-		threadPool.shutdown();
+		ThreadPoolUtil.shutdown(threadPool, poolName);
 	}
 }
