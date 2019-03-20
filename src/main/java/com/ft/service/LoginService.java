@@ -1,15 +1,15 @@
 package com.ft.service;
 
+import com.ft.constant.LoginConstant;
+import com.ft.dao.UserMapper;
+import com.ft.model.mdo.UserDO;
 import com.ft.redis.base.ValueOperationsCache;
 import com.ft.util.CommonUtil;
 import com.ft.util.EncodeUtil;
 import com.ft.util.JsonUtil;
 import com.ft.util.StringUtil;
+import com.ft.util.model.RestResult;
 import com.ft.web.exception.FtException;
-import com.ft.web.model.RestResult;
-import com.ft.constant.LoginConstant;
-import com.ft.dao.UserMapper;
-import com.ft.model.mdo.UserDO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

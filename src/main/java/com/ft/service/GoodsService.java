@@ -1,16 +1,16 @@
 package com.ft.service;
 
+import com.ft.dao.CategoryMapper;
+import com.ft.dao.GoodsMapper;
 import com.ft.db.annotation.DataSource;
 import com.ft.db.model.PageParam;
 import com.ft.db.model.PageResult;
-import com.ft.web.exception.FtException;
-import com.ft.web.model.RestResult;
-import com.ft.dao.CategoryMapper;
-import com.ft.dao.GoodsMapper;
 import com.ft.model.dto.GoodsDTO;
 import com.ft.model.mdo.CategoryDO;
 import com.ft.model.mdo.GoodsDO;
 import com.ft.model.vo.GoodsVO;
+import com.ft.util.model.RestResult;
+import com.ft.web.exception.FtException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
