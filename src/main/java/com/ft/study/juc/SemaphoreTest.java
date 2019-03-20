@@ -1,5 +1,7 @@
 package com.ft.study.juc;
 
+import com.ft.util.thread.ThreadPoolUtil;
+
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
@@ -14,7 +16,8 @@ public class SemaphoreTest {
 		int clientCount = 3;
 		int totalRequestCount = 10;
 		Semaphore semaphore = new Semaphore(clientCount);
-		ExecutorService executorService = ThreadPoolUtil.getThreadPool();
+		String poolName = "semaphore";
+		ExecutorService executorService = ThreadPoolUtil.getThreadPool(poolName, 10, 20, 300, TimeUnit.SECONDS, 50, null);
 		for (int i = 0; i < totalRequestCount; i++) {
 			executorService.execute(() -> {
 				try {
@@ -28,9 +31,6 @@ public class SemaphoreTest {
 				}
 			});
 		}
-		executorService.shutdown();
-		while (!executorService.awaitTermination(1, TimeUnit.SECONDS)) {
-			System.out.println("线程池中仍然有线程执行");
-		}
+		ThreadPoolUtil.shutdown(executorService, poolName);
 	}
 }

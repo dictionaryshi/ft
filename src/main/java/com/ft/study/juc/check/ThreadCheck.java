@@ -1,7 +1,7 @@
 package com.ft.study.juc.check;
 
-import com.ft.study.juc.ThreadPoolUtil;
 import com.ft.util.JsonUtil;
+import com.ft.util.thread.ThreadPoolUtil;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
@@ -50,7 +50,8 @@ public class ThreadCheck {
 	}
 
 	public static void main(String[] args) throws Exception {
-		ExecutorService executorService = ThreadPoolUtil.getThreadPool();
+		String poolName = "check";
+		ExecutorService executorService = ThreadPoolUtil.getThreadPool(poolName, 10, 20, 300, TimeUnit.SECONDS, 50, null);
 		List<CheckCallable> callables = new ArrayList<CheckCallable>() {
 			{
 				add(new CheckCallable("用户信用校验") {
@@ -97,10 +98,6 @@ public class ThreadCheck {
 		boolean check = check(executorService, callables);
 		log.info("final result==>{}", check);
 
-		executorService.shutdown();
-
-		while (!executorService.awaitTermination(1, TimeUnit.SECONDS)) {
-			System.out.println("线程池中仍然有线程执行");
-		}
+		ThreadPoolUtil.shutdown(executorService, poolName);
 	}
 }
