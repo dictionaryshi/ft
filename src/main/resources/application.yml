@@ -38,7 +38,6 @@ management:
         include: [health,info]
 
 kafka:
-  servers: 127.0.0.1:9092
   consign:
     topic: test_ft
     groupId: test_ft_group

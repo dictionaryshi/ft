@@ -3,6 +3,7 @@ package com.ft.task;
 import com.ft.model.mdo.LogDO;
 import com.ft.redis.base.ListOperationsCache;
 import org.apache.commons.lang3.RandomUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -17,7 +18,7 @@ import javax.annotation.Resource;
  */
 @Component
 public class LogTask {
-	@Resource(name = "consignKafkaTemplate")
+	@Autowired
 	private KafkaTemplate<String, String> kafkaTemplate;
 
 	@Value("${kafka.consign.topic}")
