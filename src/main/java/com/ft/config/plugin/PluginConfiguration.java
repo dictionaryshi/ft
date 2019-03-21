@@ -3,7 +3,6 @@ package com.ft.config.plugin;
 import com.ft.db.plugin.DataSourceAspect;
 import com.ft.redis.plugin.KafkaAop;
 import com.ft.redis.plugin.RedisAop;
-import com.ft.web.plugin.ControllerAspect;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
@@ -46,16 +45,6 @@ public class PluginConfiguration {
 	public RedisAop redisAop() {
 		log.info("插件初始化==>RedisAop");
 		return new RedisAop();
-	}
-
-	/**
-	 * 异常处理插件
-	 */
-	@Bean
-	@ConditionalOnMissingBean(ControllerAspect.class)
-	public ControllerAspect controllerAspect() {
-		log.info("插件初始化==>ControllerAspect");
-		return new ControllerAspect();
 	}
 
 	@Bean
