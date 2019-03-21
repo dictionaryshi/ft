@@ -1,6 +1,5 @@
 package com.ft.config.plugin;
 
-import com.ft.db.plugin.DataSourceAspect;
 import com.ft.redis.plugin.KafkaAop;
 import com.ft.redis.plugin.RedisAop;
 import lombok.extern.slf4j.Slf4j;
@@ -25,16 +24,6 @@ public class PluginConfiguration {
 	public LoginAop loginAop() {
 		log.info("插件初始化==>LoginAop");
 		return new LoginAop();
-	}
-
-	/**
-	 * 数据源切换插件
-	 */
-	@Bean
-	@ConditionalOnMissingBean(DataSourceAspect.class)
-	public DataSourceAspect dataSourceAspect() {
-		log.info("插件初始化==>DataSourceAspect");
-		return new DataSourceAspect();
 	}
 
 	/**
