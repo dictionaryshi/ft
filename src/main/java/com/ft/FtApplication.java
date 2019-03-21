@@ -103,6 +103,7 @@ public class FtApplication {
 						put("os", osmb.getName());
 						put("totalCache", osmb.getTotalPhysicalMemorySize() / 1024 / 1024);
 						put("freeCache", osmb.getFreePhysicalMemorySize() / 1024 / 1024);
+						put("beans", SpringContextUtil.getBeanDefinitionNames());
 					}
 				}
 		);

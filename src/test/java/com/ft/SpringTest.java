@@ -10,6 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationContext;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.List;
 import java.util.Map;
 
 @SpringBootTest
@@ -23,7 +24,8 @@ public class SpringTest {
 	public void count() {
 
 		// 遍历容器中所有bean的名称
-		String[] allBeanNames = applicationContext.getBeanDefinitionNames();
+		SpringContextUtil.setApplicationContext(applicationContext);
+		List<String> allBeanNames = SpringContextUtil.getBeanDefinitionNames();
 		for (String beanName : allBeanNames) {
 			System.out.println(beanName);
 		}
