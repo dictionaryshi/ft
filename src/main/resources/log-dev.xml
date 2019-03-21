@@ -47,7 +47,7 @@
         </rollingPolicy>
     </appender>
 
-    <appender name="KAFKA" class="com.ft.config.kafka.KafkaAppender">
+    <appender name="KAFKA" class="com.ft.redis.plugin.KafkaAppender">
     </appender>
 
     <root level="INFO">　　　　
