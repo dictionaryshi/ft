@@ -1,6 +1,6 @@
 package com.ft.dao;
 
-import com.ft.model.mdo.LogDO;
+import com.ft.redis.model.LogDO;
 import org.apache.ibatis.jdbc.SQL;
 
 /**

@@ -1,7 +1,7 @@
 package com.ft.config.kafka;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.ft.model.mdo.LogDO;
+import com.ft.redis.model.LogDO;
 import com.ft.service.LogService;
 import com.ft.util.JsonUtil;
 import lombok.extern.slf4j.Slf4j;
