@@ -1,7 +1,7 @@
 package com.ft.config.db;
 
+import com.ft.db.constant.DbConstant;
 import com.ft.db.util.MybatisUtil;
-import com.ft.constant.DbConstant;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionTemplate;
@@ -20,28 +20,25 @@ import javax.sql.DataSource;
  */
 @Slf4j
 @Configuration
-@MapperScan(basePackages = {"com.ft.dao"}, sqlSessionFactoryRef = DbConstant.DB_CONSIGN + "SqlSessionFactory")
+@MapperScan(basePackages = {"com.ft.dao"}, sqlSessionFactoryRef = DbConstant.DB_CONSIGN + DbConstant.SQL_SESSION_FACTORY)
 public class ConsignMyBatisConfig {
 
-	private final DataSource consignDataSource;
-
 	@Autowired
-	public ConsignMyBatisConfig(@Qualifier(DbConstant.DB_CONSIGN + "DataSource") DataSource consignDataSource) {
-		this.consignDataSource = consignDataSource;
-	}
+	@Qualifier(DbConstant.DB_CONSIGN + DbConstant.DATA_SOURCE)
+	private DataSource dataSource;
 
-	@Bean(DbConstant.DB_CONSIGN + "SqlSessionFactory")
-	public SqlSessionFactory consignSqlSessionFactory() {
+	@Bean(DbConstant.DB_CONSIGN + DbConstant.SQL_SESSION_FACTORY)
+	public SqlSessionFactory sqlSessionFactory() {
 		try {
-			return MybatisUtil.sqlSessionFactory(consignDataSource);
+			return MybatisUtil.sqlSessionFactory(dataSource);
 		} catch (Exception e) {
-			log.error(DbConstant.DB_CONSIGN + "SqlSessionFactory fail", e);
-			throw new RuntimeException(DbConstant.DB_CONSIGN + "SqlSessionFactory fail");
+			log.error(DbConstant.DB_CONSIGN + DbConstant.SQL_SESSION_FACTORY_FAIL, e);
+			throw new RuntimeException(DbConstant.DB_CONSIGN + DbConstant.SQL_SESSION_FACTORY_FAIL);
 		}
 	}
 
-	@Bean(DbConstant.DB_CONSIGN + "SqlSessionTemplate")
-	public SqlSessionTemplate consignSqlSessionTemplate(@Qualifier(DbConstant.DB_CONSIGN + "SqlSessionFactory") SqlSessionFactory consignSqlSessionFactory) {
-		return new SqlSessionTemplate(consignSqlSessionFactory);
+	@Bean(DbConstant.DB_CONSIGN + DbConstant.SQL_SESSION_TEMPLATE)
+	public SqlSessionTemplate sqlSessionTemplate(@Qualifier(DbConstant.DB_CONSIGN + DbConstant.SQL_SESSION_FACTORY) SqlSessionFactory sqlSessionFactory) {
+		return new SqlSessionTemplate(sqlSessionFactory);
 	}
 }
