@@ -1,6 +1,6 @@
 package com.ft.dao;
 
-import com.ft.model.mdo.LogDO;
+import com.ft.redis.model.LogDO;
 import org.apache.ibatis.annotations.InsertProvider;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Options;
