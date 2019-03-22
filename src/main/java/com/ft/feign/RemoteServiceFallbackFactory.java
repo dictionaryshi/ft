@@ -1,6 +1,9 @@
 package com.ft.feign;
 
-import com.ft.model.mdo.UserDO;
+import com.ft.rpc.api.model.RpcParam;
+import com.ft.rpc.api.model.RpcResult;
+import com.ft.util.JsonUtil;
+import com.ft.util.model.RestResult;
 import feign.hystrix.FallbackFactory;
 import org.springframework.stereotype.Component;
 
@@ -15,13 +18,13 @@ public class RemoteServiceFallbackFactory implements FallbackFactory<RemoteServi
 	public RemoteService create(Throwable throwable) {
 		return new RemoteService() {
 			@Override
-			public String user(UserDO userDO) {
-				return "feign user down";
+			public RestResult<RpcResult> put(RpcParam rpcParam) {
+				return RestResult.getErrorRestResult(JsonUtil.object2Json(rpcParam) + "_put_down", null);
 			}
 
 			@Override
-			public String get(String username, int age) {
-				return "feign get down";
+			public RestResult<RpcResult> get(String username, Integer age) {
+				return RestResult.getErrorRestResult(username + "_" + age + "_get_down", null);
 			}
 		};
 	}
