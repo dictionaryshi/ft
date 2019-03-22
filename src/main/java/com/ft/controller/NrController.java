@@ -1,10 +1,13 @@
 package com.ft.controller;
 
+import com.ft.rpc.api.model.RpcParam;
+import com.ft.rpc.api.model.RpcResult;
 import com.ft.util.ExcelUtil;
 import com.ft.util.JsonUtil;
 import com.ft.feign.RemoteService;
 import com.ft.model.mdo.UserDO;
 import com.ft.model.dto.ValidParent;
+import com.ft.util.model.RestResult;
 import com.ft.web.annotation.SignCheck;
 import com.ft.websocket.OrderWebSocket;
 import lombok.extern.slf4j.Slf4j;
@@ -32,17 +35,14 @@ public class NrController {
 
 	@GetMapping("/feign")
 	public String feign() {
-		UserDO user = new UserDO();
-		user.setId(1L);
-		user.setUsername("2");
-		user.setPassword("3");
-		user.setCreatedAt(new Date());
-		user.setUpdatedAt(new Date(System.currentTimeMillis() * 10L));
-
-		String userResult = remoteService.user(user);
-		String getResult = remoteService.get(null, 29);
-		log.info("userResult==>{}, getResult==>{}", userResult, getResult);
-		return userResult + "_" + getResult;
+		RpcParam rpcParam = new RpcParam();
+		rpcParam.setUsername("春阳");
+		rpcParam.setAge(29);
+		rpcParam.setBirth(new Date());
+		RestResult<RpcResult> putResult = remoteService.put(rpcParam);
+		RestResult<RpcResult> getResult = remoteService.get("xt", 25);
+		log.info("putResult==>{}, getResult==>{}", JsonUtil.object2Json(putResult), JsonUtil.object2Json(getResult));
+		return JsonUtil.object2Json(putResult) + "_" + JsonUtil.object2Json(getResult);
 	}
 
 	@PutMapping("/valid-model")

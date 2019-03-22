@@ -81,6 +81,12 @@
         </dependency>
         -->
 
+        <dependency>
+            <groupId>com.ft</groupId>
+            <artifactId>ft-rpc-api</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+
 
     </dependencies>
 
