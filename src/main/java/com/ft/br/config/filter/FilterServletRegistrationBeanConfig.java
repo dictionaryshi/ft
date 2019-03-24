@@ -1,6 +1,6 @@
 package com.ft.br.config.filter;
 
-import com.ft.controller.DemoServlet;
+import com.ft.br.controller.DemoServlet;
 import com.netflix.hystrix.contrib.metrics.eventstream.HystrixMetricsStreamServlet;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;

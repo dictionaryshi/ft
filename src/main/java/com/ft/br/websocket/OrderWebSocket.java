@@ -1,11 +1,8 @@
 package com.ft.br.websocket;
 
 import com.ft.br.service.GoodsService;
-import com.ft.br.util.JsonUtil;
-import com.ft.br.util.SpringContextUtil;
 import com.ft.util.JsonUtil;
 import com.ft.util.SpringContextUtil;
-import com.ft.service.GoodsService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 

@@ -1,6 +1,6 @@
 package com.ft.br.service;
 
-import com.ft.dao.LogMapper;
+import com.ft.br.dao.LogMapper;
 import com.ft.db.annotation.DataSource;
 import com.ft.redis.model.LogDO;
 import org.springframework.beans.factory.annotation.Autowired;

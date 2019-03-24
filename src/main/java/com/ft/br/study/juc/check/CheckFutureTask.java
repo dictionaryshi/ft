@@ -1,6 +1,5 @@
 package com.ft.br.study.juc.check;
 
-import com.ft.br.util.JsonUtil;
 import com.ft.util.JsonUtil;
 import lombok.extern.slf4j.Slf4j;
 

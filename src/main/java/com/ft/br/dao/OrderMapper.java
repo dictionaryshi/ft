@@ -1,10 +1,9 @@
 package com.ft.br.dao;
 
+import com.ft.br.model.dto.OrderDTO;
 import com.ft.br.model.mdo.OrderDO;
+import com.ft.br.model.vo.OrderVO;
 import com.ft.util.StringUtil;
-import com.ft.model.mdo.OrderDO;
-import com.ft.model.dto.OrderDTO;
-import com.ft.model.vo.OrderVO;
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Component;
 

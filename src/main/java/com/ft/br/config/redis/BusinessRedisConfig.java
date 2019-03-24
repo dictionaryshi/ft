@@ -1,13 +1,5 @@
 package com.ft.br.config.redis;
 
-import com.ft.br.redis.base.HashOperationsCache;
-import com.ft.br.redis.base.ListOperationsCache;
-import com.ft.br.redis.base.SetOperationsCache;
-import com.ft.br.redis.base.ValueOperationsCache;
-import com.ft.br.redis.lock.RedisLock;
-import com.ft.br.redis.model.RedisDO;
-import com.ft.br.redis.util.RedisUtil;
-import com.ft.br.util.JsonUtil;
 import com.ft.redis.base.HashOperationsCache;
 import com.ft.redis.base.ListOperationsCache;
 import com.ft.redis.base.SetOperationsCache;

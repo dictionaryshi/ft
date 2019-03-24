@@ -1,8 +1,7 @@
 package com.ft.br.study.xml;
 
+import com.ft.br.model.mdo.City;
 import com.ft.br.model.mdo.Province;
-import com.ft.model.mdo.City;
-import com.ft.model.mdo.Province;
 import com.thoughtworks.xstream.XStream;
 
 import java.util.ArrayList;

@@ -1,9 +1,8 @@
 package com.ft.br;
 
-import com.ft.br.util.LogHolder;
-import com.ft.config.study.ProFile;
-import com.ft.constant.PropertiesConstant;
-import com.ft.service.GoodsService;
+import com.ft.br.config.study.ProFile;
+import com.ft.br.constant.PropertiesConstant;
+import com.ft.br.service.GoodsService;
 import com.ft.util.ExcelUtil;
 import com.ft.util.JsonUtil;
 import com.ft.util.LogHolder;

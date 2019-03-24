@@ -1,13 +1,8 @@
 package com.ft.br.service;
 
 import com.ft.br.dao.CategoryMapper;
-import com.ft.br.db.annotation.DataSource;
 import com.ft.br.model.mdo.CategoryDO;
-import com.ft.br.util.exception.FtException;
-import com.ft.br.util.model.RestResult;
-import com.ft.dao.CategoryMapper;
 import com.ft.db.annotation.DataSource;
-import com.ft.model.mdo.CategoryDO;
 import com.ft.util.exception.FtException;
 import com.ft.util.model.RestResult;
 import org.springframework.beans.factory.annotation.Autowired;

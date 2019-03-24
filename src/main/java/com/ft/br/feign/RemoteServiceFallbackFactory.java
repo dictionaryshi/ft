@@ -1,6 +1,5 @@
 package com.ft.br.feign;
 
-import com.ft.br.util.JsonUtil;
 import com.ft.rpc.api.model.RpcParam;
 import com.ft.rpc.api.model.RpcResult;
 import com.ft.util.JsonUtil;

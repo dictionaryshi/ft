@@ -1,7 +1,7 @@
 package com.ft.br.dao;
 
-import com.ft.model.mdo.ItemDO;
-import com.ft.model.vo.ItemVO;
+import com.ft.br.model.mdo.ItemDO;
+import com.ft.br.model.vo.ItemVO;
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Component;
 

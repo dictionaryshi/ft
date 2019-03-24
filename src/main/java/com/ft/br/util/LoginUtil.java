@@ -1,12 +1,11 @@
 package com.ft.br.util;
 
+import com.ft.br.constant.LoginConstant;
 import com.ft.br.model.mdo.UserDO;
-import com.ft.br.redis.base.ValueOperationsCache;
-import com.ft.br.util.model.RestResult;
-import com.ft.br.web.util.CookieUtil;
-import com.ft.constant.LoginConstant;
-import com.ft.model.mdo.UserDO;
 import com.ft.redis.base.ValueOperationsCache;
+import com.ft.util.JsonUtil;
+import com.ft.util.SpringContextUtil;
+import com.ft.util.StringUtil;
 import com.ft.util.exception.FtException;
 import com.ft.util.model.RestResult;
 import com.ft.web.util.CookieUtil;

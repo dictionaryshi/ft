@@ -1,6 +1,6 @@
 package com.ft.br.study.genericity;
 
-import com.ft.model.mdo.Employee;
+import com.ft.br.model.mdo.Employee;
 
 /**
  * BaseChildren
