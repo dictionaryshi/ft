@@ -119,7 +119,6 @@ public class LoginRestController {
 	 * @return 当前登录用户信息
 	 */
 	@RequestMapping(value = "/user", method = RequestMethod.POST)
-	@LoginCheck
 	public String user(HttpServletRequest request) {
 		return JsonUtil.object2Json(RestResult.getSuccessRestResult(LoginUtil.getLoginUser(request)));
 	}
