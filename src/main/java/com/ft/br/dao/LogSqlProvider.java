@@ -1,6 +1,5 @@
 package com.ft.br.dao;
 
-import com.ft.br.redis.model.LogDO;
 import com.ft.redis.model.LogDO;
 import org.apache.ibatis.jdbc.SQL;
 

@@ -1,11 +1,8 @@
 package com.ft.br.config.kafka;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.ft.br.redis.model.LogDO;
 import com.ft.br.service.LogService;
-import com.ft.br.util.JsonUtil;
 import com.ft.redis.model.LogDO;
-import com.ft.service.LogService;
 import com.ft.util.JsonUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerRecord;

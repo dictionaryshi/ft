@@ -1,11 +1,7 @@
 package com.ft.br.controller;
 
-import com.ft.annotation.LoginCheck;
 import com.ft.br.annotation.LoginCheck;
-import com.ft.br.util.JsonUtil;
-import com.ft.br.util.model.RestResult;
-import com.ft.br.web.constant.SwaggerConstant;
-import com.ft.service.CategoryService;
+import com.ft.br.service.CategoryService;
 import com.ft.util.JsonUtil;
 import com.ft.util.model.RestResult;
 import com.ft.web.constant.SwaggerConstant;

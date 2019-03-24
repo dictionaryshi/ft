@@ -1,8 +1,6 @@
 package com.ft.br.model.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.ft.br.util.DateUtil;
-import com.ft.br.web.constant.SwaggerConstant;
 import com.ft.util.DateUtil;
 import com.ft.web.constant.SwaggerConstant;
 import io.swagger.annotations.ApiModel;

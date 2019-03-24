@@ -1,7 +1,5 @@
 package com.ft.br.config.db;
 
-import com.ft.br.db.dbutil.TxDataSourcePool;
-import com.ft.br.db.dbutil.TxQueryRunner;
 import com.ft.db.constant.DbConstant;
 import com.ft.db.dbutil.TxDataSourcePool;
 import com.ft.db.dbutil.TxQueryRunner;

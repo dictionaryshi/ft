@@ -1,7 +1,7 @@
 package com.ft.br;
 
-import com.ft.br.web.constant.SwaggerConstant;
-import com.ft.constant.LoginConstant;
+import com.ft.br.constant.LoginConstant;
+import com.ft.web.constant.SwaggerConstant;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.ResponseEntity;
@@ -19,9 +19,6 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.ft.web.constant.SwaggerConstant.DATA_TYPE_STRING;
-import static com.ft.web.constant.SwaggerConstant.PARAM_TYPE_HEADER;
 
 /**
  * Swagger2

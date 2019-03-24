@@ -1,9 +1,5 @@
 package com.ft.br.java8;
 
-import com.ft.br.util.CollectionUtil;
-import com.ft.br.util.JsonUtil;
-import com.ft.br.util.StringUtil;
-import com.ft.br.util.exception.FtException;
 import com.ft.util.CollectionUtil;
 import com.ft.util.JsonUtil;
 import com.ft.util.StringUtil;

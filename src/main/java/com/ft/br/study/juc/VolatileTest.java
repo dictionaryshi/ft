@@ -1,6 +1,5 @@
 package com.ft.br.study.juc;
 
-import com.ft.br.util.thread.ThreadPoolUtil;
 import com.ft.util.thread.ThreadPoolUtil;
 import lombok.extern.slf4j.Slf4j;
 

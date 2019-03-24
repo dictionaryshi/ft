@@ -1,8 +1,7 @@
 package com.ft.br.db;
 
-import com.ft.br.db.dbutil.JdbcTemplateUtil;
+import com.ft.br.model.mdo.UserDO;
 import com.ft.db.dbutil.JdbcTemplateUtil;
-import com.ft.model.mdo.UserDO;
 import com.ft.util.JsonUtil;
 import org.junit.Test;
 import org.junit.runner.RunWith;

@@ -1,7 +1,6 @@
 package com.ft.br.dao;
 
 import com.ft.br.model.mdo.CategoryDO;
-import com.ft.model.mdo.CategoryDO;
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Component;
 

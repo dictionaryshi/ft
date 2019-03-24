@@ -2,10 +2,7 @@ package com.ft.br.java8;
 
 import com.ft.br.model.mdo.Employee;
 import com.ft.br.model.mdo.UserDO;
-import com.ft.br.util.JsonUtil;
 import com.ft.util.JsonUtil;
-import com.ft.model.mdo.UserDO;
-import com.ft.model.mdo.Employee;
 import org.junit.Test;
 
 import java.util.*;

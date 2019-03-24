@@ -1,6 +1,5 @@
 package com.ft.br.study.juc;
 
-import com.ft.br.util.thread.ThreadPoolUtil;
 import com.ft.util.thread.ThreadPoolUtil;
 
 import java.util.concurrent.BrokenBarrierException;

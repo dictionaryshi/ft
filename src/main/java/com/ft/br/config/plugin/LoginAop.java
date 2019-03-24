@@ -1,10 +1,8 @@
 package com.ft.br.config.plugin;
 
-import com.ft.br.util.JsonUtil;
-import com.ft.br.web.util.HttpUtil;
-import com.ft.model.mdo.UserDO;
+import com.ft.br.model.mdo.UserDO;
+import com.ft.br.util.LoginUtil;
 import com.ft.util.JsonUtil;
-import com.ft.util.LoginUtil;
 import com.ft.util.StringUtil;
 import com.ft.web.util.HttpUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -26,7 +24,7 @@ import javax.servlet.http.HttpServletRequest;
 @Slf4j
 public class LoginAop {
 
-	@Before(value = "@annotation(com.ft.annotation.LoginCheck)")
+	@Before(value = "@annotation(com.ft.br.annotation.LoginCheck)")
 	public void before() {
 
 		// 获取request对象

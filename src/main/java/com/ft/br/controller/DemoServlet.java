@@ -1,6 +1,5 @@
 package com.ft.br.controller;
 
-import com.ft.br.web.util.HttpUtil;
 import com.ft.web.util.HttpUtil;
 import lombok.extern.slf4j.Slf4j;
 

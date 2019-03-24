@@ -1,19 +1,15 @@
 package com.ft.br.controller;
 
-import com.ft.annotation.LoginCheck;
 import com.ft.br.annotation.LoginCheck;
+import com.ft.br.constant.LoginConstant;
 import com.ft.br.model.dto.UserDTO;
-import com.ft.br.redis.base.ValueOperationsCache;
-import com.ft.br.util.*;
-import com.ft.br.util.exception.FtException;
-import com.ft.br.util.model.RestResult;
-import com.ft.br.web.constant.SwaggerConstant;
-import com.ft.br.web.util.CookieUtil;
-import com.ft.constant.LoginConstant;
-import com.ft.model.dto.UserDTO;
+import com.ft.br.service.LoginService;
+import com.ft.br.util.LoginUtil;
 import com.ft.redis.base.ValueOperationsCache;
-import com.ft.service.LoginService;
-import com.ft.util.*;
+import com.ft.util.CommonUtil;
+import com.ft.util.ImageUtil;
+import com.ft.util.JsonUtil;
+import com.ft.util.StringUtil;
 import com.ft.util.exception.FtException;
 import com.ft.util.model.RestResult;
 import com.ft.web.constant.SwaggerConstant;

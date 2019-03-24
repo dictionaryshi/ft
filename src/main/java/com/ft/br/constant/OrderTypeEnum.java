@@ -1,6 +1,5 @@
 package com.ft.br.constant;
 
-import com.ft.br.util.JsonUtil;
 import com.ft.util.JsonUtil;
 import com.google.common.collect.ImmutableMap;
 

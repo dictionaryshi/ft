@@ -1,6 +1,6 @@
 package com.ft.br.dao;
 
-import com.ft.model.mdo.UserDO;
+import com.ft.br.model.mdo.UserDO;
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Component;
 

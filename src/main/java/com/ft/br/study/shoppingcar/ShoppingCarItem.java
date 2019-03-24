@@ -1,6 +1,5 @@
 package com.ft.br.study.shoppingcar;
 
-import com.ft.br.util.BigDecimalUtil;
 import com.ft.util.BigDecimalUtil;
 import lombok.Data;
 

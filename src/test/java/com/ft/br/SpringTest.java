@@ -1,9 +1,6 @@
 package com.ft.br;
 
 import com.ft.br.model.mdo.UserDO;
-import com.ft.br.util.JsonUtil;
-import com.ft.br.util.SpringContextUtil;
-import com.ft.model.mdo.UserDO;
 import com.ft.util.JsonUtil;
 import com.ft.util.SpringContextUtil;
 import org.junit.Test;

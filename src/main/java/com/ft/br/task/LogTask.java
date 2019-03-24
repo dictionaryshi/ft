@@ -1,7 +1,5 @@
 package com.ft.br.task;
 
-import com.ft.br.redis.base.ListOperationsCache;
-import com.ft.br.redis.model.LogDO;
 import com.ft.redis.base.ListOperationsCache;
 import com.ft.redis.model.LogDO;
 import org.springframework.scheduling.annotation.Scheduled;
