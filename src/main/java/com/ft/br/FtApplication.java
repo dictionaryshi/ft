@@ -60,7 +60,7 @@ import java.util.*;
 @EnableRetry
 @EnableEurekaClient
 @EnableDiscoveryClient
-@EnableFeignClients
+@EnableFeignClients(basePackages = "com.ft")
 @EnableHystrix
 public class FtApplication {
 	@Bean
