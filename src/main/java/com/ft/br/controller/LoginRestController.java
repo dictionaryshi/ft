@@ -3,6 +3,7 @@ package com.ft.br.controller;
 import com.ft.br.annotation.LoginCheck;
 import com.ft.br.constant.LoginConstant;
 import com.ft.br.model.dto.UserDTO;
+import com.ft.br.model.mdo.UserDO;
 import com.ft.br.service.LoginService;
 import com.ft.br.util.LoginUtil;
 import com.ft.redis.base.ValueOperationsCache;
@@ -123,8 +124,8 @@ public class LoginRestController {
 	 * @return 当前登录用户信息
 	 */
 	@RequestMapping(value = "/user", method = RequestMethod.POST)
-	public String user(HttpServletRequest request) {
-		return JsonUtil.object2Json(RestResult.getSuccessRestResult(LoginUtil.getLoginUser(request)));
+	public RestResult<UserDO> user(HttpServletRequest request) {
+		return RestResult.getSuccessRestResult(LoginUtil.getLoginUser(request));
 	}
 
 	@RequestMapping(value = "/json-param", method = RequestMethod.POST)
