@@ -1,12 +1,14 @@
 package com.ft.br.db;
 
+import com.ft.db.annotation.DataSource;
 import com.ft.db.dbutil.JdbcTemplateUtil;
+import com.ft.db.plugin.DataSourceHolder;
 import com.ft.util.JsonUtil;
 import com.ft.web.model.UserDO;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -20,8 +22,12 @@ import java.util.List;
 @RunWith(SpringRunner.class)
 public class JdbcTemplateTest {
 	@Autowired
-	@Qualifier("consignJdbcTemplate")
 	private JdbcTemplate jdbcTemplate;
+
+	@Before
+	public void before() {
+		DataSourceHolder.setDataSourceKey(DataSource.master);
+	}
 
 	@Test
 	public void update() {

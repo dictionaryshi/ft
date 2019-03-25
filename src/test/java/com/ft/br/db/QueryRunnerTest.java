@@ -1,11 +1,14 @@
 package com.ft.br.db;
 
+import com.ft.db.annotation.DataSource;
 import com.ft.db.dbutil.TxQueryRunner;
+import com.ft.db.plugin.DataSourceHolder;
 import com.ft.util.JsonUtil;
 import com.ft.util.ObjectUtil;
 import com.ft.web.model.UserDO;
 import org.apache.commons.dbutils.handlers.*;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +31,11 @@ public class QueryRunnerTest {
 
 	@Autowired
 	private TxQueryRunner txQueryRunner;
+
+	@Before
+	public void before() {
+		DataSourceHolder.setDataSourceKey(DataSource.master);
+	}
 
 	/**
 	 * 测试批量添加操作
