@@ -1,9 +1,9 @@
 package com.ft.br.controller;
 
-import com.ft.br.annotation.LoginCheck;
 import com.ft.br.service.CategoryService;
 import com.ft.util.JsonUtil;
 import com.ft.util.model.RestResult;
+import com.ft.web.annotation.LoginCheck;
 import com.ft.web.constant.SwaggerConstant;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;

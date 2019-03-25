@@ -24,7 +24,7 @@ import javax.servlet.http.HttpServletRequest;
 @Slf4j
 public class LoginAop {
 
-	@Before(value = "@annotation(com.ft.br.annotation.LoginCheck)")
+	@Before(value = "@annotation(com.ft.web.annotation.LoginCheck)")
 	public void before() {
 
 		// 获取request对象
