@@ -8,7 +8,7 @@ import com.ft.util.StringUtil;
 import com.ft.util.exception.FtException;
 import com.ft.util.model.RestResult;
 import com.ft.web.model.UserDO;
-import com.ft.web.util.CookieUtil;
+import com.ft.web.util.WebUtil;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.servlet.http.HttpServletRequest;
@@ -30,7 +30,7 @@ public class LoginUtil {
 	public static UserDO getLoginUser(HttpServletRequest request) {
 		ValueOperationsCache valueOperationsCache = SpringContextUtil.getBean(ValueOperationsCache.class);
 
-		String loginToken = getToken(request);
+		String loginToken = WebUtil.getToken(request);
 		if (StringUtil.isNull(loginToken)) {
 			log.info("url==>{}, login_token 不存在", request.getRequestURL());
 			throw new FtException(RestResult.ERROR_SIGN_CODE, "签名错误");
@@ -48,36 +48,5 @@ public class LoginUtil {
 		log.info("用户token续时==>{}", flag);
 
 		return JsonUtil.json2Object(userJson, UserDO.class);
-	}
-
-	/**
-	 * 从请求或cookie中获取token
-	 *
-	 * @param request 请求对象
-	 * @return token
-	 */
-	public static String getToken(HttpServletRequest request) {
-		// 从请求参数中获取
-		String loginToken = request.getParameter(LoginConstant.PARAM_LOGIN_TOKEN);
-		if (!StringUtil.isEmpty(loginToken)) {
-			return loginToken;
-		}
-
-		// 从request域中获取
-		loginToken = (String) request.getAttribute(LoginConstant.PARAM_LOGIN_TOKEN);
-		if (!StringUtil.isEmpty(loginToken)) {
-			return loginToken;
-		}
-
-		// 从header中获取
-		loginToken = request.getHeader(LoginConstant.PARAM_LOGIN_TOKEN);
-		if (!StringUtil.isEmpty(loginToken)) {
-			return loginToken;
-		}
-
-		// 从cookie中获取
-		loginToken = CookieUtil.getCookie(request, LoginConstant.PARAM_LOGIN_TOKEN);
-
-		return loginToken;
 	}
 }

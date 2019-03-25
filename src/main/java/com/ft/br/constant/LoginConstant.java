@@ -21,10 +21,6 @@ public class LoginConstant {
 	 */
 	public static final String REDIS_LOGIN_TOKEN = "redis_token";
 	/**
-	 * 登录token param key
-	 */
-	public static final String PARAM_LOGIN_TOKEN = "login_token";
-	/**
 	 * 登陆user key
 	 */
 	public static final String PARAM_LOGIN_USER = "login_user";
