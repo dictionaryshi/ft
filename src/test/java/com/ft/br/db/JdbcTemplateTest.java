@@ -1,8 +1,8 @@
 package com.ft.br.db;
 
-import com.ft.br.model.mdo.UserDO;
 import com.ft.db.dbutil.JdbcTemplateUtil;
 import com.ft.util.JsonUtil;
+import com.ft.web.model.UserDO;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

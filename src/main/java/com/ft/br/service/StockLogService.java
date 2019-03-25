@@ -1,6 +1,5 @@
 package com.ft.br.service;
 
-
 import com.ft.br.constant.StockConstant;
 import com.ft.br.dao.GoodsMapper;
 import com.ft.br.dao.OrderMapper;
@@ -9,7 +8,6 @@ import com.ft.br.dao.UserMapper;
 import com.ft.br.model.dto.StockLogDTO;
 import com.ft.br.model.mdo.GoodsDO;
 import com.ft.br.model.mdo.StockLogDO;
-import com.ft.br.model.mdo.UserDO;
 import com.ft.br.model.vo.OrderVO;
 import com.ft.br.model.vo.StockLogVO;
 import com.ft.db.annotation.DataSource;
@@ -20,6 +18,7 @@ import com.ft.redis.lock.RedisLock;
 import com.ft.util.StringUtil;
 import com.ft.util.exception.FtException;
 import com.ft.util.model.RestResult;
+import com.ft.web.model.UserDO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;

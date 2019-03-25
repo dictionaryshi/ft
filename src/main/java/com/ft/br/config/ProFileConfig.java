@@ -4,7 +4,7 @@ import com.ft.br.config.study.DevProFile;
 import com.ft.br.config.study.ProFile;
 import com.ft.br.config.study.StagProFile;
 import com.ft.br.constant.PropertiesConstant;
-import com.ft.br.model.mdo.UserDO;
+import com.ft.web.model.UserDO;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.*;
