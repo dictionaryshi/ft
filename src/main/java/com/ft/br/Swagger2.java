@@ -1,7 +1,7 @@
 package com.ft.br;
 
-import com.ft.br.constant.LoginConstant;
 import com.ft.web.constant.SwaggerConstant;
+import com.ft.web.util.WebUtil;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.ResponseEntity;
@@ -33,7 +33,7 @@ public class Swagger2 {
 
 		// 添加token header
 		ParameterBuilder parameterBuilder = new ParameterBuilder();
-		parameterBuilder.name(LoginConstant.PARAM_LOGIN_TOKEN).description("登陆token").modelRef(new ModelRef(SwaggerConstant.DATA_TYPE_STRING)).parameterType(SwaggerConstant.PARAM_TYPE_HEADER).required(false).build();
+		parameterBuilder.name(WebUtil.PARAM_LOGIN_TOKEN).description("登陆token").modelRef(new ModelRef(SwaggerConstant.DATA_TYPE_STRING)).parameterType(SwaggerConstant.PARAM_TYPE_HEADER).required(false).build();
 
 		List<Parameter> parameters = new ArrayList<>();
 		parameters.add(parameterBuilder.build());

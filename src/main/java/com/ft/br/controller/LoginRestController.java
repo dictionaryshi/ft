@@ -15,6 +15,7 @@ import com.ft.web.annotation.LoginCheck;
 import com.ft.web.constant.SwaggerConstant;
 import com.ft.web.model.UserDO;
 import com.ft.web.util.CookieUtil;
+import com.ft.web.util.WebUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -83,14 +84,14 @@ public class LoginRestController {
 
 		String token = loginService.getLoginToken(username, password, code, codeId);
 
-		request.setAttribute(LoginConstant.PARAM_LOGIN_TOKEN, token);
+		request.setAttribute(WebUtil.PARAM_LOGIN_TOKEN, token);
 
 		Map<String, Object> result = new HashMap<>(16);
 		result.put(LoginConstant.RETURN_TOKEN, token);
 		result.put(LoginConstant.PARAM_LOGIN_USER, LoginUtil.getLoginUser(request));
 
 		String domain = this.cookieDomain;
-		CookieUtil.addCookie(response, LoginConstant.PARAM_LOGIN_TOKEN, token, CookieUtil.MAX_AGE_BROWSER, domain, true);
+		CookieUtil.addCookie(response, WebUtil.PARAM_LOGIN_TOKEN, token, CookieUtil.MAX_AGE_BROWSER, domain, true);
 
 		return JsonUtil.object2Json(RestResult.getSuccessRestResult(result));
 	}
