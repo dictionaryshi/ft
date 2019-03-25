@@ -1,8 +1,10 @@
 package com.ft.br.config.swagger;
 
 import com.ft.web.util.SwaggerUtil;
+import com.ft.web.util.WebUtil;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
@@ -12,6 +14,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
  *
  * @author shichunyang
  */
+@Profile(value = {WebUtil.ENV_DEV, WebUtil.ENV_STAG})
 @Configuration
 @EnableSwagger2
 public class SwaggerConfig {
