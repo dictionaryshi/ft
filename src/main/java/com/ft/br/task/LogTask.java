@@ -2,9 +2,8 @@ package com.ft.br.task;
 
 import com.ft.redis.base.ListOperationsCache;
 import com.ft.redis.model.LogDO;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
-
-import javax.annotation.Resource;
 
 /**
  * LogTask
@@ -15,7 +14,7 @@ import javax.annotation.Resource;
 @Component
 */
 public class LogTask {
-	@Resource(name = "listOperationsCache")
+	@Autowired
 	private ListOperationsCache listOperationsCache;
 
 	/*
