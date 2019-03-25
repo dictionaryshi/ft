@@ -1,9 +1,9 @@
 package com.ft.br.config.plugin;
 
-import com.ft.br.model.mdo.UserDO;
 import com.ft.br.util.LoginUtil;
 import com.ft.util.JsonUtil;
 import com.ft.util.StringUtil;
+import com.ft.web.model.UserDO;
 import com.ft.web.util.HttpUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.annotation.Aspect;

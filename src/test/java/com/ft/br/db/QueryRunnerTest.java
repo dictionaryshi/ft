@@ -1,9 +1,9 @@
 package com.ft.br.db;
 
-import com.ft.br.model.mdo.UserDO;
 import com.ft.db.dbutil.TxQueryRunner;
 import com.ft.util.JsonUtil;
 import com.ft.util.ObjectUtil;
+import com.ft.web.model.UserDO;
 import org.apache.commons.dbutils.handlers.*;
 import org.junit.Assert;
 import org.junit.Test;
