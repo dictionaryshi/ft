@@ -1,6 +1,5 @@
 package com.ft.br.controller;
 
-import com.ft.br.annotation.LoginCheck;
 import com.ft.br.model.dto.OrderDTO;
 import com.ft.br.model.mdo.OrderDO;
 import com.ft.br.service.OrderService;
@@ -9,6 +8,7 @@ import com.ft.db.model.PageParam;
 import com.ft.util.JsonUtil;
 import com.ft.util.StringUtil;
 import com.ft.util.model.RestResult;
+import com.ft.web.annotation.LoginCheck;
 import com.ft.web.constant.SwaggerConstant;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
