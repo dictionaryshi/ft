@@ -21,3 +21,6 @@ kafka:
 dubbo:
   port: 20881
 
+redis:
+  database: 1
+
