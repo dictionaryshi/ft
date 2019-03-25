@@ -4,19 +4,18 @@ import com.ft.redis.base.ValueOperationsCache;
 import com.ft.util.JsonUtil;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.redis.connection.DataType;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import javax.annotation.Resource;
 import java.util.Date;
 import java.util.Set;
 
 @SpringBootTest
 @RunWith(SpringRunner.class)
 public class RedisTest {
-
-	@Resource(name = "valueOperationsCache")
+	@Autowired
 	private ValueOperationsCache valueOperationsCache;
 
 	private static final String LOGIN_ID = "login_id";

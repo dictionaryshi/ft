@@ -4,18 +4,17 @@ import com.ft.redis.base.HashOperationsCache;
 import com.ft.util.JsonUtil;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import javax.annotation.Resource;
 import java.util.HashMap;
 import java.util.Map;
 
 @SpringBootTest
 @RunWith(SpringRunner.class)
 public class HashOperationsCacheTest {
-
-	@Resource(name = "hashOperationsCache")
+	@Autowired
 	private HashOperationsCache hashOperationsCache;
 
 	public static final String USER_MAP = "user_map";

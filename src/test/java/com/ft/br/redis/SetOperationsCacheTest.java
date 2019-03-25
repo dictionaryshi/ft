@@ -4,10 +4,10 @@ import com.ft.redis.base.SetOperationsCache;
 import com.ft.util.JsonUtil;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import javax.annotation.Resource;
 import java.util.Set;
 
 /**
@@ -19,7 +19,7 @@ import java.util.Set;
 @RunWith(SpringRunner.class)
 public class SetOperationsCacheTest {
 
-	@Resource(name = "setOperationsCache")
+	@Autowired
 	private SetOperationsCache setOperationsCache;
 
 	private static final String NUMBER_SET = "number_set";

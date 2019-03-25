@@ -4,10 +4,10 @@ import com.ft.redis.base.ListOperationsCache;
 import com.ft.util.JsonUtil;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import javax.annotation.Resource;
 import java.util.List;
 
 /**
@@ -18,8 +18,7 @@ import java.util.List;
 @SpringBootTest
 @RunWith(SpringRunner.class)
 public class ListOperationsCacheTest {
-
-	@Resource(name = "listOperationsCache")
+	@Autowired
 	private ListOperationsCache listOperationsCache;
 
 	public static final String NUMBER_LIST = "number_list";
