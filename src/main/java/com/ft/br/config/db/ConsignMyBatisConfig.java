@@ -20,7 +20,7 @@ import javax.sql.DataSource;
  */
 @Slf4j
 @Configuration
-@MapperScan(basePackages = {"com.ft.dao"}, sqlSessionFactoryRef = DbConstant.DB_CONSIGN + DbConstant.SQL_SESSION_FACTORY)
+@MapperScan(basePackages = {"com.ft.br.dao"}, sqlSessionFactoryRef = DbConstant.DB_CONSIGN + DbConstant.SQL_SESSION_FACTORY)
 public class ConsignMyBatisConfig {
 
 	@Autowired
