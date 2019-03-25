@@ -1,6 +1,5 @@
 package com.ft.br;
 
-import com.ft.br.config.study.ProFile;
 import com.ft.br.constant.PropertiesConstant;
 import com.ft.br.service.GoodsService;
 import com.ft.util.ExcelUtil;
@@ -69,15 +68,12 @@ public class FtApplication {
 	}
 
 	private final PropertiesConstant propertiesConstants;
-	private final ProFile proFile;
 
 	@Autowired
 	public FtApplication(
-			PropertiesConstant propertiesConstants,
-			ProFile proFile
+			PropertiesConstant propertiesConstants
 	) {
 		this.propertiesConstants = propertiesConstants;
-		this.proFile = proFile;
 	}
 
 	@Autowired
@@ -95,7 +91,6 @@ public class FtApplication {
 		return JsonUtil.object2Json(
 				new HashMap<String, Object>(16) {
 					{
-						put("pro_file", proFile.proFile());
 						put("env", propertiesConstants.getConstant());
 						put("ip", ip);
 						put("port", port);

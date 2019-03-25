@@ -1,8 +1,5 @@
 package com.ft.br.config;
 
-import com.ft.br.config.study.DevProFile;
-import com.ft.br.config.study.ProFile;
-import com.ft.br.config.study.StagProFile;
 import com.ft.br.constant.PropertiesConstant;
 import com.ft.web.model.UserDO;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -16,19 +13,6 @@ import org.springframework.context.annotation.*;
  */
 @Configuration
 public class ProFileConfig {
-
-	@Profile("dev")
-	@Bean
-	public ProFile devProFile() {
-		return new DevProFile();
-	}
-
-	@Profile("stag")
-	@Bean
-	public ProFile stagProFile() {
-		return new StagProFile();
-	}
-
 	/**
 	 * 获取User对象
 	 * Scope 多实例时, 启动容器时不会创建该对象
