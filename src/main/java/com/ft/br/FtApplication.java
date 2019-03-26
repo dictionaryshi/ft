@@ -68,8 +68,6 @@ public class FtApplication {
 	}
 
 	private final PropertiesConstant propertiesConstants;
-
-	@Autowired
 	public FtApplication(
 			PropertiesConstant propertiesConstants
 	) {
