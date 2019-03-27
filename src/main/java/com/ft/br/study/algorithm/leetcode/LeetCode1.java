@@ -13,18 +13,21 @@ import java.util.Map;
  */
 public class LeetCode1 {
 	public static int[] twoSum(int[] numbers, int target) {
-		Map<Integer, Integer> cache = new HashMap<>(16);
-		int[] chs = new int[2];
+		Map<Integer, Integer> record = new HashMap<>(16);
 		for (int i = 0; i < numbers.length; i++) {
-			int find = target - numbers[i];
-			if (cache.containsKey(find)) {
-				chs[0] = cache.get(find);
-				chs[1] = i;
-				break;
-			}
-			cache.put(numbers[i], i);
+			record.put(numbers[i], i);
 		}
-		return chs;
+
+		for (int i = 0; i < numbers.length; i++) {
+			int findNumber = target - numbers[i];
+			if (record.containsKey(findNumber)) {
+				int findIndex = record.get(findNumber);
+				if (findIndex != i) {
+					return new int[]{i, findIndex};
+				}
+			}
+		}
+		return null;
 	}
 
 	public static String bigNumberPlus(String numberA, String numberB) {
@@ -58,8 +61,8 @@ public class LeetCode1 {
 	}
 
 	public static void main(String[] args) {
-		int[] numbers = {2, 7, 11, 15};
-		System.out.println(Arrays.toString(twoSum(numbers, 9)));
+		int[] numbers = {11, 7, 11, 15};
+		System.out.println(Arrays.toString(twoSum(numbers, 22)));
 		System.out.println(bigNumberPlus("37", "163"));
 	}
 }
