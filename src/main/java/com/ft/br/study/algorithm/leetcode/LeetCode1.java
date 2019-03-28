@@ -14,18 +14,14 @@ import java.util.Map;
 public class LeetCode1 {
 	public static int[] twoSum(int[] numbers, int target) {
 		Map<Integer, Integer> record = new HashMap<>(16);
-		for (int i = 0; i < numbers.length; i++) {
-			record.put(numbers[i], i);
-		}
 
 		for (int i = 0; i < numbers.length; i++) {
 			int findNumber = target - numbers[i];
 			if (record.containsKey(findNumber)) {
 				int findIndex = record.get(findNumber);
-				if (findIndex != i) {
-					return new int[]{i, findIndex};
-				}
+				return new int[]{i, findIndex};
 			}
+			record.put(numbers[i], i);
 		}
 		return null;
 	}
