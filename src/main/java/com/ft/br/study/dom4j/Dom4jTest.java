@@ -3,7 +3,6 @@ package com.ft.br.study.dom4j;
 import com.ft.util.Dom4jUtil;
 import org.dom4j.Document;
 import org.dom4j.Element;
-import org.junit.Test;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -18,7 +17,6 @@ public class Dom4jTest {
 	public static final String CHINA_FILE_PATH = "src/main/resources/china.xml";
 	public static final String DATABASE_FILE_PATH = "src/main/resources/database.xml";
 
-	@Test
 	public void read() throws Exception {
 		Document doc = Dom4jUtil.getDocument(new FileInputStream(CHINA_FILE_PATH));
 		if (doc == null) {
@@ -53,7 +51,6 @@ public class Dom4jTest {
 		System.out.println("第一个省份/城市==>" + firstProvince.attributeValue("name") + "／" + firstCity.getText());
 	}
 
-	@Test
 	public void write() throws Exception {
 		Document doc = Dom4jUtil.getDocument(new FileInputStream(DATABASE_FILE_PATH));
 		if (doc == null) {
