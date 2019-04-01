@@ -1,7 +1,6 @@
-11.关系结构模型数据库(简称关系型数据库):使用二维表格来存储数据。
+关系型数据库:使用二维表格来存储数据。
 
 13.sql语句的分类:
-
     1)DDL:数据定义语言(CREATE, DROP, ALTER)。
     2)DML:数据操作语言(INSERT, UPDATE, DELETE)。
     3)DCL:数据控制语言(GRANT, REVOKE)。
@@ -52,37 +51,17 @@
     SELECT t.REAL_NAME FROM tgs_sys_user t WHERE t.REAL_NAME LIKE '_春%';
 
 16.如果每页查n条, 要查第m页。
-
     SELECT * FROM tgs_sys_user LIMIT (m - 1) * n, n;
 
 17.合并结果集:
-
     SELECT * FROM emp UNION ALL SELECT * FROM emp; // 保留重复结果集
     SELECT * FROM emp UNION SELECT * FROM emp;     // 去除重复结果集
 
 18.子查询:
-
-    SELECT
-        *
-    FROM emp t
-    WHERE t.sal > (SELECT t2.sal FROM emp t2 WHERE t2.ename='甘宁');
-
-    SELECT
-        *
-    FROM emp t1
-    WHERE (t1.job, t1.sal) IN
-    (SELECT t2.job, t2.sal FROM emp t2 WHERE t2.ename = '殷天正');
-
     SELECT
         *
     FROM emp t1
     WHERE t1.sal > ALL (SELECT t2.sal FROM emp t2 WHERE t2.deptno = 30);
-
-    SELECT
-        t1.empno, t1.ename, t1.sal, t2.dname, t2.loc
-    FROM
-        emp t1, (SELECT dname, loc, deptno FROM dept) t2
-    WHERE t1.deptno = t2.deptno;
 
 19.decimal(5,2)表示长度是5其中两位是小数, 如:999.99。
 
@@ -98,39 +77,31 @@
 相比delete而言truncate的效率更高, 但是truncate删除的数据是无法回滚的。
 
 26.查看MySQL数据库的所有管理员信息。
-
     USE mysql;
     SELECT * FROM `user`;
 
 27.创建mysql用户
-
     CREATE USER sd@localhost IDENTIFIED BY '123456';
     CREATE USER sd@'%' IDENTIFIED BY '123456';
 
 28.删除mysql用户
-
     DROP USER sd@localhost;
     DROP USER sd@'%';
 
 29.查看用户的权限:
-
     SHOW GRANTS FOR sd@'%';
 
 30.给用户授权:
-
     GRANT CREATE,ALTER,DROP,INSERT,UPDATE,DELETE,SELECT ON car.* TO sd@'%';
 
 31.给用户分配某个数据库的所有权限。
-
     GRANT ALL ON car.* TO sd@'%';
 
 32.撤销用户权限:
-
     REVOKE ALL ON car.* FROM sd@'%';
     REVOKE  INSERT, UPDATE, DELETE, CREATE, DROP, ALTER ON car.* FROM sd@'%';
 
 33.修改用户密码:
-
     USE mysql;
     UPDATE `user` t SET
         PASSWORD = PASSWORD('789')
@@ -140,14 +111,12 @@
     FLUSH PRIVILEGES;
 
 34.MySql的备份与恢复。
-
     mysqldump -uroot -p car > /opt/car.sql
     mysql -uroot -p car < /opt/car.sql (无需登录就恢复数据库中的数据的方式)
 
 35.事务就是对数据库的一组操作, 但是这些操作必须要么全部成功, 要么全部失败。例如:银行转账。
 
 36.事务的四大特性(ACID):
-
     1)原子性(A):事务中包含了很多数据库的操作, 但是事务是原子单位不能分割。事务只能成功或失败。
     2)一致性(C):事务执行后, 数据库状态和业务期望的结果一致。
     3)隔离性(I):指的是在并发操作数据库时, 不同事务之间有隔离性, 事务与事务之间不会受到干扰。
@@ -155,7 +124,6 @@
     即使提交事务后, 数据库马上崩溃, 在数据库重启时, 也必须能保证通过某种机制恢复数据。
 
 37.MySQL中的事务:
-
     1)默认情况下, 在MySQL中执行的每条SQL都可以单独看成一个事务。
     2)在MySQL中开启事务, 让事务中含有多条sql语句:
 
