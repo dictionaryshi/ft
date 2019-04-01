@@ -3,7 +3,7 @@ package com.ft.br.dao;
 import com.ft.redis.model.LogDO;
 import org.apache.ibatis.annotations.InsertProvider;
 import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Options;
+import org.apache.ibatis.annotations.SelectKey;
 import org.springframework.stereotype.Component;
 
 /**
@@ -21,7 +21,7 @@ public interface LogMapper {
 	 * @param log 日志
 	 * @return 1:插入成功
 	 */
-	@Options(useCache = false, keyColumn = "id", useGeneratedKeys = true)
+	@SelectKey(statement = "SELECT LAST_INSERT_ID()", keyColumn = "id", keyProperty = "id", resultType = Integer.class, before = false)
 	@InsertProvider(type = LogSqlProvider.class, method = "insertSelective")
 	int insertSelective(LogDO log);
 }
