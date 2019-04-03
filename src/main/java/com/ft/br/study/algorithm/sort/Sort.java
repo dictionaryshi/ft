@@ -194,6 +194,22 @@ public class Sort {
 		show(heap);
 	}
 
+	/**
+	 * 选择排序递归写法
+	 */
+	public static void selectionSortUecursion(Comparable[] arr, int start) {
+		if (start > arr.length - 1) {
+			return;
+		}
+		for (int i = 0; i < arr.length; i++) {
+			if (Sort.less(arr[start], arr[i])) {
+				Sort.exch(arr, start, i);
+			}
+		}
+
+		selectionSortUecursion(arr, start + 1);
+	}
+
 	public static void main(String[] args) {
 		show(NO_SORT_ARRAY);
 		show(NO_SORT_ARRAY);
