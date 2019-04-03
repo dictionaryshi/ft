@@ -210,6 +210,22 @@ public class Sort {
 		selectionSortUecursion(arr, start + 1);
 	}
 
+	/**
+	 * 冒泡排序递归
+	 */
+	public static void bubbleSortUecursion(Comparable[] arr, int end) {
+		if (end < 1) {
+			return;
+		}
+		for (int i = 0; i < end; i++) {
+			if (Sort.less(arr[i + 1], arr[i])) {
+				Sort.exch(arr, i + 1, i);
+			}
+		}
+
+		bubbleSortUecursion(arr, end - 1);
+	}
+
 	public static void main(String[] args) {
 		show(NO_SORT_ARRAY);
 		show(NO_SORT_ARRAY);
