@@ -143,25 +143,25 @@ public class Sort {
 	/**
 	 * 将二叉堆中元素进行下沉处理
 	 *
-	 * @param arr  二叉堆
-	 * @param k    指定索引
-	 * @param size 二叉堆元素数量
+	 * @param arr         二叉堆
+	 * @param parentIndex 父索引
+	 * @param size        二叉堆元素数量
 	 */
-	public static void sink(Comparable[] arr, int k, int size) {
-		while (2 * k <= size) {
-			// i为左结点
-			int i = 2 * k;
-			if (i < size && less(arr[i], arr[i + 1])) {
-				// 此时i为右节点
-				i++;
+	public static void sink(Comparable[] arr, int parentIndex, int size) {
+		while (2 * parentIndex <= size) {
+			// 左结点
+			int childIndex = 2 * parentIndex;
+			if (childIndex < size && less(arr[childIndex], arr[childIndex + 1])) {
+				// 右节点
+				childIndex++;
 			}
-			if (!less(arr[k], arr[i])) {
+			if (!less(arr[parentIndex], arr[childIndex])) {
 				break;
 			}
 
-			exch(arr, k, i);
+			exch(arr, parentIndex, childIndex);
 
-			k = i;
+			parentIndex = childIndex;
 		}
 	}
 
@@ -171,24 +171,24 @@ public class Sort {
 	 * @param arr 要排序的数组
 	 */
 	public static void heapSort(Comparable[] arr) {
-		int length = arr.length;
-		Comparable[] heap = new Comparable[length + 1];
-		for (int i = 0; i < length; i++) {
+		int size = arr.length;
+		Comparable[] heap = new Comparable[size + 1];
+		for (int i = 0; i < size; i++) {
 			heap[i + 1] = arr[i];
 		}
 		// 构造堆
-		for (int k = length / 2; k >= 1; k--) {
-			sink(heap, k, length);
+		for (int parentIndex = size / 2; parentIndex >= 1; parentIndex--) {
+			sink(heap, parentIndex, size);
 		}
 
 		show(heap);
 
 		// 下沉排序
-		while (length > 1) {
+		while (size > 1) {
 			// 将最大元素放置数组最后, 并逻辑移除
-			exch(heap, 1, length--);
+			exch(heap, 1, size--);
 			// 将新堆使用下沉恢复
-			sink(heap, 1, length);
+			sink(heap, 1, size);
 		}
 
 		show(heap);
