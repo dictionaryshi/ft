@@ -120,6 +120,7 @@ public class Sort {
 	public static void insertionSort(Comparable[] arr) {
 		int length = arr.length;
 		for (int i = 1; i < length; i++) {
+			// 将arr[i]插入到arr[i - 1]、arr[i - 2]、arr[i - 3]...之中
 			for (int j = i; j > 0 && less(arr[j], arr[j - 1]); j--) {
 				exch(arr, j, j - 1);
 			}
