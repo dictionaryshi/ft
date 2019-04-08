@@ -45,4 +45,29 @@ public class BinaryTreeNode<T> {
 			System.out.print(root.getData() + "\t");
 		}
 	}
+
+	/**
+	 * 元素个数
+	 */
+	public static int size(BinaryTreeNode root) {
+		if (root == null) {
+			return 0;
+		} else {
+			return size(root.left) + size(root.right) + 1;
+		}
+	}
+
+	/**
+	 * 二叉树高度(深度)
+	 */
+	public static int deep(BinaryTreeNode root) {
+		if (root == null) {
+			return 0;
+		}
+
+		int leftDeep = deep(root.left);
+		int rightDeep = deep(root.right);
+		return Math.max(leftDeep, rightDeep) + 1;
+	}
+
 }
