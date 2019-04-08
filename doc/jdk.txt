@@ -47,3 +47,5 @@ git配色:
     git config --global color.branch auto
     git config --global color.interactive auto
 
+jdk  kafka  maven  nginx  redis  zookeeper
+
