@@ -68,6 +68,7 @@ public class FtApplication {
 	}
 
 	private final PropertiesConstant propertiesConstants;
+
 	public FtApplication(
 			PropertiesConstant propertiesConstants
 	) {
