@@ -1,6 +1,7 @@
 package com.ft.br.config;
 
 import com.ft.br.constant.PropertiesConstant;
+import com.ft.br.model.dto.SpringLifeBean;
 import com.ft.web.model.UserDO;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -20,13 +21,20 @@ public class ProFileConfig {
 	 *
 	 * @return User对象
 	 */
-	@Bean(initMethod = "init", destroyMethod = "destroy")
+	@Bean
 	@Scope(value = ConfigurableBeanFactory.SCOPE_SINGLETON)
 	@Lazy
 	public UserDO scy() {
 		UserDO user = new UserDO();
 		user.setUsername("scy");
 		return user;
+	}
+
+	@Bean(initMethod = "init", destroyMethod = "destroy")
+	public SpringLifeBean springLifeBean() {
+		SpringLifeBean springLifeBean = new SpringLifeBean();
+		springLifeBean.setUsername("springLifeBean name");
+		return springLifeBean;
 	}
 
 	@Bean
