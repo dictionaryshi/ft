@@ -21,10 +21,3 @@ public class CategoryDO implements Serializable {
 	 */
 	private String name;
 }
-/*
-    CREATE TABLE `category` (
-      `id` smallint(6) NOT NULL AUTO_INCREMENT COMMENT '主键',
-      `name` varchar(50) NOT NULL DEFAULT '' COMMENT '分类名称',
-      PRIMARY KEY (`id`)
-    ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
- */

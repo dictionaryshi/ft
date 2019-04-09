@@ -42,14 +42,3 @@ public class GoodsDO {
 	 */
 	private Date updatedAt;
 }
-/*
-    CREATE TABLE `goods` (
-      `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
-      `name` varchar(50) NOT NULL DEFAULT '' COMMENT '商品名称',
-      `number` int(11) NOT NULL DEFAULT '0' COMMENT '库存数量',
-      `category` smallint(6) NOT NULL DEFAULT '0' COMMENT '分类',
-      `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-      `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-      PRIMARY KEY (`id`)
-    ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
- */
