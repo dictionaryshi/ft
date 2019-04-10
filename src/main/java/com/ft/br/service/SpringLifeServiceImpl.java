@@ -1,5 +1,6 @@
 package com.ft.br.service;
 
+import com.ft.br.constant.OrderTypeEnum;
 import lombok.Data;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.*;
@@ -69,5 +70,10 @@ public class SpringLifeServiceImpl implements SpringLifeService, BeanNameAware, 
 
 	public void customDestroy() {
 		System.out.println(this.username + " " + 11);
+	}
+
+	@Override
+	public OrderTypeEnum getStatus() {
+		return OrderTypeEnum.SUCCESS;
 	}
 }
