@@ -1,5 +1,6 @@
 package com.ft.br.model.mdo;
 
+import com.ft.br.constant.OrderTypeEnum;
 import lombok.Data;
 
 import java.util.Date;
