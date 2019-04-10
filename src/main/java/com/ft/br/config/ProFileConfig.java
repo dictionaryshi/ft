@@ -30,10 +30,10 @@ public class ProFileConfig {
 		return user;
 	}
 
-	@Bean(initMethod = "init", destroyMethod = "destroy")
+	@Bean(initMethod = "init", destroyMethod = "customDestroy")
 	public SpringLifeBean springLifeBean() {
 		SpringLifeBean springLifeBean = new SpringLifeBean();
-		springLifeBean.setUsername("springLifeBean name");
+		springLifeBean.setUsername("SpringLifeBean");
 		return springLifeBean;
 	}
 
