@@ -1,9 +1,11 @@
 package com.ft.br.model.dto;
 
+import com.ft.br.service.OrderService;
 import com.ft.br.service.SpringLifeService;
 import lombok.Data;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 
@@ -19,6 +21,9 @@ import javax.annotation.PreDestroy;
 public class SpringLifeBean implements SpringLifeService, BeanNameAware, BeanFactoryAware, ApplicationContextAware, InitializingBean, DisposableBean {
 	private String username;
 
+	@Autowired
+	private OrderService orderService;
+
 	public SpringLifeBean(String username) {
 		this.username = username;
 		System.out.println(this.username + " " + "构造方法初始化");
@@ -26,6 +31,7 @@ public class SpringLifeBean implements SpringLifeService, BeanNameAware, BeanFac
 
 	@Override
 	public void setBeanName(String name) {
+		System.out.println(this.username + " " + "Autowired结束, orderService==>" + orderService);
 		System.out.println(this.username + " " + 1);
 	}
 
