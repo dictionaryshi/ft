@@ -1,7 +1,7 @@
 package com.ft.br.config;
 
 import com.ft.br.constant.PropertiesConstant;
-import com.ft.br.model.dto.SpringLifeBean;
+import com.ft.br.service.SpringLifeServiceImpl;
 import com.ft.web.model.UserDO;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -31,8 +31,8 @@ public class ProFileConfig {
 	}
 
 	@Bean(initMethod = "init", destroyMethod = "customDestroy")
-	public SpringLifeBean springLifeBean() {
-		return new SpringLifeBean("SpringLifeBean");
+	public SpringLifeServiceImpl springLifeService() {
+		return new SpringLifeServiceImpl("SpringLifeBean");
 	}
 
 	@Bean

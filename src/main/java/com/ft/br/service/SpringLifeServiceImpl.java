@@ -1,7 +1,5 @@
-package com.ft.br.model.dto;
+package com.ft.br.service;
 
-import com.ft.br.service.OrderService;
-import com.ft.br.service.SpringLifeService;
 import lombok.Data;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.*;
@@ -18,13 +16,13 @@ import javax.annotation.PreDestroy;
  * @author shichunyang
  */
 @Data
-public class SpringLifeBean implements SpringLifeService, BeanNameAware, BeanFactoryAware, ApplicationContextAware, InitializingBean, DisposableBean {
+public class SpringLifeServiceImpl implements SpringLifeService, BeanNameAware, BeanFactoryAware, ApplicationContextAware, InitializingBean, DisposableBean {
 	private String username;
 
 	@Autowired
 	private OrderService orderService;
 
-	public SpringLifeBean(String username) {
+	public SpringLifeServiceImpl(String username) {
 		this.username = username;
 		System.out.println(this.username + " " + "构造方法初始化");
 	}
