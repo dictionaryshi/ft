@@ -19,6 +19,11 @@ import javax.annotation.PreDestroy;
 public class SpringLifeBean implements SpringLifeService, BeanNameAware, BeanFactoryAware, ApplicationContextAware, InitializingBean, DisposableBean {
 	private String username;
 
+	public SpringLifeBean(String username) {
+		this.username = username;
+		System.out.println(this.username + " " + "构造方法初始化");
+	}
+
 	@Override
 	public void setBeanName(String name) {
 		System.out.println(this.username + " " + 1);

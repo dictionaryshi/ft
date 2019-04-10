@@ -32,9 +32,7 @@ public class ProFileConfig {
 
 	@Bean(initMethod = "init", destroyMethod = "customDestroy")
 	public SpringLifeBean springLifeBean() {
-		SpringLifeBean springLifeBean = new SpringLifeBean();
-		springLifeBean.setUsername("SpringLifeBean");
-		return springLifeBean;
+		return new SpringLifeBean("SpringLifeBean");
 	}
 
 	@Bean
