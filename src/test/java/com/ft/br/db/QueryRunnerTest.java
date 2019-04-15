@@ -4,7 +4,6 @@ import com.ft.db.annotation.DataSource;
 import com.ft.db.dbutil.TxQueryRunner;
 import com.ft.db.plugin.DataSourceHolder;
 import com.ft.util.JsonUtil;
-import com.ft.util.ObjectUtil;
 import com.ft.web.model.UserDO;
 import org.apache.commons.dbutils.handlers.*;
 import org.junit.Assert;
@@ -16,7 +15,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -93,21 +91,6 @@ public class QueryRunnerTest {
 			System.out.print(kv.getKey() + "==>" + kv.getValue());
 			System.out.println();
 		}
-
-		UserDO user = ObjectUtil.map2Bean(map, UserDO.class, null);
-		System.out.println(JsonUtil.object2Json(user));
-
-		Map<String, Object> userMap = new HashMap<>();
-
-		userMap.put("id", 666);
-		userMap.put("username", "史春阳");
-		userMap.put("password", "naodian12300");
-		userMap.put("createdAt", "2017-11-11 11:11:11");
-		userMap.put("updatedAt", "2018-12-12 12:12:12");
-
-		user = ObjectUtil.map2Bean(userMap, UserDO.class, "yyyy-MM-dd HH:mm:ss");
-
-		System.out.println(JsonUtil.object2Json(user));
 	}
 
 	@Test
