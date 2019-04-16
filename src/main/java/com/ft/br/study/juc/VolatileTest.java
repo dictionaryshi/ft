@@ -18,7 +18,7 @@ public class VolatileTest {
 
 	/**
 	 * 1.要想并发程序正确地执行,必须要保证原子性、可见性以及有序性。只要有一个没有被保证,就有可能会导致程序运行不正确。
-	 * 2.volatile修饰类的成员变量、类的静态成员变量。
+	 * 2.volatile修饰类的成员变量、类的静态成员变量。保证内存可见性、防止指令重排序、不能保证原子性。
 	 * 3.内存可见性问题:多个线程操作共享数据时, 彼此不可见。
 	 */
 	public static void main(String[] args) throws Exception {
