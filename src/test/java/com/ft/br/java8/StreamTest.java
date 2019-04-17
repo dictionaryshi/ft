@@ -119,6 +119,9 @@ public class StreamTest {
 		Map<Integer, List<Employee>> listMap = list.stream().collect(Collectors.groupingBy(Employee::getAge));
 		System.out.println(JsonUtil.object2Json(listMap));
 
+		Map<Integer, Set<String>> nameMap = list.stream().collect(Collectors.groupingBy(Employee::getAge, Collectors.mapping(Employee::getName, Collectors.toSet())));
+		System.out.println(JsonUtil.object2Json(nameMap));
+
 		Map<Integer, Map<String, List<Employee>>> groupMap = list.stream().collect(Collectors.groupingBy(Employee::getAge, Collectors.groupingBy(Employee::getName)));
 		System.out.println(JsonUtil.object2Json(groupMap));
 	}
