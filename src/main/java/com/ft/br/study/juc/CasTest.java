@@ -38,6 +38,12 @@ public class CasTest {
 		return UNSAFE.compareAndSwapObject(userDO, USER_NAME_OFFSET, expect, update);
 	}
 
+	/**
+	 * CAS缺点:
+	 * 1.CPU消耗大。
+	 * 2.只能操作一个变量。
+	 * 3.ABA问题。
+	 */
 	public static void main(String[] args) {
 		AtomicLong atomicLong = new AtomicLong(100L);
 		boolean flag1 = atomicLong.compareAndSet(100L, 500L);
