@@ -11,6 +11,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Date;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 @SpringBootTest
 @RunWith(SpringRunner.class)
@@ -128,6 +129,21 @@ public class RedisTest {
 		for (int i = 1; i <= 5; i++) {
 			long result = valueOperationsCache.increment(LOGIN_ID, 1);
 			System.out.println(result);
+		}
+	}
+
+	/**
+	 * 自增, 并在第一次设置过期时间
+	 */
+	@Test
+	public void incrementWithExpire() {
+		for (int i = 1; i <= 5; i++) {
+			long result = valueOperationsCache.increment(LOGIN_ID, 1, 40_000L);
+			System.out.println(result);
+			try {
+				TimeUnit.SECONDS.sleep(2);
+			} catch (InterruptedException e) {
+			}
 		}
 	}
 
