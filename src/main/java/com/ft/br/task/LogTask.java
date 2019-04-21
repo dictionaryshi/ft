@@ -15,7 +15,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 */
 public class LogTask {
 	@Autowired
-	private ListOperationsCache listOperationsCache;
+	private ListOperationsCache<String, String> listOperationsCache;
 
 	/*
 	@Autowired

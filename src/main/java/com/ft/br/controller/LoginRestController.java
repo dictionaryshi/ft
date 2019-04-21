@@ -48,7 +48,7 @@ public class LoginRestController {
 	private LoginService loginService;
 
 	@Autowired
-	private ValueOperationsCache valueOperationsCache;
+	private ValueOperationsCache<String, String> valueOperationsCache;
 
 	@Value("${cookieDomain}")
 	private String cookieDomain;

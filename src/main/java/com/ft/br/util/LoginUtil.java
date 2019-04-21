@@ -28,7 +28,8 @@ public class LoginUtil {
 	 * @return 用户信息
 	 */
 	public static UserDO getLoginUser(HttpServletRequest request) {
-		ValueOperationsCache valueOperationsCache = SpringContextUtil.getBean(ValueOperationsCache.class);
+		@SuppressWarnings("unchecked")
+		ValueOperationsCache<String, String> valueOperationsCache = SpringContextUtil.getBean(ValueOperationsCache.class);
 
 		String loginToken = WebUtil.getToken(request);
 		if (StringUtil.isNull(loginToken)) {

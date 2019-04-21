@@ -55,8 +55,8 @@ public class OrderService {
 	@Autowired
 	private StockLogMapper stockLogMapper;
 
-	@Resource(name = "valueOperationsCache")
-	private ValueOperationsCache valueOperationsCache;
+	@Autowired
+	private ValueOperationsCache<String, String> valueOperationsCache;
 
 	@DataSource(DataSource.slave)
 	public PageResult<OrderVO> list(OrderDTO orderDTO, PageParam pageParam) {

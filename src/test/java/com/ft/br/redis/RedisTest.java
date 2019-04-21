@@ -17,7 +17,7 @@ import java.util.concurrent.TimeUnit;
 @RunWith(SpringRunner.class)
 public class RedisTest {
 	@Autowired
-	private ValueOperationsCache valueOperationsCache;
+	private ValueOperationsCache<String, String> valueOperationsCache;
 
 	private static final String LOGIN_ID = "login_id";
 	private static final String USER_NAME = "user_name";

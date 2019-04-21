@@ -25,7 +25,6 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,8 +48,8 @@ public class StockLogService {
 	@Autowired
 	private OrderMapper orderMapper;
 
-	@Resource(name = "valueOperationsCache")
-	private ValueOperationsCache valueOperationsCache;
+	@Autowired
+	private ValueOperationsCache<String, String> valueOperationsCache;
 
 	/**
 	 * 分页查询出入库记录
