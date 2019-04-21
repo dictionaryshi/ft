@@ -24,7 +24,7 @@ import org.springframework.stereotype.Service;
 public class LoginService {
 
 	@Autowired
-	private ValueOperationsCache valueOperationsCache;
+	private ValueOperationsCache<String, String> valueOperationsCache;
 
 	@Autowired
 	private UserMapper userMapper;

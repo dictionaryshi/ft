@@ -19,7 +19,7 @@ import java.util.List;
 @RunWith(SpringRunner.class)
 public class ListOperationsCacheTest {
 	@Autowired
-	private ListOperationsCache listOperationsCache;
+	private ListOperationsCache<String, String> listOperationsCache;
 
 	public static final String NUMBER_LIST = "number_list";
 

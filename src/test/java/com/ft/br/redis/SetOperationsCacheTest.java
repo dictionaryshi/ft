@@ -20,7 +20,7 @@ import java.util.Set;
 public class SetOperationsCacheTest {
 
 	@Autowired
-	private SetOperationsCache setOperationsCache;
+	private SetOperationsCache<String, String> setOperationsCache;
 
 	private static final String NUMBER_SET = "number_set";
 
