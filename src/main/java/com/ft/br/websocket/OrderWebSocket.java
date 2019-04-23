@@ -3,6 +3,7 @@ package com.ft.br.websocket;
 import com.ft.br.service.GoodsService;
 import com.ft.util.JsonUtil;
 import com.ft.util.SpringContextUtil;
+import com.ft.util.exception.FtException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -32,7 +33,7 @@ public class OrderWebSocket {
 
 	@OnError
 	public void onError(Session session, Throwable throwable) {
-		log.error("session==>{}, oid==>{}, exception==>{}", session, ORDER_WEB_SOCKET.get(session), JsonUtil.object2Json(throwable), throwable);
+		log.error("session==>{}, oid==>{}, exception==>{}", session, ORDER_WEB_SOCKET.get(session), FtException.getExceptionStack(throwable));
 	}
 
 	@OnClose
@@ -53,7 +54,7 @@ public class OrderWebSocket {
 			session.getBasicRemote().sendText(message);
 		} catch (Exception e) {
 			log.error("session==>{}, oid==>{}, message==>{}, exception==>{}",
-					session, ORDER_WEB_SOCKET.get(session), message, JsonUtil.object2Json(e), e);
+					session, ORDER_WEB_SOCKET.get(session), message, FtException.getExceptionStack(e));
 		}
 	}
 }
