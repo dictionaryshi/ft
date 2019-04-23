@@ -1,6 +1,5 @@
 package com.ft.br.study.juc;
 
-import com.ft.util.JsonUtil;
 import com.ft.util.exception.FtException;
 import com.ft.util.model.RestResult;
 import com.ft.web.model.UserDO;
@@ -29,7 +28,7 @@ public class CasTest {
 			USER_NAME_OFFSET = UNSAFE.objectFieldOffset
 					(UserDO.class.getDeclaredField("username"));
 		} catch (Exception e) {
-			log.error("cas init exception==>{}", JsonUtil.object2Json(e), e);
+			log.error("cas init exception==>{}", FtException.getExceptionStack(e));
 			throw new FtException(RestResult.ERROR_CODE, e.getMessage());
 		}
 	}
