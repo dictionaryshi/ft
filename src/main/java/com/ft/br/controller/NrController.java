@@ -7,6 +7,7 @@ import com.ft.rpc.api.model.RpcParam;
 import com.ft.rpc.api.model.RpcResult;
 import com.ft.util.ExcelUtil;
 import com.ft.util.JsonUtil;
+import com.ft.util.exception.FtException;
 import com.ft.util.model.RestResult;
 import com.ft.web.annotation.SignCheck;
 import lombok.extern.slf4j.Slf4j;
@@ -15,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.Date;
 
@@ -64,20 +64,11 @@ public class NrController {
 			@RequestParam String username,
 			@RequestParam MultipartFile excel
 	) {
-		InputStream in = null;
-		try {
-			in = excel.getInputStream();
+		try (InputStream in = excel.getInputStream()) {
 			return JsonUtil.object2Json(ExcelUtil.readExcel(in, false));
 		} catch (Exception e) {
+			log.error("upload exception==>{}", FtException.getExceptionStack(e));
 			return "error";
-		} finally {
-			if (in != null) {
-				try {
-					in.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
 		}
 	}
 }

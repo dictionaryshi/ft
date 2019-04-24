@@ -2,17 +2,13 @@ package com.ft.br;
 
 import com.ft.br.constant.PropertiesConstant;
 import com.ft.br.service.GoodsService;
-import com.ft.util.ExcelUtil;
-import com.ft.util.JsonUtil;
-import com.ft.util.LogHolder;
-import com.ft.util.SpringContextUtil;
+import com.ft.util.*;
 import com.ft.util.exception.FtException;
 import com.ft.web.cloud.hystrix.ThreadLocalHystrixConcurrencyStrategy;
 import com.netflix.hystrix.strategy.HystrixPlugins;
 import com.netflix.loadbalancer.IRule;
 import com.netflix.loadbalancer.RoundRobinRule;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.io.IOUtils;
 import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -155,19 +151,20 @@ public class FtApplication {
 			dataList.add(scy);
 		}
 
-		ByteArrayOutputStream excelOut = new ByteArrayOutputStream();
-		ExcelUtil.createExcel(excelOut, sheetTitle, columnChs, dataList, limit);
+		try (
+				ByteArrayOutputStream excelOut = new ByteArrayOutputStream();
+				InputStream jpegIn = new FileInputStream("/Users/shichunyang/Downloads/monster.jpeg");
+				ByteArrayOutputStream jpegOut = new ByteArrayOutputStream()
+		) {
+			ExcelUtil.createExcel(excelOut, sheetTitle, columnChs, dataList, limit);
 
-		ByteArrayOutputStream jpegOut = new ByteArrayOutputStream();
-		InputStream jpegIn = new FileInputStream("/Users/shichunyang/Downloads/monster.jpeg");
-		IOUtils.copy(jpegIn, jpegOut);
-		jpegIn.close();
+			IOUtil.copyLarge(jpegIn, jpegOut, new byte[1024 * 4]);
 
-		mimeMessageHelper.addInline(cid, new ByteArrayResource(jpegOut.toByteArray()), request.getServletContext().getMimeType("*.jpeg"));
-		mimeMessageHelper.addAttachment("人员信息.xls", new ByteArrayResource(excelOut.toByteArray()), request.getServletContext().getMimeType("*.xls"));
-
-		jpegOut.close();
-		excelOut.close();
+			mimeMessageHelper.addInline(cid, new ByteArrayResource(jpegOut.toByteArray()), request.getServletContext().getMimeType("*.jpeg"));
+			mimeMessageHelper.addAttachment("人员信息.xls", new ByteArrayResource(excelOut.toByteArray()), request.getServletContext().getMimeType("*.xls"));
+		} catch (Exception e) {
+			log.error("mail exception==>{}", FtException.getExceptionStack(e));
+		}
 
 		javaMailSender.send(mimeMailMessage);
 		return "success";
