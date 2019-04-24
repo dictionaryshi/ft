@@ -42,6 +42,12 @@
     <dependencies>
         <dependency>
             <groupId>com.ft</groupId>
+            <artifactId>ft-plugin</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.ft</groupId>
             <artifactId>ft-util</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
