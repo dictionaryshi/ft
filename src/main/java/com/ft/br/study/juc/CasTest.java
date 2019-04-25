@@ -8,6 +8,8 @@ import sun.misc.Unsafe;
 
 import java.lang.reflect.Field;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.concurrent.atomic.AtomicStampedReference;
 
 /**
  * CAS(Compare and Swap):比较并替换。
@@ -51,6 +53,20 @@ public class CasTest {
 		UserDO userDO = new UserDO();
 		userDO.setUsername("春阳");
 		boolean flag3 = compareAndSetUsername(userDO, "春阳", "xt");
+
+		UserDO z3 = new UserDO();
+		z3.setUsername("xt");
+
+		UserDO l4 = new UserDO();
+		l4.setUsername("cy");
+
+		AtomicReference<UserDO> atomicReference = new AtomicReference<>(z3);
+		boolean flag4 = atomicReference.compareAndSet(z3, l4);
+
+		AtomicStampedReference<String> atomicStampedReference = new AtomicStampedReference<>("cy", 1);
+		int oldStamp = atomicStampedReference.getStamp();
+		boolean flag5 = atomicStampedReference.compareAndSet("cy", "xt", oldStamp, oldStamp + 1);
+
 		System.out.println();
 	}
 }
