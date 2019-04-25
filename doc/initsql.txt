@@ -77,3 +77,18 @@ CREATE TABLE `user` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+CREATE TABLE `message_queue` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `topic` varchar(255) NOT NULL DEFAULT '' COMMENT 'kafka topic',
+  `source` varchar(255) NOT NULL DEFAULT '' COMMENT '消费业务线',
+  `message_id` varchar(35) NOT NULL DEFAULT '' COMMENT '消息id',
+  `message_content` longtext COMMENT '消息体',
+  `message_status` smallint(6) NOT NULL DEFAULT '-1' COMMENT '消息状态(0:待消费, 1:开始消费, 2:消费成功, 3:消费失败)',
+  `error_message` varchar(255) NOT NULL DEFAULT '' COMMENT '错误信息',
+  `request_id` varchar(35) NOT NULL DEFAULT '' COMMENT '请求id',
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '消息创建时间',
+  `consume_at` timestamp NOT NULL DEFAULT '1970-01-01 08:00:01' COMMENT '消息消费时间',
+  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '记录更改时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='mq落地';
+
