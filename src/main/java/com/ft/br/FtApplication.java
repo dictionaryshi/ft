@@ -103,17 +103,10 @@ public class FtApplication {
 		return JsonUtil.object2Json(goodsService.get(1L));
 	}
 
-	private ThreadLocal<Long> threadTime = new ThreadLocal<>();
-
 	@Retryable(value = {Exception.class}, maxAttempts = 5, backoff = @Backoff(delay = 5000L, multiplier = 2, maxDelay = 86400000L))
 	@GetMapping("/rpc")
 	public String rpc() {
-		if (threadTime.get() != null) {
-			log.info("rpc test, time==>{}", System.currentTimeMillis() - threadTime.get());
-		} else {
-			threadTime.set(System.currentTimeMillis());
-		}
-
+		log.info("rpc retry test");
 		throw new FtException(500, "重试机制测试");
 	}
 
