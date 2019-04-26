@@ -15,7 +15,7 @@ import java.util.concurrent.TimeUnit;
 public class CyclicBarrierTest {
 	public static void main(String[] args) throws Exception {
 		int totalThread = 10;
-		CyclicBarrier cyclicBarrier = new CyclicBarrier(totalThread);
+		CyclicBarrier cyclicBarrier = new CyclicBarrier(totalThread, () -> System.out.println("all thread ready"));
 		String poolName = "cyclicBarrier";
 		ExecutorService executorService = ThreadPoolUtil.getThreadPool(poolName, 10, 20, 300, TimeUnit.SECONDS, 50, null);
 		for (int i = 0; i < totalThread; i++) {
@@ -24,11 +24,6 @@ public class CyclicBarrierTest {
 				try {
 					cyclicBarrier.await();
 				} catch (InterruptedException | BrokenBarrierException e) {
-					e.printStackTrace();
-				}
-				try {
-					Thread.sleep(5_000L);
-				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
 				System.out.println("after, thread==>" + Thread.currentThread().getName());

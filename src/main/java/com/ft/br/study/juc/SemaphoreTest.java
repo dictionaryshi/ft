@@ -22,7 +22,7 @@ public class SemaphoreTest {
 			executorService.execute(() -> {
 				try {
 					semaphore.acquire();
-					System.out.println("剩余许可数==>" + semaphore.availablePermits());
+					System.out.println(Thread.currentThread().getName() + ", 抢到资源");
 					Thread.sleep(3_000L);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
