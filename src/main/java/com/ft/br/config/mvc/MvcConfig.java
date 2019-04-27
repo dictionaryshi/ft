@@ -1,5 +1,7 @@
 package com.ft.br.config.mvc;
 
+import com.ft.redis.plugin.RedisWarning;
+import com.ft.util.service.CommonService;
 import org.springframework.boot.web.servlet.MultipartConfigFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -34,5 +36,20 @@ public class MvcConfig {
 	@Bean
 	public ServerEndpointExporter serverEndpointExporter() {
 		return new ServerEndpointExporter();
+	}
+
+	@Bean
+	public RedisWarning redisWarning() {
+		return new RedisWarning();
+	}
+
+	@Bean
+	public CommonService commonService(RedisWarning redisWarning) {
+		return new CommonService() {
+			@Override
+			public void work(String application) {
+				redisWarning.flow(application);
+			}
+		};
 	}
 }
