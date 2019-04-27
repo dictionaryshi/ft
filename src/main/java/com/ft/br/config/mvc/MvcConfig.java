@@ -2,9 +2,11 @@ package com.ft.br.config.mvc;
 
 import com.ft.redis.plugin.RedisWarning;
 import com.ft.util.service.CommonService;
+import com.ft.web.plugin.MailUtil;
 import org.springframework.boot.web.servlet.MultipartConfigFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.util.unit.DataSize;
 import org.springframework.web.socket.server.standard.ServerEndpointExporter;
 
@@ -51,5 +53,10 @@ public class MvcConfig {
 				redisWarning.flow(application);
 			}
 		};
+	}
+
+	@Bean
+	public MailUtil mailUtil(JavaMailSender javaMailSender) {
+		return new MailUtil(javaMailSender);
 	}
 }
