@@ -23,7 +23,7 @@ public class RedisWarningTask {
 	@Autowired
 	private MailUtil mailUtil;
 
-	@Scheduled(cron = "0/30 * * * * ?")
+	@Scheduled(cron = "0/1 * * * * ?")
 	public void warn() {
 		Map<String, String> entries = hashOperationsCache.entries(RedisWarning.REDIS_WARNING_MAP);
 		hashOperationsCache.delete(RedisWarning.REDIS_WARNING_MAP);
