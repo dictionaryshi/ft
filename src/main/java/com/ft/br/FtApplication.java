@@ -5,6 +5,7 @@ import com.ft.br.service.GoodsService;
 import com.ft.util.*;
 import com.ft.util.exception.FtException;
 import com.ft.web.cloud.hystrix.ThreadLocalHystrixConcurrencyStrategy;
+import com.ft.web.plugin.MailUtil;
 import com.netflix.hystrix.strategy.HystrixPlugins;
 import com.netflix.loadbalancer.IRule;
 import com.netflix.loadbalancer.RoundRobinRule;
@@ -23,9 +24,6 @@ import org.springframework.cloud.netflix.hystrix.EnableHystrix;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
-import org.springframework.core.io.ByteArrayResource;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.retry.annotation.Backoff;
 import org.springframework.retry.annotation.EnableRetry;
 import org.springframework.retry.annotation.Retryable;
@@ -34,7 +32,6 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
 import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
@@ -110,32 +107,22 @@ public class FtApplication {
 		throw new FtException(500, "重试机制测试");
 	}
 
-	//@Autowired
-	private JavaMailSender javaMailSender;
+	@Autowired
+	private MailUtil mailUtil;
 
 	@GetMapping("/mail")
 	public String mail(HttpServletRequest request) throws Exception {
-		MimeMessage mimeMailMessage = javaMailSender.createMimeMessage();
-		MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMailMessage, true);
-
-		mimeMessageHelper.setTo("shichunyang@ft.com");
-		mimeMessageHelper.setFrom("903031015@qq.com");
-		mimeMessageHelper.setSubject("一封测试邮件");
-
 		String cid = "monster";
-		mimeMessageHelper.setText("<h1>Hello World</h1> <img src='cid:" + cid + "' />", true);
 
 		String sheetTitle = "人员信息";
-
 		String nameKey = "姓名";
 		String ageKey = "年龄";
 		String dateKey = "日期";
 		List<String> columnChs = Arrays.asList(nameKey, ageKey, dateKey);
-
 		List<Map<String, Object>> dataList = new ArrayList<>();
 
-		int target = 100;
-		int limit = 10;
+		int target = 70;
+		int limit = 17;
 		for (int i = 0; i < target; i++) {
 			Map<String, Object> scy = new HashMap<>(16);
 			scy.put(nameKey, "史春阳");
@@ -153,13 +140,23 @@ public class FtApplication {
 
 			IOUtil.copyLarge(jpegIn, jpegOut, new byte[1024 * 4]);
 
-			mimeMessageHelper.addInline(cid, new ByteArrayResource(jpegOut.toByteArray()), request.getServletContext().getMimeType("*.jpeg"));
-			mimeMessageHelper.addAttachment("人员信息.xls", new ByteArrayResource(excelOut.toByteArray()), request.getServletContext().getMimeType("*.xls"));
+			Map<String, Object[]> inLines = new HashMap<>(16);
+			inLines.put(cid, new Object[]{jpegOut, request.getServletContext().getMimeType("*.jpeg")});
+
+			Map<String, Object[]> attachments = new HashMap<>(16);
+			attachments.put("人员信息.xls", new Object[]{excelOut, request.getServletContext().getMimeType("*.xls")});
+			mailUtil.send(
+					new String[]{"903031015@qq.com"},
+					"903031015@qq.com",
+					"一封测试邮件",
+					"<h1>Hello World</h1> <img src='cid:" + cid + "' />",
+					inLines,
+					attachments
+			);
 		} catch (Exception e) {
 			log.error("mail exception==>{}", FtException.getExceptionStack(e));
 		}
 
-		javaMailSender.send(mimeMailMessage);
 		return "success";
 	}
 
