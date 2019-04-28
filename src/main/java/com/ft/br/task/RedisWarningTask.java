@@ -28,7 +28,7 @@ public class RedisWarningTask {
 	@Autowired
 	private MailUtil mailUtil;
 
-	@Scheduled(cron = "0/5 * * * * ?")
+	@Scheduled(cron = "0/1 * * * * ?")
 	public void warn() {
 		Set<String> warnKeys = setOperationsCache.members(RedisWarning.REDIS_WARNING_SETS);
 		if (StringUtil.isEmpty(warnKeys)) {
