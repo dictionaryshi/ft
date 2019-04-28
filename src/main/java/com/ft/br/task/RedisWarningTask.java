@@ -1,14 +1,16 @@
 package com.ft.br.task;
 
-import com.ft.redis.base.HashOperationsCache;
+import com.ft.redis.base.SetOperationsCache;
+import com.ft.redis.base.ZSetOperationsCache;
 import com.ft.redis.plugin.RedisWarning;
 import com.ft.util.StringUtil;
 import com.ft.web.plugin.MailUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import java.util.Map;
+import java.util.Set;
 
 /**
  * 流量报警
@@ -18,24 +20,43 @@ import java.util.Map;
 @Component
 public class RedisWarningTask {
 	@Autowired
-	private HashOperationsCache<String, String, String> hashOperationsCache;
+	private ZSetOperationsCache<String, String> zSetOperationsCache;
+
+	@Autowired
+	private SetOperationsCache<String, String> setOperationsCache;
 
 	@Autowired
 	private MailUtil mailUtil;
 
-	@Scheduled(cron = "0/1 * * * * ?")
+	@Scheduled(cron = "0/5 * * * * ?")
 	public void warn() {
-		Map<String, String> entries = hashOperationsCache.entries(RedisWarning.REDIS_WARNING_MAP);
-		hashOperationsCache.delete(RedisWarning.REDIS_WARNING_MAP);
-		if (StringUtil.isEmpty(entries)) {
+		Set<String> warnKeys = setOperationsCache.members(RedisWarning.REDIS_WARNING_SETS);
+		if (StringUtil.isEmpty(warnKeys)) {
 			return;
 		}
-		entries.values().forEach(message -> {
-			try {
-				mailUtil.send(new String[]{"903031015@qq.com"}, "903031015@qq.com", "流量警报", message, null, null);
-			} catch (Exception e) {
-				e.printStackTrace();
+		long startStore = 0;
+		while (true) {
+			long endStore = System.currentTimeMillis();
+
+			for (String warnKey : warnKeys) {
+				Set<ZSetOperations.TypedTuple<String>> sets = zSetOperationsCache.reverseRangeByScoreWithScores(warnKey, startStore, endStore, 0, -1);
+				if (StringUtil.isEmpty(sets)) {
+					continue;
+				}
+
+				zSetOperationsCache.removeRangeByScore(warnKey, startStore, endStore);
+
+				ZSetOperations.TypedTuple<String> messageTypedTuple = sets.stream().findFirst().orElse(null);
+				if (messageTypedTuple == null) {
+					continue;
+				}
+				String message = messageTypedTuple.getValue();
+				try {
+					mailUtil.send(new String[]{"903031015@qq.com"}, "903031015@qq.com", "流量警报", message, null, null);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
-		});
+		}
 	}
 }
