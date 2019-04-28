@@ -2,6 +2,7 @@ package com.ft.br.study.juc;
 
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 阻塞队列:队列空时从队列获取元素会被阻塞, 队列满时往队列添加元素会被阻塞。
@@ -35,6 +36,7 @@ public class QueueTest {
 			System.out.println();
 		}
 
+
 		blockingQueue = new ArrayBlockingQueue<>(2);
 		boolean offer1 = blockingQueue.offer(1);
 		boolean offer2 = blockingQueue.offer(2);
@@ -50,6 +52,26 @@ public class QueueTest {
 		Integer n5 = blockingQueue.poll();
 
 		first = blockingQueue.peek();
+
+
+		blockingQueue = new ArrayBlockingQueue<>(2);
+		try {
+			boolean offer4 = blockingQueue.offer(1, 5L, TimeUnit.SECONDS);
+			boolean offer5 = blockingQueue.offer(2, 5L, TimeUnit.SECONDS);
+			boolean offer6 = blockingQueue.offer(3, 5L, TimeUnit.SECONDS);
+			System.out.println();
+		} catch (InterruptedException e) {
+			System.out.println();
+		}
+
+		try {
+			Integer poll1 = blockingQueue.poll(5L, TimeUnit.SECONDS);
+			Integer poll2 = blockingQueue.poll(5L, TimeUnit.SECONDS);
+			Integer poll3 = blockingQueue.poll(5L, TimeUnit.SECONDS);
+			System.out.println();
+		} catch (InterruptedException e) {
+			System.out.println();
+		}
 
 		System.out.println();
 	}
