@@ -35,27 +35,25 @@ public class RedisWarningTask {
 			return;
 		}
 		long startStore = 0;
-		while (true) {
-			long endStore = System.currentTimeMillis();
+		long endStore = System.currentTimeMillis();
 
-			for (String warnKey : warnKeys) {
-				Set<ZSetOperations.TypedTuple<String>> sets = zSetOperationsCache.reverseRangeByScoreWithScores(warnKey, startStore, endStore, 0, -1);
-				if (StringUtil.isEmpty(sets)) {
-					continue;
-				}
+		for (String warnKey : warnKeys) {
+			Set<ZSetOperations.TypedTuple<String>> sets = zSetOperationsCache.reverseRangeByScoreWithScores(warnKey, startStore, endStore, 0, -1);
+			if (StringUtil.isEmpty(sets)) {
+				continue;
+			}
 
-				zSetOperationsCache.removeRangeByScore(warnKey, startStore, endStore);
+			zSetOperationsCache.removeRangeByScore(warnKey, startStore, endStore);
 
-				ZSetOperations.TypedTuple<String> messageTypedTuple = sets.stream().findFirst().orElse(null);
-				if (messageTypedTuple == null) {
-					continue;
-				}
-				String message = messageTypedTuple.getValue();
-				try {
-					mailUtil.send(new String[]{"903031015@qq.com"}, "903031015@qq.com", "流量警报", message, null, null);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+			ZSetOperations.TypedTuple<String> messageTypedTuple = sets.stream().findFirst().orElse(null);
+			if (messageTypedTuple == null) {
+				continue;
+			}
+			String message = messageTypedTuple.getValue();
+			try {
+				mailUtil.send(new String[]{"903031015@qq.com"}, "903031015@qq.com", "流量警报", message, null, null);
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
 		}
 	}
