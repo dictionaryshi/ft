@@ -18,7 +18,7 @@ import java.util.concurrent.atomic.AtomicStampedReference;
  */
 @Slf4j
 public class CasTest {
-	private static final Unsafe UNSAFE;
+	public static final Unsafe UNSAFE;
 	private static final long USER_NAME_OFFSET;
 
 	static {
