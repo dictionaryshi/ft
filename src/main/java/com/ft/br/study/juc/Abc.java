@@ -34,7 +34,7 @@ public class Abc {
 						aCondition.await();
 					}
 					System.out.println(Thread.currentThread().getName());
-					count++;
+					count = 1;
 					// 唤醒B
 					bCondition.signal();
 				}
@@ -63,7 +63,7 @@ public class Abc {
 						bCondition.await();
 					}
 					System.out.println(Thread.currentThread().getName());
-					count++;
+					count = 2;
 					// 唤醒C
 					cCondition.signal();
 				}
@@ -93,7 +93,7 @@ public class Abc {
 					}
 					System.out.println(Thread.currentThread().getName());
 					System.out.println();
-					count++;
+					count = 0;
 					// 唤醒A
 					aCondition.signal();
 				}
