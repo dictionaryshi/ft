@@ -10,3 +10,9 @@ synchronized和Lock的区别:
     3)Lock可以等待中断。public void lockInterruptibly(); public boolean tryLock(long timeout, TimeUnit unit);
     4)Lock可以是公平锁。
     5)Lock可以绑定多个Condition, 可以实现分组唤醒、精确唤醒。synchronized只能随机唤醒一个线程或唤醒全部。
+
+线程池配置:
+    1.CPU密集:CPU核数 + 1
+    2.IO密集:
+        1)通用:CPU核数 * 2
+        2)精确:CPU核数 / (1 - 阻塞系数)。阻塞系数:IO密集通常在0.8 ~ 0.9。
