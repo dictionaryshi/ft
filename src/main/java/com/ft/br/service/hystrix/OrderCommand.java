@@ -1,6 +1,6 @@
 package com.ft.br.service.hystrix;
 
-import com.ft.web.cloud.hystrix.ThreadLocalHystrixConcurrencyStrategy;
+import com.ft.web.cloud.hystrix.TtlHystrixConcurrencyStrategy;
 import com.netflix.hystrix.*;
 import com.netflix.hystrix.strategy.HystrixPlugins;
 import lombok.extern.slf4j.Slf4j;
@@ -62,7 +62,7 @@ public class OrderCommand extends HystrixCommand<String> {
 
 	public static void main(String[] args) throws Exception {
 		// 托管hystrix线程池
-		HystrixPlugins.getInstance().registerConcurrencyStrategy(new ThreadLocalHystrixConcurrencyStrategy());
+		HystrixPlugins.getInstance().registerConcurrencyStrategy(new TtlHystrixConcurrencyStrategy());
 
 		OrderCommand mac = new OrderCommand("电脑");
 		OrderCommand phone = new OrderCommand("手机");

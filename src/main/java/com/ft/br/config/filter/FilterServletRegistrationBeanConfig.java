@@ -29,7 +29,7 @@ public class FilterServletRegistrationBeanConfig {
 		return demoServlet;
 	}
 
-//	@Bean
+	//	@Bean
 	public FilterRegistrationBean characterEncodingFilter() {
 		FilterRegistrationBean<CharacterEncodingFilter> characterEncodingFilter = new FilterRegistrationBean<>();
 		characterEncodingFilter.setFilter(new CharacterEncodingFilter("UTF-8", true, true));

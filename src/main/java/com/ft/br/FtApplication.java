@@ -4,7 +4,7 @@ import com.ft.br.constant.PropertiesConstant;
 import com.ft.br.service.GoodsService;
 import com.ft.util.*;
 import com.ft.util.exception.FtException;
-import com.ft.web.cloud.hystrix.ThreadLocalHystrixConcurrencyStrategy;
+import com.ft.web.cloud.hystrix.TtlHystrixConcurrencyStrategy;
 import com.ft.web.plugin.MailUtil;
 import com.netflix.hystrix.strategy.HystrixPlugins;
 import com.netflix.loadbalancer.IRule;
@@ -181,7 +181,7 @@ public class FtApplication {
 		MDC.put(LogHolder.REQUEST_ID, "application start");
 
 		// 托管hystrix线程池
-		HystrixPlugins.getInstance().registerConcurrencyStrategy(new ThreadLocalHystrixConcurrencyStrategy());
+		HystrixPlugins.getInstance().registerConcurrencyStrategy(new TtlHystrixConcurrencyStrategy());
 
 		ApplicationContext applicationContext = SpringApplication.run(FtApplication.class, args);
 		SpringContextUtil.setApplicationContext(applicationContext);
