@@ -10,3 +10,9 @@ printf "%x\n" 15
 // 查看进程内线程使用情况
 top -H -p 4941
 
+// 查看java进程
+jps -l
+
+// 查看java启动参数
+jinfo -flags 2213
+
