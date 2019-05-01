@@ -14,7 +14,11 @@ top -H -p 4941
 jps -l
 
 // 查看java启动参数
-jinfo -flags 2213
+jinfo -flags 17346
 
-jinfo -flag MaxMetaspaceSize 12080
+jinfo -flag MaxMetaspaceSize 17346
+jinfo -flag InitialHeapSize 17346
+jinfo -flag MaxHeapSize 17346
+jinfo -flag NewSize 17346
+jinfo -flag OldSize 17346
 
