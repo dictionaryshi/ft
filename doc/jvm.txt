@@ -22,3 +22,5 @@ jinfo -flag MaxHeapSize 17346
 jinfo -flag NewSize 17346
 jinfo -flag OldSize 17346
 
+-Xms256m (默认物理内存1 / 64)
+-Xmx256m (默认物理内存1 / 4)
