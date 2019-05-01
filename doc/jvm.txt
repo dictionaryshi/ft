@@ -16,3 +16,5 @@ jps -l
 // 查看java启动参数
 jinfo -flags 2213
 
+jinfo -flag MaxMetaspaceSize 12080
+
