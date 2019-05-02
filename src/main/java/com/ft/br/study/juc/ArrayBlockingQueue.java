@@ -126,4 +126,31 @@ public class ArrayBlockingQueue<E> {
 		notFull.signal();
 		return x;
 	}
+
+	public void put(E e) throws InterruptedException {
+		checkNotNull(e);
+		final ReentrantLock lock = this.lock;
+		lock.lockInterruptibly();
+		try {
+			while (count == items.length) {
+				notFull.await();
+			}
+			enqueue(e);
+		} finally {
+			lock.unlock();
+		}
+	}
+
+	public E take() throws InterruptedException {
+		final ReentrantLock lock = this.lock;
+		lock.lockInterruptibly();
+		try {
+			while (count == 0) {
+				notEmpty.await();
+			}
+			return dequeue();
+		} finally {
+			lock.unlock();
+		}
+	}
 }
