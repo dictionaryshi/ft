@@ -29,23 +29,15 @@ server(){
 
     echo $(date '+%Y-%m-%d %H:%M:%S')
 
-    for ((i=0; i<"$length"; i=i+1))
+    for ((i = 0; i < ${length}; i++))
     do
-
-        serverProcess=$(ps aux | grep "${server_name_array[$i]}" | grep -v grep)
-	    echo ${serverProcess}
-
-	    processArray=(${serverProcess// / })
-	    serverId=${processArray[1]}
-
 	    server_test_url=${server_test_array[$i]}
 	    server_start=${server_start_array[$i]}
 	    server_log_file=${server_log_array[$i]}
 	    server_name=${server_name_array[$i]}
+	    serverId=$(getProcessId ${server_name})
 
 	    if [[ ${serverId} ]]; then
-
-		    echo "serverId==>${serverId}进程已存在" >> ${log_file}
 
 		    echo "开始检测${server_name}, ${server_test_url}"
 
@@ -63,6 +55,8 @@ server(){
 
 				sleep 3
 
+				echo -e "\e[1;32m ${server_start}, 请稍候... \e[0m"
+
 				nohup java -jar ${gc_params} ${server_start} > ${server_log_file} 2>&1 &
 
 				echo -e "\e[1;31m ${server_name}启动完毕... \e[0m"
@@ -73,11 +67,13 @@ server(){
 
 	    else
 
-            echo -e "\e[1;31m ${server_name_array[$i]}进程不存在, 开始自动重启... \e[0m"
+            echo -e "\e[1;31m ${server_name}进程不存在, 开始自动重启... \e[0m"
 
 		    echo -e "\e[1;32m ${server_start}, 请稍候... \e[0m"
 
 		    nohup java -jar ${gc_params} ${server_start} > ${server_log_file} 2>&1 &
+
+		    echo -e "\e[1;31m ${server_name}启动完毕... \e[0m"
 
             sleep 60
 
