@@ -107,7 +107,7 @@ public class ReentrantLock {
 				nextOffset = unsafe.objectFieldOffset
 						(Node.class.getDeclaredField("next"));
 			} catch (Exception e) {
-				throw new Error(e);
+				throw new java.lang.Error(e);
 			}
 		}
 
