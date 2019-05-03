@@ -29,7 +29,7 @@ server(){
 
     echo $(date '+%Y-%m-%d %H:%M:%S')
 
-    for ((i=0; i<"$length"; i=i+1))
+    for ((i = 0; i < ${length}; i++))
     do
 
         serverProcess=$(ps aux | grep "${server_name_array[$i]}" | grep -v grep)
