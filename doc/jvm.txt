@@ -10,6 +10,7 @@ printf "%x\n" 15
 // 查看进程内线程使用情况
 top -H -p 4941
 ps -mp 进程号 -o THREAD,tid,time
+jstack 6772 | grep 1abc -A 100
 
 // 查看java进程
 jps -l
