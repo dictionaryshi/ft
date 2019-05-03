@@ -9,6 +9,7 @@ printf "%x\n" 15
 
 // 查看进程内线程使用情况
 top -H -p 4941
+ps -mp 进程号 -o THREAD,tid,time
 
 // 查看java进程
 jps -l
@@ -34,3 +35,7 @@ vmstat -n 2 3 (每两秒采样一次, 共采样3次)
     -cpu:
         1)us:us值比较高时, 说明用户进程消耗的CPU时间较多, 如果长期大于50%, 需要考虑优化应用程序。
         2)sy:sy值比较高时, 说明系统进程消耗的CPU时间较多, 如果us + sy超过80%, 就表明CPU资源存在不足。
+
+mpstat -P ALL 2
+pidstat -u 2 -p 进程号
+pidstat -r 2 -p 进程号
