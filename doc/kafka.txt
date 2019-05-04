@@ -20,3 +20,15 @@ vim kafka-server-start.sh
 
 ./kafka-server-start.sh -daemon ../config/server.properties
 
+消息队列的核心:解耦、异步、削峰。
+    1)解耦:A系统产生一条比较关键的数据, 很多系统都需要A系统将这个数据发送过来。
+    2)异步:A系统接收一个请求, 需要在自己本地写库, 还需要在BCD三个系统写库。
+    3)削峰:每秒5k个请求写入MQ, A系统每秒钟最多处理2k个请求。
+
+RabbitMQ、RocketMQ、Kafka:
+    1)单机吞吐量:RabbitMQ万级。RocketMQ、Kafka10万级, 支撑高吞吐。
+    2)topic数量对吞吐量的影响:RocketMQ在同等机器下, 可以支撑大量的topic。Kafka在同等机器下尽量保证topic数量不要过多。
+    3)时效性:RabbitMQ延迟最低。
+    4)可用性:Kafka一个数据多个副本, 少数机器宕机, 不会丢失数据, 不会导致不可用。
+    5)消息可靠性:RocketMQ、Kafka可以做到0丢失。
+
