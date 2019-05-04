@@ -32,3 +32,18 @@ RabbitMQ、RocketMQ、Kafka:
     4)可用性:Kafka一个数据多个副本, 少数机器宕机, 不会丢失数据, 不会导致不可用。
     5)消息可靠性:RocketMQ、Kafka可以做到0丢失。
 
+Kafka高可用:由多个broker组成, 创建一个topic, 这个topic可以划分为多个partition,
+每个partition可以存在于不同的broker上, 每个partition存放一部分数据。(一个topic数据分散放在多个机器上)
+
+每个partition的数据都会同步到其它机器上, 形成自己的多个replica副本。所有replica会选举一个leader出来, 那么生产和消费都跟这个leader打交道。
+然后其他replica就是follower。写的时候, leader会负责把数据同步到所有follower上去, 读的时候就直接读leader上的数据即可。
+Kafka会均匀地将一个partition的所有replica分布在不同的机器上, 这样才可以提高容错性。
+
+如果某个broker宕机了, 这个broker上面的partition在其他机器上都有副本的, 如果这上面有某个partition的leader, 那么此时会从follower中重新选举一个新的leader出来。
+大家继续读写那个新的leader即可。
+
+写数据的时候, 生产者就写leader, 然后leader将数据落地写本地磁盘, 接着其他follower自己主动从leader来pull数据。一旦所有follower同步好数据了, 就会发送ack给leader。
+leader收到所有follower的ack之后, 就会返回写成功的消息给生产者。
+
+消费的时候, 只会从leader去读, 但是只有当一个消息已经被所有follower都同步成功返回ack的时候, 这个消息才会被消费者读到。
+
