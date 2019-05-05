@@ -46,8 +46,18 @@ public class ListOperationsCacheTest {
 	 */
 	@Test
 	public void rightPushAll() {
-		long length = listOperationsCache.rightPushAll(NUMBER_LIST, "1", "2", "3");
+		long length = listOperationsCache.rightPushAll(NUMBER_LIST, "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22");
 		System.out.println(length);
+
+		int page;
+		int limit = 5;
+		// 实现分页功能
+		for (int i = 1; i <= 5; i++) {
+			page = i;
+			int startIndex = (page - 1) * limit;
+			int endIndex = startIndex + (limit - 1);
+			System.out.println(listOperationsCache.range(NUMBER_LIST, startIndex, endIndex));
+		}
 	}
 
 	/**
