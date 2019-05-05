@@ -113,3 +113,7 @@ repl-diskless-sync yes (master在内存中直接创建 RDB, 然后发送给slave
 
 slave不会过期key, 只会等待master过期key。如果master过期了一个 key, 或者通过LRU淘汰了一个key, 那么会模拟一条del命令发送给slave。
 
+SLAVEOF 127.0.0.1 6379
+info replication
+SLAVEOF no one
+
