@@ -123,3 +123,20 @@ SLAVEOF 127.0.0.1 6379
 info replication
 SLAVEOF no one
 
+分布式寻址算法:
+    1)hash算法:来了一个key, 首先计算hash值, 然后对节点数取模。然后打在不同的master节点上。
+    一旦某一个master节点宕机, 所有请求过来, 都会基于最新的剩余master节点数去取模, 尝试去取数据。
+    这会导致大部分的请求过来, 全部无法拿到有效的缓存, 导致大量的流量涌入数据库。
+
+    2)一致性hash算法:一致性hash算法将整个hash值空间组织成一个虚拟的圆环, 整个空间按顺时针方向组织, 下一步将各个master节点(使用服务器的ip或主机名)进行hash。
+    这样就能确定每个节点在其哈希环上的位置。
+    来了一个key, 首先计算hash值, 并确定此数据在环上的位置, 从此位置沿环顺时针"行走", 遇到的第一个master节点就是key所在位置。
+    在一致性哈希算法中, 如果一个节点挂了, 受影响的数据仅仅是此节点到环空间前一个节点(沿着逆时针方向行走遇到的第一个节点)之间的数据, 其它不受影响。增加一个节点也同理。
+    但是, 一致性哈希算法在节点太少时, 容易因为节点分布不均匀而造成缓存热点的问题。为了解决这种热点问题, 一致性hash算法引入了虚拟节点机制, 即对每一个节点计算多个hash,
+    每个计算结果位置都放置一个虚拟节点。这样就实现了数据的均匀分布, 负载均衡。
+
+    3)redis cluster的hash slot算法:redis cluster有固定的16384个hash slot, 对每个key计算CRC16值, 然后对16384取模, 可以获取key对应的hash slot。
+    redis cluster中每个master都会持有部分slot, 比如有3个master, 那么可能每个master持有5000多个hash slot。hash slot让node的增加和移除很简单,
+    增加一个master, 就将其他master的hash slot移动部分过去, 减少一个master, 就将它的hash slot移动到其他master上去。移动hash slot的成本是非常低的。
+    客户端的api, 可以对指定的数据, 让他们走同一个hash slot, 通过hash tag来实现。任何一台机器宕机, 其它节点不受影响。因为key找的是hash slot, 不是机器。
+
