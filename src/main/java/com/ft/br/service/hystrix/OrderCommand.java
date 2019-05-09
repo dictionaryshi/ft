@@ -19,8 +19,8 @@ public class OrderCommand extends HystrixCommand<String> {
 
 	public OrderCommand(String orderParam) {
 		super(HystrixConstant.getSetter(
-				"OrderGroup",
-				"OrderPool",
+				"orderService",
+				"orderQuery",
 				10,
 				5,
 				20,
