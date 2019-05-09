@@ -1,6 +1,7 @@
 package com.ft.br.service.hystrix;
 
 import com.ft.web.cloud.hystrix.TtlHystrixConcurrencyStrategy;
+import com.ft.web.constant.HystrixConstant;
 import com.netflix.hystrix.*;
 import com.netflix.hystrix.strategy.HystrixPlugins;
 import lombok.extern.slf4j.Slf4j;
@@ -17,27 +18,16 @@ public class OrderCommand extends HystrixCommand<String> {
 	private String orderParam;
 
 	public OrderCommand(String orderParam) {
-		super(Setter
-				// 服务分组
-				.withGroupKey(HystrixCommandGroupKey.Factory.asKey("OrderGroup"))
-				// 线程分组
-				.andThreadPoolKey(HystrixThreadPoolKey.Factory.asKey("OrderPool"))
-
-				// 线程池配置
-				.andThreadPoolPropertiesDefaults(HystrixThreadPoolProperties.Setter()
-						.withCoreSize(10)
-						.withKeepAliveTimeMinutes(5)
-						.withMaxQueueSize(20)
-						.withQueueSizeRejectionThreshold(16)
-				)
-
-				.andCommandPropertiesDefaults(HystrixCommandProperties.Setter()
-						.withExecutionIsolationStrategy(HystrixCommandProperties.ExecutionIsolationStrategy.THREAD)
-						.withExecutionTimeoutInMilliseconds(3_000)
-						.withExecutionIsolationThreadInterruptOnTimeout(Boolean.TRUE)
-						.withExecutionIsolationThreadInterruptOnFutureCancel(Boolean.TRUE)
-				)
-		);
+		super(HystrixConstant.getSetter(
+				"OrderGroup",
+				"OrderPool",
+				10,
+				5,
+				20,
+				16,
+				30,
+				6000
+		));
 		this.orderParam = orderParam;
 	}
 
