@@ -1,0 +1,13 @@
+Eureka Client:负责将服务的信息注册到Eureka Server中。将Eureka Server中的其他服务注册信息拉到本地缓存中。
+
+Ribbon从Eureka Client获取对应的服务注册表, 然后Ribbon就可以使用默认的Round Robin算法, 从中选择一台机器。
+Feign就会针对这台机器, 构造并发起请求。
+
+Eureka Client默认每隔30秒会发送一个请求到Eureka Server, 来拉取最近有变化的服务信息。
+
+Eureka Client每隔30秒会发送一次心跳到Eureka Server。
+
+Eureka Server的注册表直接基于纯内存。(ConcurrentHashMap)
+
+为了确保Ribbon重试的时候不被熔断, 我们就需要让Hystrix的超时时间大于Ribbon的总超时时间。(1 + MaxAutoRetries + MaxAutoRetriesNextServer) * ReadTimeout
+
