@@ -75,3 +75,7 @@ zookeeper使用场景:
 同一个partition内的消息只能被同一个组中的一个consumer消费。当消费者数量多于partition的数量时, 多余的消费者空闲。
 也就是说如果只有一个partition你在同一组启动多少个consumer都没用, partition的数量决定了此topic在同一组中被可被均衡的程度, 例如partition = 4, 则可在同一组中被最多4个consumer均衡消费。
 
+一旦consumer和kafka建立连接, consumer会以心跳的方式来通知kafka自己还活着, 如果session.timeout.ms内心跳未到达服务器, 服务器认为心跳丢失, 会做rebalance。
+
+max.poll.interval.ms:用来标识消息处理的超时时间, 若超时, 会做rebalance。(两次poll()之间的最大时间间隔)
+
