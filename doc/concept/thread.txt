@@ -4,6 +4,9 @@ synchronized底层原理:
     当同一个线程再次获得该monitor的时候, 计数器再次自增。当不同线程想要获得该monitor的时候, 就会被阻塞。
     3)当同一个线程释放monitor(执行monitorexit指令), 计数器再自减。当计数器为0的时候。monitor将被释放, 其他线程便可以获得monitor。
 
+同步代码块的入口和出口分别有monitorenter, monitorexit指令。
+同步方法:JVM用ACC_SYNCHRONIZED关键字标识同步方法。
+
 synchronized和Lock的区别:
     1)synchronized是关键字属于JVM层面, 底层通过监视器来实现。Lock是通过巧妙的数据结构实现。
     2)Lock要求用户必须手动释放锁。
