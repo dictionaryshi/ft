@@ -334,3 +334,13 @@ mysql-master-slave:主库将变更写入binlog日志, 然后从库连接到主�
 
 事务中尽量不要包含IO等耗时操作, 会长时间占用数据库连接。
 
+mysql产生死锁的原因:两个(或以上)的Session加锁的顺序不一致。那么对应的解决死锁问题的关键就是让不同的session加锁有次序。
+    // 在in里面的列表值mysql是会自动从小到大排序的, 加锁顺序也是一条一条从小到大加的锁。
+    select * from t3 where id in (8, 9) for update;
+    // 5加锁成功, 等待8被释放
+    select * from t3 where id in (10, 8, 5) for update;
+    // 阻塞
+    select * from t3 where id = 5 for update;
+    // 10加锁成功
+    select * from t3 where id = 10 for update;
+
