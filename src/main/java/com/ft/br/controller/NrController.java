@@ -2,6 +2,7 @@ package com.ft.br.controller;
 
 import com.ft.br.feign.RemoteService;
 import com.ft.br.model.dto.ValidParent;
+import com.ft.br.service.LoginService;
 import com.ft.br.websocket.OrderWebSocket;
 import com.ft.rpc.api.model.RpcParam;
 import com.ft.rpc.api.model.RpcResult;
@@ -18,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.validation.Valid;
 import java.io.InputStream;
 import java.util.Date;
+import java.util.concurrent.ExecutorService;
 
 /**
  * NrController
@@ -31,6 +33,12 @@ public class NrController {
 
 	@Autowired
 	private RemoteService remoteService;
+
+	@Autowired
+	private LoginService loginService;
+
+	@Autowired
+	private ExecutorService executorService;
 
 	@GetMapping("/feign")
 	public String feign() {
@@ -70,5 +78,24 @@ public class NrController {
 			log.error("upload exception==>{}", FtException.getExceptionStack(e));
 			return "error";
 		}
+	}
+
+	@GetMapping
+	public RestResult<Boolean> deadLock() {
+		executorService.submit(() -> {
+			try {
+				loginService.deadLock(1, 2);
+			} catch (Exception e) {
+				log.warn("deadLock1, exception==>{}", FtException.getExceptionStack(e));
+			}
+		});
+		executorService.submit(() -> {
+			try {
+				loginService.deadLock(2, 1);
+			} catch (Exception e) {
+				log.warn("deadLock2, exception==>{}", FtException.getExceptionStack(e));
+			}
+		});
+		return RestResult.getSuccessRestResult(Boolean.TRUE);
 	}
 }

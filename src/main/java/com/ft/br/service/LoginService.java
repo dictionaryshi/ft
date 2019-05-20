@@ -2,6 +2,7 @@ package com.ft.br.service;
 
 import com.ft.br.constant.LoginConstant;
 import com.ft.br.dao.UserMapper;
+import com.ft.db.constant.DbConstant;
 import com.ft.redis.base.ValueOperationsCache;
 import com.ft.util.CommonUtil;
 import com.ft.util.EncodeUtil;
@@ -13,6 +14,9 @@ import com.ft.web.model.UserDO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 登录业务逻辑
@@ -71,5 +75,11 @@ public class LoginService {
 			throw new FtException(RestResult.ERROR_CODE, "redis_login_token 系统异常");
 		}
 		return token;
+	}
+
+	@Transactional(value = DbConstant.DB_CONSIGN + DbConstant.TRAN_SACTION_MANAGER, propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED, rollbackFor = Throwable.class)
+	public void deadLock(long lockId1, long lockId2) {
+		userMapper.deadLock(lockId1);
+		userMapper.deadLock(lockId2);
 	}
 }
