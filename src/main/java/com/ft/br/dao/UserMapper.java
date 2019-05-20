@@ -70,4 +70,7 @@ public interface UserMapper {
 	 */
 	@Select("select * from `user`")
 	List<UserDO> selectAllUsers();
+
+	@Select("select * from `user` where id = #{id} for update")
+	UserDO deadLock(@Param("id") long id);
 }

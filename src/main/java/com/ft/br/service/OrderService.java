@@ -11,6 +11,7 @@ import com.ft.br.model.mdo.StockLogDO;
 import com.ft.br.model.vo.ItemVO;
 import com.ft.br.model.vo.OrderVO;
 import com.ft.db.annotation.DataSource;
+import com.ft.db.constant.DbConstant;
 import com.ft.db.model.PageParam;
 import com.ft.db.model.PageResult;
 import com.ft.redis.base.ValueOperationsCache;
@@ -154,7 +155,7 @@ public class OrderService {
 	 * @return true:添加成功
 	 */
 	@DataSource
-	@Transactional(value = "consignTransactionManager", propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED, rollbackFor = Exception.class)
+	@Transactional(value = DbConstant.DB_CONSIGN + DbConstant.TRAN_SACTION_MANAGER, propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED, rollbackFor = Throwable.class)
 	public boolean add(OrderDTO orderDTO) {
 
 		OrderDO orderDO = new OrderDO();
@@ -286,7 +287,7 @@ public class OrderService {
 	 * @return 订单确认结果
 	 */
 	@DataSource
-	@Transactional(value = "consignTransactionManager", propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED, rollbackFor = Exception.class)
+	@Transactional(value = DbConstant.DB_CONSIGN + DbConstant.TRAN_SACTION_MANAGER, propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED, rollbackFor = Throwable.class)
 	public boolean confirm(String orderId, long userId) {
 		OrderVO order = orderMapper.getOrderById(orderId);
 		if (order == null) {
