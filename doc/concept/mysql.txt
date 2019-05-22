@@ -152,15 +152,13 @@
     3)虚读(幻读):一个事务读取到另一事务已提交的insert数据。(对同一张表的两次查询不一致)
 
 43.事务的四大隔离级别:不同事务隔离级别能够解决的数据并发问题的能力是不同的。
+    1)SERIALIZABLE(串行化):从MVCC并发控制退化为基于锁的并发控制。不区别快照读与当前读, 所有的读操作均为当前读, 读加读锁(S锁), 写加写锁(X锁)。
+    Serializable隔离级别下, 读写出现冲突, 因此并发度急剧下降, 在MySQL/InnoDB下不建议使用。
 
-    1)SERIALIZABLE(串行化):不会出现任何并发问题, 一个事务执行时, 不会受到任何事务影响。
-    数据库的执行效率最差。 能处理幻读问题。
+    2)REPEATABLE READ(可重复读):针对当前读, RR隔离级别保证对读取到的记录加锁(记录锁), 同时保证对读取的范围加锁,
+    新的满足查询条件的记录不能够插入(间隙锁), 不存在幻读现象。(MySQL默认是这种隔离级别)
 
-    2)REPEATABLE READ(可重复读):防止脏读和不可重复读, 不能处理幻读。
-    数据库的执行效率比SERIALIZABLE好。(MySQL默认是这种隔离级别)
-
-    3)READ COMMITTED(读已提交数据):只能防止脏读。
-    数据库执行效率比REPEATABLE READ要好。(Oracle默认是这种隔离级别, mysql也需要改成这种隔离级别)
+    3)READ COMMITTED(读已提交数据):只能防止脏读。针对当前读, RC隔离级别保证对读取到的记录加锁(记录锁), 存在幻读现象。
 
     4)READ UNCOMMITTED(读未提交数据):没有任何防止并发问题的措施。(数据库执行效率最高)
 
@@ -348,4 +346,33 @@ mysql产生死锁的原因:两个(或以上)的Session加锁的顺序不一致�
 辅助索引文件存储的是主键的值。(辅助索引文件都引用着主键值, 所以主键不推荐使用过长的字段)
 
 非聚簇索引:MyISAM索引。使用B+Tree作为索引结构, 主索引和辅助索引的索引文件仅仅保存数据记录的物理地址。MyISAM索引文件和数据文件是分离的。
+
+InnoDB存储引擎, 多版本的并发控制协议(MVCC, 仅RC、RR支持):读不加锁, 读写不冲突。
+
+在MVCC并发控制中, 读操作可以分成两类:
+    1)快照读:读取的是记录的可见版本, 不加锁。(可能是历史版本)
+        select * from table where ? ; (SERIALIZABLE会加锁, 不存在快照读)
+    2)当前读:读取的是记录的最新版本, 会加锁, 保证不能并发修改。
+        select * from table where ? lock in share mode;
+        select * from table where ? for update;
+        insert into table values(...);
+        update table set ? where ? ;
+        delete from table where ? ;
+
+只有事务执行完毕才会释放所有锁。
+
+read view判断当前版本数据是否可见:在innodb中, 创建一个新事务的时候, innodb会将当前系统中的活跃事务列表创建一个副本(read view),
+副本中保存的是系统当前不应该被本事务看到的其他事务id列表。当用户在这个事务中要读取该行记录的时候, innodb会将该行当前的版本号与该read view进行比较。
+    1)设当前事务读取到的当前row的db_trx_id的为trx_id, read view中最早的事务id为trx_id_earliest, 最迟的事务id为trx_id_latest。
+    2)如果trx_id < trx_id_earliest的话, 那么表明该行记录所在的事务已经在本次新事务创建之前就提交了, 所以该行记录的当前值是可见的。跳到步骤6。(快照读)
+    3)如果trx_id > trx_id_latest的话, 那么表明该行记录所在的事务在本次新事务创建之后才开启, 所以该行记录的当前值不可见, 跳到步骤5。
+    4)如果trx_id_earliest <= trx_id <= trx_id_latest, 那么表明该行记录所在事务在本次新事务创建的时候处于活动状态, 从trx_id_earliest到trx_id_latest进行遍历,
+    如果trx_id等于他们之中的某个事务id的话, 那么不可见。跳到步骤5。
+    5)从该行记录的DB_ROLL_PTR指针所指向的回滚段中取出最新的undo-log的版本号, 将它赋值该trx_id, 然后跳到步骤2。
+    6)将该可见行的值返回。
+
+注意:这里强调的本次事务, 指的是read view中的事务。
+
+RC:同一个事务中每次sql执行时, 创建一个新的read view。
+RR:开启事务时才会创建read view。
 
