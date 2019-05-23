@@ -83,7 +83,7 @@ public class NrController {
 	/**
 	 * mysql死锁:使用in (1, 2)解决。
 	 */
-	@GetMapping
+	@GetMapping("/deadLock")
 	public RestResult<Boolean> deadLock() {
 		executorService.submit(() -> {
 			try {
