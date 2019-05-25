@@ -25,6 +25,7 @@ import com.ft.web.model.UserDO;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 import com.netflix.hystrix.contrib.javanica.cache.annotation.CacheResult;
+import com.netflix.hystrix.contrib.javanica.command.AsyncResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,6 +35,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -443,19 +445,29 @@ public class OrderService {
 			},
 			fallbackMethod = "hystrixFallBack"
 	)
-	public OrderDO hystrix(String id) {
-		System.out.println("hystrix orderId==>" + id + " start");
-		long useTime = 1000L;
-		try {
-			TimeUnit.MILLISECONDS.sleep(useTime);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-		OrderDO orderDO = new OrderDO();
-		orderDO.setId(id);
-		orderDO.setRemark("订单成功");
-		System.out.println("hystrix orderId==>" + id + " end");
-		return orderDO;
+	public Future<OrderDO> hystrix(String id) {
+		return new AsyncResult<OrderDO>() {
+			@Override
+			public OrderDO invoke() {
+				try {
+					System.out.println("hystrix orderId==>" + id + " start");
+					long useTime = 1000L;
+					try {
+						TimeUnit.MILLISECONDS.sleep(useTime);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+					OrderDO orderDO = new OrderDO();
+					orderDO.setId(id);
+					orderDO.setRemark("订单成功");
+					System.out.println("hystrix orderId==>" + id + " end");
+					return orderDO;
+				} catch (Exception e) {
+					log.warn("hystrix orderId==>{}, exception==>{}", id, FtException.getExceptionStack(e));
+					throw e;
+				}
+			}
+		};
 	}
 
 	public OrderDO hystrixFallBack(String id) {
