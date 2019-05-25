@@ -24,6 +24,7 @@ import com.ft.web.constant.HystrixConstant;
 import com.ft.web.model.UserDO;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
+import com.netflix.hystrix.contrib.javanica.cache.annotation.CacheResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -424,6 +425,7 @@ public class OrderService {
 		return true;
 	}
 
+	@CacheResult(cacheKeyMethod = "orderCacheKey")
 	@HystrixCommand(
 			groupKey = "orderService",
 			threadPoolKey = "orderQuery",
@@ -441,7 +443,8 @@ public class OrderService {
 			},
 			fallbackMethod = "hystrixFallBack"
 	)
-	public OrderDO hystrix() {
+	public OrderDO hystrix(String id) {
+		System.out.println("hystrix orderId==>" + id + " start");
 		long useTime = 1000L;
 		try {
 			TimeUnit.MILLISECONDS.sleep(useTime);
@@ -449,13 +452,20 @@ public class OrderService {
 			e.printStackTrace();
 		}
 		OrderDO orderDO = new OrderDO();
+		orderDO.setId(id);
 		orderDO.setRemark("订单成功");
+		System.out.println("hystrix orderId==>" + id + " end");
 		return orderDO;
 	}
 
-	public OrderDO hystrixFallBack() {
+	public OrderDO hystrixFallBack(String id) {
 		OrderDO orderDO = new OrderDO();
+		orderDO.setId(id);
 		orderDO.setRemark("hystrix熔断");
 		return orderDO;
+	}
+
+	public String orderCacheKey(String id) {
+		return "order_cache_" + id;
 	}
 }
