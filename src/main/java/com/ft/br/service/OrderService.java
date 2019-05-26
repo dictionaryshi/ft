@@ -451,18 +451,20 @@ public class OrderService {
 			public OrderDO invoke() {
 				try {
 					System.out.println("hystrix orderId==>" + id + " start");
-					long useTime = 1000L;
-					try {
-						TimeUnit.MILLISECONDS.sleep(useTime);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
+					long start = System.currentTimeMillis();
+					int target = 1250;
+					for (int i = 0; i < target; i++) {
+						for (int j = 0; j < target; j++) {
+							System.out.print("");
+						}
 					}
+					long end = System.currentTimeMillis();
 					OrderDO orderDO = new OrderDO();
 					orderDO.setId(id);
 					orderDO.setRemark("订单成功");
-					System.out.println("hystrix orderId==>" + id + " end");
+					System.out.println("hystrix orderId==>" + id + " end, cost==>" + (end - start));
 					return orderDO;
-				} catch (Exception e) {
+				} catch (Throwable e) {
 					log.warn("hystrix orderId==>{}, exception==>{}", id, FtException.getExceptionStack(e));
 					throw e;
 				}
