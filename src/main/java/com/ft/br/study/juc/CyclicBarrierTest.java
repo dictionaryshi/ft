@@ -24,7 +24,9 @@ public class CyclicBarrierTest {
 				try {
 					cyclicBarrier.await();
 				} catch (InterruptedException | BrokenBarrierException e) {
-					e.printStackTrace();
+					if (e instanceof InterruptedException) {
+						Thread.currentThread().interrupt();
+					}
 				}
 				System.out.println("after, thread==>" + Thread.currentThread().getName());
 			});

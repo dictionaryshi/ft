@@ -61,7 +61,7 @@ public class QueueTest {
 			boolean offer6 = blockingQueue.offer(3, 5L, TimeUnit.SECONDS);
 			System.out.println();
 		} catch (InterruptedException e) {
-			System.out.println();
+			Thread.currentThread().interrupt();
 		}
 
 		try {
@@ -70,7 +70,7 @@ public class QueueTest {
 			Integer poll3 = blockingQueue.poll(5L, TimeUnit.SECONDS);
 			System.out.println();
 		} catch (InterruptedException e) {
-			System.out.println();
+			Thread.currentThread().interrupt();
 		}
 
 		System.out.println();
