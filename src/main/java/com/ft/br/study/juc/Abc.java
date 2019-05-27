@@ -39,7 +39,7 @@ public class Abc {
 					bCondition.signal();
 				}
 			} catch (InterruptedException e) {
-				e.printStackTrace();
+				Thread.currentThread().interrupt();
 			} finally {
 				lock.unlock();
 			}
@@ -68,7 +68,7 @@ public class Abc {
 					cCondition.signal();
 				}
 			} catch (InterruptedException e) {
-				e.printStackTrace();
+				Thread.currentThread().interrupt();
 			} finally {
 				lock.unlock();
 			}
@@ -98,7 +98,7 @@ public class Abc {
 					aCondition.signal();
 				}
 			} catch (InterruptedException e) {
-				e.printStackTrace();
+				Thread.currentThread().interrupt();
 			} finally {
 				lock.unlock();
 			}
