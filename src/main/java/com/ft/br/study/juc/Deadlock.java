@@ -18,7 +18,7 @@ public class Deadlock implements Runnable {
 			try {
 				TimeUnit.SECONDS.sleep(3);
 			} catch (InterruptedException e) {
-				e.printStackTrace();
+				Thread.currentThread().interrupt();
 			}
 			synchronized (lockB) {
 				System.out.println(Thread.currentThread().getName() + ", 正常结束");

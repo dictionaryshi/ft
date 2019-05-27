@@ -42,7 +42,7 @@ public class Error {
 				try {
 					Thread.sleep(30_000L);
 				} catch (InterruptedException e) {
-					e.printStackTrace();
+					Thread.currentThread().interrupt();
 				}
 			}).start();
 		}

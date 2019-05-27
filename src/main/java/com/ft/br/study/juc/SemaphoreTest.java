@@ -25,7 +25,7 @@ public class SemaphoreTest {
 					System.out.println(Thread.currentThread().getName() + ", 抢到资源");
 					Thread.sleep(3_000L);
 				} catch (InterruptedException e) {
-					e.printStackTrace();
+					Thread.currentThread().interrupt();
 				} finally {
 					semaphore.release();
 				}

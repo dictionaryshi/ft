@@ -26,8 +26,8 @@ public class ReentrantReadWriteLockTest {
 			TimeUnit.SECONDS.sleep(1);
 			System.out.println(Thread.currentThread().getName() + ", 写完成");
 			System.out.println();
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (InterruptedException e) {
+			Thread.currentThread().interrupt();
 		} finally {
 			writeLock.unlock();
 		}
@@ -40,8 +40,8 @@ public class ReentrantReadWriteLockTest {
 			System.out.println(Thread.currentThread().getName() + ", 读开始");
 			TimeUnit.SECONDS.sleep(3);
 			System.out.println(Thread.currentThread().getName() + ", 读完成");
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (InterruptedException e) {
+			Thread.currentThread().interrupt();
 		} finally {
 			readLock.unlock();
 		}

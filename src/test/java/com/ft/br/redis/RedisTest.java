@@ -143,6 +143,7 @@ public class RedisTest {
 			try {
 				TimeUnit.SECONDS.sleep(2);
 			} catch (InterruptedException e) {
+				Thread.currentThread().interrupt();
 			}
 		}
 	}

@@ -31,7 +31,7 @@ public class VolatileTest {
 				try {
 					Thread.sleep(3000);
 				} catch (InterruptedException e) {
-					e.printStackTrace();
+					Thread.currentThread().interrupt();
 				}
 				flag = true;
 				log.info("thread==>{}, flag==>{}", Thread.currentThread().getName(), flag);
