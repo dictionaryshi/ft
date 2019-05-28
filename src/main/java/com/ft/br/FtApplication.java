@@ -178,7 +178,7 @@ public class FtApplication {
 	public static void main(String[] args) {
 		System.setProperty("java.util.concurrent.ForkJoinPool.common.parallelism", "20");
 
-		MDC.put(LogHolder.REQUEST_ID, "application start");
+		MDC.put(ThreadLocalMap.REQUEST_ID, "application start");
 
 		// 托管hystrix线程池
 		HystrixPlugins.getInstance().registerConcurrencyStrategy(new TtlHystrixConcurrencyStrategy());
