@@ -2,8 +2,8 @@ package com.ft.br.db;
 
 import com.ft.db.annotation.DataSource;
 import com.ft.db.dbutil.TxQueryRunner;
-import com.ft.db.plugin.DataSourceHolder;
 import com.ft.util.JsonUtil;
+import com.ft.util.ThreadLocalMap;
 import com.ft.web.model.UserDO;
 import org.apache.commons.dbutils.handlers.*;
 import org.junit.Assert;
@@ -32,7 +32,7 @@ public class QueryRunnerTest {
 
 	@Before
 	public void before() {
-		DataSourceHolder.setDataSourceKey(DataSource.master);
+		ThreadLocalMap.putDataSourceKey(DataSource.master);
 	}
 
 	/**
