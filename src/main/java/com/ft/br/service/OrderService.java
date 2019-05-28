@@ -452,12 +452,13 @@ public class OrderService {
 				try {
 					System.out.println("hystrix orderId==>" + id + " start");
 					long start = System.currentTimeMillis();
-					int target = 1250;
-					for (int i = 0; i < target; i++) {
-						for (int j = 0; j < target; j++) {
-							System.out.print("");
-						}
+
+					try {
+						TimeUnit.SECONDS.sleep(1);
+					} catch (InterruptedException e) {
+						Thread.currentThread().interrupt();
 					}
+
 					long end = System.currentTimeMillis();
 					OrderDO orderDO = new OrderDO();
 					orderDO.setId(id);
