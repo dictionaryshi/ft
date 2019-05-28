@@ -443,37 +443,34 @@ public class OrderService {
 					@HystrixProperty(name = HystrixConstant.EXECUTION_ISOLATION_SEMAPHORE_MAXCONCURRENTREQUESTS, value = "10"),
 					@HystrixProperty(name = HystrixConstant.CIRCUITBREAKER_ENABLED, value = "true")
 			},
-			fallbackMethod = "hystrixFallBack"
+			fallbackMethod = "hystrixFallBack",
+			ignoreExceptions = {FtException.class}
 	)
 	public Future<OrderDO> hystrix(String id) {
 		return new AsyncResult<OrderDO>() {
 			@Override
 			public OrderDO invoke() {
+				System.out.println("hystrix orderId==>" + id + " start");
+				long start = System.currentTimeMillis();
+
 				try {
-					System.out.println("hystrix orderId==>" + id + " start");
-					long start = System.currentTimeMillis();
-
-					try {
-						TimeUnit.SECONDS.sleep(1);
-					} catch (InterruptedException e) {
-						Thread.currentThread().interrupt();
-					}
-
-					long end = System.currentTimeMillis();
-					OrderDO orderDO = new OrderDO();
-					orderDO.setId(id);
-					orderDO.setRemark("订单成功");
-					System.out.println("hystrix orderId==>" + id + " end, cost==>" + (end - start));
-					return orderDO;
-				} catch (Throwable e) {
-					log.warn("hystrix orderId==>{}, exception==>{}", id, FtException.getExceptionStack(e));
-					throw e;
+					TimeUnit.SECONDS.sleep(1);
+				} catch (InterruptedException e) {
+					Thread.currentThread().interrupt();
 				}
+
+				long end = System.currentTimeMillis();
+				OrderDO orderDO = new OrderDO();
+				orderDO.setId(id);
+				orderDO.setRemark("订单成功");
+				System.out.println("hystrix orderId==>" + id + " end, cost==>" + (end - start));
+				return orderDO;
 			}
 		};
 	}
 
-	public OrderDO hystrixFallBack(String id) {
+	public OrderDO hystrixFallBack(String id, Throwable e) {
+		log.warn("hystrix orderId==>{}, exception==>{}", id, FtException.getExceptionStack(e));
 		OrderDO orderDO = new OrderDO();
 		orderDO.setId(id);
 		orderDO.setRemark("hystrix熔断");
