@@ -1,6 +1,7 @@
 package com.ft.br.study.genericity;
 
-import java.lang.reflect.ParameterizedType;
+import com.ft.br.model.mdo.Employee;
+import com.ft.util.ClassUtil;
 
 /**
  * BaseParent
@@ -10,7 +11,7 @@ import java.lang.reflect.ParameterizedType;
 public class BaseParent<T> {
 	public BaseParent() {
 		// 获取子类传递的参数化类型
-		Class beanClass = (Class) ((ParameterizedType) this.getClass().getGenericSuperclass()).getActualTypeArguments()[0];
+		Class<Employee> beanClass = ClassUtil.resolveGenericType(this.getClass());
 		System.out.println(beanClass.getName());
 	}
 }
