@@ -51,9 +51,9 @@ public class FilterServletRegistrationBeanConfig {
 
 	@Bean
 	public FilterRegistrationBean hystrixRequestFilter() {
-		FilterRegistrationBean<HystrixRequestContextFilter> characterEncodingFilter = new FilterRegistrationBean<>();
-		characterEncodingFilter.setFilter(new HystrixRequestContextFilter());
-		characterEncodingFilter.setUrlPatterns(Collections.singletonList("/*"));
-		return characterEncodingFilter;
+		FilterRegistrationBean<HystrixRequestContextFilter> hystrixRequestFilter = new FilterRegistrationBean<>();
+		hystrixRequestFilter.setFilter(new HystrixRequestContextFilter());
+		hystrixRequestFilter.setUrlPatterns(Collections.singletonList("/*"));
+		return hystrixRequestFilter;
 	}
 }
