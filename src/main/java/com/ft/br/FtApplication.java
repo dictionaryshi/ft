@@ -5,6 +5,7 @@ import com.ft.br.service.GoodsService;
 import com.ft.util.*;
 import com.ft.util.exception.FtException;
 import com.ft.web.cloud.hystrix.TtlHystrixConcurrencyStrategy;
+import com.ft.web.model.MailBO;
 import com.ft.web.plugin.MailUtil;
 import com.netflix.hystrix.strategy.HystrixPlugins;
 import com.netflix.loadbalancer.IRule;
@@ -140,11 +141,19 @@ public class FtApplication {
 
 			IOUtil.copyLarge(jpegIn, jpegOut, new byte[1024 * 4]);
 
-			Map<String, Object[]> inLines = new HashMap<>(16);
-			inLines.put(cid, new Object[]{jpegOut, request.getServletContext().getMimeType("*.jpeg")});
+			MailBO mailBO;
 
-			Map<String, Object[]> attachments = new HashMap<>(16);
-			attachments.put("人员信息.xls", new Object[]{excelOut, request.getServletContext().getMimeType("*.xls")});
+			Map<String, MailBO> inLines = new HashMap<>(16);
+			mailBO = new MailBO();
+			mailBO.setContentType(request.getServletContext().getMimeType("*.jpeg"));
+			mailBO.setFileOutputStream(jpegOut);
+			inLines.put(cid, mailBO);
+
+			Map<String, MailBO> attachments = new HashMap<>(16);
+			mailBO = new MailBO();
+			mailBO.setContentType(request.getServletContext().getMimeType("*.xls"));
+			mailBO.setFileOutputStream(excelOut);
+			attachments.put("人员信息.xls", mailBO);
 			mailUtil.send(
 					new String[]{"903031015@qq.com"},
 					"903031015@qq.com",
