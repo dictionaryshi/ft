@@ -3,6 +3,7 @@ package com.ft.br.task;
 import com.ft.redis.base.SetOperationsCache;
 import com.ft.redis.base.ZSetOperationsCache;
 import com.ft.redis.plugin.RedisWarning;
+import com.ft.util.ObjectUtil;
 import com.ft.util.StringUtil;
 import com.ft.web.plugin.MailUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +32,7 @@ public class RedisWarningTask {
 	@Scheduled(cron = "0/1 * * * * ?")
 	public void warn() {
 		Set<String> warnKeys = setOperationsCache.members(RedisWarning.REDIS_WARNING_SETS);
-		if (StringUtil.isEmpty(warnKeys)) {
+		if (ObjectUtil.isEmpty(warnKeys)) {
 			return;
 		}
 		long startStore = 0;
@@ -39,7 +40,7 @@ public class RedisWarningTask {
 
 		for (String warnKey : warnKeys) {
 			Set<ZSetOperations.TypedTuple<String>> sets = zSetOperationsCache.reverseRangeByScoreWithScores(warnKey, startStore, endStore, 0, -1);
-			if (StringUtil.isEmpty(sets)) {
+			if (ObjectUtil.isEmpty(sets)) {
 				continue;
 			}
 
