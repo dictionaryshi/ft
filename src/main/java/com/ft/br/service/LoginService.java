@@ -53,7 +53,7 @@ public class LoginService {
 			log.info("redis code_id==>{}, 不存在或过期了", codeId);
 			throw new FtException(RestResult.ERROR_CODE, "验证码不正确");
 		}
-		if (!redisCode.equals(code)) {
+		if (!redisCode.equalsIgnoreCase(code)) {
 			log.info("redis code==>{}, 比对不正确", redisCode);
 			throw new FtException(RestResult.ERROR_CODE, "验证码不正确");
 		}
