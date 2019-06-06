@@ -120,15 +120,15 @@ public class FtApplication {
 		String ageKey = "年龄";
 		String dateKey = "日期";
 		List<String> columnChs = Arrays.asList(nameKey, ageKey, dateKey);
-		List<Map<String, Object>> dataList = new ArrayList<>();
+		List<Map<String, String>> dataList = new ArrayList<>();
 
 		int target = 70;
 		int limit = 17;
 		for (int i = 0; i < target; i++) {
-			Map<String, Object> scy = new HashMap<>(16);
+			Map<String, String> scy = new HashMap<>(16);
 			scy.put(nameKey, "史春阳");
-			scy.put(ageKey, i + 1);
-			scy.put(dateKey, new Date());
+			scy.put(ageKey, (i + 1) + "");
+			scy.put(dateKey, DateUtil.date2Str(new Date(), DateUtil.DEFAULT_DATE_FORMAT));
 			dataList.add(scy);
 		}
 
