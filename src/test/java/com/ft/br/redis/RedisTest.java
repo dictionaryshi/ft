@@ -9,6 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.redis.connection.DataType;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
@@ -27,7 +28,7 @@ public class RedisTest {
 	 */
 	@Test
 	public void delete() {
-		valueOperationsCache.delete(LOGIN_ID, USER_NAME);
+		valueOperationsCache.delete(Arrays.asList(LOGIN_ID, USER_NAME));
 	}
 
 	/**
