@@ -308,7 +308,7 @@ public class OrderService {
 		}
 
 		String lockKey = StringUtil.append(StringUtil.REDIS_SPLIT, "confirm", "orderId", orderId);
-		Boolean flag = valueOperationsCache.setNX(lockKey, orderId, 5_000L);
+		Boolean flag = valueOperationsCache.setIfAbsent(lockKey, orderId, 5_000L);
 		if (!flag) {
 			throw new FtException(RestResult.ERROR_CODE, "订单确认失败, 请不要重复确认");
 		}
@@ -397,7 +397,7 @@ public class OrderService {
 		}
 
 		String lockKey = StringUtil.append(StringUtil.REDIS_SPLIT, "fail", "orderId", orderId);
-		Boolean flag = valueOperationsCache.setNX(lockKey, orderId, 5_000L);
+		Boolean flag = valueOperationsCache.setIfAbsent(lockKey, orderId, 5_000L);
 		if (!flag) {
 			throw new FtException(RestResult.ERROR_CODE, "确认订单fail失败, 请不要重复确认");
 		}

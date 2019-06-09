@@ -154,7 +154,7 @@ public class RedisTest {
 	 */
 	@Test
 	public void subString() {
-		String result = valueOperationsCache.subString(LOGIN_ID, 0, 10);
+		String result = valueOperationsCache.get(LOGIN_ID, 0, 10);
 		System.out.println(result);
 	}
 
@@ -180,7 +180,7 @@ public class RedisTest {
 	 */
 	@Test
 	public void setEX() {
-		valueOperationsCache.setEX(LOGIN_ID, "13264232894", 60_000L);
+		valueOperationsCache.set(LOGIN_ID, "13264232894", 60_000L);
 	}
 
 	/**
@@ -188,7 +188,7 @@ public class RedisTest {
 	 */
 	@Test
 	public void setNX() {
-		boolean flag = valueOperationsCache.setNX(LOGIN_ID, "13264232894");
+		boolean flag = valueOperationsCache.setIfAbsent(LOGIN_ID, "13264232894");
 		System.out.println(flag);
 	}
 
@@ -197,7 +197,7 @@ public class RedisTest {
 	 */
 	@Test
 	public void setNXWithExpire() {
-		boolean flag = valueOperationsCache.setNX(LOGIN_ID, "13264232894", 60_000L);
+		boolean flag = valueOperationsCache.setIfAbsent(LOGIN_ID, "13264232894", 60_000L);
 		System.out.println(flag);
 	}
 }
