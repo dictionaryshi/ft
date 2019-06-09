@@ -107,7 +107,7 @@ public class LoginRestController {
 		String codeId = CommonUtil.get32UUID();
 
 		String codeRedisKey = StringUtil.append(StringUtil.REDIS_SPLIT, LoginConstant.REDIS_VERIFICATION_CODE, codeId);
-		boolean flag = valueOperationsCache.setNX(codeRedisKey, code, 300_000L);
+		boolean flag = valueOperationsCache.setIfAbsent(codeRedisKey, code, 300_000L);
 		if (!flag) {
 			throw new FtException(RestResult.ERROR_CODE, "验证码存储异常");
 		}

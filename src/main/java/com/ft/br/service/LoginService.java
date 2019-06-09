@@ -70,7 +70,7 @@ public class LoginService {
 
 		String token = CommonUtil.get32UUID();
 		String redisTokenKey = StringUtil.append(StringUtil.REDIS_SPLIT, LoginConstant.REDIS_LOGIN_TOKEN, token);
-		boolean flag = valueOperationsCache.setNX(redisTokenKey, JsonUtil.object2Json(userDO), 3600_000L);
+		boolean flag = valueOperationsCache.setIfAbsent(redisTokenKey, JsonUtil.object2Json(userDO), 3600_000L);
 		if (!flag) {
 			throw new FtException(RestResult.ERROR_CODE, "redis_login_token 系统异常");
 		}
