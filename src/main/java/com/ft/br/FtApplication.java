@@ -53,7 +53,7 @@ import java.util.*;
 @EnableRetry
 @EnableEurekaClient
 @EnableDiscoveryClient
-@EnableFeignClients(basePackages = "com.ft")
+@EnableFeignClients(basePackages = CommonUtil.BASE_PACKAGE)
 @EnableHystrix
 public class FtApplication {
 	@Bean
@@ -194,5 +194,7 @@ public class FtApplication {
 
 		ApplicationContext applicationContext = SpringApplication.run(FtApplication.class, args);
 		SpringContextUtil.setApplicationContext(applicationContext);
+
+		MDC.remove(ThreadLocalMap.REQUEST_ID);
 	}
 }
