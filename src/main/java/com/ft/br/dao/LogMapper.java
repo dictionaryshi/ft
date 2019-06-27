@@ -1,6 +1,6 @@
 package com.ft.br.dao;
 
-import com.ft.redis.model.LogDO;
+import com.ft.kafka.model.LogDO;
 import org.apache.ibatis.annotations.InsertProvider;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.SelectKey;

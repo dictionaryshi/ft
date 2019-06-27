@@ -1,7 +1,7 @@
 package com.ft.br.task;
 
+import com.ft.kafka.model.LogDO;
 import com.ft.redis.base.ListOperationsCache;
-import com.ft.redis.model.LogDO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 
