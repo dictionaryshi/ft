@@ -20,7 +20,6 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
-import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.cloud.netflix.hystrix.EnableHystrix;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.ApplicationContext;
@@ -51,7 +50,6 @@ import java.util.*;
 @Slf4j
 @EnableScheduling
 @EnableRetry
-@EnableEurekaClient
 @EnableDiscoveryClient
 @EnableFeignClients(basePackages = CommonUtil.BASE_PACKAGE)
 @EnableHystrix
