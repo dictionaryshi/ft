@@ -4,10 +4,8 @@ import com.ft.br.constant.PropertiesConstant;
 import com.ft.br.service.GoodsService;
 import com.ft.util.*;
 import com.ft.util.exception.FtException;
-import com.ft.web.cloud.hystrix.TtlHystrixConcurrencyStrategy;
 import com.ft.web.model.MailBO;
 import com.ft.web.plugin.MailUtil;
-import com.netflix.hystrix.strategy.HystrixPlugins;
 import com.netflix.loadbalancer.IRule;
 import com.netflix.loadbalancer.RoundRobinRule;
 import lombok.extern.slf4j.Slf4j;
@@ -20,7 +18,6 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
-import org.springframework.cloud.netflix.hystrix.EnableHystrix;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
@@ -52,7 +49,6 @@ import java.util.*;
 @EnableRetry
 @EnableDiscoveryClient
 @EnableFeignClients(basePackages = CommonUtil.BASE_PACKAGE)
-@EnableHystrix
 public class FtApplication {
 	@Bean
 	public IRule iRule() {
@@ -186,9 +182,6 @@ public class FtApplication {
 		System.setProperty("java.util.concurrent.ForkJoinPool.common.parallelism", "20");
 
 		MDC.put(ThreadLocalMap.REQUEST_ID, "application start");
-
-		// 托管hystrix线程池
-		HystrixPlugins.getInstance().registerConcurrencyStrategy(new TtlHystrixConcurrencyStrategy());
 
 		ApplicationContext applicationContext = SpringApplication.run(FtApplication.class, args);
 		SpringContextUtil.setApplicationContext(applicationContext);
