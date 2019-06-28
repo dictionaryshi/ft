@@ -1,8 +1,6 @@
 package com.ft.br.config.filter;
 
 import com.ft.br.controller.DemoServlet;
-import com.ft.br.controller.HystrixRequestContextFilter;
-import com.netflix.hystrix.contrib.metrics.eventstream.HystrixMetricsStreamServlet;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
@@ -40,20 +38,5 @@ public class FilterServletRegistrationBeanConfig {
 
 		characterEncodingFilter.setUrlPatterns(Collections.singletonList("/*"));
 		return characterEncodingFilter;
-	}
-
-	@Bean
-	public ServletRegistrationBean hystrixMetricsStreamServlet() {
-		ServletRegistrationBean<HystrixMetricsStreamServlet> registrationBean = new ServletRegistrationBean<>(new HystrixMetricsStreamServlet());
-		registrationBean.addUrlMappings("/actuator/hystrix.stream");
-		return registrationBean;
-	}
-
-	@Bean
-	public FilterRegistrationBean hystrixRequestFilter() {
-		FilterRegistrationBean<HystrixRequestContextFilter> hystrixRequestFilter = new FilterRegistrationBean<>();
-		hystrixRequestFilter.setFilter(new HystrixRequestContextFilter());
-		hystrixRequestFilter.setUrlPatterns(Collections.singletonList("/*"));
-		return hystrixRequestFilter;
 	}
 }

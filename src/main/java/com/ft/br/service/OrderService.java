@@ -20,12 +20,7 @@ import com.ft.redis.util.OrderNumberUtil;
 import com.ft.util.StringUtil;
 import com.ft.util.exception.FtException;
 import com.ft.util.model.RestResult;
-import com.ft.web.constant.HystrixConstant;
 import com.ft.web.model.UserDO;
-import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
-import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
-import com.netflix.hystrix.contrib.javanica.cache.annotation.CacheResult;
-import com.netflix.hystrix.contrib.javanica.command.AsyncResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -35,8 +30,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
 
 /**
  * 订单业务类
@@ -425,59 +418,5 @@ public class OrderService {
 		});
 
 		return true;
-	}
-
-	@CacheResult(cacheKeyMethod = "orderCacheKey")
-	@HystrixCommand(
-			groupKey = "orderService",
-			threadPoolKey = "orderQuery",
-			threadPoolProperties = {
-					@HystrixProperty(name = HystrixConstant.CORE_SIZE, value = "10"),
-					@HystrixProperty(name = HystrixConstant.KEEP_ALIVE_TIME_MINUTES, value = "5"),
-					@HystrixProperty(name = HystrixConstant.QUEUE_SIZE_REJECTION_THRESHOLD, value = "16"),
-					@HystrixProperty(name = HystrixConstant.MAX_QUEUE_SIZE, value = "20"),
-			},
-			commandProperties = {
-					@HystrixProperty(name = HystrixConstant.EXECUTION_ISOLATION_STRATEGY, value = HystrixConstant.EXECUTION_ISOLATION_STRATEGY_THREAD),
-					@HystrixProperty(name = HystrixConstant.EXECUTION_ISOLATION_THREAD_TIMEOUT_IN_MILLI_SECONDS, value = "2000"),
-					@HystrixProperty(name = HystrixConstant.EXECUTION_ISOLATION_SEMAPHORE_MAXCONCURRENTREQUESTS, value = "10"),
-					@HystrixProperty(name = HystrixConstant.CIRCUITBREAKER_ENABLED, value = "true")
-			},
-			fallbackMethod = "hystrixFallBack",
-			ignoreExceptions = {FtException.class}
-	)
-	public Future<OrderDO> hystrix(String id) {
-		return new AsyncResult<OrderDO>() {
-			@Override
-			public OrderDO invoke() {
-				System.out.println("hystrix orderId==>" + id + " start");
-				long start = System.currentTimeMillis();
-
-				try {
-					TimeUnit.SECONDS.sleep(1);
-				} catch (InterruptedException e) {
-					Thread.currentThread().interrupt();
-				}
-
-				long end = System.currentTimeMillis();
-				OrderDO orderDO = new OrderDO();
-				orderDO.setId(id);
-				orderDO.setRemark("订单成功");
-				System.out.println("hystrix orderId==>" + id + " end, cost==>" + (end - start));
-				return orderDO;
-			}
-		};
-	}
-
-	public OrderDO hystrixFallBack(String id, Throwable e) {
-		log.warn("hystrix orderId==>{}, exception==>{}", id, FtException.getExceptionStack(e));
-		OrderDO orderDO = new OrderDO();
-		orderDO.setId(id);
-		orderDO.setRemark("hystrix熔断");
-		return orderDO;
-	}
-
-	public String orderCacheKey(String id) {
-		return "order_cache_" + id;
 	}
 }
