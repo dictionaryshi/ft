@@ -15,8 +15,8 @@ spring:
 
 kafka:
   consign:
-    topic: test_ft
-    groupId: test_ft_group
+    topic: application_log
+    groupId: business
 
 dubbo:
   port: 20881
