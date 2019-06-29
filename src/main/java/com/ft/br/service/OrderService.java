@@ -10,7 +10,7 @@ import com.ft.br.model.mdo.OrderDO;
 import com.ft.br.model.mdo.StockLogDO;
 import com.ft.br.model.vo.ItemVO;
 import com.ft.br.model.vo.OrderVO;
-import com.ft.db.annotation.DataSource;
+import com.ft.db.annotation.UseMaster;
 import com.ft.db.constant.DbConstant;
 import com.ft.db.model.PageParam;
 import com.ft.db.model.PageResult;
@@ -58,7 +58,6 @@ public class OrderService {
 	@Autowired
 	private ValueOperationsCache<String, String> valueOperationsCache;
 
-	@DataSource(DataSource.slave)
 	public PageResult<OrderVO> list(OrderDTO orderDTO, PageParam pageParam) {
 		PageResult<OrderVO> pageResult = new PageResult<>();
 		pageResult.setPage(pageParam.getPage());
@@ -106,7 +105,6 @@ public class OrderService {
 	 * @param id 订单id
 	 * @return 订单信息
 	 */
-	@DataSource(DataSource.slave)
 	public OrderVO get(String id) {
 		OrderVO order = orderMapper.getOrderById(id);
 		if (order == null) {
@@ -123,7 +121,6 @@ public class OrderService {
 	 * @param id 订单id
 	 * @return 订单项
 	 */
-	@DataSource(DataSource.slave)
 	public List<ItemVO> listItems(String id) {
 		List<ItemVO> items = itemMapper.selectByOrderId(id);
 		if (items == null || items.isEmpty()) {
@@ -150,7 +147,6 @@ public class OrderService {
 	 * @param orderDTO 订单信息
 	 * @return true:添加成功
 	 */
-	@DataSource
 	@Transactional(value = DbConstant.DB_CONSIGN + DbConstant.TRAN_SACTION_MANAGER, propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED, rollbackFor = Throwable.class)
 	public boolean add(OrderDTO orderDTO) {
 
@@ -214,7 +210,7 @@ public class OrderService {
 	 * @param orderDO 订单信息
 	 * @return true:修改成功
 	 */
-	@DataSource
+	@UseMaster
 	public boolean update(OrderDO orderDO) {
 		return orderMapper.update(orderDO) == 1;
 	}
@@ -225,7 +221,7 @@ public class OrderService {
 	 * @param id 订单项id
 	 * @return true:删除成功
 	 */
-	@DataSource
+	@UseMaster
 	public boolean deleteItem(long id, String orderId) {
 		ItemDO item = new ItemDO();
 		item.setId(id);
@@ -242,7 +238,7 @@ public class OrderService {
 	 * @param goodsNumber 商品数量
 	 * @return true:修改成功
 	 */
-	@DataSource
+	@UseMaster
 	public boolean updateItem(long id, int goodsNumber, String orderId) {
 		ItemDO itemDO = new ItemDO();
 		itemDO.setId(id);
@@ -263,7 +259,7 @@ public class OrderService {
 	 * @param goodsNumber 商品数量
 	 * @return true:添加成功
 	 */
-	@DataSource
+	@UseMaster
 	public boolean addItem(String orderId, long goodsId, int goodsNumber) {
 		ItemDO item = new ItemDO();
 		item.setOrderId(orderId);
@@ -282,7 +278,6 @@ public class OrderService {
 	 * @param orderId 订单id
 	 * @return 订单确认结果
 	 */
-	@DataSource
 	@Transactional(value = DbConstant.DB_CONSIGN + DbConstant.TRAN_SACTION_MANAGER, propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED, rollbackFor = Throwable.class)
 	public boolean confirm(String orderId, long userId) {
 		OrderVO order = orderMapper.getOrderById(orderId);
@@ -352,6 +347,7 @@ public class OrderService {
 	 * @param userId  用户id
 	 * @return true:订单成功
 	 */
+	@UseMaster
 	public boolean success(String orderId, long userId) {
 		OrderVO order = orderMapper.getOrderById(orderId);
 		if (order == null) {
@@ -378,6 +374,7 @@ public class OrderService {
 	 * @param userId  用户id
 	 * @return true:确认订单失败成功
 	 */
+	@UseMaster
 	public boolean fail(String orderId, long userId) {
 
 		OrderVO order = orderMapper.getOrderById(orderId);

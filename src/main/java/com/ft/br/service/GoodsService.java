@@ -6,7 +6,7 @@ import com.ft.br.model.dto.GoodsDTO;
 import com.ft.br.model.mdo.CategoryDO;
 import com.ft.br.model.mdo.GoodsDO;
 import com.ft.br.model.vo.GoodsVO;
-import com.ft.db.annotation.DataSource;
+import com.ft.db.annotation.UseMaster;
 import com.ft.db.model.PageParam;
 import com.ft.db.model.PageResult;
 import com.ft.util.exception.FtException;
@@ -39,7 +39,6 @@ public class GoodsService {
 	 * @param id 商品id
 	 * @return 商品信息
 	 */
-	@DataSource(DataSource.slave)
 	public GoodsDO get(long id) {
 		return goodsMapper.getGoodsById(id);
 	}
@@ -52,7 +51,7 @@ public class GoodsService {
 	 * @param categoryId 分类id
 	 * @return true:修改成功
 	 */
-	@DataSource
+	@UseMaster
 	public boolean update(long id, String name, short categoryId) {
 
 		GoodsDO goodsDO = goodsMapper.getGoodsById(id);
@@ -85,7 +84,7 @@ public class GoodsService {
 	 * @param categoryId 分类id
 	 * @return true:添加成功
 	 */
-	@DataSource
+	@UseMaster
 	public boolean add(String name, short categoryId) {
 
 		CategoryDO categoryDO = categoryMapper.getCategoryById(categoryId);
@@ -111,7 +110,6 @@ public class GoodsService {
 	 * @param pageParam  分页工具类
 	 * @return 商品信息
 	 */
-	@DataSource(DataSource.slave)
 	public PageResult<GoodsVO> list(short categoryId, PageParam pageParam) {
 		PageResult<GoodsVO> pageResult = new PageResult<>();
 		pageResult.setPage(pageParam.getPage());

@@ -2,7 +2,7 @@ package com.ft.br.service;
 
 import com.ft.br.dao.CategoryMapper;
 import com.ft.br.model.mdo.CategoryDO;
-import com.ft.db.annotation.DataSource;
+import com.ft.db.annotation.UseMaster;
 import com.ft.util.exception.FtException;
 import com.ft.util.model.RestResult;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +26,6 @@ public class CategoryService {
 	 *
 	 * @return 所有分类信息
 	 */
-	@DataSource(DataSource.slave)
 	public List<CategoryDO> listAll() {
 		return categoryMapper.selectAllCategories();
 	}
@@ -37,7 +36,7 @@ public class CategoryService {
 	 * @param name 分类名称
 	 * @return true:添加成功
 	 */
-	@DataSource
+	@UseMaster
 	public boolean add(String name) {
 		CategoryDO categoryDO = categoryMapper.getCategoryByName(name);
 		if (categoryDO != null) {
@@ -57,7 +56,7 @@ public class CategoryService {
 	 * @param name 分类名称
 	 * @return true:修改成功
 	 */
-	@DataSource
+	@UseMaster
 	public boolean update(short id, String name) {
 		CategoryDO categoryDO = categoryMapper.getCategoryById(id);
 		if (categoryDO == null) {
@@ -78,7 +77,6 @@ public class CategoryService {
 	 * @param id 分类主键
 	 * @return 分类信息
 	 */
-	@DataSource(DataSource.slave)
 	public CategoryDO get(short id) {
 		return categoryMapper.getCategoryById(id);
 	}
