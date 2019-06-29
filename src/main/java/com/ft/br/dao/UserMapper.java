@@ -1,5 +1,6 @@
 package com.ft.br.dao;
 
+import com.ft.db.constant.DbConstant;
 import com.ft.web.model.UserDO;
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Component;
@@ -60,7 +61,7 @@ public interface UserMapper {
 	 * @return 1: 插入成功
 	 */
 	@Insert("insert into `user` (`username`, `password`) values (#{username}, #{password})")
-	@SelectKey(statement = "SELECT LAST_INSERT_ID()", keyColumn = "id", keyProperty = "id", resultType = Long.class, before = false)
+	@SelectKey(statement = DbConstant.SELECT_LAST_INSERT_ID, keyColumn = "id", keyProperty = "id", resultType = Long.class, before = false)
 	int insert(UserDO userDO);
 
 	/**
