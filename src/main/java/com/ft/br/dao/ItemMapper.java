@@ -2,6 +2,7 @@ package com.ft.br.dao;
 
 import com.ft.br.model.mdo.ItemDO;
 import com.ft.br.model.vo.ItemVO;
+import com.ft.db.constant.DbConstant;
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Component;
 
@@ -23,7 +24,7 @@ public interface ItemMapper {
 	 * @return 1:增加成功
 	 */
 	@Insert("insert into `item` (`order_id`, `goods_id`, `goods_number`) values (#{orderId}, #{goodsId}, #{goodsNumber})")
-	@SelectKey(statement = "SELECT LAST_INSERT_ID()", keyColumn = "id", keyProperty = "id", resultType = Long.class, before = false)
+	@SelectKey(statement = DbConstant.SELECT_LAST_INSERT_ID, keyColumn = "id", keyProperty = "id", resultType = Long.class, before = false)
 	int insert(ItemDO itemDO);
 
 	/**
