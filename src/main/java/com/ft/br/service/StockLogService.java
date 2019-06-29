@@ -10,7 +10,6 @@ import com.ft.br.model.mdo.GoodsDO;
 import com.ft.br.model.mdo.StockLogDO;
 import com.ft.br.model.vo.OrderVO;
 import com.ft.br.model.vo.StockLogVO;
-import com.ft.db.annotation.DataSource;
 import com.ft.db.constant.DbConstant;
 import com.ft.db.model.PageParam;
 import com.ft.db.model.PageResult;
@@ -111,7 +110,6 @@ public class StockLogService {
 	 * @return true:操作成功
 	 */
 	@Transactional(value = DbConstant.DB_CONSIGN + DbConstant.TRAN_SACTION_MANAGER, propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED, rollbackFor = Throwable.class)
-	@DataSource
 	public boolean storage(StockLogDO stockLogDO) {
 		// 出入库类型
 		short type = stockLogDO.getType();
