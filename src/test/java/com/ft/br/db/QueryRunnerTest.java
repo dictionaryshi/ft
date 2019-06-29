@@ -1,6 +1,5 @@
 package com.ft.br.db;
 
-import com.ft.db.annotation.DataSource;
 import com.ft.db.dbutil.TxQueryRunner;
 import com.ft.util.JsonUtil;
 import com.ft.util.ThreadLocalMap;
@@ -32,7 +31,7 @@ public class QueryRunnerTest {
 
 	@Before
 	public void before() {
-		ThreadLocalMap.putDataSourceKey(DataSource.master);
+		ThreadLocalMap.putDataSourceUseMaster(Boolean.TRUE);
 	}
 
 	/**

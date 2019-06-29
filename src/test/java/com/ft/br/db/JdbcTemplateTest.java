@@ -1,6 +1,5 @@
 package com.ft.br.db;
 
-import com.ft.db.annotation.DataSource;
 import com.ft.db.dbutil.JdbcTemplateUtil;
 import com.ft.util.JsonUtil;
 import com.ft.util.ThreadLocalMap;
@@ -26,7 +25,7 @@ public class JdbcTemplateTest {
 
 	@Before
 	public void before() {
-		ThreadLocalMap.putDataSourceKey(DataSource.master);
+		ThreadLocalMap.putDataSourceUseMaster(Boolean.TRUE);
 	}
 
 	@Test
