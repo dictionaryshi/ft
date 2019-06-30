@@ -1,11 +1,12 @@
 package com.ft.br.config;
 
-import com.ft.br.constant.PropertiesConstant;
 import com.ft.br.service.SpringLifeServiceImpl;
 import com.ft.web.model.UserDO;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.*;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.context.annotation.Scope;
 
 /**
  * 多环境配置
@@ -40,11 +41,5 @@ public class ProFileConfig {
 		UserDO user = new UserDO();
 		user.setUsername("zgl");
 		return user;
-	}
-
-	@Bean
-	@ConfigurationProperties(prefix = "com.ft")
-	public PropertiesConstant propertiesConstants() {
-		return new PropertiesConstant();
 	}
 }

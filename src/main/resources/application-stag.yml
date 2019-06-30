@@ -1,6 +1,6 @@
 com:
   ft:
-    constant: stag-xuting
+    profile: stag-xuting
 
 server:
   port: 9001

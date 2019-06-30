@@ -1,6 +1,6 @@
 com:
   ft:
-    constant: dev-chunyang
+    profile: dev-chunyang
 
 server:
   port: 9001

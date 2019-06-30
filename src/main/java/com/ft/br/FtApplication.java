@@ -1,6 +1,5 @@
 package com.ft.br;
 
-import com.ft.br.constant.PropertiesConstant;
 import com.ft.br.service.GoodsService;
 import com.ft.util.*;
 import com.ft.util.exception.FtException;
@@ -47,14 +46,6 @@ import java.util.*;
 @EnableDiscoveryClient
 @EnableFeignClients(basePackages = CommonUtil.BASE_PACKAGE)
 public class FtApplication {
-	private final PropertiesConstant propertiesConstants;
-
-	public FtApplication(
-			PropertiesConstant propertiesConstants
-	) {
-		this.propertiesConstants = propertiesConstants;
-	}
-
 	@Autowired
 	private GoodsService goodsService;
 
@@ -64,13 +55,16 @@ public class FtApplication {
 	@Value("${server.port}")
 	private Integer port;
 
+	@Value("${com.ft.profile}")
+	private String profile;
+
 	@GetMapping("/")
 	public String helloWorld() {
 		com.sun.management.OperatingSystemMXBean osmb = (com.sun.management.OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean();
 		return JsonUtil.object2Json(
 				new HashMap<String, Object>(16) {
 					{
-						put("env", propertiesConstants.getConstant());
+						put("profile", profile);
 						put("ip", ip);
 						put("port", port);
 						put("cpu", osmb.getAvailableProcessors());
