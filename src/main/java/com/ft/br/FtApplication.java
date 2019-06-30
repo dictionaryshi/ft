@@ -6,8 +6,6 @@ import com.ft.util.*;
 import com.ft.util.exception.FtException;
 import com.ft.web.model.MailBO;
 import com.ft.web.plugin.MailUtil;
-import com.netflix.loadbalancer.IRule;
-import com.netflix.loadbalancer.RoundRobinRule;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +18,6 @@ import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.Bean;
 import org.springframework.retry.annotation.Backoff;
 import org.springframework.retry.annotation.EnableRetry;
 import org.springframework.retry.annotation.Retryable;
@@ -50,11 +47,6 @@ import java.util.*;
 @EnableDiscoveryClient
 @EnableFeignClients(basePackages = CommonUtil.BASE_PACKAGE)
 public class FtApplication {
-	@Bean
-	public IRule iRule() {
-		return new RoundRobinRule();
-	}
-
 	private final PropertiesConstant propertiesConstants;
 
 	public FtApplication(
