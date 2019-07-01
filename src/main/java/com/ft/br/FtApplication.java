@@ -3,6 +3,7 @@ package com.ft.br;
 import com.ft.br.service.GoodsService;
 import com.ft.util.*;
 import com.ft.util.exception.FtException;
+import com.ft.util.thread.ThreadPoolUtil;
 import com.ft.web.model.MailBO;
 import com.ft.web.plugin.MailUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -165,9 +166,10 @@ public class FtApplication {
 	 * nohup java -jar ft-0.0.1-SNAPSHOT.jar > /root/temp.out 2>&1 &
 	 */
 	public static void main(String[] args) {
-		System.setProperty("java.util.concurrent.ForkJoinPool.common.parallelism", "20");
-
 		MDC.put(ThreadLocalMap.REQUEST_ID, "application start");
+
+		// 设置forkJoin线程池大小
+		CommonUtil.setForkJoinPoolSize(ThreadPoolUtil.getCpuNumber() * 5);
 
 		ApplicationContext applicationContext = SpringApplication.run(FtApplication.class, args);
 		SpringContextUtil.setApplicationContext(applicationContext);
