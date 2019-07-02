@@ -37,8 +37,9 @@ public class SpringTest {
 
 	@Test
 	public void getEnvironment() {
+		SpringContextUtil.setApplicationContext(applicationContext);
 		// 获取配置文件中的内容
-		String cookieDomain = SpringContextUtil.getProperty(applicationContext.getEnvironment(), "cookieDomain");
+		String cookieDomain = SpringContextUtil.getProperty("cookieDomain");
 		System.out.println(cookieDomain);
 	}
 
