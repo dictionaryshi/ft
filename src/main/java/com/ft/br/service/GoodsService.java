@@ -10,7 +10,6 @@ import com.ft.db.annotation.UseMaster;
 import com.ft.db.model.PageParam;
 import com.ft.db.model.PageResult;
 import com.ft.util.exception.FtException;
-import com.ft.util.model.RestResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -56,17 +55,17 @@ public class GoodsService {
 
 		GoodsDO goodsDO = goodsMapper.getGoodsById(id);
 		if (goodsDO == null) {
-			throw new FtException(RestResult.ERROR_CODE, "商品不存在,无法修改");
+			FtException.throwException("商品不存在,无法修改");
 		}
 
 		CategoryDO categoryDO = categoryMapper.getCategoryById(categoryId);
 		if (categoryDO == null) {
-			throw new FtException(RestResult.ERROR_CODE, "商品分类不存在,无法修改");
+			FtException.throwException("商品分类不存在,无法修改");
 		}
 
 		GoodsDO dbGoods = goodsMapper.getGoodsByName(name);
 		if (dbGoods != null && dbGoods.getCategory() == categoryId) {
-			throw new FtException(RestResult.ERROR_CODE, "商品已经存在");
+			FtException.throwException("商品已经存在");
 		}
 
 		goodsDO = new GoodsDO();
@@ -89,11 +88,11 @@ public class GoodsService {
 
 		CategoryDO categoryDO = categoryMapper.getCategoryById(categoryId);
 		if (categoryDO == null) {
-			throw new FtException(RestResult.ERROR_CODE, "商品分类不存在");
+			FtException.throwException("商品分类不存在");
 		}
 
 		if (goodsMapper.getGoodsByName(name) != null) {
-			throw new FtException(RestResult.ERROR_CODE, "商品已经存在");
+			FtException.throwException("商品已经存在");
 		}
 
 		GoodsDO goodsDO = new GoodsDO();

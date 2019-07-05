@@ -79,7 +79,7 @@ public class OrderController {
 			orderDTO.setEndDate(end);
 		}
 
-		return JsonUtil.object2Json(RestResult.getSuccessRestResult(orderService.list(orderDTO, pageParam)));
+		return JsonUtil.object2Json(RestResult.success(orderService.list(orderDTO, pageParam)));
 	}
 
 	@ApiOperation("获取某个订单信息")
@@ -95,7 +95,7 @@ public class OrderController {
 	@RequestMapping(value = "/get", method = RequestMethod.POST)
 	@LoginCheck
 	public String get(@RequestParam(value = "id") String id) {
-		return JsonUtil.object2Json(RestResult.getSuccessRestResult(orderService.get(id)));
+		return JsonUtil.object2Json(RestResult.success(orderService.get(id)));
 	}
 
 	@ApiOperation("查询订单项")
@@ -111,7 +111,7 @@ public class OrderController {
 	@RequestMapping(value = "/list-items", method = RequestMethod.POST)
 	@LoginCheck
 	public String listItems(@RequestParam(value = "id") String id) {
-		return JsonUtil.object2Json(RestResult.getSuccessRestResult(orderService.listItems(id)));
+		return JsonUtil.object2Json(RestResult.success(orderService.listItems(id)));
 	}
 
 	@ApiOperation("添加订单信息")
@@ -151,7 +151,7 @@ public class OrderController {
 		orderDTO.setOperator(LoginUtil.getLoginUser(request).getId());
 
 		boolean flag = orderService.add(orderDTO);
-		return JsonUtil.object2Json(RestResult.getSuccessRestResult(flag));
+		return JsonUtil.object2Json(RestResult.success(flag));
 	}
 
 	@ApiOperation("修改订单")
@@ -200,7 +200,7 @@ public class OrderController {
 		orderDO.setId(id);
 
 		boolean flag = orderService.update(orderDO);
-		return JsonUtil.object2Json(RestResult.getSuccessRestResult(flag));
+		return JsonUtil.object2Json(RestResult.success(flag));
 	}
 
 	@ApiOperation("添加订单项")
@@ -225,7 +225,7 @@ public class OrderController {
 			@RequestParam("goods_number") int goodsNumber
 	) {
 		boolean flag = orderService.addItem(orderId, goodsId, goodsNumber);
-		return JsonUtil.object2Json(RestResult.getSuccessRestResult(flag));
+		return JsonUtil.object2Json(RestResult.success(flag));
 	}
 
 	@ApiOperation("删除订单项")
@@ -246,7 +246,7 @@ public class OrderController {
 			@RequestParam("id") long id
 	) {
 		boolean flag = orderService.deleteItem(id, orderId);
-		return JsonUtil.object2Json(RestResult.getSuccessRestResult(flag));
+		return JsonUtil.object2Json(RestResult.success(flag));
 	}
 
 	@ApiOperation("修改订单项")
@@ -270,7 +270,7 @@ public class OrderController {
 			@RequestParam(value = "id") long id
 	) {
 		boolean flag = orderService.updateItem(id, goodsNumber, orderId);
-		return JsonUtil.object2Json(RestResult.getSuccessRestResult(flag));
+		return JsonUtil.object2Json(RestResult.success(flag));
 	}
 
 	@ApiOperation("确认订单")
@@ -291,7 +291,7 @@ public class OrderController {
 	) {
 		long userId = LoginUtil.getLoginUser(request).getId();
 		boolean flag = orderService.confirm(orderId, userId);
-		return JsonUtil.object2Json(RestResult.getSuccessRestResult(flag));
+		return JsonUtil.object2Json(RestResult.success(flag));
 	}
 
 	@ApiOperation("确认订单成功")
@@ -311,7 +311,7 @@ public class OrderController {
 	) {
 		long userId = LoginUtil.getLoginUser(request).getId();
 		boolean flag = orderService.success(orderId, userId);
-		return JsonUtil.object2Json(RestResult.getSuccessRestResult(flag));
+		return JsonUtil.object2Json(RestResult.success(flag));
 	}
 
 	@ApiOperation("确认订单失败")
@@ -331,6 +331,6 @@ public class OrderController {
 	) {
 		long userId = LoginUtil.getLoginUser(request).getId();
 		boolean flag = orderService.fail(orderId, userId);
-		return JsonUtil.object2Json(RestResult.getSuccessRestResult(flag));
+		return JsonUtil.object2Json(RestResult.success(flag));
 	}
 }

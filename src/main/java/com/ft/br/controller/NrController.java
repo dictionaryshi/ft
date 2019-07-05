@@ -99,6 +99,6 @@ public class NrController {
 				log.warn("deadLock2, exception==>{}", FtException.getExceptionStack(e));
 			}
 		});
-		return RestResult.getSuccessRestResult(Boolean.TRUE);
+		return RestResult.success(Boolean.TRUE);
 	}
 }

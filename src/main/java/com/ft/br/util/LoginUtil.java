@@ -6,7 +6,6 @@ import com.ft.util.JsonUtil;
 import com.ft.util.SpringContextUtil;
 import com.ft.util.StringUtil;
 import com.ft.util.exception.FtException;
-import com.ft.util.model.RestResult;
 import com.ft.web.model.UserDO;
 import com.ft.web.util.WebUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -34,7 +33,7 @@ public class LoginUtil {
 		String loginToken = WebUtil.getToken(request);
 		if (StringUtil.isNull(loginToken)) {
 			log.info("url==>{}, login_token 不存在", request.getRequestURL());
-			throw new FtException(RestResult.ERROR_SIGN_CODE, "签名错误");
+			FtException.throwException("签名错误");
 		}
 
 		String redisTokenKey = StringUtil.append(StringUtil.REDIS_SPLIT, LoginConstant.REDIS_LOGIN_TOKEN, loginToken);
@@ -42,7 +41,7 @@ public class LoginUtil {
 
 		if (StringUtil.isNull(userJson)) {
 			log.info("url==>{}, login_token 不存在或已过期", request.getRequestURL());
-			throw new FtException(RestResult.ERROR_SIGN_CODE, "签名错误");
+			FtException.throwException("签名错误");
 		}
 
 		boolean flag = valueOperationsCache.expire(redisTokenKey, 3600_000L);

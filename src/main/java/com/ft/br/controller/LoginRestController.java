@@ -93,7 +93,7 @@ public class LoginRestController {
 		String domain = this.cookieDomain;
 		CookieUtil.addCookie(response, WebUtil.PARAM_LOGIN_TOKEN, token, CookieUtil.MAX_AGE_BROWSER, domain, true);
 
-		return JsonUtil.object2Json(RestResult.getSuccessRestResult(result));
+		return JsonUtil.object2Json(RestResult.success(result));
 	}
 
 	@ApiOperation("图片验证码")
@@ -109,13 +109,13 @@ public class LoginRestController {
 		String codeRedisKey = StringUtil.append(StringUtil.REDIS_SPLIT, LoginConstant.REDIS_VERIFICATION_CODE, codeId);
 		boolean flag = valueOperationsCache.setIfAbsent(codeRedisKey, code, 300_000L);
 		if (!flag) {
-			throw new FtException(RestResult.ERROR_CODE, "验证码存储异常");
+			FtException.throwException("验证码存储异常");
 		}
 
 		Map<String, Object> result = new HashMap<>(16);
 		result.put("code_id", codeId);
 		result.put("img", Base64.getEncoder().encodeToString(byteArrayOutputStream.toByteArray()));
-		return JsonUtil.object2Json(RestResult.getSuccessRestResult(result));
+		return JsonUtil.object2Json(RestResult.success(result));
 	}
 
 	@ApiOperation("查询当前登录用户信息")
@@ -126,7 +126,7 @@ public class LoginRestController {
 	 */
 	@RequestMapping(value = "/user", method = RequestMethod.POST)
 	public RestResult<UserDO> user(HttpServletRequest request) {
-		return RestResult.getSuccessRestResult(LoginUtil.getLoginUser(request));
+		return RestResult.success(LoginUtil.getLoginUser(request));
 	}
 
 	@RequestMapping(value = "/json-param", method = RequestMethod.POST)

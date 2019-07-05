@@ -37,7 +37,7 @@ public class CategoryController {
 	@RequestMapping(value = "/all", method = RequestMethod.POST)
 	@LoginCheck
 	public String all() {
-		return JsonUtil.object2Json(RestResult.getSuccessRestResult(categoryService.listAll()));
+		return JsonUtil.object2Json(RestResult.success(categoryService.listAll()));
 	}
 
 	@ApiOperation("添加分类信息")
@@ -60,7 +60,7 @@ public class CategoryController {
 
 		Map<String, Object> result = new HashMap<>(16);
 		result.put("flag", flag);
-		return JsonUtil.object2Json(RestResult.getSuccessRestResult(result));
+		return JsonUtil.object2Json(RestResult.success(result));
 	}
 
 	@ApiOperation("根据id修改分类信息")
@@ -69,8 +69,8 @@ public class CategoryController {
 			@ApiImplicitParam(name = "name", value = "分类名称", required = true, dataType = SwaggerConstant.DATA_TYPE_STRING, defaultValue = "默认分类名称", paramType = SwaggerConstant.PARAM_TYPE_QUERY)
 	})
 	@ApiResponses({
-			@ApiResponse(code = RestResult.SUCCESS_CODE, message = SwaggerConstant.MESSAGE_SUCCESS, response = RestResult.class),
-			@ApiResponse(code = RestResult.ERROR_CODE, message = SwaggerConstant.MESSAGE_ERROR)
+			@ApiResponse(code = 0, message = SwaggerConstant.MESSAGE_SUCCESS, response = RestResult.class),
+			@ApiResponse(code = 500, message = SwaggerConstant.MESSAGE_ERROR)
 	})
 	/**
 	 * 根据id修改分类信息
@@ -89,7 +89,7 @@ public class CategoryController {
 		String flag = categoryService.update(id, name) ? "修改成功" : "修改失败";
 		Map<String, Object> result = new HashMap<>(16);
 		result.put("flag", flag);
-		return JsonUtil.object2Json(RestResult.getSuccessRestResult(result));
+		return JsonUtil.object2Json(RestResult.success(result));
 	}
 
 	@ApiOperation("根据id查询分类信息")
@@ -105,6 +105,6 @@ public class CategoryController {
 	@RequestMapping(value = "/get", method = RequestMethod.POST)
 	@LoginCheck
 	public String get(@RequestParam(value = "id") short id) {
-		return JsonUtil.object2Json(RestResult.getSuccessRestResult(categoryService.get(id)));
+		return JsonUtil.object2Json(RestResult.success(categoryService.get(id)));
 	}
 }

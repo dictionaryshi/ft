@@ -86,7 +86,8 @@ public class FtApplication {
 	@GetMapping("/rpc")
 	public String rpc() {
 		log.info("rpc retry test");
-		throw new FtException(500, "重试机制测试");
+		FtException.throwException("重试机制测试");
+		return null;
 	}
 
 	@Autowired

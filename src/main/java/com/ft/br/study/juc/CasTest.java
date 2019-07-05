@@ -1,7 +1,6 @@
 package com.ft.br.study.juc;
 
 import com.ft.util.exception.FtException;
-import com.ft.util.model.RestResult;
 import com.ft.web.model.UserDO;
 import lombok.extern.slf4j.Slf4j;
 import sun.misc.Unsafe;
@@ -31,7 +30,8 @@ public class CasTest {
 					(UserDO.class.getDeclaredField("username"));
 		} catch (Exception e) {
 			log.error("cas init exception==>{}", FtException.getExceptionStack(e));
-			throw new FtException(RestResult.ERROR_CODE, e.getMessage());
+			FtException.throwException(e.getMessage());
+			throw new RuntimeException("系统异常");
 		}
 	}
 

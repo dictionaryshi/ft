@@ -42,7 +42,7 @@ public class GoodsController {
 	@RequestMapping(value = "/get", method = RequestMethod.POST)
 	@LoginCheck
 	public String get(@RequestParam("id") long id) {
-		return JsonUtil.object2Json(RestResult.getSuccessRestResult(goodsService.get(id)));
+		return JsonUtil.object2Json(RestResult.success(goodsService.get(id)));
 	}
 
 	@ApiOperation("修改商品信息")
@@ -66,7 +66,7 @@ public class GoodsController {
 			@RequestParam("name") String name,
 			@RequestParam("category_id") short categoryId
 	) {
-		return JsonUtil.object2Json(RestResult.getSuccessRestResult(goodsService.update(id, name, categoryId)));
+		return JsonUtil.object2Json(RestResult.success(goodsService.update(id, name, categoryId)));
 	}
 
 	@ApiOperation("添加商品信息")
@@ -87,7 +87,7 @@ public class GoodsController {
 			@RequestParam("name") String name,
 			@RequestParam("category_id") short categoryId
 	) {
-		return JsonUtil.object2Json(RestResult.getSuccessRestResult(goodsService.add(name, categoryId)));
+		return JsonUtil.object2Json(RestResult.success(goodsService.add(name, categoryId)));
 	}
 
 	@ApiOperation("分页查询商品")
@@ -108,7 +108,7 @@ public class GoodsController {
 			@RequestParam(value = "category_id", required = false, defaultValue = "0") short categoryId,
 			@RequestParam(value = "current_page") int currentPage
 	) {
-		return JsonUtil.object2Json(RestResult.getSuccessRestResult(goodsService.list(categoryId, new PageParam(currentPage, 10))));
+		return JsonUtil.object2Json(RestResult.success(goodsService.list(categoryId, new PageParam(currentPage, 10))));
 	}
 
 	@ApiOperation("根据分类查询所有商品")
@@ -126,6 +126,6 @@ public class GoodsController {
 	public String listByCategory(
 			@RequestParam(value = "category_id") short categoryId
 	) {
-		return JsonUtil.object2Json(RestResult.getSuccessRestResult(goodsService.list(categoryId, new PageParam(1, 10_0000))));
+		return JsonUtil.object2Json(RestResult.success(goodsService.list(categoryId, new PageParam(1, 10_0000))));
 	}
 }

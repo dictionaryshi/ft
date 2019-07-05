@@ -4,7 +4,6 @@ import com.ft.br.dao.CategoryMapper;
 import com.ft.br.model.mdo.CategoryDO;
 import com.ft.db.annotation.UseMaster;
 import com.ft.util.exception.FtException;
-import com.ft.util.model.RestResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -40,7 +39,7 @@ public class CategoryService {
 	public boolean add(String name) {
 		CategoryDO categoryDO = categoryMapper.getCategoryByName(name);
 		if (categoryDO != null) {
-			throw new FtException(RestResult.ERROR_CODE, "请不要重复添加分类信息");
+			FtException.throwException("请不要重复添加分类信息");
 		}
 
 		categoryDO = new CategoryDO();
@@ -60,10 +59,10 @@ public class CategoryService {
 	public boolean update(short id, String name) {
 		CategoryDO categoryDO = categoryMapper.getCategoryById(id);
 		if (categoryDO == null) {
-			throw new FtException(RestResult.ERROR_CODE, "分类信息不存在");
+			FtException.throwException("分类信息不存在");
 		}
 		if (categoryMapper.getCategoryByName(name) != null) {
-			throw new FtException(RestResult.ERROR_CODE, "分类已经存在");
+			FtException.throwException("分类已经存在");
 		}
 		categoryDO = new CategoryDO();
 		categoryDO.setId(id);

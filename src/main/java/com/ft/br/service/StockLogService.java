@@ -119,19 +119,19 @@ public class StockLogService {
 		int goodsNumber = stockLogDO.getGoodsNumber();
 
 		if (goodsNumber < 1) {
-			throw new FtException(RestResult.ERROR_CODE, "仓库操作失败, 商品数量不能小于1");
+			FtException.throwException("仓库操作失败, 商品数量不能小于1");
 		}
 
 		GoodsDO goodsDO = goodsMapper.getGoodsById(goodsId);
 		if (goodsDO == null) {
-			throw new FtException(RestResult.ERROR_CODE, "商品不存在，操作仓库失败");
+			FtException.throwException("商品不存在，操作仓库失败");
 		}
 
 		String defaultOrderId = "0";
 		if (!stockLogDO.getOrderId().equals(defaultOrderId)) {
 			OrderVO order = orderMapper.getOrderById(stockLogDO.getOrderId());
 			if (order == null) {
-				throw new FtException(RestResult.ERROR_CODE, "仓库操作失败, 订单不存在");
+				FtException.throwException("仓库操作失败, 订单不存在");
 			}
 		}
 
@@ -143,7 +143,7 @@ public class StockLogService {
 		} else if (type == StockConstant.TYPE_OUT) {
 			// 出库操作
 			if (goodsNumber > goodsDO.getNumber()) {
-				throw new FtException(RestResult.ERROR_CODE, "出库失败, 商品库存数量不足");
+				FtException.throwException("出库失败, 商品库存数量不足");
 			}
 
 			String lockKey = StringUtil.append(StringUtil.REDIS_SPLIT, "storage", "goods", goodsId + "");
@@ -161,7 +161,7 @@ public class StockLogService {
 				return false;
 			}
 		} else {
-			throw new FtException(RestResult.ERROR_CODE, "未知操作仓库类型");
+			FtException.throwException("未知操作仓库类型");
 		}
 		return true;
 	}
