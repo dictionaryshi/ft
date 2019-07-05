@@ -170,7 +170,7 @@ public class OrderService {
 		if (item.getGoodsNumber() != null) {
 			int goodsNumber = item.getGoodsNumber();
 			if (goodsNumber < 1) {
-				throw new FtException(RestResult.ERROR_CODE, "校验订单项失败, 商品数量不能小于1");
+				FtException.throwException("校验订单项失败, 商品数量不能小于1");
 			}
 		}
 
@@ -178,28 +178,28 @@ public class OrderService {
 			long goodsId = item.getGoodsId();
 			GoodsDO goodsDO = goodsMapper.getGoodsById(goodsId);
 			if (goodsDO == null) {
-				throw new FtException(RestResult.ERROR_CODE, "校验订单项失败, 商品不存在");
+				FtException.throwException("校验订单项失败, 商品不存在");
 			}
 		}
 
 		String orderId = item.getOrderId();
 		OrderVO order = orderMapper.getOrderById(orderId);
 		if (order == null) {
-			throw new FtException(RestResult.ERROR_CODE, "校验订单项失败, 订单不存在");
+			FtException.throwException("校验订单项失败, 订单不存在");
 		}
 
 		if (order.getStatus() != OrderConstant.STATUS_READY) {
-			throw new FtException(RestResult.ERROR_CODE, "校验订单项失败, 订单已经不是待确认状态了");
+			FtException.throwException("校验订单项失败, 订单已经不是待确认状态了");
 		}
 
 		if (item.getId() != null) {
 			ItemDO itemDO = itemMapper.selectById(item.getId());
 			if (itemDO == null) {
-				throw new FtException(RestResult.ERROR_CODE, "校验订单项失败, 订单项不存在");
+				FtException.throwException("校验订单项失败, 订单项不存在");
 			}
 
 			if (!itemDO.getOrderId().equals(orderId)) {
-				throw new FtException(RestResult.ERROR_CODE, "校验订单项失败, 订单项与订单不匹配");
+				FtException.throwException("校验订单项失败, 订单项与订单不匹配");
 			}
 		}
 	}
@@ -282,23 +282,23 @@ public class OrderService {
 	public boolean confirm(String orderId, long userId) {
 		OrderVO order = orderMapper.getOrderById(orderId);
 		if (order == null) {
-			throw new FtException(RestResult.ERROR_CODE, "订单确认失败, 订单不存在");
+			FtException.throwException("订单确认失败, 订单不存在");
 		}
 
 		if (order.getStatus() != OrderConstant.STATUS_READY) {
-			throw new FtException(RestResult.ERROR_CODE, "订单确认失败, 订单已经不是待确认状态了");
+			FtException.throwException("订单确认失败, 订单已经不是待确认状态了");
 		}
 
 		// 查询订单的所有订单项
 		List<ItemVO> items = itemMapper.selectByOrderId(orderId);
 		if (items.isEmpty()) {
-			throw new FtException(RestResult.ERROR_CODE, "订单确认失败, 还没有添加订单详情");
+			FtException.throwException("订单确认失败, 还没有添加订单详情");
 		}
 
 		String lockKey = StringUtil.append(StringUtil.REDIS_SPLIT, "confirm", "orderId", orderId);
 		Boolean flag = valueOperationsCache.setIfAbsent(lockKey, orderId, 5_000L);
 		if (!flag) {
-			throw new FtException(RestResult.ERROR_CODE, "订单确认失败, 请不要重复确认");
+			FtException.throwException("订单确认失败, 请不要重复确认");
 		}
 
 		items.forEach(this::checkConfirmItem);
@@ -332,11 +332,11 @@ public class OrderService {
 		int goodsNumber = item.getGoodsNumber();
 		GoodsDO goodsDO = goodsMapper.getGoodsById(goodsId);
 		if (goodsDO == null) {
-			throw new FtException(RestResult.ERROR_CODE, "订单确认失败, 订单项中商品不存在");
+			FtException.throwException("订单确认失败, 订单项中商品不存在");
 		}
 
 		if (goodsNumber > goodsDO.getNumber()) {
-			throw new FtException(RestResult.ERROR_CODE, "订单确认失败, 商品库存数量不足");
+			FtException.throwException("订单确认失败, 商品库存数量不足");
 		}
 	}
 
@@ -351,11 +351,11 @@ public class OrderService {
 	public boolean success(String orderId, long userId) {
 		OrderVO order = orderMapper.getOrderById(orderId);
 		if (order == null) {
-			throw new FtException(RestResult.ERROR_CODE, "确认订单success失败, 订单不存在");
+			FtException.throwException("确认订单success失败, 订单不存在");
 		}
 
 		if (order.getStatus() != OrderConstant.STATUS_CONFIRM) {
-			throw new FtException(RestResult.ERROR_CODE, "确认订单success失败, 订单已经不是已确认状态了");
+			FtException.throwException("确认订单success失败, 订单已经不是已确认状态了");
 		}
 
 		OrderDO update = new OrderDO();
@@ -379,17 +379,17 @@ public class OrderService {
 
 		OrderVO order = orderMapper.getOrderById(orderId);
 		if (order == null) {
-			throw new FtException(RestResult.ERROR_CODE, "确认订单fail失败, 订单不存在");
+			FtException.throwException("确认订单fail失败, 订单不存在");
 		}
 
 		if (order.getStatus() != OrderConstant.STATUS_CONFIRM) {
-			throw new FtException(RestResult.ERROR_CODE, "确认订单fail失败, 订单已经不是已确认状态了");
+			FtException.throwException("确认订单fail失败, 订单已经不是已确认状态了");
 		}
 
 		String lockKey = StringUtil.append(StringUtil.REDIS_SPLIT, "fail", "orderId", orderId);
 		Boolean flag = valueOperationsCache.setIfAbsent(lockKey, orderId, 5_000L);
 		if (!flag) {
-			throw new FtException(RestResult.ERROR_CODE, "确认订单fail失败, 请不要重复确认");
+			FtException.throwException("确认订单fail失败, 请不要重复确认");
 		}
 
 		OrderDO update = new OrderDO();

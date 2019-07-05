@@ -66,7 +66,7 @@ public class StockLogController {
 		stockLogDTO.setStartDate(startTime);
 		stockLogDTO.setEndDate(endTime);
 
-		return JsonUtil.object2Json(RestResult.getSuccessRestResult(stockLogService.list(stockLogDTO, pageParam)));
+		return JsonUtil.object2Json(RestResult.success(stockLogService.list(stockLogDTO, pageParam)));
 	}
 
 	@ApiOperation("出/入库操作")
@@ -96,6 +96,6 @@ public class StockLogController {
 		stockLogDO.setOrderId(orderId);
 
 		boolean flag = stockLogService.storage(stockLogDO);
-		return JsonUtil.object2Json(RestResult.getSuccessRestResult(flag));
+		return JsonUtil.object2Json(RestResult.success(flag));
 	}
 }
