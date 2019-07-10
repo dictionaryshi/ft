@@ -27,6 +27,7 @@ public class HttpTest {
 		Map<String, String> textMap = new HashMap<String, String>(16) {
 			{
 				put("username", "史春阳");
+				put("age", "30");
 			}
 		};
 		httpParam.setTextMap(textMap);

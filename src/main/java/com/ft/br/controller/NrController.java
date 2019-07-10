@@ -70,6 +70,7 @@ public class NrController {
 	@PostMapping("/upload")
 	public String upload(
 			@RequestParam String username,
+			@RequestParam Integer age,
 			@RequestParam MultipartFile excel
 	) {
 		try (InputStream in = excel.getInputStream()) {
