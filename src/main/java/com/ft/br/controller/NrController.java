@@ -11,6 +11,7 @@ import com.ft.util.JsonUtil;
 import com.ft.util.exception.FtException;
 import com.ft.util.model.RestResult;
 import com.ft.web.annotation.SignCheck;
+import com.ft.web.model.UserDO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +21,7 @@ import javax.validation.Valid;
 import java.io.InputStream;
 import java.util.Date;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.TimeUnit;
 
 /**
  * NrController
@@ -59,12 +61,23 @@ public class NrController {
 
 	@SignCheck
 	@PostMapping("/socket/push")
-	public String push(
+	public RestResult<UserDO> push(
 			@RequestParam Integer oid,
 			@RequestParam String msg
 	) {
 		OrderWebSocket.ORDER_WEB_SOCKET.entrySet().stream().filter(entry -> entry.getValue().equals(oid)).forEach(entry -> OrderWebSocket.sendMessage(entry.getKey(), msg));
-		return "success";
+
+		try {
+			TimeUnit.SECONDS.sleep(5);
+		} catch (InterruptedException e) {
+			Thread.currentThread().interrupt();
+		}
+
+		UserDO userDO = new UserDO();
+		userDO.setId(oid.longValue());
+		userDO.setUsername(msg);
+		userDO.setCreatedAt(new Date());
+		return RestResult.success(userDO);
 	}
 
 	@PostMapping("/upload")
