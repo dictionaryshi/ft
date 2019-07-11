@@ -1,16 +1,20 @@
 package com.ft.br;
 
+import com.ft.util.thread.ThreadPoolUtil;
 import com.ft.web.model.HttpParam;
 import com.ft.web.model.HttpUploadBO;
+import com.ft.web.util.HttpThreadUtil;
 import com.ft.web.util.HttpUtil;
+import com.ft.web.util.RsaCheckUtil;
 import org.apache.commons.io.IOUtils;
 import org.junit.Test;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import static com.ft.web.util.HttpUtil.*;
 
@@ -46,5 +50,34 @@ public class HttpTest {
 		httpParam.setFileMap(fileMap);
 
 		System.out.println(HttpUtil.upload(httpParam));
+	}
+
+	@Test
+	public void batchHttp() {
+		String url = "http://localhost:9001/socket/push";
+
+		String taskName = "批量push订单消息";
+
+		List<HttpParam> httpParams = new ArrayList<>();
+		for (int i = 1; i <= 10; i++) {
+			Map<String, String> params = new TreeMap<>();
+			params.put("oid", i + "");
+			params.put("msg", "签名测试+=%" + i);
+			RsaCheckUtil.initParam(params, "scy");
+
+			HttpParam httpParam = new HttpParam();
+			httpParam.setUrl(url);
+			httpParam.setConnectTimeout(10_000);
+			httpParam.setReadTimeout(10_000);
+			httpParam.setTextMap(params);
+			httpParam.setBatchKey(i + "");
+			httpParams.add(httpParam);
+		}
+
+		String poolName = "http批量线程池";
+		ExecutorService threadPool = ThreadPoolUtil.getThreadPool(poolName, 10, 20, 300, TimeUnit.SECONDS, 50, null);
+
+		Map<String, String> resultMap = HttpThreadUtil.batchPostHttp(taskName, httpParams, threadPool);
+		System.out.println(resultMap);
 	}
 }
