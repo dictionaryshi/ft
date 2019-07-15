@@ -35,10 +35,10 @@ public interface StockLogMapper {
 				sb.append("and `order_id` = '").append(stockLogDTO.getOrderId()).append("' ");
 			}
 			if (!StringUtil.isNull(stockLogDTO.getStartDate())) {
-				sb.append("and `updated_at` >= '").append(stockLogDTO.getStartDate()).append("' ");
+				sb.append("and `created_at` >= '").append(stockLogDTO.getStartDate()).append("' ");
 			}
 			if (!StringUtil.isNull(stockLogDTO.getEndDate())) {
-				sb.append("and `updated_at` <= '").append(stockLogDTO.getEndDate()).append("' ");
+				sb.append("and `created_at` <= '").append(stockLogDTO.getEndDate()).append("' ");
 			}
 
 			return sb.toString();

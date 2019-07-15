@@ -54,10 +54,10 @@ public interface OrderMapper {
 				sb.append("and `status` = ").append(orderDTO.getStatus()).append(" ");
 			}
 			if (!StringUtil.isNull(orderDTO.getStartDate())) {
-				sb.append("and `updated_at` >= '").append(orderDTO.getStartDate()).append("' ");
+				sb.append("and `created_at` >= '").append(orderDTO.getStartDate()).append("' ");
 			}
 			if (!StringUtil.isNull(orderDTO.getEndDate())) {
-				sb.append("and `updated_at` <= '").append(orderDTO.getEndDate()).append("' ");
+				sb.append("and `created_at` <= '").append(orderDTO.getEndDate()).append("' ");
 			}
 
 			return sb.toString();
