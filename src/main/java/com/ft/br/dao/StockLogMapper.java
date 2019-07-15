@@ -31,7 +31,7 @@ public interface StockLogMapper {
 			if (stockLogDTO.getGoodsId() != null) {
 				sb.append("and `goods_id` = ").append(stockLogDTO.getGoodsId()).append(" ");
 			}
-			if (!StringUtil.isNull(stockLogDTO.getOrderId())) {
+			if (stockLogDTO.getOrderId() != null) {
 				sb.append("and `order_id` = '").append(stockLogDTO.getOrderId()).append("' ");
 			}
 			if (!StringUtil.isNull(stockLogDTO.getStartDate())) {

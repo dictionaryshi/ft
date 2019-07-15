@@ -39,7 +39,7 @@ public class StockLogController {
 			@ApiImplicitParam(name = "current_page", value = "查询页码", required = true, dataType = SwaggerConstant.DATA_TYPE_INT, paramType = SwaggerConstant.PARAM_TYPE_QUERY, example = "0"),
 			@ApiImplicitParam(name = "type", value = "操作类型", dataType = SwaggerConstant.DATA_TYPE_INT, paramType = SwaggerConstant.PARAM_TYPE_QUERY, example = "0"),
 			@ApiImplicitParam(name = "goods_id", value = "商品id", dataType = SwaggerConstant.DATA_TYPE_INT, paramType = SwaggerConstant.PARAM_TYPE_QUERY, example = "0"),
-			@ApiImplicitParam(name = "order_id", value = "订单id", dataType = SwaggerConstant.DATA_TYPE_STRING, paramType = SwaggerConstant.PARAM_TYPE_QUERY),
+			@ApiImplicitParam(name = "order_id", value = "订单id", dataType = SwaggerConstant.DATA_TYPE_INT, paramType = SwaggerConstant.PARAM_TYPE_QUERY),
 			@ApiImplicitParam(name = "start_time", value = "开始时间", dataType = SwaggerConstant.DATA_TYPE_STRING, paramType = SwaggerConstant.PARAM_TYPE_QUERY),
 			@ApiImplicitParam(name = "end_time", value = "结束时间", dataType = SwaggerConstant.DATA_TYPE_STRING, paramType = SwaggerConstant.PARAM_TYPE_QUERY),
 	})
@@ -49,7 +49,7 @@ public class StockLogController {
 			@RequestParam(value = "current_page") int currentPage,
 			@RequestParam(value = "type", required = false, defaultValue = "0") short type,
 			@RequestParam(value = "goods_id", required = false, defaultValue = "0") long goodsId,
-			@RequestParam(value = "order_id", required = false) String orderId,
+			@RequestParam(value = "order_id", required = false) Long orderId,
 			@RequestParam(value = "start_time", required = false) String startTime,
 			@RequestParam(value = "end_time", required = false) String endTime
 	) {
@@ -73,7 +73,7 @@ public class StockLogController {
 	@ApiImplicitParams({
 			@ApiImplicitParam(name = "type", value = "操作类型", required = true, dataType = SwaggerConstant.DATA_TYPE_INT, paramType = SwaggerConstant.PARAM_TYPE_QUERY, example = "0"),
 			@ApiImplicitParam(name = "goods_id", value = "商品id", required = true, dataType = SwaggerConstant.DATA_TYPE_INT, paramType = SwaggerConstant.PARAM_TYPE_QUERY, example = "0"),
-			@ApiImplicitParam(name = "order_id", value = "订单id", dataType = SwaggerConstant.DATA_TYPE_STRING, paramType = SwaggerConstant.PARAM_TYPE_QUERY),
+			@ApiImplicitParam(name = "order_id", value = "订单id", dataType = SwaggerConstant.DATA_TYPE_INT, paramType = SwaggerConstant.PARAM_TYPE_QUERY),
 			@ApiImplicitParam(name = "goods_number", value = "商品数量", required = true, dataType = SwaggerConstant.DATA_TYPE_INT, paramType = SwaggerConstant.PARAM_TYPE_QUERY, example = "0"),
 			@ApiImplicitParam(name = "remark", value = "操作备注", dataType = SwaggerConstant.DATA_TYPE_STRING, paramType = SwaggerConstant.PARAM_TYPE_QUERY),
 	})
@@ -83,7 +83,7 @@ public class StockLogController {
 			HttpServletRequest request,
 			@RequestParam("type") short type,
 			@RequestParam("goods_id") long goodsId,
-			@RequestParam(value = "order_id", defaultValue = "0") String orderId,
+			@RequestParam(value = "order_id", defaultValue = "0") Long orderId,
 			@RequestParam("goods_number") int goodsNumber,
 			@RequestParam(value = "remark", required = false, defaultValue = "") String remark
 	) {

@@ -47,7 +47,7 @@ public interface OrderMapper {
 		private String query(OrderDTO orderDTO) {
 			StringBuilder sb = new StringBuilder();
 			sb.append("where 1 = 1 ");
-			if (!StringUtil.isNull(orderDTO.getId())) {
+			if (orderDTO.getId() != null) {
 				sb.append("and `id` = '").append(orderDTO.getId()).append("' ");
 			}
 			if (orderDTO.getStatus() != null) {
@@ -106,7 +106,7 @@ public interface OrderMapper {
 	 * @return 订单信息
 	 */
 	@Select("select * from `order` where `id` = #{id}")
-	OrderVO getOrderById(@Param("id") String id);
+	OrderVO getOrderById(@Param("id") Long id);
 
 	/**
 	 * 查询符合条件的数量

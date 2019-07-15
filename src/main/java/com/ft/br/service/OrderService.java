@@ -16,10 +16,8 @@ import com.ft.db.model.PageParam;
 import com.ft.db.model.PageResult;
 import com.ft.redis.base.ValueOperationsCache;
 import com.ft.redis.lock.RedisLock;
-import com.ft.redis.util.OrderNumberUtil;
 import com.ft.util.StringUtil;
 import com.ft.util.exception.FtException;
-import com.ft.util.model.RestResult;
 import com.ft.web.model.UserDO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -105,7 +103,7 @@ public class OrderService {
 	 * @param id 订单id
 	 * @return 订单信息
 	 */
-	public OrderVO get(String id) {
+	public OrderVO get(Long id) {
 		OrderVO order = orderMapper.getOrderById(id);
 		if (order == null) {
 			return new OrderVO();
@@ -121,7 +119,7 @@ public class OrderService {
 	 * @param id 订单id
 	 * @return 订单项
 	 */
-	public List<ItemVO> listItems(String id) {
+	public List<ItemVO> listItems(Long id) {
 		List<ItemVO> items = itemMapper.selectByOrderId(id);
 		if (items == null || items.isEmpty()) {
 			return new ArrayList<>();
@@ -151,7 +149,7 @@ public class OrderService {
 	public boolean add(OrderDTO orderDTO) {
 
 		OrderDO orderDO = new OrderDO();
-		String orderId = OrderNumberUtil.getRandomNumber(new RedisLock(valueOperationsCache));
+		Long orderId = null;
 		orderDO.setId(orderId);
 		orderDO.setOperator(orderDTO.getOperator());
 		orderDO.setStatus(OrderConstant.STATUS_READY);
@@ -182,7 +180,7 @@ public class OrderService {
 			}
 		}
 
-		String orderId = item.getOrderId();
+		Long orderId = item.getOrderId();
 		OrderVO order = orderMapper.getOrderById(orderId);
 		if (order == null) {
 			FtException.throwException("校验订单项失败, 订单不存在");
@@ -222,7 +220,7 @@ public class OrderService {
 	 * @return true:删除成功
 	 */
 	@UseMaster
-	public boolean deleteItem(long id, String orderId) {
+	public boolean deleteItem(long id, Long orderId) {
 		ItemDO item = new ItemDO();
 		item.setId(id);
 		item.setOrderId(orderId);
@@ -239,7 +237,7 @@ public class OrderService {
 	 * @return true:修改成功
 	 */
 	@UseMaster
-	public boolean updateItem(long id, int goodsNumber, String orderId) {
+	public boolean updateItem(long id, int goodsNumber, Long orderId) {
 		ItemDO itemDO = new ItemDO();
 		itemDO.setId(id);
 		itemDO.setGoodsNumber(goodsNumber);
@@ -260,7 +258,7 @@ public class OrderService {
 	 * @return true:添加成功
 	 */
 	@UseMaster
-	public boolean addItem(String orderId, long goodsId, int goodsNumber) {
+	public boolean addItem(Long orderId, long goodsId, int goodsNumber) {
 		ItemDO item = new ItemDO();
 		item.setOrderId(orderId);
 		item.setGoodsId(goodsId);
@@ -279,7 +277,7 @@ public class OrderService {
 	 * @return 订单确认结果
 	 */
 	@Transactional(value = DbConstant.DB_CONSIGN + DbConstant.TRAN_SACTION_MANAGER, propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED, rollbackFor = Throwable.class)
-	public boolean confirm(String orderId, long userId) {
+	public boolean confirm(Long orderId, long userId) {
 		OrderVO order = orderMapper.getOrderById(orderId);
 		if (order == null) {
 			FtException.throwException("订单确认失败, 订单不存在");
@@ -295,8 +293,8 @@ public class OrderService {
 			FtException.throwException("订单确认失败, 还没有添加订单详情");
 		}
 
-		String lockKey = StringUtil.append(StringUtil.REDIS_SPLIT, "confirm", "orderId", orderId);
-		Boolean flag = valueOperationsCache.setIfAbsent(lockKey, orderId, 5_000L);
+		String lockKey = StringUtil.append(StringUtil.REDIS_SPLIT, "confirm", "orderId", orderId + "");
+		Boolean flag = valueOperationsCache.setIfAbsent(lockKey, orderId + "", 5_000L);
 		if (!flag) {
 			FtException.throwException("订单确认失败, 请不要重复确认");
 		}
@@ -348,7 +346,7 @@ public class OrderService {
 	 * @return true:订单成功
 	 */
 	@UseMaster
-	public boolean success(String orderId, long userId) {
+	public boolean success(Long orderId, long userId) {
 		OrderVO order = orderMapper.getOrderById(orderId);
 		if (order == null) {
 			FtException.throwException("确认订单success失败, 订单不存在");
@@ -375,7 +373,7 @@ public class OrderService {
 	 * @return true:确认订单失败成功
 	 */
 	@UseMaster
-	public boolean fail(String orderId, long userId) {
+	public boolean fail(Long orderId, long userId) {
 
 		OrderVO order = orderMapper.getOrderById(orderId);
 		if (order == null) {
@@ -386,8 +384,8 @@ public class OrderService {
 			FtException.throwException("确认订单fail失败, 订单已经不是已确认状态了");
 		}
 
-		String lockKey = StringUtil.append(StringUtil.REDIS_SPLIT, "fail", "orderId", orderId);
-		Boolean flag = valueOperationsCache.setIfAbsent(lockKey, orderId, 5_000L);
+		String lockKey = StringUtil.append(StringUtil.REDIS_SPLIT, "fail", "orderId", orderId + "");
+		Boolean flag = valueOperationsCache.setIfAbsent(lockKey, orderId + "", 5_000L);
 		if (!flag) {
 			FtException.throwException("确认订单fail失败, 请不要重复确认");
 		}

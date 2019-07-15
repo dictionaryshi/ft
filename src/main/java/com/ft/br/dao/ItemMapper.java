@@ -61,5 +61,5 @@ public interface ItemMapper {
 	 * @return 订单项集合
 	 */
 	@Select("select * from `item` where order_id = #{orderId} order by `created_at` asc")
-	List<ItemVO> selectByOrderId(@Param("orderId") String orderId);
+	List<ItemVO> selectByOrderId(@Param("orderId") Long orderId);
 }
