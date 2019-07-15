@@ -44,7 +44,7 @@ public class OrderController {
 	 * @return 当前页对应的订单数据
 	 */
 	@ApiImplicitParams({
-			@ApiImplicitParam(name = "id", value = "订单id", dataType = SwaggerConstant.DATA_TYPE_STRING, paramType = SwaggerConstant.PARAM_TYPE_QUERY),
+			@ApiImplicitParam(name = "id", value = "订单id", dataType = SwaggerConstant.DATA_TYPE_INT, paramType = SwaggerConstant.PARAM_TYPE_QUERY),
 			@ApiImplicitParam(name = "status", value = "订单状态", dataType = SwaggerConstant.DATA_TYPE_INT, paramType = SwaggerConstant.PARAM_TYPE_QUERY, example = "0"),
 			@ApiImplicitParam(name = "start", value = "开始时间", dataType = SwaggerConstant.DATA_TYPE_STRING, paramType = SwaggerConstant.PARAM_TYPE_QUERY),
 			@ApiImplicitParam(name = "end", value = "结束时间", dataType = SwaggerConstant.DATA_TYPE_STRING, paramType = SwaggerConstant.PARAM_TYPE_QUERY),
