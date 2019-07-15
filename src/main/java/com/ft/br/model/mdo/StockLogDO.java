@@ -39,7 +39,7 @@ public class StockLogDO {
 	/**
 	 * 订单号
 	 */
-	private String orderId;
+	private Long orderId;
 	/**
 	 * 备注
 	 */

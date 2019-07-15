@@ -13,7 +13,7 @@ import java.util.Date;
 public class ItemDO {
 
 	private Long id;
-	private String orderId;
+	private Long orderId;
 	private Long goodsId;
 	private Integer goodsNumber;
 	private Date createdAt;

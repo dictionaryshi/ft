@@ -53,7 +53,7 @@ public class OrderController {
 	@RequestMapping(value = "/list", method = RequestMethod.POST)
 	@LoginCheck
 	public String list(
-			@RequestParam(value = "id", required = false, defaultValue = "0") String id,
+			@RequestParam(value = "id", required = false, defaultValue = "0") Long id,
 			@RequestParam(value = "status", required = false, defaultValue = "99") short status,
 			@RequestParam(value = "start", required = false) String start,
 			@RequestParam(value = "end", required = false) String end,
@@ -61,7 +61,7 @@ public class OrderController {
 	) {
 		PageParam pageParam = new PageParam(currentPage, 10);
 
-		String defaultId = "0";
+		Long defaultId = 0L;
 		OrderDTO orderDTO = new OrderDTO();
 		if (!defaultId.equals(id)) {
 			orderDTO.setId(id);
@@ -90,11 +90,11 @@ public class OrderController {
 	 * @return 订单信息
 	 */
 	@ApiImplicitParams({
-			@ApiImplicitParam(name = "id", value = "订单id", required = true, dataType = SwaggerConstant.DATA_TYPE_STRING, paramType = SwaggerConstant.PARAM_TYPE_QUERY),
+			@ApiImplicitParam(name = "id", value = "订单id", required = true, dataType = SwaggerConstant.DATA_TYPE_INT, paramType = SwaggerConstant.PARAM_TYPE_QUERY),
 	})
 	@RequestMapping(value = "/get", method = RequestMethod.POST)
 	@LoginCheck
-	public String get(@RequestParam(value = "id") String id) {
+	public String get(@RequestParam(value = "id") Long id) {
 		return JsonUtil.object2Json(RestResult.success(orderService.get(id)));
 	}
 
@@ -106,11 +106,11 @@ public class OrderController {
 	 * @return 订单项
 	 */
 	@ApiImplicitParams({
-			@ApiImplicitParam(name = "id", value = "订单id", required = true, dataType = SwaggerConstant.DATA_TYPE_STRING, paramType = SwaggerConstant.PARAM_TYPE_QUERY),
+			@ApiImplicitParam(name = "id", value = "订单id", required = true, dataType = SwaggerConstant.DATA_TYPE_INT, paramType = SwaggerConstant.PARAM_TYPE_QUERY),
 	})
 	@RequestMapping(value = "/list-items", method = RequestMethod.POST)
 	@LoginCheck
-	public String listItems(@RequestParam(value = "id") String id) {
+	public String listItems(@RequestParam(value = "id") Long id) {
 		return JsonUtil.object2Json(RestResult.success(orderService.listItems(id)));
 	}
 
@@ -168,7 +168,7 @@ public class OrderController {
 	 * @return 修改结果
 	 */
 	@ApiImplicitParams({
-			@ApiImplicitParam(name = "id", value = "订单id", required = true, dataType = SwaggerConstant.DATA_TYPE_STRING, paramType = SwaggerConstant.PARAM_TYPE_QUERY),
+			@ApiImplicitParam(name = "id", value = "订单id", required = true, dataType = SwaggerConstant.DATA_TYPE_INT, paramType = SwaggerConstant.PARAM_TYPE_QUERY),
 			@ApiImplicitParam(name = "total_amount", value = "订单总金额", dataType = SwaggerConstant.DATA_TYPE_INT, paramType = SwaggerConstant.PARAM_TYPE_QUERY, example = "0"),
 			@ApiImplicitParam(name = "username", value = "客户姓名", dataType = SwaggerConstant.DATA_TYPE_STRING, paramType = SwaggerConstant.PARAM_TYPE_QUERY),
 			@ApiImplicitParam(name = "phone", value = "客户电话", dataType = SwaggerConstant.DATA_TYPE_STRING, paramType = SwaggerConstant.PARAM_TYPE_QUERY),
@@ -179,7 +179,7 @@ public class OrderController {
 	@LoginCheck
 	public String update(
 			HttpServletRequest request,
-			@RequestParam(value = "id") String id,
+			@RequestParam(value = "id") Long id,
 			@RequestParam(value = "total_amount", required = false, defaultValue = "0.0") double totalAmount,
 			@RequestParam(value = "username", required = false) String username,
 			@RequestParam(value = "phone", required = false) String phone,
@@ -213,14 +213,14 @@ public class OrderController {
 	 * @return 添加订单项结果
 	 */
 	@ApiImplicitParams({
-			@ApiImplicitParam(name = "order_id", value = "订单id", required = true, dataType = SwaggerConstant.DATA_TYPE_STRING, paramType = SwaggerConstant.PARAM_TYPE_QUERY),
+			@ApiImplicitParam(name = "order_id", value = "订单id", required = true, dataType = SwaggerConstant.DATA_TYPE_INT, paramType = SwaggerConstant.PARAM_TYPE_QUERY),
 			@ApiImplicitParam(name = "goods_id", value = "商品id", required = true, dataType = SwaggerConstant.DATA_TYPE_INT, paramType = SwaggerConstant.PARAM_TYPE_QUERY, example = "0"),
 			@ApiImplicitParam(name = "goods_number", value = "商品数量", required = true, dataType = SwaggerConstant.DATA_TYPE_INT, paramType = SwaggerConstant.PARAM_TYPE_QUERY, example = "0"),
 	})
 	@LoginCheck
 	@RequestMapping(value = "/add-item", method = RequestMethod.POST)
 	public String addItem(
-			@RequestParam("order_id") String orderId,
+			@RequestParam("order_id") Long orderId,
 			@RequestParam("goods_id") long goodsId,
 			@RequestParam("goods_number") int goodsNumber
 	) {
@@ -236,13 +236,13 @@ public class OrderController {
 	 * @return 删除结果
 	 */
 	@ApiImplicitParams({
-			@ApiImplicitParam(name = "order_id", value = "订单id", required = true, dataType = SwaggerConstant.DATA_TYPE_STRING, paramType = SwaggerConstant.PARAM_TYPE_QUERY),
+			@ApiImplicitParam(name = "order_id", value = "订单id", required = true, dataType = SwaggerConstant.DATA_TYPE_INT, paramType = SwaggerConstant.PARAM_TYPE_QUERY),
 			@ApiImplicitParam(name = "id", value = "订单项id", required = true, dataType = SwaggerConstant.DATA_TYPE_INT, paramType = SwaggerConstant.PARAM_TYPE_QUERY, example = "0"),
 	})
 	@RequestMapping(value = "/delete-item", method = RequestMethod.POST)
 	@LoginCheck
 	public String deleteItem(
-			@RequestParam("order_id") String orderId,
+			@RequestParam("order_id") Long orderId,
 			@RequestParam("id") long id
 	) {
 		boolean flag = orderService.deleteItem(id, orderId);
@@ -258,14 +258,14 @@ public class OrderController {
 	 * @return 修改订单项结果
 	 */
 	@ApiImplicitParams({
-			@ApiImplicitParam(name = "order_id", value = "订单id", required = true, dataType = SwaggerConstant.DATA_TYPE_STRING, paramType = SwaggerConstant.PARAM_TYPE_QUERY),
+			@ApiImplicitParam(name = "order_id", value = "订单id", required = true, dataType = SwaggerConstant.DATA_TYPE_INT, paramType = SwaggerConstant.PARAM_TYPE_QUERY),
 			@ApiImplicitParam(name = "goods_number", value = "商品数量", required = true, dataType = SwaggerConstant.DATA_TYPE_INT, paramType = SwaggerConstant.PARAM_TYPE_QUERY, example = "0"),
 			@ApiImplicitParam(name = "id", value = "订单项id", required = true, dataType = SwaggerConstant.DATA_TYPE_INT, paramType = SwaggerConstant.PARAM_TYPE_QUERY, example = "0"),
 	})
 	@RequestMapping(value = "/update-item", method = RequestMethod.POST)
 	@LoginCheck
 	public String updateItem(
-			@RequestParam("order_id") String orderId,
+			@RequestParam("order_id") Long orderId,
 			@RequestParam(value = "goods_number") int goodsNumber,
 			@RequestParam(value = "id") long id
 	) {
@@ -281,13 +281,13 @@ public class OrderController {
 	 * @return 确认订单结果
 	 */
 	@ApiImplicitParams({
-			@ApiImplicitParam(name = "order_id", value = "订单id", required = true, dataType = SwaggerConstant.DATA_TYPE_STRING, paramType = SwaggerConstant.PARAM_TYPE_QUERY),
+			@ApiImplicitParam(name = "order_id", value = "订单id", required = true, dataType = SwaggerConstant.DATA_TYPE_INT, paramType = SwaggerConstant.PARAM_TYPE_QUERY),
 	})
 	@LoginCheck
 	@RequestMapping(value = "/confirm", method = RequestMethod.POST)
 	public String confirm(
 			HttpServletRequest request,
-			@RequestParam("order_id") String orderId
+			@RequestParam("order_id") Long orderId
 	) {
 		long userId = LoginUtil.getLoginUser(request).getId();
 		boolean flag = orderService.confirm(orderId, userId);
@@ -301,13 +301,13 @@ public class OrderController {
 	 * @return 订单确认结果
 	 */
 	@ApiImplicitParams({
-			@ApiImplicitParam(name = "order_id", value = "订单id", required = true, dataType = SwaggerConstant.DATA_TYPE_STRING, paramType = SwaggerConstant.PARAM_TYPE_QUERY),
+			@ApiImplicitParam(name = "order_id", value = "订单id", required = true, dataType = SwaggerConstant.DATA_TYPE_INT, paramType = SwaggerConstant.PARAM_TYPE_QUERY),
 	})
 	@LoginCheck
 	@RequestMapping(value = "/success", method = RequestMethod.POST)
 	public String success(
 			HttpServletRequest request,
-			@RequestParam("order_id") String orderId
+			@RequestParam("order_id") Long orderId
 	) {
 		long userId = LoginUtil.getLoginUser(request).getId();
 		boolean flag = orderService.success(orderId, userId);
@@ -321,13 +321,13 @@ public class OrderController {
 	 * @return 订单确认失败结果
 	 */
 	@ApiImplicitParams({
-			@ApiImplicitParam(name = "order_id", value = "订单id", required = true, dataType = SwaggerConstant.DATA_TYPE_STRING, paramType = SwaggerConstant.PARAM_TYPE_QUERY),
+			@ApiImplicitParam(name = "order_id", value = "订单id", required = true, dataType = SwaggerConstant.DATA_TYPE_INT, paramType = SwaggerConstant.PARAM_TYPE_QUERY),
 	})
 	@LoginCheck
 	@RequestMapping(value = "/fail", method = RequestMethod.POST)
 	public String fail(
 			HttpServletRequest request,
-			@RequestParam("order_id") String orderId
+			@RequestParam("order_id") Long orderId
 	) {
 		long userId = LoginUtil.getLoginUser(request).getId();
 		boolean flag = orderService.fail(orderId, userId);

@@ -16,7 +16,7 @@ public class OrderDO {
 	/**
 	 * 订单号
 	 */
-	private String id;
+	private Long id;
 	/**
 	 * 操作人
 	 */
