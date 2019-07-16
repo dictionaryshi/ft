@@ -31,6 +31,7 @@ import java.io.ByteArrayOutputStream;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 登录相关api
@@ -107,7 +108,7 @@ public class LoginRestController {
 		String codeId = CommonUtil.get32UUID();
 
 		String codeRedisKey = StringUtil.append(StringUtil.REDIS_SPLIT, LoginConstant.REDIS_VERIFICATION_CODE, codeId);
-		boolean flag = valueOperationsCache.setIfAbsent(codeRedisKey, code, 300_000L);
+		boolean flag = valueOperationsCache.setIfAbsent(codeRedisKey, code, 300_000L, TimeUnit.MILLISECONDS);
 		if (!flag) {
 			FtException.throwException("验证码存储异常");
 		}

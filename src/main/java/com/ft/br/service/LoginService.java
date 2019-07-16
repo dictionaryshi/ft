@@ -18,6 +18,8 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.concurrent.TimeUnit;
+
 /**
  * 登录业务逻辑
  *
@@ -70,7 +72,7 @@ public class LoginService {
 
 		String token = CommonUtil.get32UUID();
 		String redisTokenKey = StringUtil.append(StringUtil.REDIS_SPLIT, LoginConstant.REDIS_LOGIN_TOKEN, token);
-		boolean flag = valueOperationsCache.setIfAbsent(redisTokenKey, JsonUtil.object2Json(userDO), 3600_000L);
+		boolean flag = valueOperationsCache.setIfAbsent(redisTokenKey, JsonUtil.object2Json(userDO), 3600_000L, TimeUnit.MILLISECONDS);
 		if (!flag) {
 			FtException.throwException("redis_login_token 系统异常");
 		}

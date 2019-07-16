@@ -45,7 +45,7 @@ public class RedisTest {
 	 */
 	@Test
 	public void expire() {
-		boolean flag = valueOperationsCache.expire(LOGIN_ID, 30_000L);
+		boolean flag = valueOperationsCache.expire(LOGIN_ID, 30_000L, TimeUnit.MILLISECONDS);
 		System.out.println(flag);
 	}
 
@@ -63,7 +63,7 @@ public class RedisTest {
 	 */
 	@Test
 	public void getExpire() {
-		long milliSeconds = valueOperationsCache.getExpire(LOGIN_ID);
+		long milliSeconds = valueOperationsCache.getExpire(LOGIN_ID, TimeUnit.MILLISECONDS);
 		System.out.println(milliSeconds);
 	}
 
@@ -180,7 +180,7 @@ public class RedisTest {
 	 */
 	@Test
 	public void setEX() {
-		valueOperationsCache.set(LOGIN_ID, "13264232894", 60_000L);
+		valueOperationsCache.set(LOGIN_ID, "13264232894", 60_000L, TimeUnit.MILLISECONDS);
 	}
 
 	/**
@@ -197,7 +197,7 @@ public class RedisTest {
 	 */
 	@Test
 	public void setNXWithExpire() {
-		boolean flag = valueOperationsCache.setIfAbsent(LOGIN_ID, "13264232894", 60_000L);
+		boolean flag = valueOperationsCache.setIfAbsent(LOGIN_ID, "13264232894", 60_000L, TimeUnit.MILLISECONDS);
 		System.out.println(flag);
 	}
 }
