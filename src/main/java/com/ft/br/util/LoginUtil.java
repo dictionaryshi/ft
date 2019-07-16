@@ -11,6 +11,7 @@ import com.ft.web.util.WebUtil;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 登录工具类
@@ -44,7 +45,7 @@ public class LoginUtil {
 			FtException.throwException("签名错误");
 		}
 
-		boolean flag = valueOperationsCache.expire(redisTokenKey, 3600_000L);
+		boolean flag = valueOperationsCache.expire(redisTokenKey, 3600_000L, TimeUnit.MILLISECONDS);
 		log.info("用户token续时==>{}", flag);
 
 		return JsonUtil.json2Object(userJson, UserDO.class);

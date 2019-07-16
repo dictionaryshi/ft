@@ -15,7 +15,7 @@ import java.util.Map;
 @RunWith(SpringRunner.class)
 public class HashOperationsCacheTest {
 	@Autowired
-	private HashOperationsCache<String, String, String> hashOperationsCache;
+	private HashOperationsCache<String, String, String, String> hashOperationsCache;
 
 	public static final String USER_MAP = "user_map";
 

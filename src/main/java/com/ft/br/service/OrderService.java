@@ -28,6 +28,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 订单业务类
@@ -294,7 +295,7 @@ public class OrderService {
 		}
 
 		String lockKey = StringUtil.append(StringUtil.REDIS_SPLIT, "confirm", "orderId", orderId + "");
-		Boolean flag = valueOperationsCache.setIfAbsent(lockKey, orderId + "", 5_000L);
+		Boolean flag = valueOperationsCache.setIfAbsent(lockKey, orderId + "", 5_000L, TimeUnit.MILLISECONDS);
 		if (!flag) {
 			FtException.throwException("订单确认失败, 请不要重复确认");
 		}
@@ -385,7 +386,7 @@ public class OrderService {
 		}
 
 		String lockKey = StringUtil.append(StringUtil.REDIS_SPLIT, "fail", "orderId", orderId + "");
-		Boolean flag = valueOperationsCache.setIfAbsent(lockKey, orderId + "", 5_000L);
+		Boolean flag = valueOperationsCache.setIfAbsent(lockKey, orderId + "", 5_000L, TimeUnit.MILLISECONDS);
 		if (!flag) {
 			FtException.throwException("确认订单fail失败, 请不要重复确认");
 		}
