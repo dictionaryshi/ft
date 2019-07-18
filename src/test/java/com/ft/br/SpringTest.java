@@ -3,6 +3,7 @@ package com.ft.br;
 import com.ft.util.JsonUtil;
 import com.ft.util.SpringContextUtil;
 import com.ft.web.model.UserDO;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,24 +21,28 @@ public class SpringTest {
 	@Autowired
 	private ApplicationContext applicationContext;
 
+	@Before
+	public void before() {
+		SpringContextUtil.setApplicationContext(applicationContext);
+	}
+
 	@Test
 	public void count() {
-
 		// 遍历容器中所有bean的名称
-		SpringContextUtil.setApplicationContext(applicationContext);
 		List<String> allBeanNames = SpringContextUtil.getBeanDefinitionNames();
 		for (String beanName : allBeanNames) {
 			System.out.println(beanName);
 		}
 
+		System.out.println("---");
+
 		// 容器中bean的数量
-		int beanCount = applicationContext.getBeanDefinitionCount();
+		int beanCount = SpringContextUtil.getBeanDefinitionCount();
 		System.out.println(beanCount);
 	}
 
 	@Test
 	public void getEnvironment() {
-		SpringContextUtil.setApplicationContext(applicationContext);
 		// 获取配置文件中的内容
 		String cookieDomain = SpringContextUtil.getProperty("cookieDomain");
 		System.out.println(cookieDomain);
@@ -45,7 +50,6 @@ public class SpringTest {
 
 	@Test
 	public void isSingleton() {
-		SpringContextUtil.setApplicationContext(applicationContext);
 		boolean isSingleton = SpringContextUtil.isSingleton("scy");
 		System.out.println(isSingleton);
 	}
@@ -53,14 +57,14 @@ public class SpringTest {
 	@Test
 	public void bean() {
 		// 查看指定bean在容器中的名字
-		String[] userNames = applicationContext.getBeanNamesForType(UserDO.class);
+		String[] userNames = SpringContextUtil.getBeanNamesForType(UserDO.class);
 		for (String userName : userNames) {
 			System.out.println(userName);
 		}
 
-		System.out.println("-----");
+		System.out.println("---");
 
-		Map<String, UserDO> userMap = applicationContext.getBeansOfType(UserDO.class);
+		Map<String, UserDO> userMap = SpringContextUtil.getBeansOfType(UserDO.class);
 		System.out.println(JsonUtil.object2Json(userMap));
 	}
 }
