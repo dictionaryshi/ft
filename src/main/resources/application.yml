@@ -1,4 +1,6 @@
 spring:
+  profiles:
+    active: @mvn.active@
   mail:
     username: 903031015@qq.com
     password: wxkalbwatwsvbbdg
