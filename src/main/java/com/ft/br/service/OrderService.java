@@ -5,12 +5,12 @@ import com.ft.br.constant.StockLogTypeDetailEnum;
 import com.ft.br.constant.StockLogTypeEnum;
 import com.ft.br.dao.*;
 import com.ft.br.model.dto.OrderDTO;
-import com.ft.br.model.mdo.ItemDO;
 import com.ft.br.model.mdo.OrderDO;
 import com.ft.br.model.mdo.StockLogDO;
 import com.ft.br.model.vo.ItemVO;
 import com.ft.br.model.vo.OrderVO;
 import com.ft.dao.stock.model.GoodsDO;
+import com.ft.dao.stock.model.ItemDO;
 import com.ft.db.annotation.UseMaster;
 import com.ft.db.constant.DbConstant;
 import com.ft.db.model.PageParam;
@@ -226,7 +226,7 @@ public class OrderService {
 	 * @return true:删除成功
 	 */
 	@UseMaster
-	public boolean deleteItem(long id, Long orderId) {
+	public boolean deleteItem(int id, Long orderId) {
 		ItemDO item = new ItemDO();
 		item.setId(id);
 		item.setOrderId(orderId);
@@ -243,7 +243,7 @@ public class OrderService {
 	 * @return true:修改成功
 	 */
 	@UseMaster
-	public boolean updateItem(long id, int goodsNumber, Long orderId) {
+	public boolean updateItem(int id, int goodsNumber, Long orderId) {
 		ItemDO itemDO = new ItemDO();
 		itemDO.setId(id);
 		itemDO.setGoodsNumber(goodsNumber);
@@ -264,7 +264,7 @@ public class OrderService {
 	 * @return true:添加成功
 	 */
 	@UseMaster
-	public boolean addItem(Long orderId, long goodsId, int goodsNumber) {
+	public boolean addItem(Long orderId, int goodsId, int goodsNumber) {
 		ItemDO item = new ItemDO();
 		item.setOrderId(orderId);
 		item.setGoodsId(goodsId);
@@ -321,7 +321,7 @@ public class OrderService {
 			stockLogDO.setOperator(userId);
 			stockLogDO.setType(StockLogTypeEnum.OUT.getType());
 			stockLogDO.setTypeDetail(StockLogTypeDetailEnum.OUT_ORDER.getTypeDetail());
-			stockLogDO.setGoodsId(item.getGoodsId());
+			stockLogDO.setGoodsId(item.getGoodsId().longValue());
 			stockLogDO.setGoodsNumber(item.getGoodsNumber());
 			stockLogDO.setOrderId(orderId);
 			stockLogDO.setRemark("");
@@ -411,7 +411,7 @@ public class OrderService {
 			stockLogDO.setOperator(userId);
 			stockLogDO.setType(StockLogTypeEnum.IN.getType());
 			stockLogDO.setTypeDetail(StockLogTypeDetailEnum.IN_ORDER.getTypeDetail());
-			stockLogDO.setGoodsId(item.getGoodsId());
+			stockLogDO.setGoodsId(item.getGoodsId().longValue());
 			stockLogDO.setGoodsNumber(item.getGoodsNumber());
 			stockLogDO.setOrderId(orderId);
 			stockLogDO.setRemark("");
