@@ -1,7 +1,8 @@
 package com.ft.br.service;
 
 import com.ft.br.constant.OrderStatusEnum;
-import com.ft.br.constant.StockConstant;
+import com.ft.br.constant.StockLogTypeDetailEnum;
+import com.ft.br.constant.StockLogTypeEnum;
 import com.ft.br.dao.*;
 import com.ft.br.model.dto.OrderDTO;
 import com.ft.br.model.mdo.GoodsDO;
@@ -16,7 +17,6 @@ import com.ft.db.model.PageParam;
 import com.ft.db.model.PageResult;
 import com.ft.redis.base.ValueOperationsCache;
 import com.ft.util.StringUtil;
-import com.ft.util.constant.OrderConstant;
 import com.ft.util.exception.FtException;
 import com.ft.web.model.UserDO;
 import lombok.extern.slf4j.Slf4j;
@@ -319,8 +319,8 @@ public class OrderService {
 
 			StockLogDO stockLogDO = new StockLogDO();
 			stockLogDO.setOperator(userId);
-			stockLogDO.setType(StockConstant.TYPE_OUT);
-			stockLogDO.setTypeDetail(StockConstant.TYPE_DETAIL_OUT_ORDER);
+			stockLogDO.setType(StockLogTypeEnum.OUT.getType());
+			stockLogDO.setTypeDetail(StockLogTypeDetailEnum.OUT_ORDER.getTypeDetail());
 			stockLogDO.setGoodsId(item.getGoodsId());
 			stockLogDO.setGoodsNumber(item.getGoodsNumber());
 			stockLogDO.setOrderId(orderId);
@@ -409,8 +409,8 @@ public class OrderService {
 
 			StockLogDO stockLogDO = new StockLogDO();
 			stockLogDO.setOperator(userId);
-			stockLogDO.setType(StockConstant.TYPE_IN);
-			stockLogDO.setTypeDetail(StockConstant.TYPE_DETAIL_IN_ORDER);
+			stockLogDO.setType(StockLogTypeEnum.IN.getType());
+			stockLogDO.setTypeDetail(StockLogTypeDetailEnum.IN_ORDER.getTypeDetail());
 			stockLogDO.setGoodsId(item.getGoodsId());
 			stockLogDO.setGoodsNumber(item.getGoodsNumber());
 			stockLogDO.setOrderId(orderId);

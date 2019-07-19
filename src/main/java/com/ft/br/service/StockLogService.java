@@ -1,6 +1,7 @@
 package com.ft.br.service;
 
-import com.ft.br.constant.StockConstant;
+import com.ft.br.constant.StockLogTypeDetailEnum;
+import com.ft.br.constant.StockLogTypeEnum;
 import com.ft.br.dao.GoodsMapper;
 import com.ft.br.dao.OrderMapper;
 import com.ft.br.dao.StockLogMapper;
@@ -17,7 +18,6 @@ import com.ft.redis.base.ValueOperationsCache;
 import com.ft.redis.lock.RedisLock;
 import com.ft.util.StringUtil;
 import com.ft.util.exception.FtException;
-import com.ft.util.model.RestResult;
 import com.ft.web.model.UserDO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -93,7 +93,12 @@ public class StockLogService {
 				stockLog.setOperatorName(user.getUsername());
 			}
 
-			stockLog.setTypeCH(StockConstant.TYPE_MAP.get(stockLog.getType()));
+			String typeCh = null;
+			StockLogTypeEnum stockLogTypeEnum = StockLogTypeEnum.getByType(stockLog.getType());
+			if (stockLogTypeEnum != null) {
+				typeCh = stockLogTypeEnum.getMessage();
+			}
+			stockLog.setTypeCH(typeCh);
 
 			long goodsId = stockLog.getGoodsId();
 			GoodsDO goodsDO = goodsMapper.getGoodsById(goodsId);
@@ -112,7 +117,7 @@ public class StockLogService {
 	@Transactional(value = DbConstant.DB_CONSIGN + DbConstant.TRAN_SACTION_MANAGER, propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED, rollbackFor = Throwable.class)
 	public boolean storage(StockLogDO stockLogDO) {
 		// 出入库类型
-		short type = stockLogDO.getType();
+		Integer type = stockLogDO.getType();
 		// 商品id
 		long goodsId = stockLogDO.getGoodsId();
 		// 出入库商品数量
@@ -135,12 +140,12 @@ public class StockLogService {
 			}
 		}
 
-		if (type == StockConstant.TYPE_IN) {
+		if (type == StockLogTypeEnum.IN.getType().shortValue()) {
 			// 入库操作
 			goodsMapper.updateNumber(goodsId, goodsNumber);
-			stockLogDO.setTypeDetail(StockConstant.TYPE_DETAIL_IN_PERSON);
+			stockLogDO.setTypeDetail(StockLogTypeDetailEnum.IN_PERSON.getTypeDetail());
 			stockLogMapper.insert(stockLogDO);
-		} else if (type == StockConstant.TYPE_OUT) {
+		} else if (type == StockLogTypeEnum.OUT.getType().shortValue()) {
 			// 出库操作
 			if (goodsNumber > goodsDO.getNumber()) {
 				FtException.throwException("出库失败, 商品库存数量不足");
@@ -152,7 +157,7 @@ public class StockLogService {
 			goodsDO = goodsMapper.getGoodsById(goodsId);
 			if (goodsNumber <= goodsDO.getNumber()) {
 				goodsMapper.updateNumber(goodsId, goodsNumber * -1);
-				stockLogDO.setTypeDetail(StockConstant.TYPE_DETAIL_OUT_PERSON);
+				stockLogDO.setTypeDetail(StockLogTypeDetailEnum.OUT_PERSON.getTypeDetail());
 				stockLogMapper.insert(stockLogDO);
 
 				redisLock.unlock(lockKey);

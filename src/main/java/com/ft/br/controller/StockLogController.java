@@ -47,7 +47,7 @@ public class StockLogController {
 	@LoginCheck
 	public String list(
 			@RequestParam(value = "current_page") int currentPage,
-			@RequestParam(value = "type", required = false, defaultValue = "0") short type,
+			@RequestParam(value = "type", required = false, defaultValue = "0") Integer type,
 			@RequestParam(value = "goods_id", required = false, defaultValue = "0") long goodsId,
 			@RequestParam(value = "order_id", required = false) Long orderId,
 			@RequestParam(value = "start_time", required = false) String startTime,
@@ -81,7 +81,7 @@ public class StockLogController {
 	@LoginCheck
 	public String storage(
 			HttpServletRequest request,
-			@RequestParam("type") short type,
+			@RequestParam("type") Integer type,
 			@RequestParam("goods_id") long goodsId,
 			@RequestParam(value = "order_id", defaultValue = "0") Long orderId,
 			@RequestParam("goods_number") int goodsNumber,
