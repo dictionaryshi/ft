@@ -1,7 +1,7 @@
 package com.ft.br.service;
 
 import com.ft.br.dao.CategoryMapper;
-import com.ft.br.model.mdo.CategoryDO;
+import com.ft.dao.stock.model.CategoryDO;
 import com.ft.db.annotation.UseMaster;
 import com.ft.util.exception.FtException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,7 +56,7 @@ public class CategoryService {
 	 * @return true:修改成功
 	 */
 	@UseMaster
-	public boolean update(short id, String name) {
+	public boolean update(int id, String name) {
 		CategoryDO categoryDO = categoryMapper.getCategoryById(id);
 		if (categoryDO == null) {
 			FtException.throwException("分类信息不存在");

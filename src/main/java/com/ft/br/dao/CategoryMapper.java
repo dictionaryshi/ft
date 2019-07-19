@@ -1,6 +1,6 @@
 package com.ft.br.dao;
 
-import com.ft.br.model.mdo.CategoryDO;
+import com.ft.dao.stock.model.CategoryDO;
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Component;
 
@@ -22,7 +22,7 @@ public interface CategoryMapper {
 	 * @return 分类信息
 	 */
 	@Select("select * from `category` where id = #{id}")
-	CategoryDO getCategoryById(@Param("id") short id);
+	CategoryDO getCategoryById(@Param("id") int id);
 
 	/**
 	 * 根据主键修改分类信息
