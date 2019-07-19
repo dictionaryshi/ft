@@ -1,5 +1,6 @@
 package com.ft.br.dao;
 
+import com.ft.dao.stock.mapper.CategoryDOMapper;
 import com.ft.dao.stock.model.CategoryDO;
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Component;
@@ -13,34 +14,7 @@ import java.util.List;
  */
 @Mapper
 @Component
-public interface CategoryMapper {
-
-	/**
-	 * 根据主键查询分类信息
-	 *
-	 * @param id 主键
-	 * @return 分类信息
-	 */
-	@Select("select * from `category` where id = #{id}")
-	CategoryDO getCategoryById(@Param("id") int id);
-
-	/**
-	 * 根据主键修改分类信息
-	 *
-	 * @param categoryDO 修改分类
-	 * @return 1:修改成功
-	 */
-	@Update("update `category` set `name` = #{name} where id = #{id}")
-	int update(CategoryDO categoryDO);
-
-	/**
-	 * 添加分类
-	 *
-	 * @param categoryDO 分类DO
-	 * @return 1:添加成功
-	 */
-	@Insert("insert into `category` (`name`) values (#{name})")
-	int insert(CategoryDO categoryDO);
+public interface CategoryMapper extends CategoryDOMapper {
 
 	/**
 	 * 查询所有分类数据
