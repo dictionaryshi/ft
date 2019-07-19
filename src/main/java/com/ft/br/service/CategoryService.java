@@ -45,7 +45,7 @@ public class CategoryService {
 		categoryDO = new CategoryDO();
 		categoryDO.setName(name);
 
-		return categoryMapper.insert(categoryDO) == 1;
+		return categoryMapper.insertSelective(categoryDO) == 1;
 	}
 
 	/**
@@ -57,7 +57,7 @@ public class CategoryService {
 	 */
 	@UseMaster
 	public boolean update(int id, String name) {
-		CategoryDO categoryDO = categoryMapper.getCategoryById(id);
+		CategoryDO categoryDO = categoryMapper.selectByPrimaryKey(id);
 		if (categoryDO == null) {
 			FtException.throwException("分类信息不存在");
 		}
@@ -67,7 +67,7 @@ public class CategoryService {
 		categoryDO = new CategoryDO();
 		categoryDO.setId(id);
 		categoryDO.setName(name);
-		return categoryMapper.update(categoryDO) == 1;
+		return categoryMapper.updateByPrimaryKeySelective(categoryDO) == 1;
 	}
 
 	/**
@@ -76,7 +76,7 @@ public class CategoryService {
 	 * @param id 分类主键
 	 * @return 分类信息
 	 */
-	public CategoryDO get(short id) {
-		return categoryMapper.getCategoryById(id);
+	public CategoryDO get(int id) {
+		return categoryMapper.selectByPrimaryKey(id);
 	}
 }
