@@ -1,6 +1,6 @@
 package com.ft.br.service;
 
-import com.ft.br.constant.OrderConstant;
+import com.ft.br.constant.OrderStatusEnum;
 import com.ft.br.constant.StockConstant;
 import com.ft.br.dao.*;
 import com.ft.br.model.dto.OrderDTO;
@@ -15,8 +15,8 @@ import com.ft.db.constant.DbConstant;
 import com.ft.db.model.PageParam;
 import com.ft.db.model.PageResult;
 import com.ft.redis.base.ValueOperationsCache;
-import com.ft.redis.lock.RedisLock;
 import com.ft.util.StringUtil;
+import com.ft.util.constant.OrderConstant;
 import com.ft.util.exception.FtException;
 import com.ft.web.model.UserDO;
 import lombok.extern.slf4j.Slf4j;
@@ -94,8 +94,13 @@ public class OrderService {
 			order.setOperatorName(userDO.getUsername());
 		}
 
+		String orderStatus = null;
+		OrderStatusEnum orderStatusEnum = OrderStatusEnum.getByStatus(order.getStatus());
+		if (orderStatusEnum != null) {
+			orderStatus = orderStatusEnum.getMessage();
+		}
 		// 订单中文状态
-		order.setStatusCH(OrderConstant.STATUS_MAP.get(order.getStatus()));
+		order.setStatusCH(orderStatus);
 	}
 
 	/**
@@ -153,7 +158,7 @@ public class OrderService {
 		Long orderId = null;
 		orderDO.setId(orderId);
 		orderDO.setOperator(orderDTO.getOperator());
-		orderDO.setStatus(OrderConstant.STATUS_READY);
+		orderDO.setStatus(OrderStatusEnum.WAIT_TO_CONFIRMED.getStatus());
 		orderDO.setUsername(orderDTO.getUsername());
 		orderDO.setPhone(orderDTO.getPhone());
 		orderDO.setAddress(orderDTO.getAddress());
@@ -187,7 +192,7 @@ public class OrderService {
 			FtException.throwException("校验订单项失败, 订单不存在");
 		}
 
-		if (order.getStatus() != OrderConstant.STATUS_READY) {
+		if (order.getStatus() != OrderStatusEnum.WAIT_TO_CONFIRMED.getStatus().intValue()) {
 			FtException.throwException("校验订单项失败, 订单已经不是待确认状态了");
 		}
 
@@ -284,7 +289,7 @@ public class OrderService {
 			FtException.throwException("订单确认失败, 订单不存在");
 		}
 
-		if (order.getStatus() != OrderConstant.STATUS_READY) {
+		if (order.getStatus() != OrderStatusEnum.WAIT_TO_CONFIRMED.getStatus().intValue()) {
 			FtException.throwException("订单确认失败, 订单已经不是待确认状态了");
 		}
 
@@ -305,7 +310,7 @@ public class OrderService {
 		OrderDO update = new OrderDO();
 		update.setId(order.getId());
 		update.setOperator(userId);
-		update.setStatus(OrderConstant.STATUS_CONFIRM);
+		update.setStatus(OrderStatusEnum.HAS_BEEN_CONFIRMED.getStatus());
 		orderMapper.update(update);
 
 		// 对订单的商品进行出库处理
@@ -353,14 +358,14 @@ public class OrderService {
 			FtException.throwException("确认订单success失败, 订单不存在");
 		}
 
-		if (order.getStatus() != OrderConstant.STATUS_CONFIRM) {
+		if (order.getStatus() != OrderStatusEnum.HAS_BEEN_CONFIRMED.getStatus().intValue()) {
 			FtException.throwException("确认订单success失败, 订单已经不是已确认状态了");
 		}
 
 		OrderDO update = new OrderDO();
 		update.setId(order.getId());
 		update.setOperator(userId);
-		update.setStatus(OrderConstant.STATUS_SUCCESS);
+		update.setStatus(OrderStatusEnum.SUCCESS.getStatus());
 		orderMapper.update(update);
 
 		return true;
@@ -381,7 +386,7 @@ public class OrderService {
 			FtException.throwException("确认订单fail失败, 订单不存在");
 		}
 
-		if (order.getStatus() != OrderConstant.STATUS_CONFIRM) {
+		if (order.getStatus() != OrderStatusEnum.HAS_BEEN_CONFIRMED.getStatus().intValue()) {
 			FtException.throwException("确认订单fail失败, 订单已经不是已确认状态了");
 		}
 
@@ -394,7 +399,7 @@ public class OrderService {
 		OrderDO update = new OrderDO();
 		update.setId(order.getId());
 		update.setOperator(userId);
-		update.setStatus(OrderConstant.STATUS_FAIL);
+		update.setStatus(OrderStatusEnum.FAIL.getStatus());
 		orderMapper.update(update);
 
 		// 将商品退回仓库
