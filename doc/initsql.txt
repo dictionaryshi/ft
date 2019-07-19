@@ -53,6 +53,8 @@ CREATE TABLE `order` (
   `address` varchar(1000) NOT NULL DEFAULT '' COMMENT '送货地址',
   `total_amount` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '订单总金额',
   `remark` varchar(1000) NOT NULL DEFAULT '' COMMENT '订单备注',
+  `confirm_time` bigint(20) NOT NULL DEFAULT '0' COMMENT '订单确认时间',
+  `final_operate_time` bigint(20) NOT NULL DEFAULT '0' COMMENT '最终操作时间',
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`),
