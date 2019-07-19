@@ -221,7 +221,7 @@ public class OrderController {
 	@RequestMapping(value = "/add-item", method = RequestMethod.POST)
 	public String addItem(
 			@RequestParam("order_id") Long orderId,
-			@RequestParam("goods_id") long goodsId,
+			@RequestParam("goods_id") int goodsId,
 			@RequestParam("goods_number") int goodsNumber
 	) {
 		boolean flag = orderService.addItem(orderId, goodsId, goodsNumber);
@@ -243,7 +243,7 @@ public class OrderController {
 	@LoginCheck
 	public String deleteItem(
 			@RequestParam("order_id") Long orderId,
-			@RequestParam("id") long id
+			@RequestParam("id") int id
 	) {
 		boolean flag = orderService.deleteItem(id, orderId);
 		return JsonUtil.object2Json(RestResult.success(flag));
@@ -267,7 +267,7 @@ public class OrderController {
 	public String updateItem(
 			@RequestParam("order_id") Long orderId,
 			@RequestParam(value = "goods_number") int goodsNumber,
-			@RequestParam(value = "id") long id
+			@RequestParam(value = "id") int id
 	) {
 		boolean flag = orderService.updateItem(id, goodsNumber, orderId);
 		return JsonUtil.object2Json(RestResult.success(flag));

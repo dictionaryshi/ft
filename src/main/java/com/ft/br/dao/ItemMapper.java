@@ -1,7 +1,7 @@
 package com.ft.br.dao;
 
-import com.ft.br.model.mdo.ItemDO;
 import com.ft.br.model.vo.ItemVO;
+import com.ft.dao.stock.model.ItemDO;
 import com.ft.db.constant.DbConstant;
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Component;
@@ -43,7 +43,7 @@ public interface ItemMapper {
 	 * @return 1:删除成功
 	 */
 	@Delete("delete from `item` where id = #{id}")
-	int delete(@Param("id") Long id);
+	int delete(@Param("id") int id);
 
 	/**
 	 * 根据主键查询订单项信息
@@ -52,7 +52,7 @@ public interface ItemMapper {
 	 * @return 订单项DO
 	 */
 	@Select("select * from `item` where id = #{id}")
-	ItemDO selectById(@Param("id") Long id);
+	ItemDO selectById(@Param("id") int id);
 
 	/**
 	 * 根据订单id 查询所有订单项信息
