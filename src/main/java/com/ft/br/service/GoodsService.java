@@ -58,7 +58,7 @@ public class GoodsService {
 			FtException.throwException("商品不存在,无法修改");
 		}
 
-		CategoryDO categoryDO = categoryMapper.getCategoryById(categoryId);
+		CategoryDO categoryDO = categoryMapper.selectByPrimaryKey(categoryId);
 		if (categoryDO == null) {
 			FtException.throwException("商品分类不存在,无法修改");
 		}
@@ -86,7 +86,7 @@ public class GoodsService {
 	@UseMaster
 	public boolean add(String name, int categoryId) {
 
-		CategoryDO categoryDO = categoryMapper.getCategoryById(categoryId);
+		CategoryDO categoryDO = categoryMapper.selectByPrimaryKey(categoryId);
 		if (categoryDO == null) {
 			FtException.throwException("商品分类不存在");
 		}
@@ -145,7 +145,7 @@ public class GoodsService {
 
 		goods.forEach(goodsVO -> {
 			int category = goodsVO.getCategory();
-			CategoryDO categoryDO = categoryMapper.getCategoryById(category);
+			CategoryDO categoryDO = categoryMapper.selectByPrimaryKey(category);
 			if (categoryDO != null) {
 				goodsVO.setCategoryName(categoryDO.getName());
 			}
