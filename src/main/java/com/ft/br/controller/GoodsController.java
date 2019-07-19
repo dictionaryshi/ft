@@ -41,7 +41,7 @@ public class GoodsController {
 	 */
 	@RequestMapping(value = "/get", method = RequestMethod.POST)
 	@LoginCheck
-	public String get(@RequestParam("id") long id) {
+	public String get(@RequestParam("id") int id) {
 		return JsonUtil.object2Json(RestResult.success(goodsService.get(id)));
 	}
 
@@ -62,7 +62,7 @@ public class GoodsController {
 	@RequestMapping(value = "/update", method = RequestMethod.POST)
 	@LoginCheck
 	public String update(
-			@RequestParam("id") long id,
+			@RequestParam("id") int id,
 			@RequestParam("name") String name,
 			@RequestParam("category_id") short categoryId
 	) {

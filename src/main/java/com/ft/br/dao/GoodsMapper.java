@@ -1,8 +1,8 @@
 package com.ft.br.dao;
 
 import com.ft.br.model.dto.GoodsDTO;
-import com.ft.br.model.mdo.GoodsDO;
 import com.ft.br.model.vo.GoodsVO;
+import com.ft.dao.stock.model.GoodsDO;
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Component;
 
@@ -68,7 +68,7 @@ public interface GoodsMapper {
 	 * @return 商品信息
 	 */
 	@Select("select * from `goods` where id = #{id}")
-	GoodsDO getGoodsById(@Param("id") Long id);
+	GoodsDO getGoodsById(@Param("id") int id);
 
 	/**
 	 * 根据分类查询所有商品信息

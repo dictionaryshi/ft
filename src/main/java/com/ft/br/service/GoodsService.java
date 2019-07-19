@@ -3,9 +3,9 @@ package com.ft.br.service;
 import com.ft.br.dao.CategoryMapper;
 import com.ft.br.dao.GoodsMapper;
 import com.ft.br.model.dto.GoodsDTO;
-import com.ft.br.model.mdo.GoodsDO;
 import com.ft.br.model.vo.GoodsVO;
 import com.ft.dao.stock.model.CategoryDO;
+import com.ft.dao.stock.model.GoodsDO;
 import com.ft.db.annotation.UseMaster;
 import com.ft.db.model.PageParam;
 import com.ft.db.model.PageResult;
@@ -38,7 +38,7 @@ public class GoodsService {
 	 * @param id 商品id
 	 * @return 商品信息
 	 */
-	public GoodsDO get(long id) {
+	public GoodsDO get(int id) {
 		return goodsMapper.getGoodsById(id);
 	}
 
@@ -51,7 +51,7 @@ public class GoodsService {
 	 * @return true:修改成功
 	 */
 	@UseMaster
-	public boolean update(long id, String name, short categoryId) {
+	public boolean update(int id, String name, int categoryId) {
 
 		GoodsDO goodsDO = goodsMapper.getGoodsById(id);
 		if (goodsDO == null) {
@@ -84,7 +84,7 @@ public class GoodsService {
 	 * @return true:添加成功
 	 */
 	@UseMaster
-	public boolean add(String name, short categoryId) {
+	public boolean add(String name, int categoryId) {
 
 		CategoryDO categoryDO = categoryMapper.getCategoryById(categoryId);
 		if (categoryDO == null) {
@@ -109,7 +109,7 @@ public class GoodsService {
 	 * @param pageParam  分页工具类
 	 * @return 商品信息
 	 */
-	public PageResult<GoodsVO> list(short categoryId, PageParam pageParam) {
+	public PageResult<GoodsVO> list(int categoryId, PageParam pageParam) {
 		PageResult<GoodsVO> pageResult = new PageResult<>();
 		pageResult.setPage(pageParam.getPage());
 		pageResult.setLimit(pageParam.getLimit());
@@ -144,7 +144,7 @@ public class GoodsService {
 		}
 
 		goods.forEach(goodsVO -> {
-			short category = goodsVO.getCategory();
+			int category = goodsVO.getCategory();
 			CategoryDO categoryDO = categoryMapper.getCategoryById(category);
 			if (categoryDO != null) {
 				goodsVO.setCategoryName(categoryDO.getName());

@@ -5,12 +5,12 @@ import com.ft.br.constant.StockLogTypeDetailEnum;
 import com.ft.br.constant.StockLogTypeEnum;
 import com.ft.br.dao.*;
 import com.ft.br.model.dto.OrderDTO;
-import com.ft.br.model.mdo.GoodsDO;
 import com.ft.br.model.mdo.ItemDO;
 import com.ft.br.model.mdo.OrderDO;
 import com.ft.br.model.mdo.StockLogDO;
 import com.ft.br.model.vo.ItemVO;
 import com.ft.br.model.vo.OrderVO;
+import com.ft.dao.stock.model.GoodsDO;
 import com.ft.db.annotation.UseMaster;
 import com.ft.db.constant.DbConstant;
 import com.ft.db.model.PageParam;
@@ -137,7 +137,7 @@ public class OrderService {
 	}
 
 	public void format(ItemVO item) {
-		GoodsDO goodsDO = goodsMapper.getGoodsById(item.getGoodsId());
+		GoodsDO goodsDO = goodsMapper.getGoodsById(item.getGoodsId().intValue());
 		if (goodsDO == null) {
 			return;
 		}
@@ -179,7 +179,7 @@ public class OrderService {
 		}
 
 		if (item.getGoodsId() != null) {
-			long goodsId = item.getGoodsId();
+			int goodsId = item.getGoodsId().intValue();
 			GoodsDO goodsDO = goodsMapper.getGoodsById(goodsId);
 			if (goodsDO == null) {
 				FtException.throwException("校验订单项失败, 商品不存在");
@@ -332,7 +332,7 @@ public class OrderService {
 	}
 
 	private void checkConfirmItem(ItemVO item) {
-		long goodsId = item.getGoodsId();
+		int goodsId = item.getGoodsId().intValue();
 		int goodsNumber = item.getGoodsNumber();
 		GoodsDO goodsDO = goodsMapper.getGoodsById(goodsId);
 		if (goodsDO == null) {
