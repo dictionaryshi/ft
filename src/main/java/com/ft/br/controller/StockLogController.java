@@ -1,9 +1,9 @@
 package com.ft.br.controller;
 
 import com.ft.br.model.dto.StockLogDTO;
-import com.ft.br.model.mdo.StockLogDO;
 import com.ft.br.service.StockLogService;
 import com.ft.br.util.LoginUtil;
+import com.ft.dao.stock.model.StockLogDO;
 import com.ft.db.model.PageParam;
 import com.ft.util.JsonUtil;
 import com.ft.util.model.RestResult;
@@ -48,7 +48,7 @@ public class StockLogController {
 	public String list(
 			@RequestParam(value = "current_page") int currentPage,
 			@RequestParam(value = "type", required = false, defaultValue = "0") Integer type,
-			@RequestParam(value = "goods_id", required = false, defaultValue = "0") long goodsId,
+			@RequestParam(value = "goods_id", required = false, defaultValue = "0") int goodsId,
 			@RequestParam(value = "order_id", required = false) Long orderId,
 			@RequestParam(value = "start_time", required = false) String startTime,
 			@RequestParam(value = "end_time", required = false) String endTime
@@ -82,13 +82,13 @@ public class StockLogController {
 	public String storage(
 			HttpServletRequest request,
 			@RequestParam("type") Integer type,
-			@RequestParam("goods_id") long goodsId,
+			@RequestParam("goods_id") int goodsId,
 			@RequestParam(value = "order_id", defaultValue = "0") Long orderId,
 			@RequestParam("goods_number") int goodsNumber,
 			@RequestParam(value = "remark", required = false, defaultValue = "") String remark
 	) {
 		StockLogDO stockLogDO = new StockLogDO();
-		stockLogDO.setOperator(LoginUtil.getLoginUser(request).getId());
+		stockLogDO.setOperator(LoginUtil.getLoginUser(request).getId().intValue());
 		stockLogDO.setType(type);
 		stockLogDO.setGoodsId(goodsId);
 		stockLogDO.setGoodsNumber(goodsNumber);
