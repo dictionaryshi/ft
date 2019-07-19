@@ -2,10 +2,12 @@ package com.ft.br.dao;
 
 import com.ft.dao.stock.mapper.CategoryDOMapper;
 import com.ft.dao.stock.model.CategoryDO;
-import org.apache.ibatis.annotations.*;
+import org.apache.ibatis.annotations.MapKey;
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
+import java.util.Map;
 
 /**
  * 分类Mapper
@@ -22,7 +24,8 @@ public interface CategoryMapper extends CategoryDOMapper {
 	 * @return 所有分类数据
 	 */
 	@Select("select * from `category`")
-	List<CategoryDO> selectAllCategories();
+	@MapKey("id")
+	Map<Integer, CategoryDO> selectAllCategories();
 
 	/**
 	 * 根据名称查询分类信息
@@ -31,5 +34,5 @@ public interface CategoryMapper extends CategoryDOMapper {
 	 * @return 分类信息
 	 */
 	@Select("select * from `category` where `name` = #{name} limit 1")
-	CategoryDO getCategoryByName(@Param("name") String name);
+	CategoryDO getCategoryByName(String name);
 }
