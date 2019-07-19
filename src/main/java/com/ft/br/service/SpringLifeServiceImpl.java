@@ -1,6 +1,6 @@
 package com.ft.br.service;
 
-import com.ft.br.constant.OrderTypeEnum;
+import com.ft.br.constant.OrderStatusEnum;
 import lombok.Data;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.*;
@@ -73,7 +73,7 @@ public class SpringLifeServiceImpl implements SpringLifeService, BeanNameAware, 
 	}
 
 	@Override
-	public OrderTypeEnum getStatus() {
-		return OrderTypeEnum.SUCCESS;
+	public int getStatus() {
+		return OrderStatusEnum.SUCCESS.getStatus();
 	}
 }

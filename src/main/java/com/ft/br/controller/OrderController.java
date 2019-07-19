@@ -54,7 +54,7 @@ public class OrderController {
 	@LoginCheck
 	public String list(
 			@RequestParam(value = "id", required = false, defaultValue = "0") Long id,
-			@RequestParam(value = "status", required = false, defaultValue = "99") short status,
+			@RequestParam(value = "status", required = false, defaultValue = "99") Integer status,
 			@RequestParam(value = "start", required = false) String start,
 			@RequestParam(value = "end", required = false) String end,
 			@RequestParam(value = "current_page") int currentPage

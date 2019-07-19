@@ -1,6 +1,6 @@
 package com.ft.br.model.mdo;
 
-import com.ft.br.constant.OrderTypeEnum;
+import com.ft.br.constant.OrderStatusEnum;
 import lombok.Data;
 
 import java.util.Date;
@@ -22,9 +22,9 @@ public class OrderDO {
 	 */
 	private Long operator;
 	/**
-	 * 订单状态{@link OrderTypeEnum}
+	 * 订单状态{@link OrderStatusEnum}
 	 */
-	private Short status;
+	private Integer status;
 	/**
 	 * 客户姓名
 	 */
