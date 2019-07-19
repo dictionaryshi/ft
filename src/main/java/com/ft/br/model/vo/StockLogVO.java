@@ -1,6 +1,6 @@
 package com.ft.br.model.vo;
 
-import com.ft.br.model.mdo.StockLogDO;
+import com.ft.dao.stock.model.StockLogDO;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 

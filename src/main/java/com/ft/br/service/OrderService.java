@@ -5,12 +5,12 @@ import com.ft.br.constant.StockLogTypeDetailEnum;
 import com.ft.br.constant.StockLogTypeEnum;
 import com.ft.br.dao.*;
 import com.ft.br.model.dto.OrderDTO;
-import com.ft.br.model.mdo.StockLogDO;
 import com.ft.br.model.vo.ItemVO;
 import com.ft.br.model.vo.OrderVO;
 import com.ft.dao.stock.model.GoodsDO;
 import com.ft.dao.stock.model.ItemDO;
 import com.ft.dao.stock.model.OrderDO;
+import com.ft.dao.stock.model.StockLogDO;
 import com.ft.db.annotation.UseMaster;
 import com.ft.db.constant.DbConstant;
 import com.ft.db.model.PageParam;
@@ -318,10 +318,10 @@ public class OrderService {
 			goodsMapper.updateNumber(item.getGoodsId(), item.getGoodsNumber() * -1);
 
 			StockLogDO stockLogDO = new StockLogDO();
-			stockLogDO.setOperator((long) userId);
+			stockLogDO.setOperator(userId);
 			stockLogDO.setType(StockLogTypeEnum.OUT.getType());
 			stockLogDO.setTypeDetail(StockLogTypeDetailEnum.OUT_ORDER.getTypeDetail());
-			stockLogDO.setGoodsId(item.getGoodsId().longValue());
+			stockLogDO.setGoodsId(item.getGoodsId());
 			stockLogDO.setGoodsNumber(item.getGoodsNumber());
 			stockLogDO.setOrderId(orderId);
 			stockLogDO.setRemark("");
@@ -408,10 +408,10 @@ public class OrderService {
 			goodsMapper.updateNumber(item.getGoodsId(), item.getGoodsNumber());
 
 			StockLogDO stockLogDO = new StockLogDO();
-			stockLogDO.setOperator((long) userId);
+			stockLogDO.setOperator(userId);
 			stockLogDO.setType(StockLogTypeEnum.IN.getType());
 			stockLogDO.setTypeDetail(StockLogTypeDetailEnum.IN_ORDER.getTypeDetail());
-			stockLogDO.setGoodsId(item.getGoodsId().longValue());
+			stockLogDO.setGoodsId(item.getGoodsId());
 			stockLogDO.setGoodsNumber(item.getGoodsNumber());
 			stockLogDO.setOrderId(orderId);
 			stockLogDO.setRemark("");

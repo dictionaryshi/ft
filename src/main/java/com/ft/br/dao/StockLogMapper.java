@@ -1,8 +1,8 @@
 package com.ft.br.dao;
 
 import com.ft.br.model.dto.StockLogDTO;
-import com.ft.br.model.mdo.StockLogDO;
 import com.ft.br.model.vo.StockLogVO;
+import com.ft.dao.stock.model.StockLogDO;
 import com.ft.util.StringUtil;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
