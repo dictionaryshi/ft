@@ -7,10 +7,10 @@ import com.ft.br.dao.OrderMapper;
 import com.ft.br.dao.StockLogMapper;
 import com.ft.br.dao.UserMapper;
 import com.ft.br.model.dto.StockLogDTO;
-import com.ft.br.model.mdo.GoodsDO;
 import com.ft.br.model.mdo.StockLogDO;
 import com.ft.br.model.vo.OrderVO;
 import com.ft.br.model.vo.StockLogVO;
+import com.ft.dao.stock.model.GoodsDO;
 import com.ft.db.constant.DbConstant;
 import com.ft.db.model.PageParam;
 import com.ft.db.model.PageResult;
@@ -100,7 +100,7 @@ public class StockLogService {
 			}
 			stockLog.setTypeCH(typeCh);
 
-			long goodsId = stockLog.getGoodsId();
+			int goodsId = stockLog.getGoodsId().intValue();
 			GoodsDO goodsDO = goodsMapper.getGoodsById(goodsId);
 			if (goodsDO != null) {
 				stockLog.setGoodsName(goodsDO.getName());
@@ -119,7 +119,7 @@ public class StockLogService {
 		// 出入库类型
 		Integer type = stockLogDO.getType();
 		// 商品id
-		long goodsId = stockLogDO.getGoodsId();
+		int goodsId = stockLogDO.getGoodsId().intValue();
 		// 出入库商品数量
 		int goodsNumber = stockLogDO.getGoodsNumber();
 

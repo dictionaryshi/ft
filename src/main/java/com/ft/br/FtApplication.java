@@ -79,7 +79,7 @@ public class FtApplication {
 
 	@GetMapping("/db")
 	public String db() {
-		return JsonUtil.object2Json(goodsService.get(1L));
+		return JsonUtil.object2Json(goodsService.get(1));
 	}
 
 	@Retryable(value = {Exception.class}, maxAttempts = 5, backoff = @Backoff(delay = 5000L, multiplier = 2, maxDelay = 86400000L))
