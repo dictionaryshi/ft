@@ -23,11 +23,11 @@ public class StockLogDO {
 	/**
 	 * 类型
 	 */
-	private Short type;
+	private Integer type;
 	/**
 	 * 详细操作类型
 	 */
-	private Short typeDetail;
+	private Integer typeDetail;
 	/**
 	 * 商品id
 	 */
