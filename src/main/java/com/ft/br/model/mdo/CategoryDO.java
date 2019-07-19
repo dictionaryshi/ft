@@ -11,11 +11,11 @@ import java.io.Serializable;
  */
 @Data
 public class CategoryDO implements Serializable {
-	/**
-	 * 主键
-	 */
-	private Integer id;
 
+	/**
+	 * 分类主键
+	 */
+	private Short id;
 	/**
 	 * 分类名称
 	 */
