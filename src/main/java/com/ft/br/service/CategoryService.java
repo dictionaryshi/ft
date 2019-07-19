@@ -7,7 +7,7 @@ import com.ft.util.exception.FtException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.Collection;
 
 /**
  * 分类业务
@@ -25,8 +25,8 @@ public class CategoryService {
 	 *
 	 * @return 所有分类信息
 	 */
-	public List<CategoryDO> listAll() {
-		return categoryMapper.selectAllCategories();
+	public Collection<CategoryDO> listAll() {
+		return categoryMapper.selectAllCategories().values();
 	}
 
 	/**
