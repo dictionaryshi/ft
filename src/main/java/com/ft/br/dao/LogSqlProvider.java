@@ -1,6 +1,6 @@
 package com.ft.br.dao;
 
-import com.ft.kafka.model.LogDO;
+import com.ft.dao.stock.model.LogDO;
 import org.apache.ibatis.jdbc.SQL;
 
 /**
