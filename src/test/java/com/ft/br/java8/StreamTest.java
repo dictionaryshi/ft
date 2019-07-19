@@ -1,8 +1,8 @@
 package com.ft.br.java8;
 
 import com.ft.br.model.mdo.Employee;
+import com.ft.dao.stock.model.UserDO;
 import com.ft.util.JsonUtil;
-import com.ft.web.model.UserDO;
 import org.junit.Test;
 
 import java.util.*;
@@ -209,22 +209,22 @@ public class StreamTest {
 	@Test
 	public void toMap() {
 		UserDO u1 = new UserDO();
-		u1.setId(1L);
+		u1.setId(1);
 		u1.setUsername("小一");
 
 		UserDO u2 = new UserDO();
-		u2.setId(2L);
+		u2.setId(2);
 		u2.setUsername("小二");
 
 		UserDO u3 = new UserDO();
-		u3.setId(3L);
+		u3.setId(3);
 		u3.setUsername("小三");
 
 		UserDO u4 = new UserDO();
-		u4.setId(2L);
+		u4.setId(2);
 		u4.setUsername("小四");
 
-		Map<Long, UserDO> userMap = Stream.of(u1, u2, u3, u4).collect(Collectors.toMap(UserDO::getId, Function.identity(), (oldValue, newValue) -> newValue));
+		Map<Integer, UserDO> userMap = Stream.of(u1, u2, u3, u4).collect(Collectors.toMap(UserDO::getId, Function.identity(), (oldValue, newValue) -> newValue));
 		System.out.println(JsonUtil.object2Json(userMap));
 	}
 }

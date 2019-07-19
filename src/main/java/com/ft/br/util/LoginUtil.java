@@ -1,12 +1,12 @@
 package com.ft.br.util;
 
 import com.ft.br.constant.LoginConstant;
+import com.ft.dao.stock.model.UserDO;
 import com.ft.redis.base.ValueOperationsCache;
 import com.ft.util.JsonUtil;
 import com.ft.util.SpringContextUtil;
 import com.ft.util.StringUtil;
 import com.ft.util.exception.FtException;
-import com.ft.web.model.UserDO;
 import com.ft.web.util.WebUtil;
 import lombok.extern.slf4j.Slf4j;
 

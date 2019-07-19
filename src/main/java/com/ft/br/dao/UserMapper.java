@@ -1,7 +1,7 @@
 package com.ft.br.dao;
 
+import com.ft.dao.stock.model.UserDO;
 import com.ft.db.constant.DbConstant;
-import com.ft.web.model.UserDO;
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Component;
 

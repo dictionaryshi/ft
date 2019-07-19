@@ -1,7 +1,7 @@
 package com.ft.br.study.juc;
 
+import com.ft.dao.stock.model.UserDO;
 import com.ft.util.exception.FtException;
-import com.ft.web.model.UserDO;
 import lombok.extern.slf4j.Slf4j;
 import sun.misc.Unsafe;
 

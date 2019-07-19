@@ -4,6 +4,7 @@ import com.ft.br.feign.RemoteService;
 import com.ft.br.model.dto.ValidParent;
 import com.ft.br.service.LoginService;
 import com.ft.br.websocket.OrderWebSocket;
+import com.ft.dao.stock.model.UserDO;
 import com.ft.rpc.api.model.RpcParam;
 import com.ft.rpc.api.model.RpcResult;
 import com.ft.util.ExcelUtil;
@@ -11,7 +12,6 @@ import com.ft.util.JsonUtil;
 import com.ft.util.exception.FtException;
 import com.ft.util.model.RestResult;
 import com.ft.web.annotation.SignCheck;
-import com.ft.web.model.UserDO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -74,7 +74,7 @@ public class NrController {
 		}
 
 		UserDO userDO = new UserDO();
-		userDO.setId(oid.longValue());
+		userDO.setId(oid);
 		userDO.setUsername(msg);
 		userDO.setCreatedAt(new Date());
 		return RestResult.success(userDO);
