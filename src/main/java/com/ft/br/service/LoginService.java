@@ -2,6 +2,7 @@ package com.ft.br.service;
 
 import com.ft.br.constant.LoginConstant;
 import com.ft.br.dao.UserMapper;
+import com.ft.dao.stock.model.UserDO;
 import com.ft.db.constant.DbConstant;
 import com.ft.redis.base.ValueOperationsCache;
 import com.ft.util.CommonUtil;
@@ -9,8 +10,6 @@ import com.ft.util.EncodeUtil;
 import com.ft.util.JsonUtil;
 import com.ft.util.StringUtil;
 import com.ft.util.exception.FtException;
-import com.ft.util.model.RestResult;
-import com.ft.web.model.UserDO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

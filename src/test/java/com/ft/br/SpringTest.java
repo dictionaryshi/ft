@@ -1,8 +1,8 @@
 package com.ft.br;
 
+import com.ft.dao.stock.model.UserDO;
 import com.ft.util.JsonUtil;
 import com.ft.util.SpringContextUtil;
-import com.ft.web.model.UserDO;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
