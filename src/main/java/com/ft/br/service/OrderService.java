@@ -5,12 +5,12 @@ import com.ft.br.constant.StockLogTypeDetailEnum;
 import com.ft.br.constant.StockLogTypeEnum;
 import com.ft.br.dao.*;
 import com.ft.br.model.dto.OrderDTO;
-import com.ft.br.model.mdo.OrderDO;
 import com.ft.br.model.mdo.StockLogDO;
 import com.ft.br.model.vo.ItemVO;
 import com.ft.br.model.vo.OrderVO;
 import com.ft.dao.stock.model.GoodsDO;
 import com.ft.dao.stock.model.ItemDO;
+import com.ft.dao.stock.model.OrderDO;
 import com.ft.db.annotation.UseMaster;
 import com.ft.db.constant.DbConstant;
 import com.ft.db.model.PageParam;
@@ -283,7 +283,7 @@ public class OrderService {
 	 * @return 订单确认结果
 	 */
 	@Transactional(value = DbConstant.DB_CONSIGN + DbConstant.TRAN_SACTION_MANAGER, propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED, rollbackFor = Throwable.class)
-	public boolean confirm(Long orderId, long userId) {
+	public boolean confirm(Long orderId, int userId) {
 		OrderVO order = orderMapper.getOrderById(orderId);
 		if (order == null) {
 			FtException.throwException("订单确认失败, 订单不存在");
@@ -318,7 +318,7 @@ public class OrderService {
 			goodsMapper.updateNumber(item.getGoodsId(), item.getGoodsNumber() * -1);
 
 			StockLogDO stockLogDO = new StockLogDO();
-			stockLogDO.setOperator(userId);
+			stockLogDO.setOperator((long) userId);
 			stockLogDO.setType(StockLogTypeEnum.OUT.getType());
 			stockLogDO.setTypeDetail(StockLogTypeDetailEnum.OUT_ORDER.getTypeDetail());
 			stockLogDO.setGoodsId(item.getGoodsId().longValue());
@@ -352,7 +352,7 @@ public class OrderService {
 	 * @return true:订单成功
 	 */
 	@UseMaster
-	public boolean success(Long orderId, long userId) {
+	public boolean success(Long orderId, int userId) {
 		OrderVO order = orderMapper.getOrderById(orderId);
 		if (order == null) {
 			FtException.throwException("确认订单success失败, 订单不存在");
@@ -379,7 +379,7 @@ public class OrderService {
 	 * @return true:确认订单失败成功
 	 */
 	@UseMaster
-	public boolean fail(Long orderId, long userId) {
+	public boolean fail(Long orderId, int userId) {
 
 		OrderVO order = orderMapper.getOrderById(orderId);
 		if (order == null) {
@@ -408,7 +408,7 @@ public class OrderService {
 			goodsMapper.updateNumber(item.getGoodsId(), item.getGoodsNumber());
 
 			StockLogDO stockLogDO = new StockLogDO();
-			stockLogDO.setOperator(userId);
+			stockLogDO.setOperator((long) userId);
 			stockLogDO.setType(StockLogTypeEnum.IN.getType());
 			stockLogDO.setTypeDetail(StockLogTypeDetailEnum.IN_ORDER.getTypeDetail());
 			stockLogDO.setGoodsId(item.getGoodsId().longValue());

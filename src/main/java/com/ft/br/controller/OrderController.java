@@ -1,9 +1,9 @@
 package com.ft.br.controller;
 
 import com.ft.br.model.dto.OrderDTO;
-import com.ft.br.model.mdo.OrderDO;
 import com.ft.br.service.OrderService;
 import com.ft.br.util.LoginUtil;
+import com.ft.dao.stock.model.OrderDO;
 import com.ft.db.model.PageParam;
 import com.ft.util.JsonUtil;
 import com.ft.util.StringUtil;
@@ -148,7 +148,7 @@ public class OrderController {
 		orderDTO.setPhone(phone);
 		orderDTO.setAddress(address);
 		orderDTO.setRemark(remark);
-		orderDTO.setOperator(LoginUtil.getLoginUser(request).getId());
+		orderDTO.setOperator(LoginUtil.getLoginUser(request).getId().intValue());
 
 		boolean flag = orderService.add(orderDTO);
 		return JsonUtil.object2Json(RestResult.success(flag));
@@ -187,7 +187,7 @@ public class OrderController {
 			@RequestParam(value = "remark", required = false) String remark
 	) {
 		OrderDO orderDO = new OrderDO();
-		orderDO.setOperator(LoginUtil.getLoginUser(request).getId());
+		orderDO.setOperator(LoginUtil.getLoginUser(request).getId().intValue());
 		orderDO.setUsername(username);
 		orderDO.setPhone(phone);
 		orderDO.setAddress(address);
@@ -289,7 +289,7 @@ public class OrderController {
 			HttpServletRequest request,
 			@RequestParam("order_id") Long orderId
 	) {
-		long userId = LoginUtil.getLoginUser(request).getId();
+		int userId = LoginUtil.getLoginUser(request).getId().intValue();
 		boolean flag = orderService.confirm(orderId, userId);
 		return JsonUtil.object2Json(RestResult.success(flag));
 	}
@@ -309,7 +309,7 @@ public class OrderController {
 			HttpServletRequest request,
 			@RequestParam("order_id") Long orderId
 	) {
-		long userId = LoginUtil.getLoginUser(request).getId();
+		int userId = LoginUtil.getLoginUser(request).getId().intValue();
 		boolean flag = orderService.success(orderId, userId);
 		return JsonUtil.object2Json(RestResult.success(flag));
 	}
@@ -329,7 +329,7 @@ public class OrderController {
 			HttpServletRequest request,
 			@RequestParam("order_id") Long orderId
 	) {
-		long userId = LoginUtil.getLoginUser(request).getId();
+		int userId = LoginUtil.getLoginUser(request).getId().intValue();
 		boolean flag = orderService.fail(orderId, userId);
 		return JsonUtil.object2Json(RestResult.success(flag));
 	}
