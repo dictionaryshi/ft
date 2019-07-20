@@ -1,11 +1,13 @@
 package com.ft.br.dao;
 
-import com.ft.br.model.dto.OrderDTO;
-import com.ft.br.model.vo.OrderVO;
+import com.ft.br.model.ao.OrderListAO;
 import com.ft.dao.stock.mapper.OrderDOMapper;
+import com.ft.dao.stock.model.OrderDO;
+import com.ft.db.util.MybatisUtil;
 import com.ft.util.StringUtil;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.SelectProvider;
+import org.apache.ibatis.jdbc.SQL;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -20,57 +22,66 @@ import java.util.List;
 public interface OrderMapper extends OrderDOMapper {
 
 	class SqlBuilder {
-		private String query(OrderDTO orderDTO) {
-			StringBuilder sb = new StringBuilder();
-			sb.append("where 1 = 1 ");
-			if (orderDTO.getId() != null) {
-				sb.append("and `id` = '").append(orderDTO.getId()).append("' ");
-			}
-			if (orderDTO.getStatus() != null) {
-				sb.append("and `status` = ").append(orderDTO.getStatus()).append(" ");
-			}
-			if (!StringUtil.isNull(orderDTO.getStartDate())) {
-				sb.append("and `created_at` >= '").append(orderDTO.getStartDate()).append("' ");
-			}
-			if (!StringUtil.isNull(orderDTO.getEndDate())) {
-				sb.append("and `created_at` <= '").append(orderDTO.getEndDate()).append("' ");
+		private void pageWhere(SQL sql, OrderListAO ao) {
+			if (ao.getId() != null) {
+				sql.WHERE("id = #{id}");
 			}
 
-			return sb.toString();
+			if (ao.getStatus() != null) {
+				sql.WHERE("status = #{status}");
+			}
+
+			if (!StringUtil.isNull(ao.getStartTime())) {
+				sql.WHERE("created_at >= #{startTime}");
+			}
+
+			if (!StringUtil.isNull(ao.getEndTime())) {
+				sql.WHERE("created_at <= #{endTime}");
+			}
 		}
 
-		public String countPagination(OrderDTO orderDTO) {
-			String sql;
-			sql = "select count(1) from `order` " +
-					query(orderDTO);
-			return sql;
+		public String countPagination(OrderListAO ao) {
+			SQL sql = new SQL();
+
+			sql.SELECT("count(1)");
+
+			sql.FROM("order");
+
+			this.pageWhere(sql, ao);
+
+			return sql.toString();
 		}
 
-		public String listPagination(OrderDTO orderDTO) {
-			String sql;
-			sql = "select * from `order` " +
-					query(orderDTO) +
-					"order by `updated_at` desc " +
-					"limit " + orderDTO.getStartRow() + ", " + orderDTO.getPageSize();
-			return sql;
+		public String listPagination(OrderListAO ao) {
+			SQL sql = new SQL();
+
+			sql.SELECT("*");
+
+			sql.FROM("order");
+
+			this.pageWhere(sql, ao);
+
+			sql.ORDER_BY("id desc");
+
+			return MybatisUtil.limit(sql, ao);
 		}
 	}
 
 	/**
 	 * 查询符合条件的数量
 	 *
-	 * @param orderDTO 条件
+	 * @param orderListAO 条件
 	 * @return 数量
 	 */
 	@SelectProvider(type = SqlBuilder.class, method = "countPagination")
-	int countPagination(OrderDTO orderDTO);
+	int countPagination(OrderListAO orderListAO);
 
 	/**
 	 * 分页查询订单
 	 *
-	 * @param orderDTO 条件
+	 * @param orderListAO 条件
 	 * @return 订单记录
 	 */
 	@SelectProvider(type = SqlBuilder.class, method = "listPagination")
-	List<OrderVO> listPagination(OrderDTO orderDTO);
+	List<OrderDO> listPagination(OrderListAO orderListAO);
 }
