@@ -193,7 +193,7 @@ public class OrderService {
 		}
 
 		if (item.getId() != null) {
-			ItemDO itemDO = itemMapper.selectById(item.getId());
+			ItemDO itemDO = itemMapper.selectByPrimaryKey(item.getId());
 			if (itemDO == null) {
 				FtException.throwException("校验订单项失败, 订单项不存在");
 			}
@@ -228,7 +228,7 @@ public class OrderService {
 		item.setOrderId(orderId);
 		// 核查订单项
 		this.checkItem(item);
-		return itemMapper.delete(id) == 1;
+		return itemMapper.deleteByPrimaryKey(id) == 1;
 	}
 
 	/**
@@ -248,7 +248,7 @@ public class OrderService {
 		// 核查订单项
 		this.checkItem(itemDO);
 
-		return itemMapper.update(itemDO) == 1;
+		return itemMapper.updateByPrimaryKeySelective(itemDO) == 1;
 	}
 
 	/**
@@ -269,7 +269,7 @@ public class OrderService {
 		// 核查订单项
 		this.checkItem(item);
 
-		return itemMapper.insert(item) == 1;
+		return itemMapper.insertSelective(item) == 1;
 	}
 
 	/**
