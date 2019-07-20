@@ -10,6 +10,7 @@ import com.ft.br.model.dto.StockLogDTO;
 import com.ft.br.model.vo.OrderVO;
 import com.ft.br.model.vo.StockLogVO;
 import com.ft.dao.stock.model.GoodsDO;
+import com.ft.dao.stock.model.OrderDO;
 import com.ft.dao.stock.model.StockLogDO;
 import com.ft.dao.stock.model.UserDO;
 import com.ft.db.constant.DbConstant;
@@ -134,7 +135,8 @@ public class StockLogService {
 
 		String defaultOrderId = "0";
 		if (!stockLogDO.getOrderId().equals(defaultOrderId)) {
-			OrderVO order = orderMapper.getOrderById(stockLogDO.getOrderId());
+			OrderDO orderDO = orderMapper.selectByPrimaryKey(stockLogDO.getOrderId());
+			OrderVO order = new OrderVO();
 			if (order == null) {
 				FtException.throwException("仓库操作失败, 订单不存在");
 			}
