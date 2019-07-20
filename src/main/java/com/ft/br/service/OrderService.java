@@ -133,7 +133,7 @@ public class OrderService {
 	}
 
 	public void format(ItemVO item) {
-		GoodsDO goodsDO = goodsMapper.getGoodsById(item.getGoodsId().intValue());
+		GoodsDO goodsDO = goodsMapper.selectByPrimaryKey(item.getGoodsId());
 		if (goodsDO == null) {
 			return;
 		}
@@ -175,8 +175,8 @@ public class OrderService {
 		}
 
 		if (item.getGoodsId() != null) {
-			int goodsId = item.getGoodsId().intValue();
-			GoodsDO goodsDO = goodsMapper.getGoodsById(goodsId);
+			int goodsId = item.getGoodsId();
+			GoodsDO goodsDO = goodsMapper.selectByPrimaryKey(goodsId);
 			if (goodsDO == null) {
 				FtException.throwException("校验订单项失败, 商品不存在");
 			}
@@ -328,9 +328,9 @@ public class OrderService {
 	}
 
 	private void checkConfirmItem(ItemVO item) {
-		int goodsId = item.getGoodsId().intValue();
+		int goodsId = item.getGoodsId();
 		int goodsNumber = item.getGoodsNumber();
-		GoodsDO goodsDO = goodsMapper.getGoodsById(goodsId);
+		GoodsDO goodsDO = goodsMapper.selectByPrimaryKey(goodsId);
 		if (goodsDO == null) {
 			FtException.throwException("订单确认失败, 订单项中商品不存在");
 		}

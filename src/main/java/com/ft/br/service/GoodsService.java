@@ -39,7 +39,7 @@ public class GoodsService {
 	 * @return 商品信息
 	 */
 	public GoodsDO get(int id) {
-		return goodsMapper.getGoodsById(id);
+		return goodsMapper.selectByPrimaryKey(id);
 	}
 
 	/**
@@ -53,7 +53,7 @@ public class GoodsService {
 	@UseMaster
 	public boolean update(int id, String name, int categoryId) {
 
-		GoodsDO goodsDO = goodsMapper.getGoodsById(id);
+		GoodsDO goodsDO = goodsMapper.selectByPrimaryKey(id);
 		if (goodsDO == null) {
 			FtException.throwException("商品不存在,无法修改");
 		}
@@ -73,7 +73,7 @@ public class GoodsService {
 		goodsDO.setName(name);
 		goodsDO.setCategory(categoryId);
 
-		return goodsMapper.update(goodsDO) == 1;
+		return goodsMapper.updateByPrimaryKeySelective(goodsDO) == 1;
 	}
 
 	/**
@@ -99,7 +99,7 @@ public class GoodsService {
 		goodsDO.setName(name);
 		goodsDO.setCategory(categoryId);
 
-		return goodsMapper.insert(goodsDO) == 1;
+		return goodsMapper.insertSelective(goodsDO) == 1;
 	}
 
 	/**
