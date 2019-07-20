@@ -122,7 +122,8 @@ public class OrderService {
 	 * @return 订单项
 	 */
 	public List<ItemVO> listItems(Long id) {
-		List<ItemVO> items = itemMapper.selectByOrderId(id);
+		List<ItemDO> itemDOS = itemMapper.selectByOrderId(id);
+		List<ItemVO> items = new ArrayList<>();
 		if (items == null || items.isEmpty()) {
 			return new ArrayList<>();
 		}
@@ -289,8 +290,9 @@ public class OrderService {
 			FtException.throwException("订单确认失败, 订单已经不是待确认状态了");
 		}
 
+		List<ItemDO> itemDOS = itemMapper.selectByOrderId(orderId);
 		// 查询订单的所有订单项
-		List<ItemVO> items = itemMapper.selectByOrderId(orderId);
+		List<ItemVO> items = new ArrayList<>();
 		if (items.isEmpty()) {
 			FtException.throwException("订单确认失败, 还没有添加订单详情");
 		}
@@ -398,8 +400,9 @@ public class OrderService {
 		update.setStatus(OrderStatusEnum.FAIL.getStatus());
 		orderMapper.update(update);
 
+		List<ItemDO> itemDOS = itemMapper.selectByOrderId(orderId);
 		// 将商品退回仓库
-		List<ItemVO> items = itemMapper.selectByOrderId(orderId);
+		List<ItemVO> items = new ArrayList<>();
 		items.forEach(item -> {
 			goodsMapper.updateNumber(item.getGoodsId(), item.getGoodsNumber());
 
