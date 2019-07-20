@@ -2,9 +2,8 @@ package com.ft.br.dao;
 
 import com.ft.br.model.dto.StockLogDTO;
 import com.ft.br.model.vo.StockLogVO;
-import com.ft.dao.stock.model.StockLogDO;
+import com.ft.dao.stock.mapper.StockLogDOMapper;
 import com.ft.util.StringUtil;
-import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.SelectProvider;
 import org.springframework.stereotype.Component;
@@ -18,10 +17,9 @@ import java.util.List;
  */
 @Mapper
 @Component
-public interface StockLogMapper {
+public interface StockLogMapper extends StockLogDOMapper {
 
 	class SqlBuilder {
-
 		private String query(StockLogDTO stockLogDTO) {
 			StringBuilder sb = new StringBuilder();
 			sb.append("where 1 = 1 ");
@@ -60,19 +58,6 @@ public interface StockLogMapper {
 			return sb;
 		}
 	}
-
-	/**
-	 * 添加出/入库记录
-	 *
-	 * @param stockLogDO 出入库日志对象
-	 * @return 1:添加成功
-	 */
-	@Insert({
-			"insert into `stock_log` ",
-			"(`operator`, `type`, `type_detail`, `goods_id`, `goods_number`, `order_id`, `remark`) values ",
-			"(#{operator}, #{type}, #{typeDetail}, #{goodsId}, #{goodsNumber}, #{orderId}, #{remark})"
-	})
-	int insert(StockLogDO stockLogDO);
 
 	/**
 	 * 查询符合条件的数量
