@@ -1,7 +1,6 @@
 package com.ft.br.dao;
 
 import com.ft.br.model.ao.GoodsListAO;
-import com.ft.br.model.vo.GoodsVO;
 import com.ft.dao.stock.mapper.GoodsDOMapper;
 import com.ft.dao.stock.model.GoodsDO;
 import com.ft.db.util.MybatisUtil;
@@ -91,7 +90,7 @@ public interface GoodsMapper extends GoodsDOMapper {
 	 * @return 商品信息
 	 */
 	@SelectProvider(type = SqlBuilder.class, method = "listPaging")
-	List<GoodsVO> listPaging(GoodsListAO goodsListAO);
+	List<GoodsDO> listPaging(GoodsListAO goodsListAO);
 
 	/**
 	 * 根据名称查询商品
