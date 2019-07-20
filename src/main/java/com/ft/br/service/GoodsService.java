@@ -129,7 +129,8 @@ public class GoodsService {
 		goodsDTO.setStartRowNumber(pageParam.getStartRowNumber());
 		goodsDTO.setLimit(pageParam.getLimit());
 
-		List<GoodsVO> goods = goodsMapper.listPaging(goodsDTO);
+		List<GoodsDO> goodsDOS = goodsMapper.listPaging(goodsDTO);
+		List<GoodsVO> goods = new ArrayList<>();
 		this.format(goods);
 
 		pageResult.setTotal(count);
