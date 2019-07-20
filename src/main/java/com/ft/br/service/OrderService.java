@@ -84,8 +84,8 @@ public class OrderService {
 	 */
 	private void format(OrderVO order) {
 		// 操作人
-		long operator = order.getOperator();
-		UserDO userDO = userMapper.getUserById(operator);
+		int operator = order.getOperator();
+		UserDO userDO = userMapper.selectByPrimaryKey(operator);
 		if (userDO != null) {
 			order.setOperatorName(userDO.getUsername());
 		}

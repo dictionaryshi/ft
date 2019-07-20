@@ -88,8 +88,8 @@ public class StockLogService {
 			return;
 		}
 		stockLogs.forEach(stockLog -> {
-			long operator = stockLog.getOperator();
-			UserDO user = userMapper.getUserById(operator);
+			int operator = stockLog.getOperator();
+			UserDO user = userMapper.selectByPrimaryKey(operator);
 			if (user != null) {
 				stockLog.setOperatorName(user.getUsername());
 			}

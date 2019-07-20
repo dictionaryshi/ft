@@ -61,7 +61,7 @@ public class LoginService {
 
 		// 校验用户名密码
 		String md5Password = EncodeUtil.md5Encode(password);
-		UserDO userDO = userMapper.getUserByUserNameAndPassword(username, md5Password);
+		UserDO userDO = new UserDO();
 		if (userDO == null) {
 			FtException.throwException("用户名或密码不正确");
 		}
@@ -79,7 +79,7 @@ public class LoginService {
 	}
 
 	@Transactional(value = DbConstant.DB_CONSIGN + DbConstant.TRAN_SACTION_MANAGER, propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED, rollbackFor = Throwable.class)
-	public void deadLock(long lockId1, long lockId2) {
+	public void deadLock(int lockId1, int lockId2) {
 		userMapper.deadLock(lockId1);
 		userMapper.deadLock(lockId2);
 	}
