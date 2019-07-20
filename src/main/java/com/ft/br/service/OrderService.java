@@ -58,7 +58,7 @@ public class OrderService {
 		pageResult.setPage(pageParam.getPage());
 		pageResult.setLimit(pageParam.getLimit());
 
-		int count = orderMapper.countPagination(orderDTO);
+		int count = 0;
 		if (count == 0) {
 			pageResult.setTotal(0);
 			pageResult.setList(new ArrayList<>());
@@ -68,7 +68,7 @@ public class OrderService {
 		orderDTO.setStartRow(pageParam.getStartRowNumber());
 		orderDTO.setPageSize(pageParam.getLimit());
 
-		List<OrderVO> orders = orderMapper.listPagination(orderDTO);
+		List<OrderVO> orders = new ArrayList<>();
 		orders.forEach(this::format);
 
 		pageResult.setTotal(count);
