@@ -2,6 +2,7 @@ package com.ft.br.dao;
 
 import com.ft.br.model.dto.GoodsDTO;
 import com.ft.br.model.vo.GoodsVO;
+import com.ft.dao.stock.mapper.GoodsDOMapper;
 import com.ft.dao.stock.model.GoodsDO;
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Component;
@@ -15,10 +16,9 @@ import java.util.List;
  */
 @Mapper
 @Component
-public interface GoodsMapper {
+public interface GoodsMapper extends GoodsDOMapper {
 
 	class SqlBuilder {
-
 		private String query(GoodsDTO goodsDTO) {
 			StringBuilder sb = new StringBuilder();
 			sb.append("where 1 = 1 ");
@@ -44,40 +44,13 @@ public interface GoodsMapper {
 	}
 
 	/**
-	 * 插入商品
-	 *
-	 * @param goodsDO 商品
-	 * @return 1:插入成功
-	 */
-	@Insert("insert into `goods` (`name`, `category`) values (#{name}, #{category})")
-	int insert(GoodsDO goodsDO);
-
-	/**
-	 * 修改商品
-	 *
-	 * @param goodsDO 商品信息
-	 * @return 1:修改成功
-	 */
-	@Update("update `goods` set `name` = #{name}, `category` = #{category} where id = #{id}")
-	int update(GoodsDO goodsDO);
-
-	/**
-	 * 根据主键查找商品信息
-	 *
-	 * @param id 主键
-	 * @return 商品信息
-	 */
-	@Select("select * from `goods` where id = #{id}")
-	GoodsDO getGoodsById(@Param("id") int id);
-
-	/**
 	 * 根据分类查询所有商品信息
 	 *
 	 * @param category 分类
 	 * @return 商品信息
 	 */
 	@Select("select * from `goods` where category = #{category} ")
-	List<GoodsDO> selectByCategory(@Param("category") short category);
+	List<GoodsDO> selectByCategory(int category);
 
 	/**
 	 * 根据id 修改商品库存数量
@@ -114,5 +87,5 @@ public interface GoodsMapper {
 	 * @return 商品信息
 	 */
 	@Select("select * from `goods` where `name` = #{name} limit 1")
-	GoodsDO getGoodsByName(@Param("name") String name);
+	GoodsDO getGoodsByName(String name);
 }
