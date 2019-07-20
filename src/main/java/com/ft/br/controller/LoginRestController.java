@@ -1,10 +1,8 @@
 package com.ft.br.controller;
 
 import com.ft.br.constant.LoginConstant;
-import com.ft.br.model.dto.UserDTO;
 import com.ft.br.service.LoginService;
 import com.ft.br.util.LoginUtil;
-import com.ft.dao.stock.model.UserDO;
 import com.ft.redis.base.ValueOperationsCache;
 import com.ft.util.CommonUtil;
 import com.ft.util.ImageUtil;
@@ -12,8 +10,8 @@ import com.ft.util.JsonUtil;
 import com.ft.util.StringUtil;
 import com.ft.util.exception.FtException;
 import com.ft.util.model.RestResult;
-import com.ft.web.annotation.LoginCheck;
 import com.ft.web.constant.SwaggerConstant;
+import com.ft.web.model.UserBO;
 import com.ft.web.util.CookieUtil;
 import com.ft.web.util.WebUtil;
 import io.swagger.annotations.Api;
@@ -38,11 +36,11 @@ import java.util.concurrent.TimeUnit;
  *
  * @author shichunyang
  */
-@Api(tags = "登陆API")
+@Api(tags = "SSO API")
 @RestController
 @Slf4j
 @CrossOrigin
-@RequestMapping(RestResult.API)
+@RequestMapping(RestResult.API + "/sso")
 public class LoginRestController {
 
 	@Autowired
@@ -119,20 +117,16 @@ public class LoginRestController {
 		return JsonUtil.object2Json(RestResult.success(result));
 	}
 
-	@ApiOperation("查询当前登录用户信息")
 	/**
 	 * 查询当前登录用户信息
 	 *
 	 * @return 当前登录用户信息
 	 */
-	@RequestMapping(value = "/user", method = RequestMethod.POST)
-	public RestResult<UserDO> user(HttpServletRequest request) {
-		return RestResult.success(LoginUtil.getLoginUser(request));
-	}
-
-	@RequestMapping(value = "/json-param", method = RequestMethod.POST)
-	@LoginCheck
-	public String jsonParam(@RequestBody UserDTO body) {
-		return JsonUtil.object2Json(body);
+	@ApiOperation("查询当前登录用户信息")
+	@GetMapping("/current-user")
+	public RestResult<UserBO> user(
+			HttpServletRequest request
+	) {
+		return null;
 	}
 }
