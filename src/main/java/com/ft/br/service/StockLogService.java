@@ -146,7 +146,7 @@ public class StockLogService {
 			// 入库操作
 			goodsMapper.updateNumber(goodsId, goodsNumber);
 			stockLogDO.setTypeDetail(StockLogTypeDetailEnum.IN_PERSON.getTypeDetail());
-			stockLogMapper.insert(stockLogDO);
+			stockLogMapper.insertSelective(stockLogDO);
 		} else if (type == StockLogTypeEnum.OUT.getType().shortValue()) {
 			// 出库操作
 			if (goodsNumber > goodsDO.getNumber()) {
@@ -160,7 +160,7 @@ public class StockLogService {
 			if (goodsNumber <= goodsDO.getNumber()) {
 				goodsMapper.updateNumber(goodsId, goodsNumber * -1);
 				stockLogDO.setTypeDetail(StockLogTypeDetailEnum.OUT_PERSON.getTypeDetail());
-				stockLogMapper.insert(stockLogDO);
+				stockLogMapper.insertSelective(stockLogDO);
 
 				redisLock.unlock(lockKey);
 			} else {

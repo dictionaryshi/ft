@@ -326,7 +326,7 @@ public class OrderService {
 			stockLogDO.setGoodsNumber(item.getGoodsNumber());
 			stockLogDO.setOrderId(orderId);
 			stockLogDO.setRemark("");
-			stockLogMapper.insert(stockLogDO);
+			stockLogMapper.insertSelective(stockLogDO);
 		});
 
 		return true;
@@ -419,7 +419,7 @@ public class OrderService {
 			stockLogDO.setGoodsNumber(item.getGoodsNumber());
 			stockLogDO.setOrderId(orderId);
 			stockLogDO.setRemark("");
-			stockLogMapper.insert(stockLogDO);
+			stockLogMapper.insertSelective(stockLogDO);
 		});
 
 		return true;
