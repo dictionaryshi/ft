@@ -2,7 +2,7 @@ package com.ft.br.service;
 
 import com.ft.br.dao.CategoryMapper;
 import com.ft.br.dao.GoodsMapper;
-import com.ft.br.model.dto.GoodsDTO;
+import com.ft.br.model.ao.GoodsListAO;
 import com.ft.br.model.vo.GoodsVO;
 import com.ft.dao.stock.model.CategoryDO;
 import com.ft.dao.stock.model.GoodsDO;
@@ -114,7 +114,7 @@ public class GoodsService {
 		pageResult.setPage(pageParam.getPage());
 		pageResult.setLimit(pageParam.getLimit());
 
-		GoodsDTO goodsDTO = new GoodsDTO();
+		GoodsListAO goodsDTO = new GoodsListAO();
 		if (categoryId != 0) {
 			goodsDTO.setCategory(categoryId);
 		}
@@ -126,8 +126,8 @@ public class GoodsService {
 			return pageResult;
 		}
 
-		goodsDTO.setStartRow(pageParam.getStartRowNumber());
-		goodsDTO.setPageSize(pageParam.getLimit());
+		goodsDTO.setStartRowNumber(pageParam.getStartRowNumber());
+		goodsDTO.setLimit(pageParam.getLimit());
 
 		List<GoodsVO> goods = goodsMapper.listPaging(goodsDTO);
 		this.format(goods);
