@@ -1,10 +1,12 @@
 package com.ft.br.dao;
 
-import com.ft.br.model.dto.GoodsDTO;
+import com.ft.br.model.ao.GoodsListAO;
 import com.ft.br.model.vo.GoodsVO;
 import com.ft.dao.stock.mapper.GoodsDOMapper;
 import com.ft.dao.stock.model.GoodsDO;
+import com.ft.db.util.MybatisUtil;
 import org.apache.ibatis.annotations.*;
+import org.apache.ibatis.jdbc.SQL;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -20,27 +22,36 @@ import java.util.Map;
 public interface GoodsMapper extends GoodsDOMapper {
 
 	class SqlBuilder {
-		private String query(GoodsDTO goodsDTO) {
-			StringBuilder sb = new StringBuilder();
-			sb.append("where 1 = 1 ");
-			if (goodsDTO.getCategory() != null) {
-				sb.append("and `category` = ").append(goodsDTO.getCategory()).append(" ");
+		private void pageWhere(SQL sql, GoodsListAO ao) {
+			if (ao.getCategory() != null) {
+				sql.WHERE("category = #{category}");
 			}
-			return sb.toString();
 		}
 
-		public String countPaging(GoodsDTO goodsDTO) {
-			String sql;
-			sql = "select count(1) from `goods` " + query(goodsDTO);
-			return sql;
+		public String countPaging(GoodsListAO ao) {
+			SQL sql = new SQL();
+
+			sql.SELECT("count(1)");
+
+			sql.FROM("goods");
+
+			this.pageWhere(sql, ao);
+
+			return sql.toString();
 		}
 
-		public String listPaging(GoodsDTO goodsDTO) {
-			String sql;
-			sql = "select * from `goods` " + query(goodsDTO)
-					+ "order by id asc "
-					+ "limit " + goodsDTO.getStartRow() + ", " + goodsDTO.getPageSize();
-			return sql;
+		public String listPaging(GoodsListAO ao) {
+			SQL sql = new SQL();
+
+			sql.SELECT("*");
+
+			sql.FROM("goods");
+
+			this.pageWhere(sql, ao);
+
+			sql.ORDER_BY("id desc");
+
+			return MybatisUtil.limit(sql, ao);
 		}
 	}
 
@@ -67,20 +78,20 @@ public interface GoodsMapper extends GoodsDOMapper {
 	/**
 	 * 查询符合条件的条数
 	 *
-	 * @param goodsDTO 条件
+	 * @param goodsListAO 条件
 	 * @return 数量
 	 */
 	@SelectProvider(type = SqlBuilder.class, method = "countPaging")
-	int countPaging(GoodsDTO goodsDTO);
+	int countPaging(GoodsListAO goodsListAO);
 
 	/**
 	 * 分页查询商品信息
 	 *
-	 * @param goodsDTO 条件
+	 * @param goodsListAO 条件
 	 * @return 商品信息
 	 */
 	@SelectProvider(type = SqlBuilder.class, method = "listPaging")
-	List<GoodsVO> listPaging(GoodsDTO goodsDTO);
+	List<GoodsVO> listPaging(GoodsListAO goodsListAO);
 
 	/**
 	 * 根据名称查询商品
