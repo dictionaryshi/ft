@@ -3,7 +3,6 @@ package com.ft.br.dao;
 import com.ft.dao.stock.mapper.UserDOMapper;
 import com.ft.dao.stock.model.UserDO;
 import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Component;
 
@@ -15,16 +14,6 @@ import org.springframework.stereotype.Component;
 @Mapper
 @Component
 public interface UserMapper extends UserDOMapper {
-
-	/**
-	 * 根据用户名和密码查找用户
-	 *
-	 * @param username 用户名
-	 * @param password 密码(md5)
-	 * @return 用户
-	 */
-	@Select("select * from `user` where username = #{username} and password = #{password}")
-	UserDO getUserByUserNameAndPassword(@Param("username") String username, @Param("password") String password);
 
 	/**
 	 * 根据用户名查询用户信息
