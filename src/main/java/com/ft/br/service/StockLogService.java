@@ -64,7 +64,7 @@ public class StockLogService {
 		pageResult.setLimit(pageParam.getLimit());
 
 
-		int count = stockLogMapper.countPagination(stockLogDTO);
+		int count = 0;
 		if (count == 0) {
 			pageResult.setTotal(0);
 			pageResult.setList(new ArrayList<>());
@@ -74,7 +74,7 @@ public class StockLogService {
 		stockLogDTO.setStartRow(pageParam.getStartRowNumber());
 		stockLogDTO.setPageSize(pageParam.getLimit());
 
-		List<StockLogVO> stockLogs = stockLogMapper.listPagination(stockLogDTO);
+		List<StockLogVO> stockLogs = new ArrayList<>();
 		this.format(stockLogs);
 
 		pageResult.setTotal(count);
