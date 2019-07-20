@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * GoodsMapper
@@ -49,8 +50,9 @@ public interface GoodsMapper extends GoodsDOMapper {
 	 * @param category 分类
 	 * @return 商品信息
 	 */
+	@MapKey("id")
 	@Select("select * from `goods` where category = #{category} ")
-	List<GoodsDO> selectByCategory(int category);
+	Map<Integer, GoodsDO> selectByCategory(int category);
 
 	/**
 	 * 根据id 修改商品库存数量
@@ -83,9 +85,10 @@ public interface GoodsMapper extends GoodsDOMapper {
 	/**
 	 * 根据名称查询商品
 	 *
-	 * @param name 商品名称
+	 * @param category 分类
+	 * @param name     商品名称
 	 * @return 商品信息
 	 */
-	@Select("select * from `goods` where `name` = #{name} limit 1")
-	GoodsDO getGoodsByName(String name);
+	@Select("select * from `goods` where category = #{category} and `name` = #{name} limit 1")
+	GoodsDO getGoodsByName(@Param("category") int category, @Param("name") String name);
 }
