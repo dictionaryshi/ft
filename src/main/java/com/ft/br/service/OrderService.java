@@ -106,7 +106,8 @@ public class OrderService {
 	 * @return 订单信息
 	 */
 	public OrderVO get(Long id) {
-		OrderVO order = orderMapper.getOrderById(id);
+		OrderDO orderDO = orderMapper.selectByPrimaryKey(id);
+		OrderVO order = new OrderVO();
 		if (order == null) {
 			return new OrderVO();
 		}
@@ -161,7 +162,7 @@ public class OrderService {
 		orderDO.setAddress(orderDTO.getAddress());
 		orderDO.setTotalAmount(orderDTO.getTotalAmount());
 		orderDO.setRemark(orderDTO.getRemark());
-		int flag = orderMapper.insert(orderDO);
+		int flag = orderMapper.insertSelective(orderDO);
 
 		return flag == 1;
 	}
@@ -184,7 +185,8 @@ public class OrderService {
 		}
 
 		Long orderId = item.getOrderId();
-		OrderVO order = orderMapper.getOrderById(orderId);
+		OrderDO orderDO = orderMapper.selectByPrimaryKey(orderId);
+		OrderVO order = new OrderVO();
 		if (order == null) {
 			FtException.throwException("校验订单项失败, 订单不存在");
 		}
@@ -213,7 +215,7 @@ public class OrderService {
 	 */
 	@UseMaster
 	public boolean update(OrderDO orderDO) {
-		return orderMapper.update(orderDO) == 1;
+		return orderMapper.updateByPrimaryKeySelective(orderDO) == 1;
 	}
 
 	/**
@@ -281,7 +283,8 @@ public class OrderService {
 	 */
 	@Transactional(value = DbConstant.DB_CONSIGN + DbConstant.TRAN_SACTION_MANAGER, propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED, rollbackFor = Throwable.class)
 	public boolean confirm(Long orderId, int userId) {
-		OrderVO order = orderMapper.getOrderById(orderId);
+		OrderDO orderDO = orderMapper.selectByPrimaryKey(orderId);
+		OrderVO order = new OrderVO();
 		if (order == null) {
 			FtException.throwException("订单确认失败, 订单不存在");
 		}
@@ -309,7 +312,7 @@ public class OrderService {
 		update.setId(order.getId());
 		update.setOperator(userId);
 		update.setStatus(OrderStatusEnum.HAS_BEEN_CONFIRMED.getStatus());
-		orderMapper.update(update);
+		orderMapper.updateByPrimaryKeySelective(update);
 
 		// 对订单的商品进行出库处理
 		items.forEach(item -> {
@@ -351,7 +354,8 @@ public class OrderService {
 	 */
 	@UseMaster
 	public boolean success(Long orderId, int userId) {
-		OrderVO order = orderMapper.getOrderById(orderId);
+		OrderDO orderDO = orderMapper.selectByPrimaryKey(orderId);
+		OrderVO order = new OrderVO();
 		if (order == null) {
 			FtException.throwException("确认订单success失败, 订单不存在");
 		}
@@ -364,7 +368,7 @@ public class OrderService {
 		update.setId(order.getId());
 		update.setOperator(userId);
 		update.setStatus(OrderStatusEnum.SUCCESS.getStatus());
-		orderMapper.update(update);
+		orderMapper.updateByPrimaryKeySelective(update);
 
 		return true;
 	}
@@ -379,7 +383,8 @@ public class OrderService {
 	@UseMaster
 	public boolean fail(Long orderId, int userId) {
 
-		OrderVO order = orderMapper.getOrderById(orderId);
+		OrderDO orderDO = orderMapper.selectByPrimaryKey(orderId);
+		OrderVO order = new OrderVO();
 		if (order == null) {
 			FtException.throwException("确认订单fail失败, 订单不存在");
 		}
@@ -398,7 +403,7 @@ public class OrderService {
 		update.setId(order.getId());
 		update.setOperator(userId);
 		update.setStatus(OrderStatusEnum.FAIL.getStatus());
-		orderMapper.update(update);
+		orderMapper.updateByPrimaryKeySelective(update);
 
 		List<ItemDO> itemDOS = itemMapper.selectByOrderId(orderId);
 		// 将商品退回仓库
