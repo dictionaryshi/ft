@@ -100,8 +100,8 @@ public class StockLogService {
 			}
 			stockLog.setTypeCH(typeCh);
 
-			int goodsId = stockLog.getGoodsId().intValue();
-			GoodsDO goodsDO = goodsMapper.getGoodsById(goodsId);
+			int goodsId = stockLog.getGoodsId();
+			GoodsDO goodsDO = goodsMapper.selectByPrimaryKey(goodsId);
 			if (goodsDO != null) {
 				stockLog.setGoodsName(goodsDO.getName());
 			}
@@ -119,7 +119,7 @@ public class StockLogService {
 		// 出入库类型
 		Integer type = stockLogDO.getType();
 		// 商品id
-		int goodsId = stockLogDO.getGoodsId().intValue();
+		int goodsId = stockLogDO.getGoodsId();
 		// 出入库商品数量
 		int goodsNumber = stockLogDO.getGoodsNumber();
 
@@ -127,7 +127,7 @@ public class StockLogService {
 			FtException.throwException("仓库操作失败, 商品数量不能小于1");
 		}
 
-		GoodsDO goodsDO = goodsMapper.getGoodsById(goodsId);
+		GoodsDO goodsDO = goodsMapper.selectByPrimaryKey(goodsId);
 		if (goodsDO == null) {
 			FtException.throwException("商品不存在，操作仓库失败");
 		}
@@ -154,7 +154,7 @@ public class StockLogService {
 			String lockKey = StringUtil.append(StringUtil.REDIS_SPLIT, "storage", "goods", goodsId + "");
 			RedisLock redisLock = new RedisLock(valueOperationsCache);
 			redisLock.lock(lockKey, 10_000L);
-			goodsDO = goodsMapper.getGoodsById(goodsId);
+			goodsDO = goodsMapper.selectByPrimaryKey(goodsId);
 			if (goodsNumber <= goodsDO.getNumber()) {
 				goodsMapper.updateNumber(goodsId, goodsNumber * -1);
 				stockLogDO.setTypeDetail(StockLogTypeDetailEnum.OUT_PERSON.getTypeDetail());
