@@ -1,7 +1,7 @@
 package com.ft.br.dao;
 
-import com.ft.br.model.vo.ItemVO;
 import com.ft.dao.stock.mapper.ItemDOMapper;
+import com.ft.dao.stock.model.ItemDO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Component;
@@ -24,5 +24,5 @@ public interface ItemMapper extends ItemDOMapper {
 	 * @return 订单项集合
 	 */
 	@Select("select * from `item` where order_id = #{orderId} order by `id` asc")
-	List<ItemVO> selectByOrderId(Long orderId);
+	List<ItemDO> selectByOrderId(Long orderId);
 }
