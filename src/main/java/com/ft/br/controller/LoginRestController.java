@@ -5,6 +5,7 @@ import com.ft.br.model.ao.LoginAO;
 import com.ft.br.model.bo.CodeBO;
 import com.ft.br.model.bo.TokenBO;
 import com.ft.br.service.SsoService;
+import com.ft.redis.lock.RedisLock;
 import com.ft.util.StringUtil;
 import com.ft.util.model.RestResult;
 import com.ft.web.model.UserBO;
@@ -39,6 +40,9 @@ public class LoginRestController {
 	@Autowired
 	private SsoService ssoService;
 
+	@Autowired
+	private RedisLock redisLock;
+
 	/**
 	 * 图片验证码
 	 */
@@ -59,25 +63,31 @@ public class LoginRestController {
 			HttpServletRequest request,
 			HttpServletResponse response
 	) {
-		String token = WebUtil.getToken(request);
-		if (!StringUtil.isNull(token)) {
-			CurrentUserAO currentUserAO = new CurrentUserAO();
-			currentUserAO.setToken(token);
+		String lockKey = "sso_login_" + loginAO.getUsername();
+		try {
+			redisLock.lock(lockKey, 10_000L);
+			String token = WebUtil.getToken(request);
+			if (!StringUtil.isNull(token)) {
+				CurrentUserAO currentUserAO = new CurrentUserAO();
+				currentUserAO.setToken(token);
 
-			UserBO userBO = ssoService.currentUser(currentUserAO);
-			if (userBO != null) {
-				TokenBO tokenBO = new TokenBO();
-				tokenBO.setUser(userBO);
-				return RestResult.success(tokenBO);
+				UserBO userBO = ssoService.currentUser(currentUserAO);
+				if (userBO != null) {
+					TokenBO tokenBO = new TokenBO();
+					tokenBO.setUser(userBO);
+					return RestResult.success(tokenBO);
+				}
 			}
+
+			TokenBO tokenBO = ssoService.login(loginAO);
+
+			String domain = this.cookieDomain;
+			CookieUtil.addCookie(response, WebUtil.COOKIE_LOGIN, tokenBO.getToken(), CookieUtil.MAX_AGE_BROWSER, domain, true);
+
+			return RestResult.success(tokenBO);
+		} finally {
+			redisLock.unlock(lockKey);
 		}
-
-		TokenBO tokenBO = ssoService.login(loginAO);
-
-		String domain = this.cookieDomain;
-		CookieUtil.addCookie(response, WebUtil.COOKIE_LOGIN, tokenBO.getToken(), CookieUtil.MAX_AGE_BROWSER, domain, true);
-
-		return RestResult.success(tokenBO);
 	}
 
 	/**
