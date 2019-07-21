@@ -1,6 +1,7 @@
 package com.ft.br.service.impl;
 
 import com.ft.br.dao.CategoryMapper;
+import com.ft.br.model.bo.CategoryBO;
 import com.ft.br.service.CategoryService;
 import com.ft.dao.stock.model.CategoryDO;
 import com.ft.db.annotation.UseMaster;
@@ -9,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 分类业务
@@ -21,13 +24,15 @@ public class CategoryServiceImpl implements CategoryService {
 	@Autowired
 	private CategoryMapper categoryMapper;
 
-	/**
-	 * 获取所有分类信息
-	 *
-	 * @return 所有分类信息
-	 */
-	public Collection<CategoryDO> listAll() {
-		return categoryMapper.selectAllCategories().values();
+	@Override
+	public List<CategoryBO> listAllCategories() {
+		Collection<CategoryDO> categoryDOs = categoryMapper.selectAllCategories().values();
+		return categoryDOs.stream().map(categoryDO -> {
+			CategoryBO categoryBO = new CategoryBO();
+			categoryBO.setId(categoryDO.getId());
+			categoryBO.setName(categoryDO.getName());
+			return categoryBO;
+		}).collect(Collectors.toList());
 	}
 
 	/**
