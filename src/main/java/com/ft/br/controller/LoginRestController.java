@@ -1,5 +1,6 @@
 package com.ft.br.controller;
 
+import com.ft.br.model.ao.CurrentUserAO;
 import com.ft.br.model.ao.LoginAO;
 import com.ft.br.model.bo.CodeBO;
 import com.ft.br.model.bo.TokenBO;
@@ -15,7 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
@@ -72,7 +72,7 @@ public class LoginRestController {
 	@ApiOperation("查询当前登录用户信息")
 	@GetMapping("/current-user")
 	public RestResult<UserBO> user(
-			HttpServletRequest request
+			@Valid CurrentUserAO currentUserAO
 	) {
 		return null;
 	}
