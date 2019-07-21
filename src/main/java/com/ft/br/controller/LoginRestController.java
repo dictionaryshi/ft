@@ -74,6 +74,7 @@ public class LoginRestController {
 	public RestResult<UserBO> user(
 			@Valid CurrentUserAO currentUserAO
 	) {
-		return null;
+		UserBO userBO = ssoService.currentUser(currentUserAO);
+		return RestResult.success(userBO);
 	}
 }

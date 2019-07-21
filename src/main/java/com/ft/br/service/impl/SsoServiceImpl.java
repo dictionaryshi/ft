@@ -1,7 +1,9 @@
 package com.ft.br.service.impl;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.ft.br.constant.LoginConstant;
 import com.ft.br.dao.UserMapper;
+import com.ft.br.model.ao.CurrentUserAO;
 import com.ft.br.model.ao.LoginAO;
 import com.ft.br.model.bo.CodeBO;
 import com.ft.br.model.bo.TokenBO;
@@ -134,5 +136,20 @@ public class SsoServiceImpl implements SsoService {
 		}
 
 		return null;
+	}
+
+	@Override
+	public UserBO currentUser(CurrentUserAO currentUserAO) {
+		String tokenKey = StringUtil.append(StringUtil.REDIS_SPLIT, LoginConstant.REDIS_LOGIN_TOKEN, currentUserAO.getToken());
+		String userJson = valueOperationsCache.get(tokenKey);
+
+		if (StringUtil.isNull(userJson)) {
+			return null;
+		}
+
+		valueOperationsCache.expire(tokenKey, 3600_000L, TimeUnit.MILLISECONDS);
+
+		return JsonUtil.json2Object(userJson, new TypeReference<UserBO>() {
+		});
 	}
 }

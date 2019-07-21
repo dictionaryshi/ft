@@ -1,8 +1,10 @@
 package com.ft.br.service;
 
+import com.ft.br.model.ao.CurrentUserAO;
 import com.ft.br.model.ao.LoginAO;
 import com.ft.br.model.bo.CodeBO;
 import com.ft.br.model.bo.TokenBO;
+import com.ft.web.model.UserBO;
 
 /**
  * SsoService
@@ -32,4 +34,12 @@ public interface SsoService {
 	 * @return sso token
 	 */
 	TokenBO login(LoginAO loginAO);
+
+	/**
+	 * 获取当前用户信息
+	 *
+	 * @param currentUserAO token
+	 * @return 当前登陆用户信息
+	 */
+	UserBO currentUser(CurrentUserAO currentUserAO);
 }
