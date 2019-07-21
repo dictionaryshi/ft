@@ -6,7 +6,6 @@ import com.ft.br.model.bo.CodeBO;
 import com.ft.br.model.bo.TokenBO;
 import com.ft.br.service.SsoService;
 import com.ft.util.StringUtil;
-import com.ft.util.exception.FtException;
 import com.ft.util.model.RestResult;
 import com.ft.web.model.UserBO;
 import com.ft.web.util.CookieUtil;
@@ -67,7 +66,9 @@ public class LoginRestController {
 
 			UserBO userBO = ssoService.currentUser(currentUserAO);
 			if (userBO != null) {
-				FtException.throwException("请不要重复登陆");
+				TokenBO tokenBO = new TokenBO();
+				tokenBO.setUser(userBO);
+				return RestResult.success(tokenBO);
 			}
 		}
 
