@@ -1,14 +1,11 @@
 package com.ft.br.controller;
 
 import com.ft.br.constant.LoginConstant;
+import com.ft.br.model.bo.CodeBO;
 import com.ft.br.service.LoginService;
+import com.ft.br.service.SsoService;
 import com.ft.br.util.LoginUtil;
-import com.ft.redis.base.ValueOperationsCache;
-import com.ft.util.CommonUtil;
-import com.ft.util.ImageUtil;
 import com.ft.util.JsonUtil;
-import com.ft.util.StringUtil;
-import com.ft.util.exception.FtException;
 import com.ft.util.model.RestResult;
 import com.ft.web.constant.SwaggerConstant;
 import com.ft.web.model.UserBO;
@@ -25,11 +22,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.ByteArrayOutputStream;
-import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 /**
  * 登录相关api
@@ -46,11 +40,21 @@ public class LoginRestController {
 	@Autowired
 	private LoginService loginService;
 
-	@Autowired
-	private ValueOperationsCache<String, String> valueOperationsCache;
-
 	@Value("${cookieDomain}")
 	private String cookieDomain;
+
+	@Autowired
+	private SsoService ssoService;
+
+	/**
+	 * 图片验证码
+	 */
+	@ApiOperation("获取图片验证码")
+	@GetMapping("/code")
+	public RestResult<CodeBO> code() {
+		CodeBO codeBO = ssoService.getCode();
+		return RestResult.success(codeBO);
+	}
 
 	@ApiOperation("登录")
 	@ApiImplicitParams({
@@ -92,28 +96,6 @@ public class LoginRestController {
 		String domain = this.cookieDomain;
 		CookieUtil.addCookie(response, WebUtil.PARAM_LOGIN_TOKEN, token, CookieUtil.MAX_AGE_BROWSER, domain, true);
 
-		return JsonUtil.object2Json(RestResult.success(result));
-	}
-
-	@ApiOperation("图片验证码")
-	/**
-	 * 图片验证码
-	 */
-	@RequestMapping(value = "/code", method = RequestMethod.POST)
-	public String code() {
-		ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-		String code = ImageUtil.getImage(byteArrayOutputStream);
-		String codeId = CommonUtil.get32UUID();
-
-		String codeRedisKey = StringUtil.append(StringUtil.REDIS_SPLIT, LoginConstant.REDIS_VERIFICATION_CODE, codeId);
-		boolean flag = valueOperationsCache.setIfAbsent(codeRedisKey, code, 300_000L, TimeUnit.MILLISECONDS);
-		if (!flag) {
-			FtException.throwException("验证码存储异常");
-		}
-
-		Map<String, Object> result = new HashMap<>(16);
-		result.put("code_id", codeId);
-		result.put("img", Base64.getEncoder().encodeToString(byteArrayOutputStream.toByteArray()));
 		return JsonUtil.object2Json(RestResult.success(result));
 	}
 
