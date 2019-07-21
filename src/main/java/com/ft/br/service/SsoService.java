@@ -11,6 +11,14 @@ import com.ft.br.model.bo.TokenBO;
  */
 public interface SsoService {
 	/**
+	 * 死锁测试
+	 *
+	 * @param lockId1 锁定id
+	 * @param lockId2 锁定id
+	 */
+	void deadLock(int lockId1, int lockId2);
+
+	/**
 	 * 获取图片验证码
 	 *
 	 * @return 图片验证码

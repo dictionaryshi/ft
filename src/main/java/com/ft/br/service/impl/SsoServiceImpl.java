@@ -7,6 +7,7 @@ import com.ft.br.model.bo.CodeBO;
 import com.ft.br.model.bo.TokenBO;
 import com.ft.br.service.SsoService;
 import com.ft.dao.stock.model.UserDO;
+import com.ft.db.constant.DbConstant;
 import com.ft.redis.base.ValueOperationsCache;
 import com.ft.util.*;
 import com.ft.util.exception.FtException;
@@ -16,6 +17,9 @@ import com.ft.web.model.UserBO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.ByteArrayOutputStream;
 import java.util.Base64;
@@ -35,6 +39,13 @@ public class SsoServiceImpl implements SsoService {
 
 	@Autowired
 	private UserMapper userMapper;
+
+	@Override
+	@Transactional(value = DbConstant.DB_CONSIGN + DbConstant.TRAN_SACTION_MANAGER, propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED, rollbackFor = Throwable.class)
+	public void deadLock(int lockId1, int lockId2) {
+		userMapper.deadLock(lockId1);
+		userMapper.deadLock(lockId2);
+	}
 
 	@Override
 	public CodeBO getCode() {
