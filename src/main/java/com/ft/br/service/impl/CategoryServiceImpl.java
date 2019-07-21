@@ -1,4 +1,4 @@
-package com.ft.br.service;
+package com.ft.br.service.impl;
 
 import com.ft.br.dao.CategoryMapper;
 import com.ft.dao.stock.model.CategoryDO;
@@ -15,7 +15,7 @@ import java.util.Collection;
  * @author shichunyang
  */
 @Service
-public class CategoryService {
+public class CategoryServiceImpl {
 
 	@Autowired
 	private CategoryMapper categoryMapper;

@@ -1,6 +1,6 @@
 package com.ft.br.controller;
 
-import com.ft.br.service.CategoryService;
+import com.ft.br.service.impl.CategoryServiceImpl;
 import com.ft.util.JsonUtil;
 import com.ft.util.model.RestResult;
 import com.ft.web.annotation.LoginCheck;
@@ -26,7 +26,7 @@ import java.util.Map;
 public class CategoryController {
 
 	@Autowired
-	private CategoryService categoryService;
+	private CategoryServiceImpl categoryService;
 
 	@ApiOperation("查询所有分类信息")
 	/**
