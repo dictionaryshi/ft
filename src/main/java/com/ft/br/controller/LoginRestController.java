@@ -3,7 +3,6 @@ package com.ft.br.controller;
 import com.ft.br.model.ao.LoginAO;
 import com.ft.br.model.bo.CodeBO;
 import com.ft.br.model.bo.TokenBO;
-import com.ft.br.service.LoginService;
 import com.ft.br.service.SsoService;
 import com.ft.util.model.RestResult;
 import com.ft.web.model.UserBO;
@@ -31,9 +30,6 @@ import javax.validation.Valid;
 @CrossOrigin
 @RequestMapping(RestResult.API + "/sso")
 public class LoginRestController {
-
-	@Autowired
-	private LoginService loginService;
 
 	@Value("${cookieDomain}")
 	private String cookieDomain;

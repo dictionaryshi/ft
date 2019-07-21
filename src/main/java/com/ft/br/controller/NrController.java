@@ -2,7 +2,7 @@ package com.ft.br.controller;
 
 import com.ft.br.feign.RemoteService;
 import com.ft.br.model.dto.ValidParent;
-import com.ft.br.service.LoginService;
+import com.ft.br.service.SsoService;
 import com.ft.br.websocket.OrderWebSocket;
 import com.ft.dao.stock.model.UserDO;
 import com.ft.rpc.api.model.RpcParam;
@@ -37,7 +37,7 @@ public class NrController {
 	private RemoteService remoteService;
 
 	@Autowired
-	private LoginService loginService;
+	private SsoService ssoService;
 
 	@Autowired
 	private ExecutorService executorService;
@@ -101,14 +101,14 @@ public class NrController {
 	public RestResult<Boolean> deadLock() {
 		executorService.submit(() -> {
 			try {
-				loginService.deadLock(1, 2);
+				ssoService.deadLock(1, 2);
 			} catch (Exception e) {
 				log.warn("deadLock1, exception==>{}", FtException.getExceptionStack(e));
 			}
 		});
 		executorService.submit(() -> {
 			try {
-				loginService.deadLock(2, 1);
+				ssoService.deadLock(2, 1);
 			} catch (Exception e) {
 				log.warn("deadLock2, exception==>{}", FtException.getExceptionStack(e));
 			}
