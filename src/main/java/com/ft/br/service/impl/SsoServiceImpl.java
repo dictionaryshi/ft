@@ -71,7 +71,17 @@ public class SsoServiceImpl implements SsoService {
 
 		// 校验用户名 密码
 		UserBO userBO = this.checkUserAndPassword(loginAO);
-		return null;
+
+		// token 用户信息绑定
+		String token = CommonUtil.get32UUID();
+		String tokenKey = StringUtil.append(StringUtil.REDIS_SPLIT, LoginConstant.REDIS_LOGIN_TOKEN, token);
+		valueOperationsCache.setIfAbsent(tokenKey, JsonUtil.object2Json(userBO), 3600_000L, TimeUnit.MILLISECONDS);
+
+		TokenBO tokenBO = new TokenBO();
+		tokenBO.setToken(token);
+		tokenBO.setUser(userBO);
+
+		return tokenBO;
 	}
 
 	private UserBO checkUserAndPassword(LoginAO loginAO) {
