@@ -5,6 +5,7 @@ import com.ft.br.model.ao.LoginAO;
 import com.ft.br.model.bo.CodeBO;
 import com.ft.br.model.bo.TokenBO;
 import com.ft.br.service.SsoService;
+import com.ft.util.StringUtil;
 import com.ft.util.model.RestResult;
 import com.ft.web.model.UserBO;
 import com.ft.web.util.CookieUtil;
@@ -16,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
@@ -54,8 +56,22 @@ public class LoginRestController {
 	@PostMapping("/login")
 	public RestResult<TokenBO> login(
 			@RequestBody @Valid LoginAO loginAO,
+			HttpServletRequest request,
 			HttpServletResponse response
 	) {
+		String token = WebUtil.getToken(request);
+		if (!StringUtil.isNull(token)) {
+			CurrentUserAO currentUserAO = new CurrentUserAO();
+			currentUserAO.setToken(token);
+
+			UserBO userBO = ssoService.currentUser(currentUserAO);
+			if (userBO != null) {
+				TokenBO tokenBO = new TokenBO();
+				tokenBO.setUser(userBO);
+				return RestResult.success(tokenBO);
+			}
+		}
+
 		TokenBO tokenBO = ssoService.login(loginAO);
 
 		String domain = this.cookieDomain;
