@@ -1,5 +1,6 @@
 package com.ft.br.controller;
 
+import com.ft.br.service.CategoryService;
 import com.ft.br.service.impl.CategoryServiceImpl;
 import com.ft.util.JsonUtil;
 import com.ft.util.model.RestResult;
@@ -26,7 +27,10 @@ import java.util.Map;
 public class CategoryController {
 
 	@Autowired
-	private CategoryServiceImpl categoryService;
+	private CategoryServiceImpl categoryServiceImpl;
+
+	@Autowired
+	private CategoryService categoryService;
 
 	@ApiOperation("查询所有分类信息")
 	/**
@@ -37,7 +41,7 @@ public class CategoryController {
 	@RequestMapping(value = "/all", method = RequestMethod.POST)
 	@LoginCheck
 	public String all() {
-		return JsonUtil.object2Json(RestResult.success(categoryService.listAll()));
+		return JsonUtil.object2Json(RestResult.success(categoryServiceImpl.listAll()));
 	}
 
 	@ApiOperation("添加分类信息")
@@ -56,7 +60,7 @@ public class CategoryController {
 
 		name = name.trim();
 
-		String flag = categoryService.add(name) ? "添加成功" : "添加失败";
+		String flag = categoryServiceImpl.add(name) ? "添加成功" : "添加失败";
 
 		Map<String, Object> result = new HashMap<>(16);
 		result.put("flag", flag);
@@ -86,7 +90,7 @@ public class CategoryController {
 			@RequestParam(value = "name") String name
 	) {
 		name = name.trim();
-		String flag = categoryService.update(id, name) ? "修改成功" : "修改失败";
+		String flag = categoryServiceImpl.update(id, name) ? "修改成功" : "修改失败";
 		Map<String, Object> result = new HashMap<>(16);
 		result.put("flag", flag);
 		return JsonUtil.object2Json(RestResult.success(result));
@@ -105,6 +109,6 @@ public class CategoryController {
 	@RequestMapping(value = "/get", method = RequestMethod.POST)
 	@LoginCheck
 	public String get(@RequestParam(value = "id") short id) {
-		return JsonUtil.object2Json(RestResult.success(categoryService.get(id)));
+		return JsonUtil.object2Json(RestResult.success(categoryServiceImpl.get(id)));
 	}
 }

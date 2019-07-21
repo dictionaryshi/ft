@@ -1,6 +1,7 @@
 package com.ft.br.service.impl;
 
 import com.ft.br.dao.CategoryMapper;
+import com.ft.br.service.CategoryService;
 import com.ft.dao.stock.model.CategoryDO;
 import com.ft.db.annotation.UseMaster;
 import com.ft.util.exception.FtException;
@@ -14,8 +15,8 @@ import java.util.Collection;
  *
  * @author shichunyang
  */
-@Service
-public class CategoryServiceImpl {
+@Service("com.ft.br.service.impl.CategoryServiceImpl")
+public class CategoryServiceImpl implements CategoryService {
 
 	@Autowired
 	private CategoryMapper categoryMapper;
