@@ -1,7 +1,5 @@
 package com.ft.br.service.impl;
 
-import java.util.Date;
-
 import com.ft.br.constant.LoginConstant;
 import com.ft.br.dao.UserMapper;
 import com.ft.br.model.ao.LoginAO;
@@ -17,7 +15,6 @@ import com.ft.util.model.LogBO;
 import com.ft.web.model.UserBO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayOutputStream;
@@ -35,9 +32,6 @@ public class SsoServiceImpl implements SsoService {
 
 	@Autowired
 	private ValueOperationsCache<String, String> valueOperationsCache;
-
-	@Value("${cookieDomain}")
-	private String cookieDomain;
 
 	@Autowired
 	private UserMapper userMapper;
