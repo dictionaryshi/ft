@@ -53,7 +53,7 @@ public class LoginRestController {
 	@ApiOperation("用户登录")
 	@PostMapping("/login")
 	public RestResult<TokenBO> login(
-			@Valid LoginAO loginAO,
+			@RequestBody @Valid LoginAO loginAO,
 			HttpServletResponse response
 	) {
 		TokenBO tokenBO = ssoService.login(loginAO);
