@@ -1,5 +1,6 @@
 package com.ft.br.controller;
 
+import com.ft.br.model.bo.CategoryBO;
 import com.ft.br.service.CategoryService;
 import com.ft.br.service.impl.CategoryServiceImpl;
 import com.ft.util.JsonUtil;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -32,16 +34,14 @@ public class CategoryController {
 	@Autowired
 	private CategoryService categoryService;
 
-	@ApiOperation("查询所有分类信息")
 	/**
 	 * 查询所有分类信息
-	 *
-	 * @return 所有分类信息
 	 */
-	@RequestMapping(value = "/all", method = RequestMethod.POST)
+	@ApiOperation("查询所有分类信息")
 	@LoginCheck
-	public String all() {
-		return JsonUtil.object2Json(RestResult.success(categoryServiceImpl.listAll()));
+	@GetMapping("/all")
+	public RestResult<List<CategoryBO>> all() {
+		return RestResult.success(categoryService.listAllCategories());
 	}
 
 	@ApiOperation("添加分类信息")
