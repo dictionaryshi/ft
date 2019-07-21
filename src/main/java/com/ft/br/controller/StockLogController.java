@@ -2,7 +2,6 @@ package com.ft.br.controller;
 
 import com.ft.br.model.dto.StockLogDTO;
 import com.ft.br.service.StockLogService;
-import com.ft.br.util.LoginUtil;
 import com.ft.dao.stock.model.StockLogDO;
 import com.ft.db.model.PageParam;
 import com.ft.util.JsonUtil;
@@ -88,7 +87,7 @@ public class StockLogController {
 			@RequestParam(value = "remark", required = false, defaultValue = "") String remark
 	) {
 		StockLogDO stockLogDO = new StockLogDO();
-		stockLogDO.setOperator(LoginUtil.getLoginUser(request).getId().intValue());
+		stockLogDO.setOperator(0);
 		stockLogDO.setType(type);
 		stockLogDO.setGoodsId(goodsId);
 		stockLogDO.setGoodsNumber(goodsNumber);
