@@ -1,18 +1,20 @@
 package com.ft.br.service.impl;
 
+import java.util.Date;
+
 import com.ft.br.constant.LoginConstant;
+import com.ft.br.dao.UserMapper;
 import com.ft.br.model.ao.LoginAO;
 import com.ft.br.model.bo.CodeBO;
 import com.ft.br.model.bo.TokenBO;
 import com.ft.br.service.SsoService;
+import com.ft.dao.stock.model.UserDO;
 import com.ft.redis.base.ValueOperationsCache;
-import com.ft.util.CommonUtil;
-import com.ft.util.ImageUtil;
-import com.ft.util.LogUtil;
-import com.ft.util.StringUtil;
+import com.ft.util.*;
 import com.ft.util.exception.FtException;
 import com.ft.util.model.LogAO;
 import com.ft.util.model.LogBO;
+import com.ft.web.model.UserBO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -36,6 +38,9 @@ public class SsoServiceImpl implements SsoService {
 
 	@Value("${cookieDomain}")
 	private String cookieDomain;
+
+	@Autowired
+	private UserMapper userMapper;
 
 	@Override
 	public CodeBO getCode() {
@@ -63,7 +68,33 @@ public class SsoServiceImpl implements SsoService {
 		if (errorMessage != null) {
 			FtException.throwException(errorMessage);
 		}
+
+		// 校验用户名 密码
+		UserBO userBO = this.checkUserAndPassword(loginAO);
 		return null;
+	}
+
+	private UserBO checkUserAndPassword(LoginAO loginAO) {
+		UserDO userDO = userMapper.getUserByUserName(loginAO.getUsername());
+		if (userDO == null) {
+			LogBO logBO = LogUtil.log("用户名不存在",
+					LogAO.build("username", loginAO.getUsername()));
+			log.info(logBO.getLogPattern(), logBO.getParams());
+			FtException.throwException("用户名或密码不正确");
+		}
+
+		String md5Password = EncodeUtil.md5Encode(loginAO.getPassword());
+		if (!ObjectUtil.equals(md5Password, userDO.getPassword())) {
+			FtException.throwException("用户名或密码不正确");
+		}
+
+		UserBO userBO = new UserBO();
+		userBO.setId(userDO.getId());
+		userBO.setUsername(userDO.getUsername());
+		userBO.setCreatedAt(userDO.getCreatedAt());
+		userBO.setUpdatedAt(userDO.getUpdatedAt());
+
+		return userBO;
 	}
 
 	private String checkCode(LoginAO loginAO) {
