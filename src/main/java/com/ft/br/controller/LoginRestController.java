@@ -63,7 +63,7 @@ public class LoginRestController {
 		TokenBO tokenBO = ssoService.login(loginAO);
 
 		String domain = this.cookieDomain;
-		CookieUtil.addCookie(response, WebUtil.PARAM_LOGIN_TOKEN, tokenBO.getToken(), CookieUtil.MAX_AGE_BROWSER, domain, true);
+		CookieUtil.addCookie(response, WebUtil.COOKIE_LOGIN, tokenBO.getToken(), CookieUtil.MAX_AGE_BROWSER, domain, true);
 
 		return RestResult.success(tokenBO);
 	}
