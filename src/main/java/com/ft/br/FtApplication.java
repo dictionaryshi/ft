@@ -1,6 +1,6 @@
 package com.ft.br;
 
-import com.ft.br.service.GoodsService;
+import com.ft.br.service.impl.GoodsServiceImpl;
 import com.ft.util.*;
 import com.ft.util.exception.FtException;
 import com.ft.util.thread.ThreadPoolUtil;
@@ -48,7 +48,7 @@ import java.util.*;
 @EnableFeignClients(basePackages = CommonUtil.BASE_PACKAGE)
 public class FtApplication {
 	@Autowired
-	private GoodsService goodsService;
+	private GoodsServiceImpl goodsService;
 
 	@Value("${spring.cloud.client.ip-address}")
 	private String ip;
