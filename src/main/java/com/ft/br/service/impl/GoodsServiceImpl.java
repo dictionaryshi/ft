@@ -116,32 +116,6 @@ public class GoodsServiceImpl implements GoodsService {
 	}
 
 	/**
-	 * 添加商品
-	 *
-	 * @param name       商品名称
-	 * @param categoryId 分类id
-	 * @return true:添加成功
-	 */
-	@UseMaster
-	public boolean add(String name, int categoryId) {
-
-		CategoryDO categoryDO = categoryMapper.selectByPrimaryKey(categoryId);
-		if (categoryDO == null) {
-			FtException.throwException("商品分类不存在");
-		}
-
-		if (goodsMapper.getGoodsByName(categoryId, name) != null) {
-			FtException.throwException("商品已经存在");
-		}
-
-		GoodsDO goodsDO = new GoodsDO();
-		goodsDO.setName(name);
-		goodsDO.setCategory(categoryId);
-
-		return goodsMapper.insertSelective(goodsDO) == 1;
-	}
-
-	/**
 	 * 分页查询商品信息
 	 *
 	 * @param categoryId 分类id
