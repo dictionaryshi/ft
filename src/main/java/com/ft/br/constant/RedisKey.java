@@ -18,4 +18,6 @@ public class RedisKey {
 	 * 登录token redis key
 	 */
 	public static final String REDIS_LOGIN_TOKEN = "ft_br_redis_token";
+
+	public static final String REDIS_SSO_LOGIN_LOCK = "ft_br_sso_login_lock";
 }
