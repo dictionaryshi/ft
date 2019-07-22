@@ -1,5 +1,6 @@
 package com.ft.br.controller;
 
+import com.ft.br.model.ao.CategoryAddAO;
 import com.ft.br.model.ao.CategoryGetAO;
 import com.ft.br.model.bo.CategoryBO;
 import com.ft.br.service.CategoryService;
@@ -59,27 +60,17 @@ public class CategoryController {
 		return RestResult.success(categoryBO);
 	}
 
-	@ApiOperation("添加分类信息")
-	@ApiImplicitParams({
-			@ApiImplicitParam(name = "name", value = "分类名称", required = true, dataType = SwaggerConstant.DATA_TYPE_STRING, paramType = SwaggerConstant.PARAM_TYPE_QUERY)
-	})
 	/**
 	 * 添加分类信息
-	 *
-	 * @param name 分类名称
-	 * @return 添加结果
 	 */
-	@RequestMapping(value = "/add", method = RequestMethod.POST)
+	@ApiOperation("添加分类信息")
 	@LoginCheck
-	public String add(@RequestParam(value = "name") String name) {
-
-		name = name.trim();
-
-		String flag = categoryServiceImpl.add(name) ? "添加成功" : "添加失败";
-
-		Map<String, Object> result = new HashMap<>(16);
-		result.put("flag", flag);
-		return JsonUtil.object2Json(RestResult.success(result));
+	@PostMapping("/add")
+	public RestResult<Boolean> add(
+			@RequestBody @Valid CategoryAddAO categoryAddAO
+	) {
+		boolean result = categoryService.add(categoryAddAO);
+		return RestResult.success(result);
 	}
 
 	@ApiOperation("根据id修改分类信息")

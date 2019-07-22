@@ -1,6 +1,7 @@
 package com.ft.br.service.impl;
 
 import com.ft.br.dao.CategoryMapper;
+import com.ft.br.model.ao.CategoryAddAO;
 import com.ft.br.model.bo.CategoryBO;
 import com.ft.br.service.CategoryService;
 import com.ft.dao.stock.model.CategoryDO;
@@ -49,17 +50,13 @@ public class CategoryServiceImpl implements CategoryService {
 		return categoryBO;
 	}
 
-	/**
-	 * 添加分类信息
-	 *
-	 * @param name 分类名称
-	 * @return true:添加成功
-	 */
-	@UseMaster
-	public boolean add(String name) {
+	@Override
+	public boolean add(CategoryAddAO categoryAddAO) {
+		String name = categoryAddAO.getName();
+
 		CategoryDO categoryDO = categoryMapper.getCategoryByName(name);
 		if (categoryDO != null) {
-			FtException.throwException("请不要重复添加分类信息");
+			FtException.throwException("分类信息已存在");
 		}
 
 		categoryDO = new CategoryDO();
