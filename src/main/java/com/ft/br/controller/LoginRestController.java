@@ -1,11 +1,13 @@
 package com.ft.br.controller;
 
+import com.ft.br.constant.RedisKey;
 import com.ft.br.model.ao.CurrentUserAO;
 import com.ft.br.model.ao.LoginAO;
 import com.ft.br.model.bo.CodeBO;
 import com.ft.br.model.bo.TokenBO;
 import com.ft.br.service.SsoService;
 import com.ft.redis.lock.RedisLock;
+import com.ft.redis.util.RedisUtil;
 import com.ft.util.StringUtil;
 import com.ft.util.model.RestResult;
 import com.ft.web.model.UserBO;
@@ -63,7 +65,7 @@ public class LoginRestController {
 			HttpServletRequest request,
 			HttpServletResponse response
 	) {
-		String lockKey = "sso_login_" + loginAO.getUsername();
+		String lockKey = RedisUtil.getRedisKey(RedisKey.REDIS_SSO_LOGIN_LOCK, loginAO.getUsername());
 		try {
 			redisLock.lock(lockKey, 10_000L);
 			String token = WebUtil.getToken(request);
