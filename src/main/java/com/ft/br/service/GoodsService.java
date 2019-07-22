@@ -2,6 +2,7 @@ package com.ft.br.service;
 
 import com.ft.br.model.ao.goods.GoodsAddAO;
 import com.ft.br.model.ao.goods.GoodsGetAO;
+import com.ft.br.model.bo.GoodsBO;
 import com.ft.dao.stock.model.GoodsDO;
 
 /**
@@ -25,7 +26,7 @@ public interface GoodsService {
 	 * @param goodsGetAO 商品主键
 	 * @return 商品信息
 	 */
-	GoodsDO get(GoodsGetAO goodsGetAO);
+	GoodsBO get(GoodsGetAO goodsGetAO);
 
 	/**
 	 * 根据主键查询商品信息

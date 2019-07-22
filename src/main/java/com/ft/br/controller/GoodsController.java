@@ -2,9 +2,9 @@ package com.ft.br.controller;
 
 import com.ft.br.model.ao.goods.GoodsAddAO;
 import com.ft.br.model.ao.goods.GoodsGetAO;
+import com.ft.br.model.bo.GoodsBO;
 import com.ft.br.service.GoodsService;
 import com.ft.br.service.impl.GoodsServiceImpl;
-import com.ft.dao.stock.model.GoodsDO;
 import com.ft.db.model.PageParam;
 import com.ft.util.JsonUtil;
 import com.ft.util.model.RestResult;
@@ -57,11 +57,11 @@ public class GoodsController {
 	@ApiOperation("根据id查询商品信息")
 	@LoginCheck
 	@GetMapping("/get")
-	public RestResult<GoodsDO> get(
+	public RestResult<GoodsBO> get(
 			@Valid GoodsGetAO goodsGetAO
 	) {
-		GoodsDO goodsDO = goodsService.get(goodsGetAO);
-		return RestResult.success(goodsDO);
+		GoodsBO goodsBO = goodsService.get(goodsGetAO);
+		return RestResult.success(goodsBO);
 	}
 
 	@ApiOperation("修改商品信息")

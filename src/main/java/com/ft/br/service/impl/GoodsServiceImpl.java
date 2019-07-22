@@ -6,6 +6,8 @@ import com.ft.br.dao.GoodsMapper;
 import com.ft.br.model.ao.GoodsListAO;
 import com.ft.br.model.ao.goods.GoodsAddAO;
 import com.ft.br.model.ao.goods.GoodsGetAO;
+import com.ft.br.model.bo.CategoryBO;
+import com.ft.br.model.bo.GoodsBO;
 import com.ft.br.model.vo.GoodsVO;
 import com.ft.br.service.CategoryService;
 import com.ft.br.service.GoodsService;
@@ -74,9 +76,25 @@ public class GoodsServiceImpl implements GoodsService {
 	}
 
 	@Override
-	public GoodsDO get(GoodsGetAO goodsGetAO) {
+	public GoodsBO get(GoodsGetAO goodsGetAO) {
 		int id = goodsGetAO.getId();
-		return goodsMapper.selectByPrimaryKey(id);
+		GoodsDO goodsDO = this.get(id);
+		if (goodsDO == null) {
+			return null;
+		}
+
+		GoodsBO goodsBO = new GoodsBO();
+		goodsBO.setId(goodsDO.getId());
+		goodsBO.setGoodsName(goodsDO.getName());
+		goodsBO.setStockNumber(goodsDO.getNumber());
+		goodsBO.setCategoryId(goodsDO.getCategory());
+
+		CategoryBO categoryBO = categoryService.getById(goodsDO.getCategory());
+		if (categoryBO != null) {
+			goodsBO.setCategoryName(categoryBO.getName());
+		}
+
+		return goodsBO;
 	}
 
 	@Override
