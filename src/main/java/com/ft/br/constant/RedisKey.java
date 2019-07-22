@@ -20,4 +20,6 @@ public class RedisKey {
 	public static final String REDIS_LOGIN_TOKEN = "ft_br_redis_token";
 
 	public static final String REDIS_SSO_LOGIN_LOCK = "ft_br_sso_login_lock";
+
+	public static final String REDIS_GOODS_ADD_LOCK = "ft_br_redis_goods_add_lock";
 }
