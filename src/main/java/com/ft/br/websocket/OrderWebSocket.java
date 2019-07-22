@@ -1,6 +1,6 @@
 package com.ft.br.websocket;
 
-import com.ft.br.service.GoodsService;
+import com.ft.br.service.impl.GoodsServiceImpl;
 import com.ft.util.JsonUtil;
 import com.ft.util.SpringContextUtil;
 import com.ft.util.exception.FtException;
@@ -45,7 +45,7 @@ public class OrderWebSocket {
 	@OnMessage
 	public void onMessage(Session session, String message) {
 		log.info("client==>{}, oid==>{}, msg==>{}", session, ORDER_WEB_SOCKET.get(session), message);
-		GoodsService goodsService = SpringContextUtil.getBean(GoodsService.class);
+		GoodsServiceImpl goodsService = SpringContextUtil.getBean(GoodsServiceImpl.class);
 		sendMessage(session, JsonUtil.object2Json(goodsService.get(ORDER_WEB_SOCKET.get(session))));
 	}
 
