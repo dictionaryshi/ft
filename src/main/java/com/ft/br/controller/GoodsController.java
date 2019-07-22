@@ -1,5 +1,7 @@
 package com.ft.br.controller;
 
+import com.ft.br.model.ao.goods.GoodsAddAO;
+import com.ft.br.service.GoodsService;
 import com.ft.br.service.impl.GoodsServiceImpl;
 import com.ft.db.model.PageParam;
 import com.ft.util.JsonUtil;
@@ -14,6 +16,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 /**
  * 商品API
  *
@@ -27,7 +31,23 @@ import org.springframework.web.bind.annotation.*;
 public class GoodsController {
 
 	@Autowired
+	private GoodsService goodsService;
+
+	@Autowired
 	private GoodsServiceImpl goodsServiceImpl;
+
+	/**
+	 * 添加商品信息
+	 */
+	@ApiOperation("添加商品信息")
+	@LoginCheck
+	@PostMapping("/add")
+	public RestResult<Boolean> add(
+			@RequestBody @Valid GoodsAddAO goodsAddAO
+	) {
+		boolean result = goodsService.add(goodsAddAO);
+		return RestResult.success(result);
+	}
 
 	@ApiOperation("根据id查询商品信息")
 	@ApiImplicitParams({
@@ -67,27 +87,6 @@ public class GoodsController {
 			@RequestParam("category_id") short categoryId
 	) {
 		return JsonUtil.object2Json(RestResult.success(goodsServiceImpl.update(id, name, categoryId)));
-	}
-
-	@ApiOperation("添加商品信息")
-	@ApiImplicitParams({
-			@ApiImplicitParam(name = "name", value = "商品名称", required = true, dataType = SwaggerConstant.DATA_TYPE_STRING, paramType = SwaggerConstant.PARAM_TYPE_QUERY),
-			@ApiImplicitParam(name = "category_id", value = "分类id", required = true, dataType = SwaggerConstant.DATA_TYPE_INT, paramType = SwaggerConstant.PARAM_TYPE_QUERY, example = "0"),
-	})
-	/**
-	 * 添加商品信息
-	 *
-	 * @param name       商品名称
-	 * @param categoryId 分类id
-	 * @return 添加结果
-	 */
-	@RequestMapping(value = "/add", method = RequestMethod.POST)
-	@LoginCheck
-	public String add(
-			@RequestParam("name") String name,
-			@RequestParam("category_id") short categoryId
-	) {
-		return JsonUtil.object2Json(RestResult.success(goodsServiceImpl.add(name, categoryId)));
 	}
 
 	@ApiOperation("分页查询商品")

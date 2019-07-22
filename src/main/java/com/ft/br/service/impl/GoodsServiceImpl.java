@@ -1,8 +1,10 @@
 package com.ft.br.service.impl;
 
+import com.ft.br.constant.RedisKey;
 import com.ft.br.dao.CategoryMapper;
 import com.ft.br.dao.GoodsMapper;
 import com.ft.br.model.ao.GoodsListAO;
+import com.ft.br.model.ao.goods.GoodsAddAO;
 import com.ft.br.model.vo.GoodsVO;
 import com.ft.br.service.CategoryService;
 import com.ft.br.service.GoodsService;
@@ -11,6 +13,8 @@ import com.ft.dao.stock.model.GoodsDO;
 import com.ft.db.annotation.UseMaster;
 import com.ft.db.model.PageParam;
 import com.ft.db.model.PageResult;
+import com.ft.redis.lock.RedisLock;
+import com.ft.redis.util.RedisUtil;
 import com.ft.util.exception.FtException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +40,36 @@ public class GoodsServiceImpl implements GoodsService {
 
 	@Autowired
 	private CategoryService categoryService;
+
+	@Autowired
+	private RedisLock redisLock;
+
+	@Override
+	public boolean add(GoodsAddAO goodsAddAO) {
+		int categoryId = goodsAddAO.getCategoryId();
+		String name = goodsAddAO.getName();
+
+		CategoryDO categoryDO = categoryMapper.selectByPrimaryKey(categoryId);
+		if (categoryDO == null) {
+			FtException.throwException("商品分类不存在");
+		}
+
+		String lockKey = RedisUtil.getRedisKey(RedisKey.REDIS_GOODS_ADD_LOCK, categoryId + "_" + name);
+		try {
+			redisLock.lock(lockKey, 10_000L);
+			if (goodsMapper.getGoodsByName(categoryId, name) != null) {
+				FtException.throwException("商品已经存在");
+			}
+
+			GoodsDO goodsDO = new GoodsDO();
+			goodsDO.setName(name);
+			goodsDO.setCategory(categoryId);
+
+			return goodsMapper.insertSelective(goodsDO) == 1;
+		} finally {
+			redisLock.unlock(lockKey);
+		}
+	}
 
 	/**
 	 * 根据商品id查询商品信息
