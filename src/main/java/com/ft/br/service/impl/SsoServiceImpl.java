@@ -1,7 +1,7 @@
 package com.ft.br.service.impl;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.ft.br.constant.LoginConstant;
+import com.ft.br.constant.RedisKey;
 import com.ft.br.dao.UserMapper;
 import com.ft.br.model.ao.CurrentUserAO;
 import com.ft.br.model.ao.LoginAO;
@@ -11,6 +11,7 @@ import com.ft.br.service.SsoService;
 import com.ft.dao.stock.model.UserDO;
 import com.ft.db.constant.DbConstant;
 import com.ft.redis.base.ValueOperationsCache;
+import com.ft.redis.util.RedisUtil;
 import com.ft.util.*;
 import com.ft.util.exception.FtException;
 import com.ft.util.model.LogAO;
@@ -62,7 +63,7 @@ public class SsoServiceImpl implements SsoService {
 		codeBO.setImg(img);
 
 		// code codeId做关系绑定
-		String codeIdKey = StringUtil.append(StringUtil.REDIS_SPLIT, LoginConstant.REDIS_VERIFICATION_CODE, codeId);
+		String codeIdKey = RedisUtil.getRedisKey(RedisKey.REDIS_VERIFICATION_CODE, codeId);
 		valueOperationsCache.setIfAbsent(codeIdKey, code, 300_000L, TimeUnit.MILLISECONDS);
 
 		return codeBO;
@@ -81,7 +82,7 @@ public class SsoServiceImpl implements SsoService {
 
 		// token 用户信息绑定
 		String token = CommonUtil.get32UUID();
-		String tokenKey = StringUtil.append(StringUtil.REDIS_SPLIT, LoginConstant.REDIS_LOGIN_TOKEN, token);
+		String tokenKey = RedisUtil.getRedisKey(RedisKey.REDIS_LOGIN_TOKEN, token);
 		valueOperationsCache.setIfAbsent(tokenKey, JsonUtil.object2Json(userBO), 3600_000L, TimeUnit.MILLISECONDS);
 
 		TokenBO tokenBO = new TokenBO();
@@ -119,7 +120,8 @@ public class SsoServiceImpl implements SsoService {
 
 		// 校验code
 		String codeId = loginAO.getCodeId();
-		String redisCode = valueOperationsCache.get(StringUtil.append(StringUtil.REDIS_SPLIT, LoginConstant.REDIS_VERIFICATION_CODE, codeId));
+		String codeIdKey = RedisUtil.getRedisKey(RedisKey.REDIS_VERIFICATION_CODE, codeId);
+		String redisCode = valueOperationsCache.get(codeIdKey);
 		if (StringUtil.isNull(redisCode)) {
 			LogBO logBO = LogUtil.log("验证码不存在或已过期",
 					LogAO.build("codeId", codeId));
@@ -140,7 +142,7 @@ public class SsoServiceImpl implements SsoService {
 
 	@Override
 	public UserBO currentUser(CurrentUserAO currentUserAO) {
-		String tokenKey = StringUtil.append(StringUtil.REDIS_SPLIT, LoginConstant.REDIS_LOGIN_TOKEN, currentUserAO.getToken());
+		String tokenKey = RedisUtil.getRedisKey(RedisKey.REDIS_LOGIN_TOKEN, currentUserAO.getToken());
 		String userJson = valueOperationsCache.get(tokenKey);
 
 		if (StringUtil.isNull(userJson)) {
