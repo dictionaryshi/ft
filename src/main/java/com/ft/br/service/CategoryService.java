@@ -16,4 +16,12 @@ public interface CategoryService {
 	 * @return 所有分类信息
 	 */
 	List<CategoryBO> listAllCategories();
+
+	/**
+	 * 根据主键查询分类信息
+	 *
+	 * @param id 主键
+	 * @return 分类信息
+	 */
+	CategoryBO getById(int id);
 }

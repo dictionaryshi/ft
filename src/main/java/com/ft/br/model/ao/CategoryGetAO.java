@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import javax.validation.constraints.NotNull;
+
 /**
  * CategoryGetAO
  *
@@ -17,6 +19,7 @@ import lombok.ToString;
 @ToString
 public class CategoryGetAO {
 
+	@NotNull(message = "分类主键不为null")
 	@ApiModelProperty(value = "分类主键", required = true)
 	private Integer id;
 }

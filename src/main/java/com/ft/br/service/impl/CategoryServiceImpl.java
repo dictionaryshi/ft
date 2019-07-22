@@ -35,6 +35,20 @@ public class CategoryServiceImpl implements CategoryService {
 		}).collect(Collectors.toList());
 	}
 
+	@Override
+	public CategoryBO getById(int id) {
+		CategoryDO categoryDO = categoryMapper.selectByPrimaryKey(id);
+		if (categoryDO == null) {
+			return null;
+		}
+
+		CategoryBO categoryBO = new CategoryBO();
+		categoryBO.setId(categoryDO.getId());
+		categoryBO.setName(categoryDO.getName());
+
+		return categoryBO;
+	}
+
 	/**
 	 * 添加分类信息
 	 *
@@ -74,15 +88,5 @@ public class CategoryServiceImpl implements CategoryService {
 		categoryDO.setId(id);
 		categoryDO.setName(name);
 		return categoryMapper.updateByPrimaryKeySelective(categoryDO) == 1;
-	}
-
-	/**
-	 * 根据主键查询分类信息
-	 *
-	 * @param id 分类主键
-	 * @return 分类信息
-	 */
-	public CategoryDO get(int id) {
-		return categoryMapper.selectByPrimaryKey(id);
 	}
 }
