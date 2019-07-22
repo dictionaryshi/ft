@@ -1,6 +1,9 @@
 package com.ft.br.service;
 
 import com.ft.br.model.ao.goods.GoodsAddAO;
+import com.ft.br.model.ao.goods.GoodsGetAO;
+import com.ft.br.model.bo.GoodsBO;
+import com.ft.dao.stock.model.GoodsDO;
 
 /**
  * GoodsService
@@ -16,4 +19,20 @@ public interface GoodsService {
 	 * @return true 添加成功
 	 */
 	boolean add(GoodsAddAO goodsAddAO);
+
+	/**
+	 * 根据主键查询商品信息
+	 *
+	 * @param goodsGetAO 商品主键
+	 * @return 商品信息
+	 */
+	GoodsBO get(GoodsGetAO goodsGetAO);
+
+	/**
+	 * 根据主键查询商品信息
+	 *
+	 * @param id 商品主键
+	 * @return 商品信息
+	 */
+	GoodsDO get(int id);
 }

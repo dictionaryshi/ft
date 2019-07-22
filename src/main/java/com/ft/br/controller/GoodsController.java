@@ -1,6 +1,8 @@
 package com.ft.br.controller;
 
 import com.ft.br.model.ao.goods.GoodsAddAO;
+import com.ft.br.model.ao.goods.GoodsGetAO;
+import com.ft.br.model.bo.GoodsBO;
 import com.ft.br.service.GoodsService;
 import com.ft.br.service.impl.GoodsServiceImpl;
 import com.ft.db.model.PageParam;
@@ -49,20 +51,17 @@ public class GoodsController {
 		return RestResult.success(result);
 	}
 
-	@ApiOperation("根据id查询商品信息")
-	@ApiImplicitParams({
-			@ApiImplicitParam(name = "id", value = "商品id", required = true, dataType = SwaggerConstant.DATA_TYPE_INT, paramType = SwaggerConstant.PARAM_TYPE_QUERY, example = "0"),
-	})
 	/**
 	 * 根据id查询商品信息
-	 *
-	 * @param id 商品id
-	 * @return 商品信息
 	 */
-	@RequestMapping(value = "/get", method = RequestMethod.POST)
+	@ApiOperation("根据id查询商品信息")
 	@LoginCheck
-	public String get(@RequestParam("id") int id) {
-		return JsonUtil.object2Json(RestResult.success(goodsServiceImpl.get(id)));
+	@GetMapping("/get")
+	public RestResult<GoodsBO> get(
+			@Valid GoodsGetAO goodsGetAO
+	) {
+		GoodsBO goodsBO = goodsService.get(goodsGetAO);
+		return RestResult.success(goodsBO);
 	}
 
 	@ApiOperation("修改商品信息")
