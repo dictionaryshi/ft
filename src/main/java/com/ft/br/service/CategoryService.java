@@ -5,6 +5,7 @@ import com.ft.br.model.ao.CategoryUpdateAO;
 import com.ft.br.model.bo.CategoryBO;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * CategoryService
@@ -42,4 +43,12 @@ public interface CategoryService {
 	 * @return true 修改成功
 	 */
 	boolean update(CategoryUpdateAO categoryUpdateAO);
+
+	/**
+	 * 根据id批量获取分类名称
+	 *
+	 * @param categoryIds 分类id集合
+	 * @return 分类名称集合
+	 */
+	Map<Integer, String> listCategoryNameByIds(List<Integer> categoryIds);
 }

@@ -6,12 +6,16 @@ import com.ft.br.model.ao.CategoryUpdateAO;
 import com.ft.br.model.bo.CategoryBO;
 import com.ft.br.service.CategoryService;
 import com.ft.dao.stock.model.CategoryDO;
+import com.ft.util.ObjectUtil;
+import com.ft.util.StringUtil;
 import com.ft.util.exception.FtException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -83,5 +87,19 @@ public class CategoryServiceImpl implements CategoryService {
 		update.setId(id);
 		update.setName(name);
 		return categoryMapper.updateByPrimaryKeySelective(update) == 1;
+	}
+
+	@Override
+	public Map<Integer, String> listCategoryNameByIds(List<Integer> categoryIds) {
+		Map<Integer, String> resultMap = new HashMap<>(16);
+		if (ObjectUtil.isEmpty(categoryIds)) {
+			return resultMap;
+		}
+
+		String categoryIdStr = StringUtil.join(categoryIds, ",");
+		Map<Integer, CategoryDO> categoryMap = categoryMapper.listByIds(categoryIdStr);
+		categoryMap.forEach((id, categoryDO) -> resultMap.put(id, categoryDO.getName()));
+
+		return resultMap;
 	}
 }

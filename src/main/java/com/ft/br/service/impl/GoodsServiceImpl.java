@@ -25,6 +25,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * 商品业务
@@ -100,6 +102,27 @@ public class GoodsServiceImpl implements GoodsService {
 	@Override
 	public GoodsDO get(int id) {
 		return goodsMapper.selectByPrimaryKey(id);
+	}
+
+	@Override
+	public List<GoodsBO> listByCategoryId(int categoryId) {
+		Map<Integer, GoodsDO> goodsMap = goodsMapper.selectByCategory(categoryId);
+
+		List<Integer> categoryIds = goodsMap.values().stream().map(GoodsDO::getCategory).distinct().collect(Collectors.toList());
+		Map<Integer, String> categoryNameMap = categoryService.listCategoryNameByIds(categoryIds);
+
+		return goodsMap.values().stream().map(goodsDO -> {
+			GoodsBO goodsBO = new GoodsBO();
+			goodsBO.setId(goodsDO.getId());
+			goodsBO.setGoodsName(goodsDO.getName());
+			goodsBO.setStockNumber(goodsDO.getNumber());
+			goodsBO.setCategoryId(goodsDO.getCategory());
+
+			String categoryName = categoryNameMap.get(goodsDO.getCategory());
+			goodsBO.setCategoryName(categoryName);
+
+			return goodsBO;
+		}).collect(Collectors.toList());
 	}
 
 	/**

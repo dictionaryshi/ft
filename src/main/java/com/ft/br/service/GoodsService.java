@@ -5,6 +5,8 @@ import com.ft.br.model.ao.goods.GoodsGetAO;
 import com.ft.br.model.bo.GoodsBO;
 import com.ft.dao.stock.model.GoodsDO;
 
+import java.util.List;
+
 /**
  * GoodsService
  *
@@ -35,4 +37,12 @@ public interface GoodsService {
 	 * @return 商品信息
 	 */
 	GoodsDO get(int id);
+
+	/**
+	 * 根据分类查询所有商品信息
+	 *
+	 * @param categoryId 分类id
+	 * @return 所有商品信息
+	 */
+	List<GoodsBO> listByCategoryId(int categoryId);
 }
