@@ -22,8 +22,8 @@ public interface GoodsMapper extends GoodsDOMapper {
 
 	class SqlBuilder {
 		private void pageWhere(SQL sql, GoodsListAO ao) {
-			if (ao.getCategory() != null) {
-				sql.WHERE("category = #{category}");
+			if (ao.getCategoryId() != null) {
+				sql.WHERE("category = #{categoryId}");
 			}
 		}
 
