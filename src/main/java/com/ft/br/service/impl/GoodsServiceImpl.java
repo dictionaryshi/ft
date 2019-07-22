@@ -44,6 +44,7 @@ public class GoodsServiceImpl implements GoodsService {
 	@Autowired
 	private RedisLock redisLock;
 
+	@UseMaster
 	@Override
 	public boolean add(GoodsAddAO goodsAddAO) {
 		int categoryId = goodsAddAO.getCategoryId();
