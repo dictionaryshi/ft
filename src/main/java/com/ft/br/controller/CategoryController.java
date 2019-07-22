@@ -2,22 +2,19 @@ package com.ft.br.controller;
 
 import com.ft.br.model.ao.CategoryAddAO;
 import com.ft.br.model.ao.CategoryGetAO;
+import com.ft.br.model.ao.CategoryUpdateAO;
 import com.ft.br.model.bo.CategoryBO;
 import com.ft.br.service.CategoryService;
-import com.ft.br.service.impl.CategoryServiceImpl;
-import com.ft.util.JsonUtil;
 import com.ft.util.model.RestResult;
 import com.ft.web.annotation.LoginCheck;
-import com.ft.web.constant.SwaggerConstant;
-import io.swagger.annotations.*;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * 分类api接口
@@ -30,9 +27,6 @@ import java.util.Map;
 @Slf4j
 @Api(tags = "分类API")
 public class CategoryController {
-
-	@Autowired
-	private CategoryServiceImpl categoryServiceImpl;
 
 	@Autowired
 	private CategoryService categoryService;
@@ -73,32 +67,16 @@ public class CategoryController {
 		return RestResult.success(result);
 	}
 
-	@ApiOperation("根据id修改分类信息")
-	@ApiImplicitParams({
-			@ApiImplicitParam(name = "id", value = "分类id", required = true, dataType = SwaggerConstant.DATA_TYPE_INT, paramType = SwaggerConstant.PARAM_TYPE_QUERY, example = "0"),
-			@ApiImplicitParam(name = "name", value = "分类名称", required = true, dataType = SwaggerConstant.DATA_TYPE_STRING, defaultValue = "默认分类名称", paramType = SwaggerConstant.PARAM_TYPE_QUERY)
-	})
-	@ApiResponses({
-			@ApiResponse(code = 0, message = SwaggerConstant.MESSAGE_SUCCESS, response = RestResult.class),
-			@ApiResponse(code = 500, message = SwaggerConstant.MESSAGE_ERROR)
-	})
 	/**
 	 * 根据id修改分类信息
-	 *
-	 * @param id   分类id
-	 * @param name 分类新名称
-	 * @return 修改结果
 	 */
-	@RequestMapping(value = "/update", method = RequestMethod.POST)
+	@ApiOperation("根据id修改分类信息")
 	@LoginCheck
-	public String update(
-			@RequestParam(value = "id") short id,
-			@RequestParam(value = "name") String name
+	@PostMapping("/update")
+	public RestResult<Boolean> update(
+			@RequestBody @Valid CategoryUpdateAO categoryUpdateAO
 	) {
-		name = name.trim();
-		String flag = categoryServiceImpl.update(id, name) ? "修改成功" : "修改失败";
-		Map<String, Object> result = new HashMap<>(16);
-		result.put("flag", flag);
-		return JsonUtil.object2Json(RestResult.success(result));
+		boolean result = categoryService.update(categoryUpdateAO);
+		return RestResult.success(result);
 	}
 }
