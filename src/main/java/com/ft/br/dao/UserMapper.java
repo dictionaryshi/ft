@@ -2,9 +2,13 @@ package com.ft.br.dao;
 
 import com.ft.dao.stock.mapper.UserDOMapper;
 import com.ft.dao.stock.model.UserDO;
+import org.apache.ibatis.annotations.MapKey;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Component;
+
+import java.util.Map;
 
 /**
  * 登录用户操作类
@@ -32,4 +36,13 @@ public interface UserMapper extends UserDOMapper {
 	 */
 	@Select("select * from `user` where id = #{id} for update")
 	UserDO deadLock(int id);
+
+	@MapKey("id")
+	@Select({
+			"select ",
+			"* ",
+			"from user ",
+			"where id in (${idStr}) "
+	})
+	Map<Integer, UserDO> selectByIds(@Param("idStr") String idStr);
 }
