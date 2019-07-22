@@ -9,22 +9,20 @@ import com.ft.br.model.ao.goods.GoodsGetAO;
 import com.ft.br.model.ao.goods.GoodsUpdateAO;
 import com.ft.br.model.bo.CategoryBO;
 import com.ft.br.model.bo.GoodsBO;
-import com.ft.br.model.vo.GoodsVO;
 import com.ft.br.service.CategoryService;
 import com.ft.br.service.GoodsService;
 import com.ft.dao.stock.model.CategoryDO;
 import com.ft.dao.stock.model.GoodsDO;
 import com.ft.db.annotation.UseMaster;
-import com.ft.db.model.PageParam;
 import com.ft.db.model.PageResult;
 import com.ft.redis.lock.RedisLock;
 import com.ft.redis.util.RedisUtil;
 import com.ft.util.exception.FtException;
+import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -112,18 +110,7 @@ public class GoodsServiceImpl implements GoodsService {
 		List<Integer> categoryIds = goodsMap.values().stream().map(GoodsDO::getCategory).distinct().collect(Collectors.toList());
 		Map<Integer, String> categoryNameMap = categoryService.listCategoryNameByIds(categoryIds);
 
-		return goodsMap.values().stream().map(goodsDO -> {
-			GoodsBO goodsBO = new GoodsBO();
-			goodsBO.setId(goodsDO.getId());
-			goodsBO.setGoodsName(goodsDO.getName());
-			goodsBO.setStockNumber(goodsDO.getNumber());
-			goodsBO.setCategoryId(goodsDO.getCategory());
-
-			String categoryName = categoryNameMap.get(goodsDO.getCategory());
-			goodsBO.setCategoryName(categoryName);
-
-			return goodsBO;
-		}).collect(Collectors.toList());
+		return goodsMap.values().stream().map(goodsDO -> this.goodsDO2GoodsBO(goodsDO, categoryNameMap)).collect(Collectors.toList());
 	}
 
 	@UseMaster
@@ -165,54 +152,40 @@ public class GoodsServiceImpl implements GoodsService {
 		}
 	}
 
-	/**
-	 * 分页查询商品信息
-	 *
-	 * @param categoryId 分类id
-	 * @param pageParam  分页工具类
-	 * @return 商品信息
-	 */
-	public PageResult<GoodsVO> list(int categoryId, PageParam pageParam) {
-		PageResult<GoodsVO> pageResult = new PageResult<>();
-		pageResult.setPage(pageParam.getPage());
-		pageResult.setLimit(pageParam.getLimit());
+	@Override
+	public PageResult<GoodsBO> listByPage(GoodsListAO goodsListAO) {
+		int total = goodsMapper.countPaging(goodsListAO);
 
-		GoodsListAO goodsDTO = new GoodsListAO();
-		if (categoryId != 0) {
-			goodsDTO.setCategory(categoryId);
-		}
-
-		int count = goodsMapper.countPaging(goodsDTO);
-		if (count == 0) {
-			pageResult.setTotal(0);
-			pageResult.setList(new ArrayList<>());
+		PageResult<GoodsBO> pageResult = new PageResult<>();
+		pageResult.setPage(goodsListAO.getPage());
+		pageResult.setLimit(goodsListAO.getLimit());
+		pageResult.setTotal(total);
+		pageResult.setList(Lists.newArrayList());
+		if (total <= 0) {
 			return pageResult;
 		}
 
-		goodsDTO.setStartRowNumber(pageParam.getStartRowNumber());
-		goodsDTO.setLimit(pageParam.getLimit());
+		List<GoodsDO> goodsDOs = goodsMapper.listPaging(goodsListAO);
 
-		List<GoodsDO> goodsDOS = goodsMapper.listPaging(goodsDTO);
-		List<GoodsVO> goods = new ArrayList<>();
-		this.format(goods);
+		List<Integer> categoryIds = goodsDOs.stream().map(GoodsDO::getCategory).distinct().collect(Collectors.toList());
+		Map<Integer, String> categoryNameMap = categoryService.listCategoryNameByIds(categoryIds);
 
-		pageResult.setTotal(count);
-		pageResult.setList(goods);
+		List<GoodsBO> list = goodsDOs.stream().map(goodsDO -> this.goodsDO2GoodsBO(goodsDO, categoryNameMap)).collect(Collectors.toList());
+		pageResult.setList(list);
 
 		return pageResult;
 	}
 
-	public void format(List<GoodsVO> goods) {
-		if (goods.isEmpty()) {
-			return;
-		}
+	private GoodsBO goodsDO2GoodsBO(GoodsDO goodsDO, Map<Integer, String> categoryNameMap) {
+		GoodsBO goodsBO = new GoodsBO();
+		goodsBO.setId(goodsDO.getId());
+		goodsBO.setGoodsName(goodsDO.getName());
+		goodsBO.setStockNumber(goodsDO.getNumber());
+		goodsBO.setCategoryId(goodsDO.getCategory());
 
-		goods.forEach(goodsVO -> {
-			int category = goodsVO.getCategory();
-			CategoryDO categoryDO = categoryMapper.selectByPrimaryKey(category);
-			if (categoryDO != null) {
-				goodsVO.setCategoryName(categoryDO.getName());
-			}
-		});
+		String categoryName = categoryNameMap.get(goodsDO.getCategory());
+		goodsBO.setCategoryName(categoryName);
+
+		return goodsBO;
 	}
 }

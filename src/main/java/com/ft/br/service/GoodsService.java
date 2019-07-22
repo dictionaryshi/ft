@@ -1,10 +1,12 @@
 package com.ft.br.service;
 
+import com.ft.br.model.ao.GoodsListAO;
 import com.ft.br.model.ao.goods.GoodsAddAO;
 import com.ft.br.model.ao.goods.GoodsGetAO;
 import com.ft.br.model.ao.goods.GoodsUpdateAO;
 import com.ft.br.model.bo.GoodsBO;
 import com.ft.dao.stock.model.GoodsDO;
+import com.ft.db.model.PageResult;
 
 import java.util.List;
 
@@ -54,4 +56,12 @@ public interface GoodsService {
 	 * @return true 修改成功
 	 */
 	boolean update(GoodsUpdateAO goodsUpdateAO);
+
+	/**
+	 * 分页查询商品信息
+	 *
+	 * @param goodsListAO 分页条件
+	 * @return 商品信息
+	 */
+	PageResult<GoodsBO> listByPage(GoodsListAO goodsListAO);
 }

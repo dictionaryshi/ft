@@ -1,20 +1,17 @@
 package com.ft.br.controller;
 
+import com.ft.br.model.ao.GoodsListAO;
 import com.ft.br.model.ao.goods.GoodsAddAO;
 import com.ft.br.model.ao.goods.GoodsGetAO;
 import com.ft.br.model.ao.goods.GoodsListByCategoryAO;
 import com.ft.br.model.ao.goods.GoodsUpdateAO;
 import com.ft.br.model.bo.GoodsBO;
 import com.ft.br.service.GoodsService;
-import com.ft.br.service.impl.GoodsServiceImpl;
-import com.ft.db.model.PageParam;
-import com.ft.util.JsonUtil;
+import com.ft.db.annotation.PageParamCheck;
+import com.ft.db.model.PageResult;
 import com.ft.util.model.RestResult;
 import com.ft.web.annotation.LoginCheck;
-import com.ft.web.constant.SwaggerConstant;
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,9 +34,6 @@ public class GoodsController {
 
 	@Autowired
 	private GoodsService goodsService;
-
-	@Autowired
-	private GoodsServiceImpl goodsServiceImpl;
 
 	/**
 	 * 添加商品信息
@@ -94,24 +88,17 @@ public class GoodsController {
 		return RestResult.success(result);
 	}
 
-	@ApiOperation("分页查询商品")
-	@ApiImplicitParams({
-			@ApiImplicitParam(name = "category_id", value = "分类id", required = true, dataType = SwaggerConstant.DATA_TYPE_INT, paramType = SwaggerConstant.PARAM_TYPE_QUERY, example = "0", defaultValue = "0"),
-			@ApiImplicitParam(name = "current_page", value = "查询页码", required = true, dataType = SwaggerConstant.DATA_TYPE_INT, paramType = SwaggerConstant.PARAM_TYPE_QUERY, example = "0"),
-	})
 	/**
 	 * 分页查询商品
-	 *
-	 * @param categoryId  分类id
-	 * @param currentPage 当前页
-	 * @return 查询到的数据
 	 */
-	@RequestMapping(value = "/list", method = RequestMethod.POST)
+	@ApiOperation("分页查询商品")
 	@LoginCheck
-	public String list(
-			@RequestParam(value = "category_id", required = false, defaultValue = "0") short categoryId,
-			@RequestParam(value = "current_page") int currentPage
+	@PageParamCheck
+	@GetMapping("/list")
+	public RestResult<PageResult<GoodsBO>> list(
+			@Valid GoodsListAO goodsListAO
 	) {
-		return JsonUtil.object2Json(RestResult.success(goodsServiceImpl.list(categoryId, new PageParam(currentPage, 10))));
+		PageResult<GoodsBO> pageResult = goodsService.listByPage(goodsListAO);
+		return RestResult.success(pageResult);
 	}
 }

@@ -7,8 +7,6 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import javax.validation.constraints.NotNull;
-
 /**
  * GoodsListAO
  *
@@ -20,7 +18,6 @@ import javax.validation.constraints.NotNull;
 @ToString
 public class GoodsListAO extends PageParam {
 
-	@NotNull(message = "分类id不为null")
-	@ApiModelProperty(value = "分类id", required = true, example = "10")
+	@ApiModelProperty(value = "分类id", example = "10")
 	private Integer categoryId;
 }
