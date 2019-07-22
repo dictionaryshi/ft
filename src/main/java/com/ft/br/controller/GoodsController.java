@@ -2,6 +2,7 @@ package com.ft.br.controller;
 
 import com.ft.br.model.ao.goods.GoodsAddAO;
 import com.ft.br.model.ao.goods.GoodsGetAO;
+import com.ft.br.model.ao.goods.GoodsListByCategoryAO;
 import com.ft.br.model.bo.GoodsBO;
 import com.ft.br.service.GoodsService;
 import com.ft.br.service.impl.GoodsServiceImpl;
@@ -19,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 /**
  * 商品API
@@ -64,6 +66,20 @@ public class GoodsController {
 		return RestResult.success(goodsBO);
 	}
 
+	/**
+	 * 根据分类查询所有商品
+	 */
+	@ApiOperation("根据分类查询所有商品")
+	@LoginCheck
+	@GetMapping("/list-by-category")
+	public RestResult<List<GoodsBO>> listByCategory(
+			@Valid GoodsListByCategoryAO goodsListByCategoryAO
+	) {
+		int categoryId = goodsListByCategoryAO.getCategoryId();
+		List<GoodsBO> goodsBOs = goodsService.listByCategoryId(categoryId);
+		return RestResult.success(goodsBOs);
+	}
+
 	@ApiOperation("修改商品信息")
 	@ApiImplicitParams({
 			@ApiImplicitParam(name = "id", value = "商品id", required = true, dataType = SwaggerConstant.DATA_TYPE_INT, paramType = SwaggerConstant.PARAM_TYPE_QUERY, example = "0"),
@@ -107,23 +123,5 @@ public class GoodsController {
 			@RequestParam(value = "current_page") int currentPage
 	) {
 		return JsonUtil.object2Json(RestResult.success(goodsServiceImpl.list(categoryId, new PageParam(currentPage, 10))));
-	}
-
-	@ApiOperation("根据分类查询所有商品")
-	@ApiImplicitParams({
-			@ApiImplicitParam(name = "category_id", value = "分类id", required = true, dataType = SwaggerConstant.DATA_TYPE_INT, paramType = SwaggerConstant.PARAM_TYPE_QUERY, example = "0"),
-	})
-	/**
-	 * 根据分类查询所有商品
-	 *
-	 * @param categoryId 分类id
-	 * @return 该分类下所有商品
-	 */
-	@RequestMapping(value = "/list-by-category", method = RequestMethod.POST)
-	@LoginCheck
-	public String listByCategory(
-			@RequestParam(value = "category_id") short categoryId
-	) {
-		return JsonUtil.object2Json(RestResult.success(goodsServiceImpl.list(categoryId, new PageParam(1, 10_0000))));
 	}
 }
