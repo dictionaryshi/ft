@@ -21,5 +21,7 @@ public class RedisKey {
 
 	public static final String REDIS_SSO_LOGIN_LOCK = "ft_br_sso_login_lock";
 
-	public static final String REDIS_GOODS_ADD_LOCK = "ft_br_redis_goods_add_lock";
+	public static final String REDIS_GOODS_ADD_LOCK = "ft_br_goods_add_lock";
+
+	public static final String REDIS_GOODS_UPDATE_LOCK = "ft_br_goods_update_lock";
 }

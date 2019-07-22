@@ -3,6 +3,7 @@ package com.ft.br.controller;
 import com.ft.br.model.ao.goods.GoodsAddAO;
 import com.ft.br.model.ao.goods.GoodsGetAO;
 import com.ft.br.model.ao.goods.GoodsListByCategoryAO;
+import com.ft.br.model.ao.goods.GoodsUpdateAO;
 import com.ft.br.model.bo.GoodsBO;
 import com.ft.br.service.GoodsService;
 import com.ft.br.service.impl.GoodsServiceImpl;
@@ -80,28 +81,17 @@ public class GoodsController {
 		return RestResult.success(goodsBOs);
 	}
 
-	@ApiOperation("修改商品信息")
-	@ApiImplicitParams({
-			@ApiImplicitParam(name = "id", value = "商品id", required = true, dataType = SwaggerConstant.DATA_TYPE_INT, paramType = SwaggerConstant.PARAM_TYPE_QUERY, example = "0"),
-			@ApiImplicitParam(name = "name", value = "商品名称", required = true, dataType = SwaggerConstant.DATA_TYPE_STRING, paramType = SwaggerConstant.PARAM_TYPE_QUERY),
-			@ApiImplicitParam(name = "category_id", value = "分类id", required = true, dataType = SwaggerConstant.DATA_TYPE_INT, paramType = SwaggerConstant.PARAM_TYPE_QUERY, example = "0"),
-	})
 	/**
 	 * 修改商品信息
-	 *
-	 * @param id         主键
-	 * @param name       商品名称
-	 * @param categoryId 分类id
-	 * @return 修改结果
 	 */
-	@RequestMapping(value = "/update", method = RequestMethod.POST)
+	@ApiOperation("修改商品信息")
 	@LoginCheck
-	public String update(
-			@RequestParam("id") int id,
-			@RequestParam("name") String name,
-			@RequestParam("category_id") short categoryId
+	@PostMapping("/update")
+	public RestResult<Boolean> update(
+			@RequestBody @Valid GoodsUpdateAO goodsUpdateAO
 	) {
-		return JsonUtil.object2Json(RestResult.success(goodsServiceImpl.update(id, name, categoryId)));
+		boolean result = goodsService.update(goodsUpdateAO);
+		return RestResult.success(result);
 	}
 
 	@ApiOperation("分页查询商品")
