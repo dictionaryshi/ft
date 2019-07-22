@@ -1,6 +1,7 @@
 package com.ft.br.service;
 
 import com.ft.br.model.ao.CategoryAddAO;
+import com.ft.br.model.ao.CategoryUpdateAO;
 import com.ft.br.model.bo.CategoryBO;
 
 import java.util.List;
@@ -33,4 +34,12 @@ public interface CategoryService {
 	 * @return true 添加成功
 	 */
 	boolean add(CategoryAddAO categoryAddAO);
+
+	/**
+	 * 修改分类信息
+	 *
+	 * @param categoryUpdateAO 分类信息
+	 * @return true 修改成功
+	 */
+	boolean update(CategoryUpdateAO categoryUpdateAO);
 }

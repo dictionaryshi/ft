@@ -2,10 +2,10 @@ package com.ft.br.service.impl;
 
 import com.ft.br.dao.CategoryMapper;
 import com.ft.br.model.ao.CategoryAddAO;
+import com.ft.br.model.ao.CategoryUpdateAO;
 import com.ft.br.model.bo.CategoryBO;
 import com.ft.br.service.CategoryService;
 import com.ft.dao.stock.model.CategoryDO;
-import com.ft.db.annotation.UseMaster;
 import com.ft.util.exception.FtException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -65,25 +65,23 @@ public class CategoryServiceImpl implements CategoryService {
 		return categoryMapper.insertSelective(categoryDO) == 1;
 	}
 
-	/**
-	 * 修改分类信息
-	 *
-	 * @param id   分类id
-	 * @param name 分类名称
-	 * @return true:修改成功
-	 */
-	@UseMaster
-	public boolean update(int id, String name) {
+	@Override
+	public boolean update(CategoryUpdateAO categoryUpdateAO) {
+		int id = categoryUpdateAO.getId();
+		String name = categoryUpdateAO.getName();
+
 		CategoryDO categoryDO = categoryMapper.selectByPrimaryKey(id);
 		if (categoryDO == null) {
 			FtException.throwException("分类信息不存在");
 		}
+
 		if (categoryMapper.getCategoryByName(name) != null) {
 			FtException.throwException("分类已经存在");
 		}
-		categoryDO = new CategoryDO();
-		categoryDO.setId(id);
-		categoryDO.setName(name);
-		return categoryMapper.updateByPrimaryKeySelective(categoryDO) == 1;
+
+		CategoryDO update = new CategoryDO();
+		update.setId(id);
+		update.setName(name);
+		return categoryMapper.updateByPrimaryKeySelective(update) == 1;
 	}
 }
