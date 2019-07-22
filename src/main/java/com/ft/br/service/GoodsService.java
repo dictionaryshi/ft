@@ -2,6 +2,7 @@ package com.ft.br.service;
 
 import com.ft.br.model.ao.goods.GoodsAddAO;
 import com.ft.br.model.ao.goods.GoodsGetAO;
+import com.ft.br.model.ao.goods.GoodsUpdateAO;
 import com.ft.br.model.bo.GoodsBO;
 import com.ft.dao.stock.model.GoodsDO;
 
@@ -45,4 +46,12 @@ public interface GoodsService {
 	 * @return 所有商品信息
 	 */
 	List<GoodsBO> listByCategoryId(int categoryId);
+
+	/**
+	 * 修改商品信息
+	 *
+	 * @param goodsUpdateAO 商品信息
+	 * @return true 修改成功
+	 */
+	boolean update(GoodsUpdateAO goodsUpdateAO);
 }

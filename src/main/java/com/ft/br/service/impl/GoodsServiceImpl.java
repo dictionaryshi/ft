@@ -6,6 +6,7 @@ import com.ft.br.dao.GoodsMapper;
 import com.ft.br.model.ao.GoodsListAO;
 import com.ft.br.model.ao.goods.GoodsAddAO;
 import com.ft.br.model.ao.goods.GoodsGetAO;
+import com.ft.br.model.ao.goods.GoodsUpdateAO;
 import com.ft.br.model.bo.CategoryBO;
 import com.ft.br.model.bo.GoodsBO;
 import com.ft.br.model.vo.GoodsVO;
@@ -125,38 +126,43 @@ public class GoodsServiceImpl implements GoodsService {
 		}).collect(Collectors.toList());
 	}
 
-	/**
-	 * 根据id修改商品信息
-	 *
-	 * @param id         主键
-	 * @param name       商品名称
-	 * @param categoryId 分类id
-	 * @return true:修改成功
-	 */
 	@UseMaster
-	public boolean update(int id, String name, int categoryId) {
+	@Override
+	public boolean update(GoodsUpdateAO goodsUpdateAO) {
+		int id = goodsUpdateAO.getId();
 
 		GoodsDO goodsDO = goodsMapper.selectByPrimaryKey(id);
 		if (goodsDO == null) {
-			FtException.throwException("商品不存在,无法修改");
+			FtException.throwException("商品不存在");
 		}
 
-		CategoryDO categoryDO = categoryMapper.selectByPrimaryKey(categoryId);
-		if (categoryDO == null) {
-			FtException.throwException("商品分类不存在,无法修改");
+		int categoryId = goodsUpdateAO.getCategoryId();
+		CategoryBO categoryBO = categoryService.getById(categoryId);
+		if (categoryBO == null) {
+			FtException.throwException("商品分类不存在");
 		}
 
-		GoodsDO dbGoods = goodsMapper.getGoodsByName(categoryId, name);
-		if (dbGoods != null) {
-			FtException.throwException("商品已经存在");
+		String lockKey = RedisUtil.getRedisKey(RedisKey.REDIS_GOODS_UPDATE_LOCK, id + "");
+
+		try {
+			redisLock.lock(lockKey, 10_000L);
+
+			String name = goodsUpdateAO.getName();
+
+			goodsDO = goodsMapper.getGoodsByName(categoryId, name);
+			if (goodsDO != null) {
+				FtException.throwException("商品分类关系已存在");
+			}
+
+			GoodsDO update = new GoodsDO();
+			update.setId(id);
+			update.setName(name);
+			update.setCategory(categoryId);
+
+			return goodsMapper.updateByPrimaryKeySelective(update) == 1;
+		} finally {
+			redisLock.unlock(lockKey);
 		}
-
-		goodsDO = new GoodsDO();
-		goodsDO.setId(id);
-		goodsDO.setName(name);
-		goodsDO.setCategory(categoryId);
-
-		return goodsMapper.updateByPrimaryKeySelective(goodsDO) == 1;
 	}
 
 	/**
