@@ -20,6 +20,6 @@ import javax.validation.constraints.NotNull;
 public class CategoryGetAO {
 
 	@NotNull(message = "分类主键不为null")
-	@ApiModelProperty(value = "分类主键", required = true)
+	@ApiModelProperty(value = "分类主键", required = true, example = "10")
 	private Integer id;
 }
