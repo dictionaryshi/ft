@@ -5,6 +5,7 @@ import com.ft.br.dao.CategoryMapper;
 import com.ft.br.dao.GoodsMapper;
 import com.ft.br.model.ao.GoodsListAO;
 import com.ft.br.model.ao.goods.GoodsAddAO;
+import com.ft.br.model.ao.goods.GoodsGetAO;
 import com.ft.br.model.vo.GoodsVO;
 import com.ft.br.service.CategoryService;
 import com.ft.br.service.GoodsService;
@@ -72,13 +73,9 @@ public class GoodsServiceImpl implements GoodsService {
 		}
 	}
 
-	/**
-	 * 根据商品id查询商品信息
-	 *
-	 * @param id 商品id
-	 * @return 商品信息
-	 */
-	public GoodsDO get(int id) {
+	@Override
+	public GoodsDO get(GoodsGetAO goodsGetAO) {
+		int id = goodsGetAO.getId();
 		return goodsMapper.selectByPrimaryKey(id);
 	}
 
