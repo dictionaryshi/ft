@@ -79,6 +79,11 @@ public class GoodsServiceImpl implements GoodsService {
 		return goodsMapper.selectByPrimaryKey(id);
 	}
 
+	@Override
+	public GoodsDO get(int id) {
+		return goodsMapper.selectByPrimaryKey(id);
+	}
+
 	/**
 	 * 根据id修改商品信息
 	 *

@@ -26,4 +26,12 @@ public interface GoodsService {
 	 * @return 商品信息
 	 */
 	GoodsDO get(GoodsGetAO goodsGetAO);
+
+	/**
+	 * 根据主键查询商品信息
+	 *
+	 * @param id 商品主键
+	 * @return 商品信息
+	 */
+	GoodsDO get(int id);
 }
