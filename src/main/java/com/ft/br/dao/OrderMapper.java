@@ -1,6 +1,6 @@
 package com.ft.br.dao;
 
-import com.ft.br.model.ao.OrderListAO;
+import com.ft.br.model.ao.order.OrderListAO;
 import com.ft.dao.stock.mapper.OrderDOMapper;
 import com.ft.dao.stock.model.OrderDO;
 import com.ft.db.util.MybatisUtil;

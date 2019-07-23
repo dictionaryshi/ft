@@ -1,6 +1,6 @@
 package com.ft.br.controller;
 
-import com.ft.br.model.ao.StockLogListAO;
+import com.ft.br.model.ao.stock.StockLogListAO;
 import com.ft.br.model.bo.StockLogBO;
 import com.ft.br.service.StockLogService;
 import com.ft.br.service.impl.StockLogServiceImpl;

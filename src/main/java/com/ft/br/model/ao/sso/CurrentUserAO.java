@@ -1,4 +1,4 @@
-package com.ft.br.model.ao;
+package com.ft.br.model.ao.sso;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;

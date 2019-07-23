@@ -9,7 +9,7 @@ import com.ft.br.constant.StockLogTypeEnum;
 import com.ft.br.dao.GoodsMapper;
 import com.ft.br.dao.OrderMapper;
 import com.ft.br.dao.StockLogMapper;
-import com.ft.br.model.ao.StockLogListAO;
+import com.ft.br.model.ao.stock.StockLogListAO;
 import com.ft.br.model.bo.StockLogBO;
 import com.ft.br.model.vo.OrderVO;
 import com.ft.br.service.StockLogService;

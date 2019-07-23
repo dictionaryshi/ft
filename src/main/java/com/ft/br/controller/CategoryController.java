@@ -1,8 +1,8 @@
 package com.ft.br.controller;
 
-import com.ft.br.model.ao.CategoryAddAO;
-import com.ft.br.model.ao.CategoryGetAO;
-import com.ft.br.model.ao.CategoryUpdateAO;
+import com.ft.br.model.ao.category.CategoryAddAO;
+import com.ft.br.model.ao.category.CategoryGetAO;
+import com.ft.br.model.ao.category.CategoryUpdateAO;
 import com.ft.br.model.bo.CategoryBO;
 import com.ft.br.service.CategoryService;
 import com.ft.util.model.RestResult;

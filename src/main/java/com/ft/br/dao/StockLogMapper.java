@@ -1,6 +1,6 @@
 package com.ft.br.dao;
 
-import com.ft.br.model.ao.StockLogListAO;
+import com.ft.br.model.ao.stock.StockLogListAO;
 import com.ft.dao.stock.mapper.StockLogDOMapper;
 import com.ft.dao.stock.model.StockLogDO;
 import com.ft.db.util.MybatisUtil;

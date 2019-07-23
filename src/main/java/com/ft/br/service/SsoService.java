@@ -1,7 +1,7 @@
 package com.ft.br.service;
 
-import com.ft.br.model.ao.CurrentUserAO;
-import com.ft.br.model.ao.LoginAO;
+import com.ft.br.model.ao.sso.CurrentUserAO;
+import com.ft.br.model.ao.sso.LoginAO;
 import com.ft.br.model.bo.CodeBO;
 import com.ft.br.model.bo.TokenBO;
 import com.ft.web.model.UserBO;
