@@ -1,4 +1,4 @@
-package com.ft.br.config;
+package com.ft.br.config.processor;
 
 import com.ft.br.service.SpringLifeService;
 import com.ft.util.plugin.BaseBeanPostProcessor;
@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Configuration;
  *
  * @author shichunyang
  */
-@Configuration
+@Configuration("com.ft.br.config.processor.BeanPostProcessorConfig")
 public class BeanPostProcessorConfig extends BaseBeanPostProcessor<SpringLifeService> {
 	@Override
 	protected void before(SpringLifeService bean, String beanName) throws BeansException {
