@@ -2,6 +2,7 @@ package com.ft.br.controller;
 
 import com.ft.br.model.dto.StockLogDTO;
 import com.ft.br.service.StockLogService;
+import com.ft.br.service.impl.StockLogServiceImpl;
 import com.ft.dao.stock.model.StockLogDO;
 import com.ft.db.model.PageParam;
 import com.ft.util.JsonUtil;
@@ -32,6 +33,9 @@ public class StockLogController {
 
 	@Autowired
 	private StockLogService stockLogService;
+
+	@Autowired
+	private StockLogServiceImpl stockLogServiceImpl;
 
 	@ApiOperation("库存列表")
 	@ApiImplicitParams({
@@ -65,7 +69,7 @@ public class StockLogController {
 		stockLogDTO.setStartDate(startTime);
 		stockLogDTO.setEndDate(endTime);
 
-		return JsonUtil.object2Json(RestResult.success(stockLogService.list(stockLogDTO, pageParam)));
+		return JsonUtil.object2Json(RestResult.success(stockLogServiceImpl.list(stockLogDTO, pageParam)));
 	}
 
 	@ApiOperation("出/入库操作")
@@ -94,7 +98,7 @@ public class StockLogController {
 		stockLogDO.setRemark(remark);
 		stockLogDO.setOrderId(orderId);
 
-		boolean flag = stockLogService.storage(stockLogDO);
+		boolean flag = stockLogServiceImpl.storage(stockLogDO);
 		return JsonUtil.object2Json(RestResult.success(flag));
 	}
 }
