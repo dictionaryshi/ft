@@ -30,9 +30,9 @@
 
 15.use mysql;
 
-16.update user set password=PASSWORD('naodian12300') where user='root';
+16.update user set password=PASSWORD('flzx@3qc') where user='root';
 
-17.GRANT ALL PRIVILEGES ON *.* TO root@"%" IDENTIFIED BY 'naodian12300' WITH GRANT OPTION;
+17.GRANT ALL PRIVILEGES ON *.* TO root@"%" IDENTIFIED BY 'flzx@3qc' WITH GRANT OPTION;
 
 18.exit;
 
@@ -51,7 +51,7 @@ character-set-server=utf8mb4
 [mysql]
 default-character-set=utf8mb4
 
-CREATE USER sd@'%' IDENTIFIED BY 'naodian12300';
+CREATE USER sd@'%' IDENTIFIED BY 'flzx@3qc';
 GRANT SELECT ON *.* TO sd@'%';
 
 查看数据库编码:mysql> SHOW VARIABLES LIKE '%char%';
