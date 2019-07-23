@@ -6,12 +6,13 @@ import org.springframework.beans.BeansException;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * BeanPostProcessorConfig
+ * SpringLifeServicePostProcessorConfig
  *
  * @author shichunyang
  */
-@Configuration("com.ft.br.config.processor.BeanPostProcessorConfig")
-public class BeanPostProcessorConfig extends BaseBeanPostProcessor<SpringLifeService> {
+@Configuration("com.ft.br.config.processor.SpringLifeServicePostProcessorConfig")
+public class SpringLifeServicePostProcessorConfig extends BaseBeanPostProcessor<SpringLifeService> {
+
 	@Override
 	protected void before(SpringLifeService bean, String beanName) throws BeansException {
 		System.out.println("SpringLifeBean " + 4);
