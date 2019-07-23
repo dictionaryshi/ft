@@ -1,39 +1,36 @@
 package com.ft.br.model.ao;
 
 import com.ft.db.model.PageParam;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import com.ft.util.DateUtil;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 /**
  * StockLogListAO
  *
  * @author shichunyang
  */
-@EqualsAndHashCode(callSuper = true)
-@Data
+@ApiModel("分页查询仓库操作信息")
+@Getter
+@Setter
+@ToString
 public class StockLogListAO extends PageParam {
-	/**
-	 * 类型
-	 */
+
+	@ApiModelProperty(value = "操作类型", example = "1")
 	private Integer type;
 
-	/**
-	 * 商品id
-	 */
+	@ApiModelProperty(value = "商品id", example = "10")
 	private Integer goodsId;
 
-	/**
-	 * 订单id
-	 */
+	@ApiModelProperty(value = "订单id", example = "10")
 	private Long orderId;
 
-	/**
-	 * 开始日期
-	 */
+	@ApiModelProperty(value = "操作开始日期", example = DateUtil.TIMESTAMP_DEFAULT_TIME)
 	private String startTime;
 
-	/**
-	 * 结束日期
-	 */
+	@ApiModelProperty(value = "操作结束日期", example = DateUtil.TIMESTAMP_DEFAULT_TIME)
 	private String endTime;
 }
