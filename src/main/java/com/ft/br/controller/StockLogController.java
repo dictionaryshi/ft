@@ -1,10 +1,14 @@
 package com.ft.br.controller;
 
+import com.ft.br.model.ao.StockLogListAO;
+import com.ft.br.model.bo.StockLogBO;
 import com.ft.br.model.dto.StockLogDTO;
 import com.ft.br.service.StockLogService;
 import com.ft.br.service.impl.StockLogServiceImpl;
 import com.ft.dao.stock.model.StockLogDO;
+import com.ft.db.annotation.PageParamCheck;
 import com.ft.db.model.PageParam;
+import com.ft.db.model.PageResult;
 import com.ft.util.JsonUtil;
 import com.ft.util.model.RestResult;
 import com.ft.web.annotation.LoginCheck;
@@ -18,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
 /**
  * 出入库API
@@ -37,39 +42,15 @@ public class StockLogController {
 	@Autowired
 	private StockLogServiceImpl stockLogServiceImpl;
 
-	@ApiOperation("库存列表")
-	@ApiImplicitParams({
-			@ApiImplicitParam(name = "current_page", value = "查询页码", required = true, dataType = SwaggerConstant.DATA_TYPE_INT, paramType = SwaggerConstant.PARAM_TYPE_QUERY, example = "0"),
-			@ApiImplicitParam(name = "type", value = "操作类型", dataType = SwaggerConstant.DATA_TYPE_INT, paramType = SwaggerConstant.PARAM_TYPE_QUERY, example = "0"),
-			@ApiImplicitParam(name = "goods_id", value = "商品id", dataType = SwaggerConstant.DATA_TYPE_INT, paramType = SwaggerConstant.PARAM_TYPE_QUERY, example = "0"),
-			@ApiImplicitParam(name = "order_id", value = "订单id", dataType = SwaggerConstant.DATA_TYPE_INT, paramType = SwaggerConstant.PARAM_TYPE_QUERY, example = "0"),
-			@ApiImplicitParam(name = "start_time", value = "开始时间", dataType = SwaggerConstant.DATA_TYPE_STRING, paramType = SwaggerConstant.PARAM_TYPE_QUERY),
-			@ApiImplicitParam(name = "end_time", value = "结束时间", dataType = SwaggerConstant.DATA_TYPE_STRING, paramType = SwaggerConstant.PARAM_TYPE_QUERY),
-	})
-	@RequestMapping(value = "/list", method = RequestMethod.POST)
+	@ApiOperation("分页查询库存操作记录")
 	@LoginCheck
-	public String list(
-			@RequestParam(value = "current_page") int currentPage,
-			@RequestParam(value = "type", required = false, defaultValue = "0") Integer type,
-			@RequestParam(value = "goods_id", required = false, defaultValue = "0") int goodsId,
-			@RequestParam(value = "order_id", required = false) Long orderId,
-			@RequestParam(value = "start_time", required = false) String startTime,
-			@RequestParam(value = "end_time", required = false) String endTime
+	@PageParamCheck
+	@GetMapping("/list")
+	public RestResult<PageResult<StockLogBO>> list(
+			@Valid StockLogListAO stockLogListAO;
 	) {
-		PageParam pageParam = new PageParam(currentPage, 10);
-
-		StockLogDTO stockLogDTO = new StockLogDTO();
-		if (type != 0) {
-			stockLogDTO.setType(type);
-		}
-		if (goodsId != 0) {
-			stockLogDTO.setGoodsId(goodsId);
-		}
-		stockLogDTO.setOrderId(orderId);
-		stockLogDTO.setStartDate(startTime);
-		stockLogDTO.setEndDate(endTime);
-
-		return JsonUtil.object2Json(RestResult.success(stockLogServiceImpl.list(stockLogDTO, pageParam)));
+		PageResult<StockLogBO> pageResult = stockLogService.listByPage(stockLogListAO);
+		return RestResult.success(pageResult);
 	}
 
 	@ApiOperation("出/入库操作")
