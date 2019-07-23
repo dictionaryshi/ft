@@ -1,21 +1,22 @@
 package com.ft.br.service.impl;
 
+import com.ft.br.service.GoodsService;
+import com.ft.br.service.UserService;
+import com.ft.util.ObjectUtil;
+import com.google.common.collect.Lists;
 import com.ft.br.constant.StockLogTypeDetailEnum;
 import com.ft.br.constant.StockLogTypeEnum;
 import com.ft.br.dao.GoodsMapper;
 import com.ft.br.dao.OrderMapper;
 import com.ft.br.dao.StockLogMapper;
-import com.ft.br.dao.UserMapper;
-import com.ft.br.model.dto.StockLogDTO;
+import com.ft.br.model.ao.StockLogListAO;
+import com.ft.br.model.bo.StockLogBO;
 import com.ft.br.model.vo.OrderVO;
-import com.ft.br.model.vo.StockLogVO;
 import com.ft.br.service.StockLogService;
 import com.ft.dao.stock.model.GoodsDO;
 import com.ft.dao.stock.model.OrderDO;
 import com.ft.dao.stock.model.StockLogDO;
-import com.ft.dao.stock.model.UserDO;
 import com.ft.db.constant.DbConstant;
-import com.ft.db.model.PageParam;
 import com.ft.db.model.PageResult;
 import com.ft.redis.base.ValueOperationsCache;
 import com.ft.redis.lock.RedisLock;
@@ -27,8 +28,9 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * 出入库业务
@@ -42,10 +44,13 @@ public class StockLogServiceImpl implements StockLogService {
 	private StockLogMapper stockLogMapper;
 
 	@Autowired
-	private UserMapper userMapper;
+	private UserService userService;
 
 	@Autowired
 	private GoodsMapper goodsMapper;
+
+	@Autowired
+	private GoodsService goodsService;
 
 	@Autowired
 	private OrderMapper orderMapper;
@@ -53,61 +58,51 @@ public class StockLogServiceImpl implements StockLogService {
 	@Autowired
 	private ValueOperationsCache<String, String> valueOperationsCache;
 
-	/**
-	 * 分页查询出入库记录
-	 *
-	 * @param stockLogDTO 分页查询条件
-	 * @return 本次查询记录
-	 */
-	public PageResult<StockLogVO> list(StockLogDTO stockLogDTO, PageParam pageParam) {
-		PageResult<StockLogVO> pageResult = new PageResult<>();
-		pageResult.setPage(pageParam.getPage());
-		pageResult.setLimit(pageParam.getLimit());
-
-
-		int count = 0;
-		if (count == 0) {
-			pageResult.setTotal(0);
-			pageResult.setList(new ArrayList<>());
+	@Override
+	public PageResult<StockLogBO> listByPage(StockLogListAO stockLogListAO) {
+		int total = stockLogMapper.countPagination(stockLogListAO);
+		PageResult<StockLogBO> pageResult = new PageResult<>();
+		pageResult.setPage(stockLogListAO.getPage());
+		pageResult.setLimit(stockLogListAO.getLimit());
+		pageResult.setTotal(total);
+		pageResult.setList(Lists.newArrayList());
+		if (total <= 0) {
 			return pageResult;
 		}
 
-		stockLogDTO.setStartRow(pageParam.getStartRowNumber());
-		stockLogDTO.setPageSize(pageParam.getLimit());
+		List<StockLogDO> stockLogDOs = stockLogMapper.listPagination(stockLogListAO);
 
-		List<StockLogVO> stockLogs = new ArrayList<>();
-		this.format(stockLogs);
+		List<Integer> goodsIds = stockLogDOs.stream().map(StockLogDO::getGoodsId).distinct().collect(Collectors.toList());
+		Map<Integer, String> goodsNameMap = goodsService.listGoodsNamesByIds(goodsIds);
 
-		pageResult.setTotal(count);
-		pageResult.setList(stockLogs);
+		List<Integer> operatorIds = stockLogDOs.stream().map(StockLogDO::getOperator).distinct().collect(Collectors.toList());
+		Map<Integer, String> userNameMap = userService.listUserNamesByIds(operatorIds);
+
+		List<StockLogBO> list = stockLogDOs.stream().map(stockLogDO -> {
+			StockLogBO stockLogBO = ObjectUtil.copy(stockLogDO, StockLogBO.class);
+			if (stockLogBO == null) {
+				stockLogBO = new StockLogBO();
+			}
+
+			stockLogBO.setOperatorName(userNameMap.get(stockLogDO.getOperator()));
+
+			StockLogTypeEnum stockLogTypeEnum = StockLogTypeEnum.getByType(stockLogDO.getType());
+			if (stockLogTypeEnum != null) {
+				stockLogBO.setTypeCH(stockLogTypeEnum.getMessage());
+			}
+
+			StockLogTypeDetailEnum stockLogTypeDetailEnum = StockLogTypeDetailEnum.getByTypeDetail(stockLogDO.getTypeDetail());
+			if (stockLogTypeDetailEnum != null) {
+				stockLogBO.setTypeDetailCH(stockLogTypeDetailEnum.getMessage());
+			}
+
+			stockLogBO.setGoodsName(goodsNameMap.get(stockLogDO.getGoodsId()));
+
+			return stockLogBO;
+		}).collect(Collectors.toList());
+		pageResult.setList(list);
 
 		return pageResult;
-	}
-
-	private void format(List<StockLogVO> stockLogs) {
-		if (stockLogs.isEmpty()) {
-			return;
-		}
-		stockLogs.forEach(stockLog -> {
-			int operator = stockLog.getOperator();
-			UserDO user = userMapper.selectByPrimaryKey(operator);
-			if (user != null) {
-				stockLog.setOperatorName(user.getUsername());
-			}
-
-			String typeCh = null;
-			StockLogTypeEnum stockLogTypeEnum = StockLogTypeEnum.getByType(stockLog.getType());
-			if (stockLogTypeEnum != null) {
-				typeCh = stockLogTypeEnum.getMessage();
-			}
-			stockLog.setTypeCH(typeCh);
-
-			int goodsId = stockLog.getGoodsId();
-			GoodsDO goodsDO = goodsMapper.selectByPrimaryKey(goodsId);
-			if (goodsDO != null) {
-				stockLog.setGoodsName(goodsDO.getName());
-			}
-		});
 	}
 
 	/**
