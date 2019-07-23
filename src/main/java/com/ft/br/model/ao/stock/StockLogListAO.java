@@ -1,4 +1,4 @@
-package com.ft.br.model.ao;
+package com.ft.br.model.ao.stock;
 
 import com.ft.db.model.PageParam;
 import com.ft.util.DateUtil;

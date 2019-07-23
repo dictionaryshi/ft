@@ -1,4 +1,4 @@
-package com.ft.br.model.ao;
+package com.ft.br.model.ao.order;
 
 import com.ft.db.model.PageParam;
 import lombok.Data;

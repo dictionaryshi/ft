@@ -1,7 +1,7 @@
 package com.ft.br.service;
 
-import com.ft.br.model.ao.CategoryAddAO;
-import com.ft.br.model.ao.CategoryUpdateAO;
+import com.ft.br.model.ao.category.CategoryAddAO;
+import com.ft.br.model.ao.category.CategoryUpdateAO;
 import com.ft.br.model.bo.CategoryBO;
 
 import java.util.List;

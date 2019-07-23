@@ -1,6 +1,6 @@
 package com.ft.br.service;
 
-import com.ft.br.model.ao.StockLogListAO;
+import com.ft.br.model.ao.stock.StockLogListAO;
 import com.ft.br.model.bo.StockLogBO;
 import com.ft.db.model.PageResult;
 

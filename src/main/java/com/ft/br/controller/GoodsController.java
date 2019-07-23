@@ -1,6 +1,6 @@
 package com.ft.br.controller;
 
-import com.ft.br.model.ao.GoodsListAO;
+import com.ft.br.model.ao.goods.GoodsListAO;
 import com.ft.br.model.ao.goods.GoodsAddAO;
 import com.ft.br.model.ao.goods.GoodsGetAO;
 import com.ft.br.model.ao.goods.GoodsListByCategoryAO;

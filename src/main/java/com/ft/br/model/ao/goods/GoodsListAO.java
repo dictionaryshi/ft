@@ -1,4 +1,4 @@
-package com.ft.br.model.ao;
+package com.ft.br.model.ao.goods;
 
 import com.ft.db.model.PageParam;
 import io.swagger.annotations.ApiModel;
