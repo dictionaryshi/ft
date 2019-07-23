@@ -17,12 +17,15 @@ import com.ft.db.annotation.UseMaster;
 import com.ft.db.model.PageResult;
 import com.ft.redis.lock.RedisLock;
 import com.ft.redis.util.RedisUtil;
+import com.ft.util.ObjectUtil;
+import com.ft.util.StringUtil;
 import com.ft.util.exception.FtException;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -187,5 +190,20 @@ public class GoodsServiceImpl implements GoodsService {
 		goodsBO.setCategoryName(categoryName);
 
 		return goodsBO;
+	}
+
+	@Override
+	public Map<Integer, String> listGoodsNamesByIds(List<Integer> ids) {
+		Map<Integer, String> resultMap = new HashMap<>(16);
+
+		if (ObjectUtil.isEmpty(ids)) {
+			return resultMap;
+		}
+
+		String idStr = StringUtil.join(ids, ",");
+		Map<Integer, GoodsDO> goodsDOMap = goodsMapper.selectByIds(idStr);
+		goodsDOMap.forEach((id, goodsDO) -> resultMap.put(id, goodsDO.getName()));
+
+		return resultMap;
 	}
 }

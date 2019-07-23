@@ -9,6 +9,7 @@ import com.ft.dao.stock.model.GoodsDO;
 import com.ft.db.model.PageResult;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * GoodsService
@@ -64,4 +65,12 @@ public interface GoodsService {
 	 * @return 商品信息
 	 */
 	PageResult<GoodsBO> listByPage(GoodsListAO goodsListAO);
+
+	/**
+	 * 批量获取商品名称
+	 *
+	 * @param ids 商品id集合
+	 * @return 商品名称集合
+	 */
+	Map<Integer, String> listGoodsNamesByIds(List<Integer> ids);
 }
