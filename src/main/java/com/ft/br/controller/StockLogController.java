@@ -2,12 +2,10 @@ package com.ft.br.controller;
 
 import com.ft.br.model.ao.StockLogListAO;
 import com.ft.br.model.bo.StockLogBO;
-import com.ft.br.model.dto.StockLogDTO;
 import com.ft.br.service.StockLogService;
 import com.ft.br.service.impl.StockLogServiceImpl;
 import com.ft.dao.stock.model.StockLogDO;
 import com.ft.db.annotation.PageParamCheck;
-import com.ft.db.model.PageParam;
 import com.ft.db.model.PageResult;
 import com.ft.util.JsonUtil;
 import com.ft.util.model.RestResult;
@@ -47,7 +45,7 @@ public class StockLogController {
 	@PageParamCheck
 	@GetMapping("/list")
 	public RestResult<PageResult<StockLogBO>> list(
-			@Valid StockLogListAO stockLogListAO;
+			@Valid StockLogListAO stockLogListAO
 	) {
 		PageResult<StockLogBO> pageResult = stockLogService.listByPage(stockLogListAO);
 		return RestResult.success(pageResult);
