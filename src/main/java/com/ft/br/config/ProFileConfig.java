@@ -1,6 +1,6 @@
 package com.ft.br.config;
 
-import com.ft.br.service.SpringLifeServiceImpl;
+import com.ft.br.service.impl.SpringLifeServiceImpl;
 import com.ft.dao.stock.model.UserDO;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Bean;
