@@ -25,7 +25,7 @@ public class HashOperationsCacheTest {
 	@Test
 	public void put() {
 		hashOperationsCache.put(USER_MAP, "username", "13264232894");
-		hashOperationsCache.put(USER_MAP, "password", "naodian12300");
+		hashOperationsCache.put(USER_MAP, "password", "flzx@3qc");
 	}
 
 	/**

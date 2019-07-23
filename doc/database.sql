@@ -43,7 +43,7 @@ FROM `user`;
     创建用户
  */
 CREATE USER reader@'%'
-  IDENTIFIED BY 'reader_naodian12300';
+  IDENTIFIED BY 'reader_flzx@3qc';
 
 /**
     删除用户
