@@ -101,4 +101,13 @@ public interface GoodsMapper extends GoodsDOMapper {
 	 */
 	@Select("select * from `goods` where category = #{category} and `name` = #{name} limit 1")
 	GoodsDO getGoodsByName(@Param("category") int category, @Param("name") String name);
+
+	@MapKey("id")
+	@Select({
+			"select ",
+			"* ",
+			"from goods ",
+			"where id in (${idStr}) "
+	})
+	Map<Integer, GoodsDO> selectByIds(@Param("idStr") String idStr);
 }
