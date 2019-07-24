@@ -40,4 +40,10 @@ public class StockLogStorageAO {
 	@NotBlank(message = "操作备注不为空")
 	@ApiModelProperty(value = "操作备注", required = true)
 	private String remark;
+
+
+	/**
+	 * 操作人
+	 */
+	private Integer operator;
 }
