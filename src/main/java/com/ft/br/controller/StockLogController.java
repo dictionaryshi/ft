@@ -1,5 +1,6 @@
 package com.ft.br.controller;
 
+import com.ft.br.constant.RedisKey;
 import com.ft.br.model.ao.stock.StockLogListAO;
 import com.ft.br.model.ao.stock.StockLogStorageAO;
 import com.ft.br.model.bo.StockLogBO;
@@ -8,6 +9,7 @@ import com.ft.br.service.StockStorageService;
 import com.ft.db.annotation.PageParamCheck;
 import com.ft.db.model.PageResult;
 import com.ft.redis.lock.RedisLock;
+import com.ft.redis.util.RedisUtil;
 import com.ft.util.exception.FtException;
 import com.ft.util.model.LogAO;
 import com.ft.util.model.RestResult;
@@ -68,6 +70,15 @@ public class StockLogController {
 					LogAO.build("type", type + ""));
 		}
 
-		return null;
+		String lockKey = RedisUtil.getRedisKey(RedisKey.REDIS_GOODS_UPDATE_LOCK, stockLogStorageAO.getGoodsId() + "");
+		try {
+			redisLock.lock(lockKey, 10_000L);
+
+			boolean result = stockStorageService.storage(stockLogStorageAO);
+
+			return RestResult.success(result);
+		} finally {
+			redisLock.unlock(lockKey);
+		}
 	}
 }
