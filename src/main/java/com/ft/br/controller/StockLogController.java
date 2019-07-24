@@ -4,9 +4,12 @@ import com.ft.br.model.ao.stock.StockLogListAO;
 import com.ft.br.model.ao.stock.StockLogStorageAO;
 import com.ft.br.model.bo.StockLogBO;
 import com.ft.br.service.StockLogService;
+import com.ft.br.service.StockStorageService;
 import com.ft.db.annotation.PageParamCheck;
 import com.ft.db.model.PageResult;
 import com.ft.redis.lock.RedisLock;
+import com.ft.util.exception.FtException;
+import com.ft.util.model.LogAO;
 import com.ft.util.model.RestResult;
 import com.ft.web.annotation.LoginCheck;
 import com.ft.web.util.WebUtil;
@@ -57,6 +60,13 @@ public class StockLogController {
 		stockLogStorageAO.setOperator(operator);
 
 		stockLogService.check(stockLogStorageAO);
+
+		int type = stockLogStorageAO.getType();
+		StockStorageService stockStorageService = StockStorageService.STOCK_STORAGE_SERVICE_MAP.get(type);
+		if (stockStorageService == null) {
+			FtException.throwException("操作类型不正确",
+					LogAO.build("type", type + ""));
+		}
 
 		return null;
 	}
