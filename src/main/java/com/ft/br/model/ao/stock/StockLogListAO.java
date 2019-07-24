@@ -19,7 +19,7 @@ import lombok.ToString;
 @ToString
 public class StockLogListAO extends PageParam {
 
-	@ApiModelProperty(value = "操作类型", example = "1")
+	@ApiModelProperty(value = "仓库操作类型(1:入库, 2:出库)", example = "1")
 	private Integer type;
 
 	@ApiModelProperty(value = "商品id", example = "10")
