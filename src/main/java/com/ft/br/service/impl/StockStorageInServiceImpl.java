@@ -1,10 +1,13 @@
 package com.ft.br.service.impl;
 
 import com.ft.br.constant.StockLogTypeEnum;
+import com.ft.br.dao.GoodsMapper;
+import com.ft.br.dao.StockLogMapper;
 import com.ft.br.model.ao.stock.StockLogStorageAO;
 import com.ft.br.service.StockStorageService;
 import com.ft.db.annotation.UseMaster;
 import com.ft.db.constant.DbConstant;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
@@ -17,6 +20,12 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Service("com.ft.br.service.impl.StockStorageInServiceImpl")
 public class StockStorageInServiceImpl implements StockStorageService {
+
+	@Autowired
+	private GoodsMapper goodsMapper;
+
+	@Autowired
+	private StockLogMapper stockLogMapper;
 
 	@Override
 	public int type() {
