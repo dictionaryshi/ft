@@ -6,6 +6,7 @@ import com.ft.br.model.bo.StockLogBO;
 import com.ft.br.service.StockLogService;
 import com.ft.db.annotation.PageParamCheck;
 import com.ft.db.model.PageResult;
+import com.ft.redis.lock.RedisLock;
 import com.ft.util.model.RestResult;
 import com.ft.web.annotation.LoginCheck;
 import com.ft.web.util.WebUtil;
@@ -32,6 +33,9 @@ public class StockLogController {
 	@Autowired
 	private StockLogService stockLogService;
 
+	@Autowired
+	private RedisLock redisLock;
+
 	@ApiOperation("分页查询库存操作记录")
 	@LoginCheck
 	@PageParamCheck
@@ -51,6 +55,8 @@ public class StockLogController {
 	) {
 		int operator = WebUtil.getCurrentUser().getId();
 		stockLogStorageAO.setOperator(operator);
+
+		stockLogService.check(stockLogStorageAO);
 
 		return null;
 	}

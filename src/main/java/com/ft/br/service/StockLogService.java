@@ -1,6 +1,7 @@
 package com.ft.br.service;
 
 import com.ft.br.model.ao.stock.StockLogListAO;
+import com.ft.br.model.ao.stock.StockLogStorageAO;
 import com.ft.br.model.bo.StockLogBO;
 import com.ft.db.model.PageResult;
 
@@ -17,4 +18,12 @@ public interface StockLogService {
 	 * @return 仓库操作记录
 	 */
 	PageResult<StockLogBO> listByPage(StockLogListAO stockLogListAO);
+
+	/**
+	 * 校验出入库参数
+	 *
+	 * @param stockLogStorageAO 出入库参数
+	 * @return true 校验成功
+	 */
+	boolean check(StockLogStorageAO stockLogStorageAO);
 }
