@@ -1,8 +1,10 @@
 package com.ft.br.service.impl;
 
+import com.ft.br.model.ao.stock.StockLogStorageAO;
 import com.ft.br.service.GoodsService;
 import com.ft.br.service.UserService;
 import com.ft.util.ObjectUtil;
+import com.ft.util.model.LogAO;
 import com.google.common.collect.Lists;
 import com.ft.br.constant.StockLogTypeDetailEnum;
 import com.ft.br.constant.StockLogTypeEnum;
@@ -28,6 +30,7 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -103,6 +106,27 @@ public class StockLogServiceImpl implements StockLogService {
 		pageResult.setList(list);
 
 		return pageResult;
+	}
+
+	@Override
+	public boolean check(StockLogStorageAO stockLogStorageAO) {
+		int goodsId = stockLogStorageAO.getGoodsId();
+		GoodsDO goodsDO = goodsService.get(goodsId);
+		if (goodsDO == null) {
+			FtException.throwException("商品不存在",
+					LogAO.build("goodsId", goodsId + ""));
+		}
+
+		Long orderId = stockLogStorageAO.getOrderId();
+		if (orderId != null) {
+			OrderDO orderDO = orderMapper.selectByPrimaryKey(orderId);
+			if (orderDO == null) {
+				FtException.throwException("订单不存在",
+						LogAO.build("orderId", orderId + ""));
+			}
+		}
+
+		return Boolean.TRUE;
 	}
 
 	/**

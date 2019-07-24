@@ -1,25 +1,26 @@
 package com.ft.br.controller;
 
+import com.ft.br.constant.RedisKey;
 import com.ft.br.model.ao.stock.StockLogListAO;
+import com.ft.br.model.ao.stock.StockLogStorageAO;
 import com.ft.br.model.bo.StockLogBO;
 import com.ft.br.service.StockLogService;
-import com.ft.br.service.impl.StockLogServiceImpl;
-import com.ft.dao.stock.model.StockLogDO;
+import com.ft.br.service.StockStorageService;
 import com.ft.db.annotation.PageParamCheck;
 import com.ft.db.model.PageResult;
-import com.ft.util.JsonUtil;
+import com.ft.redis.lock.RedisLock;
+import com.ft.redis.util.RedisUtil;
+import com.ft.util.exception.FtException;
+import com.ft.util.model.LogAO;
 import com.ft.util.model.RestResult;
 import com.ft.web.annotation.LoginCheck;
-import com.ft.web.constant.SwaggerConstant;
+import com.ft.web.util.WebUtil;
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 /**
@@ -38,7 +39,7 @@ public class StockLogController {
 	private StockLogService stockLogService;
 
 	@Autowired
-	private StockLogServiceImpl stockLogServiceImpl;
+	private RedisLock redisLock;
 
 	@ApiOperation("分页查询库存操作记录")
 	@LoginCheck
@@ -52,32 +53,32 @@ public class StockLogController {
 	}
 
 	@ApiOperation("出/入库操作")
-	@ApiImplicitParams({
-			@ApiImplicitParam(name = "type", value = "操作类型", required = true, dataType = SwaggerConstant.DATA_TYPE_INT, paramType = SwaggerConstant.PARAM_TYPE_QUERY, example = "0"),
-			@ApiImplicitParam(name = "goods_id", value = "商品id", required = true, dataType = SwaggerConstant.DATA_TYPE_INT, paramType = SwaggerConstant.PARAM_TYPE_QUERY, example = "0"),
-			@ApiImplicitParam(name = "order_id", value = "订单id", dataType = SwaggerConstant.DATA_TYPE_INT, paramType = SwaggerConstant.PARAM_TYPE_QUERY, example = "0"),
-			@ApiImplicitParam(name = "goods_number", value = "商品数量", required = true, dataType = SwaggerConstant.DATA_TYPE_INT, paramType = SwaggerConstant.PARAM_TYPE_QUERY, example = "0"),
-			@ApiImplicitParam(name = "remark", value = "操作备注", dataType = SwaggerConstant.DATA_TYPE_STRING, paramType = SwaggerConstant.PARAM_TYPE_QUERY),
-	})
-	@RequestMapping(value = "/storage", method = RequestMethod.POST)
 	@LoginCheck
-	public String storage(
-			HttpServletRequest request,
-			@RequestParam("type") Integer type,
-			@RequestParam("goods_id") int goodsId,
-			@RequestParam(value = "order_id", defaultValue = "0") Long orderId,
-			@RequestParam("goods_number") int goodsNumber,
-			@RequestParam(value = "remark", required = false, defaultValue = "") String remark
+	@PostMapping("/storage")
+	public RestResult<Boolean> storage(
+			@RequestBody @Valid StockLogStorageAO stockLogStorageAO
 	) {
-		StockLogDO stockLogDO = new StockLogDO();
-		stockLogDO.setOperator(0);
-		stockLogDO.setType(type);
-		stockLogDO.setGoodsId(goodsId);
-		stockLogDO.setGoodsNumber(goodsNumber);
-		stockLogDO.setRemark(remark);
-		stockLogDO.setOrderId(orderId);
+		int operator = WebUtil.getCurrentUser().getId();
+		stockLogStorageAO.setOperator(operator);
 
-		boolean flag = stockLogServiceImpl.storage(stockLogDO);
-		return JsonUtil.object2Json(RestResult.success(flag));
+		stockLogService.check(stockLogStorageAO);
+
+		int type = stockLogStorageAO.getType();
+		StockStorageService stockStorageService = StockStorageService.STOCK_STORAGE_SERVICE_MAP.get(type);
+		if (stockStorageService == null) {
+			FtException.throwException("操作类型不正确",
+					LogAO.build("type", type + ""));
+		}
+
+		String lockKey = RedisUtil.getRedisKey(RedisKey.REDIS_GOODS_UPDATE_LOCK, stockLogStorageAO.getGoodsId() + "");
+		try {
+			redisLock.lock(lockKey, 10_000L);
+
+			boolean result = stockStorageService.storage(stockLogStorageAO);
+
+			return RestResult.success(result);
+		} finally {
+			redisLock.unlock(lockKey);
+		}
 	}
 }
