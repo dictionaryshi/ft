@@ -1,4 +1,4 @@
-package com.ft.br.service;
+package com.ft.br.service.impl;
 
 import com.ft.br.constant.OrderStatusEnum;
 import com.ft.br.constant.StockLogTypeDetailEnum;
@@ -33,7 +33,7 @@ import java.util.concurrent.TimeUnit;
  */
 @Service
 @Slf4j
-public class OrderService {
+public class OrderServiceImpl {
 
 	@Autowired
 	private OrderMapper orderMapper;

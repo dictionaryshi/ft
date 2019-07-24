@@ -1,7 +1,7 @@
 package com.ft.br.controller;
 
 import com.ft.br.model.dto.OrderDTO;
-import com.ft.br.service.OrderService;
+import com.ft.br.service.impl.OrderServiceImpl;
 import com.ft.dao.stock.model.OrderDO;
 import com.ft.db.model.PageParam;
 import com.ft.util.JsonUtil;
@@ -32,7 +32,7 @@ import javax.servlet.http.HttpServletRequest;
 public class OrderController {
 
 	@Autowired
-	private OrderService orderService;
+	private OrderServiceImpl orderService;
 
 	@ApiOperation("分页查询订单信息")
 	/**
