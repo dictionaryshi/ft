@@ -206,4 +206,14 @@ public class GoodsServiceImpl implements GoodsService {
 
 		return resultMap;
 	}
+
+	@Override
+	public Integer getStock(int goodsId) {
+		GoodsDO goodsDO = goodsMapper.selectByPrimaryKey(goodsId);
+		if (goodsDO == null) {
+			return null;
+		}
+
+		return goodsDO.getNumber();
+	}
 }
