@@ -1,7 +1,6 @@
 package com.ft.br.service.impl;
 
 import com.ft.br.constant.OrderStatusEnum;
-import com.ft.br.service.OrderService;
 import com.ft.br.service.SpringLifeService;
 import lombok.Data;
 import org.springframework.beans.BeansException;
@@ -23,7 +22,7 @@ public class SpringLifeServiceImpl implements SpringLifeService, BeanNameAware, 
 	private String username;
 
 	@Autowired
-	private OrderService orderService;
+	private OrderServiceImpl orderService;
 
 	public SpringLifeServiceImpl(String username) {
 		this.username = username;
