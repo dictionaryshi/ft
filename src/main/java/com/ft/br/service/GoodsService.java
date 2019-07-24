@@ -73,4 +73,12 @@ public interface GoodsService {
 	 * @return 商品名称集合
 	 */
 	Map<Integer, String> listGoodsNamesByIds(List<Integer> ids);
+
+	/**
+	 * 获取库存
+	 *
+	 * @param goodsId 商品id
+	 * @return 商品库存数量
+	 */
+	Integer getStock(int goodsId);
 }
