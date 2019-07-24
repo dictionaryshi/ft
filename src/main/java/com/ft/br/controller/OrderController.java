@@ -1,6 +1,7 @@
 package com.ft.br.controller;
 
 import com.ft.br.model.dto.OrderDTO;
+import com.ft.br.service.OrderService;
 import com.ft.br.service.impl.OrderServiceImpl;
 import com.ft.dao.stock.model.OrderDO;
 import com.ft.db.model.PageParam;
@@ -32,7 +33,10 @@ import javax.servlet.http.HttpServletRequest;
 public class OrderController {
 
 	@Autowired
-	private OrderServiceImpl orderService;
+	private OrderService orderService;
+
+	@Autowired
+	private OrderServiceImpl orderServiceImpl;
 
 	@ApiOperation("分页查询订单信息")
 	/**
@@ -78,7 +82,7 @@ public class OrderController {
 			orderDTO.setEndDate(end);
 		}
 
-		return JsonUtil.object2Json(RestResult.success(orderService.list(orderDTO, pageParam)));
+		return JsonUtil.object2Json(RestResult.success(orderServiceImpl.list(orderDTO, pageParam)));
 	}
 
 	@ApiOperation("获取某个订单信息")
@@ -94,7 +98,7 @@ public class OrderController {
 	@RequestMapping(value = "/get", method = RequestMethod.POST)
 	@LoginCheck
 	public String get(@RequestParam(value = "id") Long id) {
-		return JsonUtil.object2Json(RestResult.success(orderService.get(id)));
+		return JsonUtil.object2Json(RestResult.success(orderServiceImpl.get(id)));
 	}
 
 	@ApiOperation("查询订单项")
@@ -110,7 +114,7 @@ public class OrderController {
 	@RequestMapping(value = "/list-items", method = RequestMethod.POST)
 	@LoginCheck
 	public String listItems(@RequestParam(value = "id") Long id) {
-		return JsonUtil.object2Json(RestResult.success(orderService.listItems(id)));
+		return JsonUtil.object2Json(RestResult.success(orderServiceImpl.listItems(id)));
 	}
 
 	@ApiOperation("添加订单信息")
@@ -149,7 +153,7 @@ public class OrderController {
 		orderDTO.setRemark(remark);
 		orderDTO.setOperator(0);
 
-		boolean flag = orderService.add(orderDTO);
+		boolean flag = orderServiceImpl.add(orderDTO);
 		return JsonUtil.object2Json(RestResult.success(flag));
 	}
 
@@ -198,7 +202,7 @@ public class OrderController {
 		orderDO.setRemark(remark);
 		orderDO.setId(id);
 
-		boolean flag = orderService.update(orderDO);
+		boolean flag = orderServiceImpl.update(orderDO);
 		return JsonUtil.object2Json(RestResult.success(flag));
 	}
 
@@ -223,7 +227,7 @@ public class OrderController {
 			@RequestParam("goods_id") int goodsId,
 			@RequestParam("goods_number") int goodsNumber
 	) {
-		boolean flag = orderService.addItem(orderId, goodsId, goodsNumber);
+		boolean flag = orderServiceImpl.addItem(orderId, goodsId, goodsNumber);
 		return JsonUtil.object2Json(RestResult.success(flag));
 	}
 
@@ -244,7 +248,7 @@ public class OrderController {
 			@RequestParam("order_id") Long orderId,
 			@RequestParam("id") int id
 	) {
-		boolean flag = orderService.deleteItem(id, orderId);
+		boolean flag = orderServiceImpl.deleteItem(id, orderId);
 		return JsonUtil.object2Json(RestResult.success(flag));
 	}
 
@@ -268,7 +272,7 @@ public class OrderController {
 			@RequestParam(value = "goods_number") int goodsNumber,
 			@RequestParam(value = "id") int id
 	) {
-		boolean flag = orderService.updateItem(id, goodsNumber, orderId);
+		boolean flag = orderServiceImpl.updateItem(id, goodsNumber, orderId);
 		return JsonUtil.object2Json(RestResult.success(flag));
 	}
 
@@ -289,7 +293,7 @@ public class OrderController {
 			@RequestParam("order_id") Long orderId
 	) {
 		int userId = 0;
-		boolean flag = orderService.confirm(orderId, userId);
+		boolean flag = orderServiceImpl.confirm(orderId, userId);
 		return JsonUtil.object2Json(RestResult.success(flag));
 	}
 
@@ -309,7 +313,7 @@ public class OrderController {
 			@RequestParam("order_id") Long orderId
 	) {
 		int userId = 0;
-		boolean flag = orderService.success(orderId, userId);
+		boolean flag = orderServiceImpl.success(orderId, userId);
 		return JsonUtil.object2Json(RestResult.success(flag));
 	}
 
@@ -329,7 +333,7 @@ public class OrderController {
 			@RequestParam("order_id") Long orderId
 	) {
 		int userId = 0;
-		boolean flag = orderService.fail(orderId, userId);
+		boolean flag = orderServiceImpl.fail(orderId, userId);
 		return JsonUtil.object2Json(RestResult.success(flag));
 	}
 }

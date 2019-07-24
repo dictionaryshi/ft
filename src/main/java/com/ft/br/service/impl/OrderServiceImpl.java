@@ -7,6 +7,7 @@ import com.ft.br.dao.*;
 import com.ft.br.model.dto.OrderDTO;
 import com.ft.br.model.vo.ItemVO;
 import com.ft.br.model.vo.OrderVO;
+import com.ft.br.service.OrderService;
 import com.ft.dao.stock.model.*;
 import com.ft.db.annotation.UseMaster;
 import com.ft.db.constant.DbConstant;
@@ -31,9 +32,9 @@ import java.util.concurrent.TimeUnit;
  *
  * @author shichunyang
  */
-@Service
 @Slf4j
-public class OrderServiceImpl {
+@Service("com.ft.br.service.impl.OrderServiceImpl")
+public class OrderServiceImpl implements OrderService {
 
 	@Autowired
 	private OrderMapper orderMapper;
