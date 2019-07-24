@@ -35,8 +35,14 @@ public class StockLogBO {
 	@ApiModelProperty(value = "商品id", required = true, example = "10")
 	private Integer goodsId;
 
+	@ApiModelProperty(value = "操作前库存", required = true, example = "10")
+	private Integer beforeStockNumber;
+
 	@ApiModelProperty(value = "商品数量", required = true, example = "10")
 	private Integer goodsNumber;
+
+	@ApiModelProperty(value = "操作后库存", required = true, example = "10")
+	private Integer afterStockNumber;
 
 	@ApiModelProperty(value = "订单id", required = true, example = "10")
 	private Long orderId;
