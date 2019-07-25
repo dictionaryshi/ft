@@ -20,7 +20,7 @@ import javax.validation.constraints.Size;
 @Getter
 @Setter
 @ToString
-public class OrderAddAO {
+public class OrderAddUpdateAO {
 
 	@NotNull(message = "订单id不为null")
 	@ApiModelProperty(value = "订单id", required = true, example = "2237867")

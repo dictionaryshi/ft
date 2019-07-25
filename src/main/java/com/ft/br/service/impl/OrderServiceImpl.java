@@ -4,11 +4,10 @@ import com.ft.br.constant.OrderStatusEnum;
 import com.ft.br.constant.StockLogTypeDetailEnum;
 import com.ft.br.constant.StockLogTypeEnum;
 import com.ft.br.dao.*;
-import com.ft.br.model.ao.order.OrderAddAO;
+import com.ft.br.model.ao.order.OrderAddUpdateAO;
 import com.ft.br.model.dto.OrderDTO;
 import com.ft.br.model.vo.ItemVO;
 import com.ft.br.model.vo.OrderVO;
-import com.ft.br.service.IdService;
 import com.ft.br.service.OrderService;
 import com.ft.dao.stock.model.*;
 import com.ft.db.annotation.UseMaster;
@@ -28,7 +27,6 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -62,7 +60,7 @@ public class OrderServiceImpl implements OrderService {
 
 	@UseMaster
 	@Override
-	public boolean createOrder(OrderAddAO orderAddAO) {
+	public boolean createOrder(OrderAddUpdateAO orderAddAO) {
 		Long orderId = orderAddAO.getId();
 		OrderDO dbOrder = orderMapper.selectByPrimaryKey(orderId);
 		if (dbOrder != null) {
