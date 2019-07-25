@@ -174,52 +174,6 @@ public class OrderServiceImpl implements OrderService {
 		return pageResult;
 	}
 
-	public PageResult<OrderVO> list(OrderDTO orderDTO, PageParam pageParam) {
-		PageResult<OrderVO> pageResult = new PageResult<>();
-		pageResult.setPage(pageParam.getPage());
-		pageResult.setLimit(pageParam.getLimit());
-
-		int count = 0;
-		if (count == 0) {
-			pageResult.setTotal(0);
-			pageResult.setList(new ArrayList<>());
-			return pageResult;
-		}
-
-		orderDTO.setStartRow(pageParam.getStartRowNumber());
-		orderDTO.setPageSize(pageParam.getLimit());
-
-		List<OrderVO> orders = new ArrayList<>();
-		orders.forEach(this::format);
-
-		pageResult.setTotal(count);
-		pageResult.setList(orders);
-
-		return pageResult;
-	}
-
-	/**
-	 * 格式化订单信息
-	 *
-	 * @param order 订单信息
-	 */
-	private void format(OrderVO order) {
-		// 操作人
-		int operator = order.getOperator();
-		UserDO userDO = userMapper.selectByPrimaryKey(operator);
-		if (userDO != null) {
-			order.setOperatorName(userDO.getUsername());
-		}
-
-		String orderStatus = null;
-		OrderStatusEnum orderStatusEnum = OrderStatusEnum.getByStatus(order.getStatus());
-		if (orderStatusEnum != null) {
-			orderStatus = orderStatusEnum.getMessage();
-		}
-		// 订单中文状态
-		order.setStatusCH(orderStatus);
-	}
-
 	/**
 	 * 查询订单项
 	 *
