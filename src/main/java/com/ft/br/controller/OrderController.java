@@ -146,7 +146,7 @@ public class OrderController {
 			@RequestParam(value = "remark", required = false) String remark
 	) {
 		OrderDTO orderDTO = new OrderDTO();
-		orderDTO.setTotalAmount(totalAmount);
+		orderDTO.setTotalAmount(0);
 		orderDTO.setUsername(username);
 		orderDTO.setPhone(phone);
 		orderDTO.setAddress(address);
@@ -197,7 +197,7 @@ public class OrderController {
 
 		double defaultAmount = 0.0;
 		if (totalAmount != defaultAmount && totalAmount > defaultAmount) {
-			orderDO.setTotalAmount(totalAmount);
+			orderDO.setTotalAmount(0);
 		}
 		orderDO.setRemark(remark);
 		orderDO.setId(id);
