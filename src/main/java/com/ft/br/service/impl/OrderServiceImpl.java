@@ -5,6 +5,8 @@ import com.ft.br.constant.StockLogTypeDetailEnum;
 import com.ft.br.constant.StockLogTypeEnum;
 import com.ft.br.dao.*;
 import com.ft.br.model.ao.order.OrderAddUpdateAO;
+import com.ft.br.model.ao.order.OrderGetAO;
+import com.ft.br.model.bo.OrderBO;
 import com.ft.br.model.dto.OrderDTO;
 import com.ft.br.model.vo.ItemVO;
 import com.ft.br.model.vo.OrderVO;
@@ -15,6 +17,7 @@ import com.ft.db.constant.DbConstant;
 import com.ft.db.model.PageParam;
 import com.ft.db.model.PageResult;
 import com.ft.redis.base.ValueOperationsCache;
+import com.ft.util.DateUtil;
 import com.ft.util.JsonUtil;
 import com.ft.util.ObjectUtil;
 import com.ft.util.StringUtil;
@@ -28,6 +31,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -100,6 +104,51 @@ public class OrderServiceImpl implements OrderService {
 		return Boolean.TRUE;
 	}
 
+	@Override
+	public OrderBO getOrderById(OrderGetAO orderGetAO) {
+		OrderDO orderDO = orderMapper.selectByPrimaryKey(orderGetAO.getId());
+		if (orderDO == null) {
+			return new OrderBO();
+		}
+
+		return this.orderDO2OrderBO(orderDO);
+	}
+
+	private OrderBO orderDO2OrderBO(OrderDO orderDO) {
+		OrderBO orderBO = new OrderBO();
+		orderBO.setId(orderDO.getId());
+
+		UserDO userDO = userMapper.selectByPrimaryKey(orderDO.getOperator());
+		if (userDO != null) {
+			orderBO.setOperatorName(userDO.getUsername());
+		}
+
+		orderBO.setStatus(orderDO.getStatus());
+
+		OrderStatusEnum orderStatusEnum = OrderStatusEnum.getByStatus(orderDO.getStatus());
+		if (orderStatusEnum != null) {
+			orderBO.setStatusCH(orderStatusEnum.getMessage());
+		}
+
+		orderBO.setUsername(orderDO.getUsername());
+		orderBO.setPhone(orderDO.getPhone());
+		orderBO.setAddress(orderDO.getAddress());
+		orderBO.setTotalAmount(orderDO.getTotalAmount());
+		orderBO.setRemark(orderDO.getRemark());
+
+		if (orderDO.getConfirmTime() > 0) {
+			orderBO.setConfirmTimeCH(DateUtil.date2Str(new Date(orderDO.getConfirmTime()), DateUtil.DEFAULT_DATE_FORMAT));
+		}
+
+		if (orderDO.getFinalOperateTime() > 0) {
+			orderBO.setFinalOperateTimeCH(DateUtil.date2Str(new Date(orderDO.getFinalOperateTime()), DateUtil.DEFAULT_DATE_FORMAT));
+		}
+
+		orderBO.setCreatedAtCH(DateUtil.date2Str(orderDO.getCreatedAt(), DateUtil.DEFAULT_DATE_FORMAT));
+
+		return orderBO;
+	}
+
 	public PageResult<OrderVO> list(OrderDTO orderDTO, PageParam pageParam) {
 		PageResult<OrderVO> pageResult = new PageResult<>();
 		pageResult.setPage(pageParam.getPage());
@@ -144,23 +193,6 @@ public class OrderServiceImpl implements OrderService {
 		}
 		// 订单中文状态
 		order.setStatusCH(orderStatus);
-	}
-
-	/**
-	 * 获取订单信息
-	 *
-	 * @param id 订单id
-	 * @return 订单信息
-	 */
-	public OrderVO get(Long id) {
-		OrderDO orderDO = orderMapper.selectByPrimaryKey(id);
-		OrderVO order = new OrderVO();
-		if (order == null) {
-			return new OrderVO();
-		}
-
-		this.format(order);
-		return order;
 	}
 
 	/**

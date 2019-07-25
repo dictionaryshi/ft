@@ -2,6 +2,8 @@ package com.ft.br.controller;
 
 import com.ft.br.constant.RedisKey;
 import com.ft.br.model.ao.order.OrderAddUpdateAO;
+import com.ft.br.model.ao.order.OrderGetAO;
+import com.ft.br.model.bo.OrderBO;
 import com.ft.br.model.dto.OrderDTO;
 import com.ft.br.service.IdService;
 import com.ft.br.service.OrderService;
@@ -99,6 +101,15 @@ public class OrderController {
 		return RestResult.success(result);
 	}
 
+	@ApiOperation("根据id查询订单信息")
+	@LoginCheck
+	@GetMapping("/get")
+	public RestResult<OrderBO> get(
+			@Valid OrderGetAO orderGetAO
+	) {
+		return RestResult.success(orderService.getOrderById(orderGetAO));
+	}
+
 	@ApiOperation("分页查询订单信息")
 	/**
 	 * 分页查询订单信息
@@ -144,22 +155,6 @@ public class OrderController {
 		}
 
 		return JsonUtil.object2Json(RestResult.success(orderServiceImpl.list(orderDTO, pageParam)));
-	}
-
-	@ApiOperation("获取某个订单信息")
-	/**
-	 * 获取某个订单信息
-	 *
-	 * @param id 订单主键
-	 * @return 订单信息
-	 */
-	@ApiImplicitParams({
-			@ApiImplicitParam(name = "id", value = "订单id", required = true, dataType = SwaggerConstant.DATA_TYPE_INT, paramType = SwaggerConstant.PARAM_TYPE_QUERY, example = "0"),
-	})
-	@RequestMapping(value = "/get", method = RequestMethod.POST)
-	@LoginCheck
-	public String get(@RequestParam(value = "id") Long id) {
-		return JsonUtil.object2Json(RestResult.success(orderServiceImpl.get(id)));
 	}
 
 	@ApiOperation("查询订单项")

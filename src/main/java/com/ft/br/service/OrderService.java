@@ -1,6 +1,8 @@
 package com.ft.br.service;
 
 import com.ft.br.model.ao.order.OrderAddUpdateAO;
+import com.ft.br.model.ao.order.OrderGetAO;
+import com.ft.br.model.bo.OrderBO;
 
 /**
  * OrderService
@@ -23,4 +25,12 @@ public interface OrderService {
 	 * @return true 修改成功
 	 */
 	boolean updateOrder(OrderAddUpdateAO orderAddUpdateAO);
+
+	/**
+	 * 根据主键查询订单信息
+	 *
+	 * @param orderGetAO 订单主键
+	 * @return 订单信息
+	 */
+	OrderBO getOrderById(OrderGetAO orderGetAO);
 }
