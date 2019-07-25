@@ -1,6 +1,7 @@
 package com.ft.br.controller;
 
 import com.ft.br.constant.RedisKey;
+import com.ft.br.model.ao.item.ItemAddAO;
 import com.ft.br.model.ao.order.OrderAddUpdateAO;
 import com.ft.br.model.ao.order.OrderGetAO;
 import com.ft.br.model.ao.order.OrderListAO;
@@ -121,6 +122,16 @@ public class OrderController {
 		return RestResult.success(pageResult);
 	}
 
+	@ApiOperation("添加订单项")
+	@LoginCheck
+	@PostMapping("/add-item")
+	public RestResult<Boolean> addItem(
+			@RequestBody @Valid ItemAddAO itemAddAO
+	) {
+		boolean result = orderService.addItem(itemAddAO);
+		return RestResult.success(result);
+	}
+
 	@ApiOperation("查询订单项")
 	/**
 	 * 查询订单项
@@ -135,31 +146,6 @@ public class OrderController {
 	@LoginCheck
 	public String listItems(@RequestParam(value = "id") Long id) {
 		return JsonUtil.object2Json(RestResult.success(orderServiceImpl.listItems(id)));
-	}
-
-	@ApiOperation("添加订单项")
-	/**
-	 * 添加订单项
-	 *
-	 * @param orderId     订单id
-	 * @param goodsId     商品id
-	 * @param goodsNumber 商品数量
-	 * @return 添加订单项结果
-	 */
-	@ApiImplicitParams({
-			@ApiImplicitParam(name = "order_id", value = "订单id", required = true, dataType = SwaggerConstant.DATA_TYPE_INT, paramType = SwaggerConstant.PARAM_TYPE_QUERY, example = "0"),
-			@ApiImplicitParam(name = "goods_id", value = "商品id", required = true, dataType = SwaggerConstant.DATA_TYPE_INT, paramType = SwaggerConstant.PARAM_TYPE_QUERY, example = "0"),
-			@ApiImplicitParam(name = "goods_number", value = "商品数量", required = true, dataType = SwaggerConstant.DATA_TYPE_INT, paramType = SwaggerConstant.PARAM_TYPE_QUERY, example = "0"),
-	})
-	@LoginCheck
-	@RequestMapping(value = "/add-item", method = RequestMethod.POST)
-	public String addItem(
-			@RequestParam("order_id") Long orderId,
-			@RequestParam("goods_id") int goodsId,
-			@RequestParam("goods_number") int goodsNumber
-	) {
-		boolean flag = orderServiceImpl.addItem(orderId, goodsId, goodsNumber);
-		return JsonUtil.object2Json(RestResult.success(flag));
 	}
 
 	@ApiOperation("删除订单项")

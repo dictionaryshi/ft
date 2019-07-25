@@ -1,5 +1,9 @@
 package com.ft.br.service.impl;
 
+import com.ft.br.constant.RedisKey;
+import com.ft.br.model.ao.item.ItemAddAO;
+import com.ft.redis.lock.RedisLock;
+import com.ft.redis.util.RedisUtil;
 import com.google.common.collect.Lists;
 
 import com.ft.br.constant.OrderStatusEnum;
@@ -10,14 +14,12 @@ import com.ft.br.model.ao.order.OrderAddUpdateAO;
 import com.ft.br.model.ao.order.OrderGetAO;
 import com.ft.br.model.ao.order.OrderListAO;
 import com.ft.br.model.bo.OrderBO;
-import com.ft.br.model.dto.OrderDTO;
 import com.ft.br.model.vo.ItemVO;
 import com.ft.br.model.vo.OrderVO;
 import com.ft.br.service.OrderService;
 import com.ft.dao.stock.model.*;
 import com.ft.db.annotation.UseMaster;
 import com.ft.db.constant.DbConstant;
-import com.ft.db.model.PageParam;
 import com.ft.db.model.PageResult;
 import com.ft.redis.base.ValueOperationsCache;
 import com.ft.util.DateUtil;
@@ -65,6 +67,9 @@ public class OrderServiceImpl implements OrderService {
 
 	@Autowired
 	private ValueOperationsCache<String, String> valueOperationsCache;
+
+	@Autowired
+	private RedisLock redisLock;
 
 	@UseMaster
 	@Override
@@ -174,6 +179,44 @@ public class OrderServiceImpl implements OrderService {
 		return pageResult;
 	}
 
+	@UseMaster
+	@Override
+	public boolean addItem(ItemAddAO itemAO) {
+		long orderId = itemAO.getOrderId();
+		int goodsId = itemAO.getGoodsId();
+		int goodsNumber = itemAO.getGoodsNumber();
+
+		OrderDO orderDO = orderMapper.selectByPrimaryKey(orderId);
+		if (orderDO == null) {
+			FtException.throwException("订单不存在");
+		}
+
+		GoodsDO goodsDO = goodsMapper.selectByPrimaryKey(goodsId);
+		if (goodsDO == null) {
+			FtException.throwException("商品不存在");
+		}
+
+		String lockKey = RedisUtil.getRedisKey(RedisKey.REDIS_ITEM_ADD_LOCK, orderId + "_" + goodsId);
+
+		try {
+			redisLock.lock(lockKey, 10_000L);
+
+			ItemDO itemDO = itemMapper.selectByOrderIdAndGoodsId(orderId, goodsId);
+			if (itemDO != null) {
+				FtException.throwException("请不要重复添加商品");
+			}
+
+			itemDO = new ItemDO();
+			itemDO.setOrderId(orderId);
+			itemDO.setGoodsId(goodsId);
+			itemDO.setGoodsNumber(goodsNumber);
+
+			return itemMapper.insertSelective(itemDO) == 1;
+		} finally {
+			redisLock.unlock(lockKey);
+		}
+	}
+
 	/**
 	 * 查询订单项
 	 *
@@ -275,27 +318,6 @@ public class OrderServiceImpl implements OrderService {
 		this.checkItem(itemDO);
 
 		return itemMapper.updateByPrimaryKeySelective(itemDO) == 1;
-	}
-
-	/**
-	 * 添加订单项信息
-	 *
-	 * @param orderId     订单id
-	 * @param goodsId     商品id
-	 * @param goodsNumber 商品数量
-	 * @return true:添加成功
-	 */
-	@UseMaster
-	public boolean addItem(Long orderId, int goodsId, int goodsNumber) {
-		ItemDO item = new ItemDO();
-		item.setOrderId(orderId);
-		item.setGoodsId(goodsId);
-		item.setGoodsNumber(goodsNumber);
-
-		// 核查订单项
-		this.checkItem(item);
-
-		return itemMapper.insertSelective(item) == 1;
 	}
 
 	/**

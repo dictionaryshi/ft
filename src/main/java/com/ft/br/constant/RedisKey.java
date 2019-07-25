@@ -26,4 +26,6 @@ public class RedisKey {
 	public static final String REDIS_GOODS_UPDATE_LOCK = "ft_br_goods_update_lock";
 
 	public static final String REDIS_ORDER_UPDATE_LOCK = "ft_br_order_update_lock";
+
+	public static final String REDIS_ITEM_ADD_LOCK = "ft_br_item_add_lock";
 }

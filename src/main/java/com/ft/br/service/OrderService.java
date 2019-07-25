@@ -1,5 +1,6 @@
 package com.ft.br.service;
 
+import com.ft.br.model.ao.item.ItemAddAO;
 import com.ft.br.model.ao.order.OrderAddUpdateAO;
 import com.ft.br.model.ao.order.OrderGetAO;
 import com.ft.br.model.ao.order.OrderListAO;
@@ -43,4 +44,12 @@ public interface OrderService {
 	 * @return 订单信息集合
 	 */
 	PageResult<OrderBO> listByPage(OrderListAO orderListAO);
+
+	/**
+	 * 添加订单项
+	 *
+	 * @param itemAO 订单项
+	 * @return true 添加成功
+	 */
+	boolean addItem(ItemAddAO itemAO);
 }
