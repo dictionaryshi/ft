@@ -126,7 +126,7 @@ public class OrderController {
 	@LoginCheck
 	@PostMapping("/add-item")
 	public RestResult<Boolean> addItem(
-			@Valid ItemAddAO itemAddAO
+			@RequestBody @Valid ItemAddAO itemAddAO
 	) {
 		boolean result = orderService.addItem(itemAddAO);
 		return RestResult.success(result);
