@@ -1,6 +1,6 @@
 package com.ft.br.service;
 
-import com.ft.br.model.ao.order.OrderAddAO;
+import com.ft.br.model.ao.order.OrderAddUpdateAO;
 
 /**
  * OrderService
@@ -14,5 +14,5 @@ public interface OrderService {
 	 * @param orderAddAO 订单信息
 	 * @return true 创建成功
 	 */
-	boolean createOrder(OrderAddAO orderAddAO);
+	boolean createOrder(OrderAddUpdateAO orderAddAO);
 }

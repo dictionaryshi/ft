@@ -1,7 +1,7 @@
 package com.ft.br.controller;
 
 import com.ft.br.constant.RedisKey;
-import com.ft.br.model.ao.order.OrderAddAO;
+import com.ft.br.model.ao.order.OrderAddUpdateAO;
 import com.ft.br.model.dto.OrderDTO;
 import com.ft.br.service.IdService;
 import com.ft.br.service.OrderService;
@@ -68,7 +68,7 @@ public class OrderController {
 	@LoginCheck
 	@PostMapping("/create")
 	public RestResult<Boolean> create(
-			@RequestBody @Valid OrderAddAO orderAddAO
+			@RequestBody @Valid OrderAddUpdateAO orderAddAO
 	) {
 		int operator = WebUtil.getCurrentUser().getId();
 		orderAddAO.setOperator(operator);
