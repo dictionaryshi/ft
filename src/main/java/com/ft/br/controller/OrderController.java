@@ -8,6 +8,7 @@ import com.ft.br.model.bo.OrderBO;
 import com.ft.br.service.IdService;
 import com.ft.br.service.OrderService;
 import com.ft.br.service.impl.OrderServiceImpl;
+import com.ft.db.annotation.PageParamCheck;
 import com.ft.db.model.PageResult;
 import com.ft.redis.lock.RedisLock;
 import com.ft.redis.util.RedisUtil;
@@ -111,6 +112,7 @@ public class OrderController {
 
 	@ApiOperation("分页查询订单信息")
 	@LoginCheck
+	@PageParamCheck
 	@GetMapping("/list")
 	public RestResult<PageResult<OrderBO>> list(
 			@Valid OrderListAO orderListAO
