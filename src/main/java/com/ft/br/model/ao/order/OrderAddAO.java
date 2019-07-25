@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
@@ -33,6 +34,7 @@ public class OrderAddAO {
 	private String address;
 
 	@NotNull(message = "订单总金额不为NULL")
+	@DecimalMin(value = "0", message = "订单金额最小为0")
 	@ApiModelProperty(value = "订单总金额(元)", required = true, example = "25000")
 	private Integer totalAmount;
 
