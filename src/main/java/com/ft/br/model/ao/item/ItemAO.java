@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -28,6 +29,7 @@ public class ItemAO {
 	private Integer goodsId;
 
 	@NotNull(message = "商品数量不为NULL")
+	@DecimalMin(value = "0", inclusive = false, message = "商品数量必须大于0")
 	@ApiModelProperty(value = "商品数量", required = true, example = "10")
 	private Integer goodsNumber;
 }

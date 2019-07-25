@@ -1,5 +1,9 @@
 package com.ft.br.service.impl;
 
+import com.ft.br.constant.RedisKey;
+import com.ft.br.model.ao.item.ItemAO;
+import com.ft.redis.lock.RedisLock;
+import com.ft.redis.util.RedisUtil;
 import com.google.common.collect.Lists;
 
 import com.ft.br.constant.OrderStatusEnum;
@@ -33,6 +37,7 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -65,6 +70,9 @@ public class OrderServiceImpl implements OrderService {
 
 	@Autowired
 	private ValueOperationsCache<String, String> valueOperationsCache;
+
+	@Autowired
+	private RedisLock redisLock;
 
 	@UseMaster
 	@Override
@@ -172,6 +180,44 @@ public class OrderServiceImpl implements OrderService {
 		pageResult.setList(list);
 
 		return pageResult;
+	}
+
+	@UseMaster
+	@Override
+	public boolean addItem(ItemAO itemAO) {
+		long orderId = itemAO.getOrderId();
+		int goodsId = itemAO.getGoodsId();
+		int goodsNumber = itemAO.getGoodsNumber();
+
+		OrderDO orderDO = orderMapper.selectByPrimaryKey(orderId);
+		if (orderDO == null) {
+			FtException.throwException("订单不存在");
+		}
+
+		GoodsDO goodsDO = goodsMapper.selectByPrimaryKey(goodsId);
+		if (goodsDO == null) {
+			FtException.throwException("商品不存在");
+		}
+
+		String lockKey = RedisUtil.getRedisKey(RedisKey.REDIS_ITEM_ADD_LOCK, orderId + "_" + goodsId);
+
+		try {
+			redisLock.lock(lockKey, 10_000L);
+
+			ItemDO itemDO = itemMapper.selectByOrderIdAndGoodsId(orderId, goodsId);
+			if (itemDO != null) {
+				FtException.throwException("请不要重复添加商品");
+			}
+
+			itemDO = new ItemDO();
+			itemDO.setOrderId(orderId);
+			itemDO.setGoodsId(goodsId);
+			itemDO.setGoodsNumber(goodsNumber);
+
+			return itemMapper.insertSelective(itemDO) == 1;
+		} finally {
+			redisLock.unlock(lockKey);
+		}
 	}
 
 	/**
