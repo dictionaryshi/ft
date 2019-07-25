@@ -1,13 +1,18 @@
 package com.ft.br.controller;
 
+import com.ft.br.constant.RedisKey;
 import com.ft.br.model.ao.order.OrderAddAO;
 import com.ft.br.model.dto.OrderDTO;
+import com.ft.br.service.IdService;
 import com.ft.br.service.OrderService;
 import com.ft.br.service.impl.OrderServiceImpl;
 import com.ft.dao.stock.model.OrderDO;
 import com.ft.db.model.PageParam;
+import com.ft.redis.lock.RedisLock;
+import com.ft.redis.util.RedisUtil;
 import com.ft.util.JsonUtil;
 import com.ft.util.StringUtil;
+import com.ft.util.exception.FtException;
 import com.ft.util.model.RestResult;
 import com.ft.web.annotation.LoginCheck;
 import com.ft.web.constant.SwaggerConstant;
@@ -41,6 +46,24 @@ public class OrderController {
 	@Autowired
 	private OrderServiceImpl orderServiceImpl;
 
+	@Autowired
+	private IdService idService;
+
+	@Autowired
+	private RedisLock redisLock;
+
+	@ApiOperation("获取订单id")
+	@LoginCheck
+	@GetMapping("/get-order-id")
+	public RestResult<Long> getOrderId() {
+		Long orderId = idService.getId();
+		if (orderId == null || orderId <= 0) {
+			FtException.throwException("订单id获取失败");
+		}
+
+		return RestResult.success(orderId);
+	}
+
 	@ApiOperation("创建订单")
 	@LoginCheck
 	@PostMapping("/create")
@@ -50,9 +73,17 @@ public class OrderController {
 		int operator = WebUtil.getCurrentUser().getId();
 		orderAddAO.setOperator(operator);
 
-		boolean result = orderService.createOrder(orderAddAO);
+		String lockKey = RedisUtil.getRedisKey(RedisKey.REDIS_ORDER_UPDATE_LOCK, orderAddAO.getId() + "");
 
-		return RestResult.success(result);
+		try {
+			redisLock.lock(lockKey, 10_000L);
+
+			boolean result = orderService.createOrder(orderAddAO);
+
+			return RestResult.success(result);
+		} finally {
+			redisLock.unlock(lockKey);
+		}
 	}
 
 	@ApiOperation("分页查询订单信息")

@@ -28,6 +28,7 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -59,15 +60,13 @@ public class OrderServiceImpl implements OrderService {
 	@Autowired
 	private ValueOperationsCache<String, String> valueOperationsCache;
 
-	@Autowired
-	private IdService idService;
-
 	@UseMaster
 	@Override
 	public boolean createOrder(OrderAddAO orderAddAO) {
-		Long orderId = idService.getId();
-		if (orderId == null || orderId <= 0) {
-			FtException.throwException("订单id获取失败");
+		Long orderId = orderAddAO.getId();
+		OrderDO dbOrder = orderMapper.selectByPrimaryKey(orderId);
+		if (dbOrder != null) {
+			FtException.throwException("订单已存在");
 		}
 
 		OrderDO orderDO = ObjectUtil.copy(orderAddAO, OrderDO.class);
@@ -76,7 +75,6 @@ public class OrderServiceImpl implements OrderService {
 					LogAO.build("orderAddAO", JsonUtil.object2Json(orderAddAO)));
 		}
 
-		orderDO.setId(orderId);
 		orderDO.setStatus(OrderStatusEnum.WAIT_TO_CONFIRMED.getStatus());
 
 		orderMapper.insertSelective(orderDO);

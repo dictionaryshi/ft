@@ -22,6 +22,10 @@ import javax.validation.constraints.Size;
 @ToString
 public class OrderAddAO {
 
+	@NotNull(message = "订单id不为null")
+	@ApiModelProperty(value = "订单id", required = true, example = "2237867")
+	private Long id;
+
 	@NotBlank(message = "客户姓名不为空")
 	@ApiModelProperty(value = "客户姓名", required = true)
 	private String username;
