@@ -1,7 +1,7 @@
 package com.ft.br.service.impl;
 
 import com.ft.br.constant.RedisKey;
-import com.ft.br.model.ao.item.ItemAO;
+import com.ft.br.model.ao.item.ItemAddAO;
 import com.ft.redis.lock.RedisLock;
 import com.ft.redis.util.RedisUtil;
 import com.google.common.collect.Lists;
@@ -14,14 +14,12 @@ import com.ft.br.model.ao.order.OrderAddUpdateAO;
 import com.ft.br.model.ao.order.OrderGetAO;
 import com.ft.br.model.ao.order.OrderListAO;
 import com.ft.br.model.bo.OrderBO;
-import com.ft.br.model.dto.OrderDTO;
 import com.ft.br.model.vo.ItemVO;
 import com.ft.br.model.vo.OrderVO;
 import com.ft.br.service.OrderService;
 import com.ft.dao.stock.model.*;
 import com.ft.db.annotation.UseMaster;
 import com.ft.db.constant.DbConstant;
-import com.ft.db.model.PageParam;
 import com.ft.db.model.PageResult;
 import com.ft.redis.base.ValueOperationsCache;
 import com.ft.util.DateUtil;
@@ -37,7 +35,6 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -184,7 +181,7 @@ public class OrderServiceImpl implements OrderService {
 
 	@UseMaster
 	@Override
-	public boolean addItem(ItemAO itemAO) {
+	public boolean addItem(ItemAddAO itemAO) {
 		long orderId = itemAO.getOrderId();
 		int goodsId = itemAO.getGoodsId();
 		int goodsNumber = itemAO.getGoodsNumber();
@@ -321,27 +318,6 @@ public class OrderServiceImpl implements OrderService {
 		this.checkItem(itemDO);
 
 		return itemMapper.updateByPrimaryKeySelective(itemDO) == 1;
-	}
-
-	/**
-	 * 添加订单项信息
-	 *
-	 * @param orderId     订单id
-	 * @param goodsId     商品id
-	 * @param goodsNumber 商品数量
-	 * @return true:添加成功
-	 */
-	@UseMaster
-	public boolean addItem(Long orderId, int goodsId, int goodsNumber) {
-		ItemDO item = new ItemDO();
-		item.setOrderId(orderId);
-		item.setGoodsId(goodsId);
-		item.setGoodsNumber(goodsNumber);
-
-		// 核查订单项
-		this.checkItem(item);
-
-		return itemMapper.insertSelective(item) == 1;
 	}
 
 	/**
