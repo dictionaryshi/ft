@@ -80,6 +80,26 @@ public class OrderServiceImpl implements OrderService {
 		return Boolean.TRUE;
 	}
 
+	@UseMaster
+	@Override
+	public boolean updateOrder(OrderAddUpdateAO orderAddUpdateAO) {
+		Long orderId = orderAddUpdateAO.getId();
+		OrderDO dbOrder = orderMapper.selectByPrimaryKey(orderId);
+		if (dbOrder == null) {
+			FtException.throwException("订单不存在");
+		}
+
+		OrderDO update = ObjectUtil.copy(orderAddUpdateAO, OrderDO.class);
+		if (update == null) {
+			FtException.throwException("订单信息copy失败",
+					LogAO.build("orderAddUpdateAO", JsonUtil.object2Json(orderAddUpdateAO)));
+		}
+
+		orderMapper.updateByPrimaryKeySelective(update);
+
+		return Boolean.TRUE;
+	}
+
 	public PageResult<OrderVO> list(OrderDTO orderDTO, PageParam pageParam) {
 		PageResult<OrderVO> pageResult = new PageResult<>();
 		pageResult.setPage(pageParam.getPage());
@@ -208,17 +228,6 @@ public class OrderServiceImpl implements OrderService {
 				FtException.throwException("校验订单项失败, 订单项与订单不匹配");
 			}
 		}
-	}
-
-	/**
-	 * 修改订单信息
-	 *
-	 * @param orderDO 订单信息
-	 * @return true:修改成功
-	 */
-	@UseMaster
-	public boolean update(OrderDO orderDO) {
-		return orderMapper.updateByPrimaryKeySelective(orderDO) == 1;
 	}
 
 	/**
