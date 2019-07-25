@@ -71,6 +71,7 @@ CREATE TABLE `stock_log` (
   `goods_number` int(11) NOT NULL DEFAULT '0' COMMENT '商品数量',
   `after_stock_number` int(11) NOT NULL DEFAULT '0' COMMENT '操作后库存',
   `order_id` bigint(20) NOT NULL DEFAULT '0' COMMENT '订单id',
+  `item_id` int(11) NOT NULL DEFAULT '0' COMMENT '订单项id',
   `remark` varchar(1000) NOT NULL DEFAULT '' COMMENT '备注信息',
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
