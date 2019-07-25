@@ -6,7 +6,6 @@ import com.ft.br.model.dto.OrderDTO;
 import com.ft.br.service.IdService;
 import com.ft.br.service.OrderService;
 import com.ft.br.service.impl.OrderServiceImpl;
-import com.ft.dao.stock.model.OrderDO;
 import com.ft.db.model.PageParam;
 import com.ft.redis.lock.RedisLock;
 import com.ft.redis.util.RedisUtil;
@@ -86,6 +85,20 @@ public class OrderController {
 		}
 	}
 
+	@ApiOperation("修改订单信息")
+	@LoginCheck
+	@PostMapping("/update")
+	public RestResult<Boolean> update(
+			@RequestBody @Valid OrderAddUpdateAO orderAddUpdateAO
+	) {
+		int operator = WebUtil.getCurrentUser().getId();
+		orderAddUpdateAO.setOperator(operator);
+
+		boolean result = orderService.updateOrder(orderAddUpdateAO);
+
+		return RestResult.success(result);
+	}
+
 	@ApiOperation("分页查询订单信息")
 	/**
 	 * 分页查询订单信息
@@ -163,55 +176,6 @@ public class OrderController {
 	@LoginCheck
 	public String listItems(@RequestParam(value = "id") Long id) {
 		return JsonUtil.object2Json(RestResult.success(orderServiceImpl.listItems(id)));
-	}
-
-	@ApiOperation("修改订单")
-	/**
-	 * 修改订单
-	 *
-	 * @param request     请求对象
-	 * @param id          订单id
-	 * @param totalAmount 总金额
-	 * @param username    用户名
-	 * @param phone       电话
-	 * @param address     地址
-	 * @param remark      备注
-	 * @return 修改结果
-	 */
-	@ApiImplicitParams({
-			@ApiImplicitParam(name = "id", value = "订单id", required = true, dataType = SwaggerConstant.DATA_TYPE_INT, paramType = SwaggerConstant.PARAM_TYPE_QUERY, example = "0"),
-			@ApiImplicitParam(name = "total_amount", value = "订单总金额", dataType = SwaggerConstant.DATA_TYPE_INT, paramType = SwaggerConstant.PARAM_TYPE_QUERY, example = "0"),
-			@ApiImplicitParam(name = "username", value = "客户姓名", dataType = SwaggerConstant.DATA_TYPE_STRING, paramType = SwaggerConstant.PARAM_TYPE_QUERY),
-			@ApiImplicitParam(name = "phone", value = "客户电话", dataType = SwaggerConstant.DATA_TYPE_STRING, paramType = SwaggerConstant.PARAM_TYPE_QUERY),
-			@ApiImplicitParam(name = "address", value = "客户地址", dataType = SwaggerConstant.DATA_TYPE_STRING, paramType = SwaggerConstant.PARAM_TYPE_QUERY),
-			@ApiImplicitParam(name = "remark", value = "订单备注", dataType = SwaggerConstant.DATA_TYPE_STRING, paramType = SwaggerConstant.PARAM_TYPE_QUERY),
-	})
-	@RequestMapping(value = "/update", method = RequestMethod.POST)
-	@LoginCheck
-	public String update(
-			HttpServletRequest request,
-			@RequestParam(value = "id") Long id,
-			@RequestParam(value = "total_amount", required = false, defaultValue = "0.0") double totalAmount,
-			@RequestParam(value = "username", required = false) String username,
-			@RequestParam(value = "phone", required = false) String phone,
-			@RequestParam(value = "address", required = false) String address,
-			@RequestParam(value = "remark", required = false) String remark
-	) {
-		OrderDO orderDO = new OrderDO();
-		orderDO.setOperator(0);
-		orderDO.setUsername(username);
-		orderDO.setPhone(phone);
-		orderDO.setAddress(address);
-
-		double defaultAmount = 0.0;
-		if (totalAmount != defaultAmount && totalAmount > defaultAmount) {
-			orderDO.setTotalAmount(0);
-		}
-		orderDO.setRemark(remark);
-		orderDO.setId(id);
-
-		boolean flag = orderServiceImpl.update(orderDO);
-		return JsonUtil.object2Json(RestResult.success(flag));
 	}
 
 	@ApiOperation("添加订单项")
