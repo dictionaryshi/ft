@@ -4,9 +4,11 @@ import com.ft.br.constant.OrderStatusEnum;
 import com.ft.br.constant.StockLogTypeDetailEnum;
 import com.ft.br.constant.StockLogTypeEnum;
 import com.ft.br.dao.*;
+import com.ft.br.model.ao.order.OrderAddAO;
 import com.ft.br.model.dto.OrderDTO;
 import com.ft.br.model.vo.ItemVO;
 import com.ft.br.model.vo.OrderVO;
+import com.ft.br.service.IdService;
 import com.ft.br.service.OrderService;
 import com.ft.dao.stock.model.*;
 import com.ft.db.annotation.UseMaster;
@@ -14,8 +16,11 @@ import com.ft.db.constant.DbConstant;
 import com.ft.db.model.PageParam;
 import com.ft.db.model.PageResult;
 import com.ft.redis.base.ValueOperationsCache;
+import com.ft.util.JsonUtil;
+import com.ft.util.ObjectUtil;
 import com.ft.util.StringUtil;
 import com.ft.util.exception.FtException;
+import com.ft.util.model.LogAO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,6 +28,7 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -53,6 +59,28 @@ public class OrderServiceImpl implements OrderService {
 
 	@Autowired
 	private ValueOperationsCache<String, String> valueOperationsCache;
+
+	@UseMaster
+	@Override
+	public boolean createOrder(OrderAddAO orderAddAO) {
+		Long orderId = orderAddAO.getId();
+		OrderDO dbOrder = orderMapper.selectByPrimaryKey(orderId);
+		if (dbOrder != null) {
+			FtException.throwException("订单已存在");
+		}
+
+		OrderDO orderDO = ObjectUtil.copy(orderAddAO, OrderDO.class);
+		if (orderDO == null) {
+			FtException.throwException("订单信息copy失败",
+					LogAO.build("orderAddAO", JsonUtil.object2Json(orderAddAO)));
+		}
+
+		orderDO.setStatus(OrderStatusEnum.WAIT_TO_CONFIRMED.getStatus());
+
+		orderMapper.insertSelective(orderDO);
+
+		return Boolean.TRUE;
+	}
 
 	public PageResult<OrderVO> list(OrderDTO orderDTO, PageParam pageParam) {
 		PageResult<OrderVO> pageResult = new PageResult<>();
@@ -142,30 +170,6 @@ public class OrderServiceImpl implements OrderService {
 		}
 
 		item.setGoodsName(goodsDO.getName());
-	}
-
-	/**
-	 * 添加订单信息
-	 *
-	 * @param orderDTO 订单信息
-	 * @return true:添加成功
-	 */
-	@Transactional(value = DbConstant.DB_CONSIGN + DbConstant.TRAN_SACTION_MANAGER, propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED, rollbackFor = Throwable.class)
-	public boolean add(OrderDTO orderDTO) {
-
-		OrderDO orderDO = new OrderDO();
-		Long orderId = null;
-		orderDO.setId(orderId);
-		orderDO.setOperator(orderDTO.getOperator());
-		orderDO.setStatus(OrderStatusEnum.WAIT_TO_CONFIRMED.getStatus());
-		orderDO.setUsername(orderDTO.getUsername());
-		orderDO.setPhone(orderDTO.getPhone());
-		orderDO.setAddress(orderDTO.getAddress());
-		orderDO.setTotalAmount(orderDTO.getTotalAmount());
-		orderDO.setRemark(orderDTO.getRemark());
-		int flag = orderMapper.insertSelective(orderDO);
-
-		return flag == 1;
 	}
 
 	public void checkItem(ItemDO item) {
