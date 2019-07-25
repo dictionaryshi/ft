@@ -2,7 +2,9 @@ package com.ft.br.service;
 
 import com.ft.br.model.ao.order.OrderAddUpdateAO;
 import com.ft.br.model.ao.order.OrderGetAO;
+import com.ft.br.model.ao.order.OrderListAO;
 import com.ft.br.model.bo.OrderBO;
+import com.ft.db.model.PageResult;
 
 /**
  * OrderService
@@ -33,4 +35,12 @@ public interface OrderService {
 	 * @return 订单信息
 	 */
 	OrderBO getOrderById(OrderGetAO orderGetAO);
+
+	/**
+	 * 分页查询订单信息
+	 *
+	 * @param orderListAO 分页条件
+	 * @return 订单信息集合
+	 */
+	PageResult<OrderBO> listByPage(OrderListAO orderListAO);
 }

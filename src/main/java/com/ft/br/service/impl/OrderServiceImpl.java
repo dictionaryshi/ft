@@ -1,11 +1,14 @@
 package com.ft.br.service.impl;
 
+import com.google.common.collect.Lists;
+
 import com.ft.br.constant.OrderStatusEnum;
 import com.ft.br.constant.StockLogTypeDetailEnum;
 import com.ft.br.constant.StockLogTypeEnum;
 import com.ft.br.dao.*;
 import com.ft.br.model.ao.order.OrderAddUpdateAO;
 import com.ft.br.model.ao.order.OrderGetAO;
+import com.ft.br.model.ao.order.OrderListAO;
 import com.ft.br.model.bo.OrderBO;
 import com.ft.br.model.dto.OrderDTO;
 import com.ft.br.model.vo.ItemVO;
@@ -34,6 +37,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 /**
  * 订单业务类
@@ -147,6 +151,27 @@ public class OrderServiceImpl implements OrderService {
 		orderBO.setCreatedAtCH(DateUtil.date2Str(orderDO.getCreatedAt(), DateUtil.DEFAULT_DATE_FORMAT));
 
 		return orderBO;
+	}
+
+	@Override
+	public PageResult<OrderBO> listByPage(OrderListAO orderListAO) {
+		int total = orderMapper.countPagination(orderListAO);
+
+		PageResult<OrderBO> pageResult = new PageResult<>();
+		pageResult.setPage(orderListAO.getPage());
+		pageResult.setLimit(orderListAO.getLimit());
+		pageResult.setTotal(total);
+		pageResult.setList(Lists.newArrayList());
+
+		if (total <= 0) {
+			return pageResult;
+		}
+
+		List<OrderDO> orderDOS = orderMapper.listPagination(orderListAO);
+		List<OrderBO> list = orderDOS.stream().map(this::orderDO2OrderBO).collect(Collectors.toList());
+		pageResult.setList(list);
+
+		return pageResult;
 	}
 
 	public PageResult<OrderVO> list(OrderDTO orderDTO, PageParam pageParam) {
