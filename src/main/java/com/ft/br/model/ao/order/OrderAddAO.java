@@ -9,6 +9,7 @@ import lombok.ToString;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 /**
  * OrderAddAO
@@ -26,6 +27,7 @@ public class OrderAddAO {
 	private String username;
 
 	@NotBlank(message = "客户手机号不为空")
+	@Size(min = 11, max = 11, message = "手机号必须为11位")
 	@ApiModelProperty(value = "客户手机号", required = true)
 	private String phone;
 
