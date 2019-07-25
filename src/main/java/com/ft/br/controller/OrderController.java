@@ -1,5 +1,6 @@
 package com.ft.br.controller;
 
+import com.ft.br.model.ao.order.OrderAddAO;
 import com.ft.br.model.dto.OrderDTO;
 import com.ft.br.service.OrderService;
 import com.ft.br.service.impl.OrderServiceImpl;
@@ -10,6 +11,7 @@ import com.ft.util.StringUtil;
 import com.ft.util.model.RestResult;
 import com.ft.web.annotation.LoginCheck;
 import com.ft.web.constant.SwaggerConstant;
+import com.ft.web.util.WebUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -19,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
 /**
  * 订单API
@@ -37,6 +40,20 @@ public class OrderController {
 
 	@Autowired
 	private OrderServiceImpl orderServiceImpl;
+
+	@ApiOperation("创建订单")
+	@LoginCheck
+	@PostMapping("/create")
+	public RestResult<Boolean> create(
+			@RequestBody @Valid OrderAddAO orderAddAO
+	) {
+		int operator = WebUtil.getCurrentUser().getId();
+		orderAddAO.setOperator(operator);
+
+		boolean result = orderService.createOrder(orderAddAO);
+
+		return RestResult.success(result);
+	}
 
 	@ApiOperation("分页查询订单信息")
 	/**
@@ -115,46 +132,6 @@ public class OrderController {
 	@LoginCheck
 	public String listItems(@RequestParam(value = "id") Long id) {
 		return JsonUtil.object2Json(RestResult.success(orderServiceImpl.listItems(id)));
-	}
-
-	@ApiOperation("添加订单信息")
-	/**
-	 * 添加订单信息
-	 *
-	 * @param totalAmount 订单总金额
-	 * @param username    用户姓名
-	 * @param phone       手机号
-	 * @param address     地址
-	 * @param remark      备注信息
-	 * @return 添加结果
-	 */
-	@ApiImplicitParams({
-			@ApiImplicitParam(name = "total_amount", value = "订单总金额", required = true, dataType = SwaggerConstant.DATA_TYPE_INT, paramType = SwaggerConstant.PARAM_TYPE_QUERY, example = "0"),
-			@ApiImplicitParam(name = "username", value = "客户姓名", dataType = SwaggerConstant.DATA_TYPE_STRING, paramType = SwaggerConstant.PARAM_TYPE_QUERY),
-			@ApiImplicitParam(name = "phone", value = "客户电话", dataType = SwaggerConstant.DATA_TYPE_STRING, paramType = SwaggerConstant.PARAM_TYPE_QUERY),
-			@ApiImplicitParam(name = "address", value = "客户地址", dataType = SwaggerConstant.DATA_TYPE_STRING, paramType = SwaggerConstant.PARAM_TYPE_QUERY),
-			@ApiImplicitParam(name = "remark", value = "订单备注", dataType = SwaggerConstant.DATA_TYPE_STRING, paramType = SwaggerConstant.PARAM_TYPE_QUERY),
-	})
-	@RequestMapping(value = "/add", method = RequestMethod.POST)
-	@LoginCheck
-	public String add(
-			HttpServletRequest request,
-			@RequestParam(value = "total_amount") double totalAmount,
-			@RequestParam(value = "username", required = false) String username,
-			@RequestParam(value = "phone", required = false) String phone,
-			@RequestParam(value = "address", required = false) String address,
-			@RequestParam(value = "remark", required = false) String remark
-	) {
-		OrderDTO orderDTO = new OrderDTO();
-		orderDTO.setTotalAmount(0);
-		orderDTO.setUsername(username);
-		orderDTO.setPhone(phone);
-		orderDTO.setAddress(address);
-		orderDTO.setRemark(remark);
-		orderDTO.setOperator(0);
-
-		boolean flag = orderServiceImpl.add(orderDTO);
-		return JsonUtil.object2Json(RestResult.success(flag));
 	}
 
 	@ApiOperation("修改订单")
