@@ -45,7 +45,7 @@ public interface OrderMapper extends OrderDOMapper {
 
 			sql.SELECT("count(1)");
 
-			sql.FROM("`order`");
+			sql.FROM("`order_goods`");
 
 			this.pageWhere(sql, ao);
 
@@ -57,7 +57,7 @@ public interface OrderMapper extends OrderDOMapper {
 
 			sql.SELECT("*");
 
-			sql.FROM("`order`");
+			sql.FROM("`order_goods`");
 
 			this.pageWhere(sql, ao);
 
