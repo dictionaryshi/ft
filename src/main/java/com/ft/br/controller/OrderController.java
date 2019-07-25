@@ -3,16 +3,16 @@ package com.ft.br.controller;
 import com.ft.br.constant.RedisKey;
 import com.ft.br.model.ao.order.OrderAddUpdateAO;
 import com.ft.br.model.ao.order.OrderGetAO;
+import com.ft.br.model.ao.order.OrderListAO;
 import com.ft.br.model.bo.OrderBO;
-import com.ft.br.model.dto.OrderDTO;
 import com.ft.br.service.IdService;
 import com.ft.br.service.OrderService;
 import com.ft.br.service.impl.OrderServiceImpl;
-import com.ft.db.model.PageParam;
+import com.ft.db.annotation.PageParamCheck;
+import com.ft.db.model.PageResult;
 import com.ft.redis.lock.RedisLock;
 import com.ft.redis.util.RedisUtil;
 import com.ft.util.JsonUtil;
-import com.ft.util.StringUtil;
 import com.ft.util.exception.FtException;
 import com.ft.util.model.RestResult;
 import com.ft.web.annotation.LoginCheck;
@@ -111,50 +111,14 @@ public class OrderController {
 	}
 
 	@ApiOperation("分页查询订单信息")
-	/**
-	 * 分页查询订单信息
-	 *
-	 * @param id          订单id
-	 * @param currentPage 当前页码
-	 * @return 当前页对应的订单数据
-	 */
-	@ApiImplicitParams({
-			@ApiImplicitParam(name = "id", value = "订单id", dataType = SwaggerConstant.DATA_TYPE_INT, paramType = SwaggerConstant.PARAM_TYPE_QUERY, example = "0"),
-			@ApiImplicitParam(name = "status", value = "订单状态", dataType = SwaggerConstant.DATA_TYPE_INT, paramType = SwaggerConstant.PARAM_TYPE_QUERY, example = "0"),
-			@ApiImplicitParam(name = "start", value = "开始时间", dataType = SwaggerConstant.DATA_TYPE_STRING, paramType = SwaggerConstant.PARAM_TYPE_QUERY),
-			@ApiImplicitParam(name = "end", value = "结束时间", dataType = SwaggerConstant.DATA_TYPE_STRING, paramType = SwaggerConstant.PARAM_TYPE_QUERY),
-			@ApiImplicitParam(name = "current_page", value = "查询页码", required = true, dataType = SwaggerConstant.DATA_TYPE_INT, paramType = SwaggerConstant.PARAM_TYPE_QUERY, example = "0"),
-	})
-	@RequestMapping(value = "/list", method = RequestMethod.POST)
 	@LoginCheck
-	public String list(
-			@RequestParam(value = "id", required = false, defaultValue = "0") Long id,
-			@RequestParam(value = "status", required = false, defaultValue = "99") Integer status,
-			@RequestParam(value = "start", required = false) String start,
-			@RequestParam(value = "end", required = false) String end,
-			@RequestParam(value = "current_page") int currentPage
+	@PageParamCheck
+	@GetMapping("/list")
+	public RestResult<PageResult<OrderBO>> list(
+			@Valid OrderListAO orderListAO
 	) {
-		PageParam pageParam = new PageParam(currentPage, 10);
-
-		Long defaultId = 0L;
-		OrderDTO orderDTO = new OrderDTO();
-		if (!defaultId.equals(id)) {
-			orderDTO.setId(id);
-		}
-
-		int defaultStatus = 99;
-		if (status != defaultStatus) {
-			orderDTO.setStatus(status);
-		}
-
-		if (!StringUtil.isNull(start)) {
-			orderDTO.setStartDate(start);
-		}
-		if (!StringUtil.isNull(end)) {
-			orderDTO.setEndDate(end);
-		}
-
-		return JsonUtil.object2Json(RestResult.success(orderServiceImpl.list(orderDTO, pageParam)));
+		PageResult<OrderBO> pageResult = orderService.listByPage(orderListAO);
+		return RestResult.success(pageResult);
 	}
 
 	@ApiOperation("查询订单项")
