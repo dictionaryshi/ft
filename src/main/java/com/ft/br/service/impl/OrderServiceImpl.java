@@ -191,6 +191,9 @@ public class OrderServiceImpl implements OrderService {
 		if (orderDO == null) {
 			FtException.throwException("订单不存在");
 		}
+		if (!ObjectUtil.equals(orderDO.getStatus(), OrderStatusEnum.WAIT_TO_CONFIRMED.getStatus())) {
+			FtException.throwException("只有待确认订单才可添加订单项");
+		}
 
 		GoodsDO goodsDO = goodsMapper.selectByPrimaryKey(goodsId);
 		if (goodsDO == null) {
@@ -240,56 +243,9 @@ public class OrderServiceImpl implements OrderService {
 		return itemBO;
 	}
 
-	/**
-	 * 查询订单项
-	 *
-	 * @param id 订单id
-	 * @return 订单项
-	 */
-	public List<ItemVO> listItems(Long id) {
-		List<ItemDO> itemDOS = itemMapper.selectByOrderId(id);
-		List<ItemVO> items = new ArrayList<>();
-		if (items == null || items.isEmpty()) {
-			return new ArrayList<>();
-		}
-
-		items.forEach(this::format);
-
-		return items;
-	}
-
-	public void format(ItemVO item) {
-		GoodsDO goodsDO = goodsMapper.selectByPrimaryKey(item.getGoodsId());
-		if (goodsDO == null) {
-			return;
-		}
-
-		item.setGoodsName(goodsDO.getName());
-	}
-
 	public void checkItem(ItemDO item) {
-
-		if (item.getGoodsNumber() != null) {
-			int goodsNumber = item.getGoodsNumber();
-			if (goodsNumber < 1) {
-				FtException.throwException("校验订单项失败, 商品数量不能小于1");
-			}
-		}
-
-		if (item.getGoodsId() != null) {
-			int goodsId = item.getGoodsId();
-			GoodsDO goodsDO = goodsMapper.selectByPrimaryKey(goodsId);
-			if (goodsDO == null) {
-				FtException.throwException("校验订单项失败, 商品不存在");
-			}
-		}
-
 		Long orderId = item.getOrderId();
-		OrderDO orderDO = orderMapper.selectByPrimaryKey(orderId);
 		OrderVO order = new OrderVO();
-		if (order == null) {
-			FtException.throwException("校验订单项失败, 订单不存在");
-		}
 
 		if (order.getStatus() != OrderStatusEnum.WAIT_TO_CONFIRMED.getStatus().intValue()) {
 			FtException.throwException("校验订单项失败, 订单已经不是待确认状态了");
