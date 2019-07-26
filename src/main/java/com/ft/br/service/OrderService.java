@@ -63,4 +63,12 @@ public interface OrderService {
 	 * @return 所有订单项信息
 	 */
 	List<ItemBO> listItems(long orderId);
+
+	/**
+	 * 删除订单项
+	 *
+	 * @param itemId 订单项id
+	 * @return true 删除成功
+	 */
+	boolean deleteItem(int itemId);
 }
