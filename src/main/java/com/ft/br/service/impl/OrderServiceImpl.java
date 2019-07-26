@@ -2,6 +2,7 @@ package com.ft.br.service.impl;
 
 import com.ft.br.constant.RedisKey;
 import com.ft.br.model.ao.item.ItemAddAO;
+import com.ft.br.model.bo.ItemBO;
 import com.ft.redis.lock.RedisLock;
 import com.ft.redis.util.RedisUtil;
 import com.google.common.collect.Lists;
@@ -215,6 +216,28 @@ public class OrderServiceImpl implements OrderService {
 		} finally {
 			redisLock.unlock(lockKey);
 		}
+	}
+
+	@Override
+	public List<ItemBO> listItems(long orderId) {
+		List<ItemDO> itemDOS = itemMapper.selectByOrderId(orderId);
+		return itemDOS.stream().map(this::itemDO2ItemBO).collect(Collectors.toList());
+	}
+
+	private ItemBO itemDO2ItemBO(ItemDO itemDO) {
+		ItemBO itemBO = new ItemBO();
+		itemBO.setId(itemDO.getId());
+		itemBO.setOrderId(itemDO.getOrderId());
+		itemBO.setGoodsId(itemDO.getGoodsId());
+		itemBO.setGoodsNumber(itemDO.getGoodsNumber());
+		itemBO.setCreatedAt(itemDO.getCreatedAt());
+
+		GoodsDO goodsDO = goodsMapper.selectByPrimaryKey(itemDO.getGoodsId());
+		if (goodsDO != null) {
+			itemBO.setGoodsName(goodsDO.getName());
+		}
+
+		return itemBO;
 	}
 
 	/**

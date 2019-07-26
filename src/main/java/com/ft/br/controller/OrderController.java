@@ -2,9 +2,11 @@ package com.ft.br.controller;
 
 import com.ft.br.constant.RedisKey;
 import com.ft.br.model.ao.item.ItemAddAO;
+import com.ft.br.model.ao.item.ItemListAO;
 import com.ft.br.model.ao.order.OrderAddUpdateAO;
 import com.ft.br.model.ao.order.OrderGetAO;
 import com.ft.br.model.ao.order.OrderListAO;
+import com.ft.br.model.bo.ItemBO;
 import com.ft.br.model.bo.OrderBO;
 import com.ft.br.service.IdService;
 import com.ft.br.service.OrderService;
@@ -29,6 +31,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.util.List;
 
 /**
  * 订单API
@@ -133,19 +136,13 @@ public class OrderController {
 	}
 
 	@ApiOperation("查询订单项")
-	/**
-	 * 查询订单项
-	 *
-	 * @param id 订单id
-	 * @return 订单项
-	 */
-	@ApiImplicitParams({
-			@ApiImplicitParam(name = "id", value = "订单id", required = true, dataType = SwaggerConstant.DATA_TYPE_INT, paramType = SwaggerConstant.PARAM_TYPE_QUERY, example = "0"),
-	})
-	@RequestMapping(value = "/list-items", method = RequestMethod.POST)
+	@GetMapping("/list-items")
 	@LoginCheck
-	public String listItems(@RequestParam(value = "id") Long id) {
-		return JsonUtil.object2Json(RestResult.success(orderServiceImpl.listItems(id)));
+	public RestResult<List<ItemBO>> listItems(
+			@Valid ItemListAO itemListAO
+	) {
+		List<ItemBO> itemBOS = orderService.listItems(itemListAO.getOrderId());
+		return RestResult.success(itemBOS);
 	}
 
 	@ApiOperation("删除订单项")
