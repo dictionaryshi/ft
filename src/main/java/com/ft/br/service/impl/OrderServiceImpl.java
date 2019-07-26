@@ -264,6 +264,7 @@ public class OrderServiceImpl implements OrderService {
 		try {
 			redisLock.lock(lockKey, 10_000L);
 
+			orderDO = orderMapper.selectByPrimaryKey(orderId);
 			if (!ObjectUtil.equals(orderDO.getStatus(), OrderStatusEnum.WAIT_TO_CONFIRMED.getStatus())) {
 				FtException.throwException("只有待确认订单才可删除订单项");
 			}
@@ -295,6 +296,7 @@ public class OrderServiceImpl implements OrderService {
 		try {
 			redisLock.lock(lockKey, 10_000L);
 
+			orderDO = orderMapper.selectByPrimaryKey(orderId);
 			if (!ObjectUtil.equals(orderDO.getStatus(), OrderStatusEnum.WAIT_TO_CONFIRMED.getStatus())) {
 				FtException.throwException("只有待确认订单才可修改订单项");
 			}
