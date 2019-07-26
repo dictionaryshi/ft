@@ -327,6 +327,33 @@ public class OrderServiceImpl implements OrderService {
 
 	}
 
+	@Override
+	public boolean orderSuccess(long orderId, int userId) {
+		String lockKey = RedisUtil.getRedisKey(RedisKey.REDIS_ORDER_UPDATE_LOCK, orderId + "");
+
+		try {
+			redisLock.lock(lockKey, 10_000L);
+
+			OrderDO orderDO = orderMapper.selectByPrimaryKey(orderId);
+			if (orderDO == null) {
+				FtException.throwException("订单不存在");
+			}
+
+			if (!ObjectUtil.equals(orderDO.getStatus(), OrderStatusEnum.HAS_BEEN_CONFIRMED.getStatus())) {
+				FtException.throwException("非确认状态订单");
+			}
+
+			OrderDO update = new OrderDO();
+			update.setId(orderId);
+			update.setOperator(userId);
+			update.setStatus(OrderStatusEnum.SUCCESS.getStatus());
+			update.setFinalOperateTime(System.currentTimeMillis());
+			return orderMapper.updateByPrimaryKeySelective(update) == 1;
+		} finally {
+			redisLock.unlock(lockKey);
+		}
+	}
+
 	/**
 	 * 确认订单
 	 *
