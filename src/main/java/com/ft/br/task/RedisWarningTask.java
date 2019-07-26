@@ -105,14 +105,9 @@ public class RedisWarningTask {
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
-
-				for (int i = 0; i < 10; i++) {
-					ZSetOperations.TypedTuple<String> typedTuple = flowWarningList.get(i);
-					zSetOperationsCache.remove(warnKey, typedTuple.getValue());
-				}
-			} else {
-				zSetOperationsCache.remove(warnKey, startTypedTuple.getValue());
 			}
+
+			zSetOperationsCache.remove(warnKey, startTypedTuple.getValue());
 		}
 	}
 }
