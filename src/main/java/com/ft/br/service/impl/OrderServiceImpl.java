@@ -258,11 +258,21 @@ public class OrderServiceImpl implements OrderService {
 		if (orderDO == null) {
 			FtException.throwException("订单不存在");
 		}
-		if (!ObjectUtil.equals(orderDO.getStatus(), OrderStatusEnum.WAIT_TO_CONFIRMED.getStatus())) {
-			FtException.throwException("只有待确认订单才可删除订单项");
+
+		String lockKey = RedisUtil.getRedisKey(RedisKey.REDIS_ORDER_UPDATE_LOCK, orderDO.getId() + "");
+
+		try {
+			redisLock.lock(lockKey, 10_000L);
+
+			if (!ObjectUtil.equals(orderDO.getStatus(), OrderStatusEnum.WAIT_TO_CONFIRMED.getStatus())) {
+				FtException.throwException("只有待确认订单才可删除订单项");
+			}
+
+			return itemMapper.deleteByPrimaryKey(itemId) == 1;
+		} finally {
+			redisLock.unlock(lockKey);
 		}
 
-		return itemMapper.deleteByPrimaryKey(itemId) == 1;
 	}
 
 	@UseMaster
@@ -279,22 +289,32 @@ public class OrderServiceImpl implements OrderService {
 		if (orderDO == null) {
 			FtException.throwException("订单不存在");
 		}
-		if (!ObjectUtil.equals(orderDO.getStatus(), OrderStatusEnum.WAIT_TO_CONFIRMED.getStatus())) {
-			FtException.throwException("只有待确认订单才可修改订单项");
+
+		String lockKey = RedisUtil.getRedisKey(RedisKey.REDIS_ORDER_UPDATE_LOCK, orderDO.getId() + "");
+
+		try {
+			redisLock.lock(lockKey, 10_000L);
+
+			if (!ObjectUtil.equals(orderDO.getStatus(), OrderStatusEnum.WAIT_TO_CONFIRMED.getStatus())) {
+				FtException.throwException("只有待确认订单才可修改订单项");
+			}
+
+			int goodsId = itemUpdateAO.getGoodsId();
+			GoodsDO goodsDO = goodsMapper.selectByPrimaryKey(goodsId);
+			if (goodsDO == null) {
+				FtException.throwException("商品不存在");
+			}
+
+			ItemDO update = new ItemDO();
+			update.setId(itemId);
+			update.setGoodsId(goodsId);
+			update.setGoodsNumber(itemUpdateAO.getGoodsNumber());
+
+			return itemMapper.updateByPrimaryKeySelective(update) == 1;
+		} finally {
+			redisLock.unlock(lockKey);
 		}
 
-		int goodsId = itemUpdateAO.getGoodsId();
-		GoodsDO goodsDO = goodsMapper.selectByPrimaryKey(goodsId);
-		if (goodsDO == null) {
-			FtException.throwException("商品不存在");
-		}
-
-		ItemDO update = new ItemDO();
-		update.setId(itemId);
-		update.setGoodsId(goodsId);
-		update.setGoodsNumber(itemUpdateAO.getGoodsNumber());
-
-		return itemMapper.updateByPrimaryKeySelective(update) == 1;
 	}
 
 	/**
