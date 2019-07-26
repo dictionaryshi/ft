@@ -7,6 +7,7 @@ import com.ft.br.model.ao.item.ItemListAO;
 import com.ft.br.model.ao.item.ItemUpdateAO;
 import com.ft.br.model.ao.order.OrderAddUpdateAO;
 import com.ft.br.model.ao.order.OrderGetAO;
+import com.ft.br.model.ao.order.OrderIdAO;
 import com.ft.br.model.ao.order.OrderListAO;
 import com.ft.br.model.bo.ItemBO;
 import com.ft.br.model.bo.OrderBO;
@@ -167,6 +168,17 @@ public class OrderController {
 		return RestResult.success(result);
 	}
 
+	@ApiOperation("确认订单成功")
+	@LoginCheck
+	@PostMapping("/success")
+	public RestResult<Boolean> success(
+			@RequestBody @Valid OrderIdAO orderIdAO
+	) {
+		int userId = WebUtil.getCurrentUser().getId();
+		boolean result = orderService.orderSuccess(orderIdAO.getId(), userId);
+		return RestResult.success(result);
+	}
+
 	@ApiOperation("确认订单")
 	/**
 	 * 确认订单
@@ -185,26 +197,6 @@ public class OrderController {
 	) {
 		int userId = 0;
 		boolean flag = orderServiceImpl.confirm(orderId, userId);
-		return JsonUtil.object2Json(RestResult.success(flag));
-	}
-
-	@ApiOperation("确认订单成功")
-	/**
-	 * 确认订单成功
-	 *
-	 * @return 订单确认结果
-	 */
-	@ApiImplicitParams({
-			@ApiImplicitParam(name = "order_id", value = "订单id", required = true, dataType = SwaggerConstant.DATA_TYPE_INT, paramType = SwaggerConstant.PARAM_TYPE_QUERY, example = "0"),
-	})
-	@LoginCheck
-	@RequestMapping(value = "/success", method = RequestMethod.POST)
-	public String success(
-			HttpServletRequest request,
-			@RequestParam("order_id") Long orderId
-	) {
-		int userId = 0;
-		boolean flag = orderServiceImpl.success(orderId, userId);
 		return JsonUtil.object2Json(RestResult.success(flag));
 	}
 

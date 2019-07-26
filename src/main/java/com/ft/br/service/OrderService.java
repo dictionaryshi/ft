@@ -80,4 +80,13 @@ public interface OrderService {
 	 * @return true 修改成功
 	 */
 	boolean updateItem(ItemUpdateAO itemUpdateAO);
+
+	/**
+	 * 确认订单成功
+	 *
+	 * @param orderId 订单id
+	 * @param userId  操作人
+	 * @return true 确认成功
+	 */
+	boolean orderSuccess(long orderId, int userId);
 }
