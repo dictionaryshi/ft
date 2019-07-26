@@ -2,6 +2,7 @@ package com.ft.br.service.impl;
 
 import com.ft.br.constant.RedisKey;
 import com.ft.br.model.ao.item.ItemAddAO;
+import com.ft.br.model.ao.item.ItemUpdateAO;
 import com.ft.br.model.bo.ItemBO;
 import com.ft.redis.lock.RedisLock;
 import com.ft.redis.util.RedisUtil;
@@ -36,6 +37,7 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -263,27 +265,36 @@ public class OrderServiceImpl implements OrderService {
 		return itemMapper.deleteByPrimaryKey(itemId) == 1;
 	}
 
-	public void checkItem(ItemDO item) {
-	}
-
-	/**
-	 * 修改订单项
-	 *
-	 * @param id          订单项id
-	 * @param goodsNumber 商品数量
-	 * @return true:修改成功
-	 */
 	@UseMaster
-	public boolean updateItem(int id, int goodsNumber, Long orderId) {
-		ItemDO itemDO = new ItemDO();
-		itemDO.setId(id);
-		itemDO.setGoodsNumber(goodsNumber);
-		itemDO.setOrderId(orderId);
+	@Override
+	public boolean updateItem(ItemUpdateAO itemUpdateAO) {
+		int itemId = itemUpdateAO.getItemId();
+		ItemDO itemDO = itemMapper.selectByPrimaryKey(itemId);
+		if (itemDO == null) {
+			FtException.throwException("订单项不存在");
+		}
 
-		// 核查订单项
-		this.checkItem(itemDO);
+		long orderId = itemDO.getOrderId();
+		OrderDO orderDO = orderMapper.selectByPrimaryKey(orderId);
+		if (orderDO == null) {
+			FtException.throwException("订单不存在");
+		}
+		if (!ObjectUtil.equals(orderDO.getStatus(), OrderStatusEnum.WAIT_TO_CONFIRMED.getStatus())) {
+			FtException.throwException("只有待确认订单才可修改订单项");
+		}
 
-		return itemMapper.updateByPrimaryKeySelective(itemDO) == 1;
+		int goodsId = itemUpdateAO.getGoodsId();
+		GoodsDO goodsDO = goodsMapper.selectByPrimaryKey(goodsId);
+		if (goodsDO == null) {
+			FtException.throwException("商品不存在");
+		}
+
+		ItemDO update = new ItemDO();
+		update.setId(itemId);
+		update.setGoodsId(goodsId);
+		update.setGoodsNumber(itemUpdateAO.getGoodsNumber());
+
+		return itemMapper.updateByPrimaryKeySelective(update) == 1;
 	}
 
 	/**

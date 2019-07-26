@@ -4,6 +4,7 @@ import com.ft.br.constant.RedisKey;
 import com.ft.br.model.ao.item.ItemAddAO;
 import com.ft.br.model.ao.item.ItemDeleteAO;
 import com.ft.br.model.ao.item.ItemListAO;
+import com.ft.br.model.ao.item.ItemUpdateAO;
 import com.ft.br.model.ao.order.OrderAddUpdateAO;
 import com.ft.br.model.ao.order.OrderGetAO;
 import com.ft.br.model.ao.order.OrderListAO;
@@ -157,27 +158,13 @@ public class OrderController {
 	}
 
 	@ApiOperation("修改订单项")
-	/**
-	 * 修改订单项
-	 *
-	 * @param goodsNumber 商品数目
-	 * @param id          订单项id
-	 * @return 修改订单项结果
-	 */
-	@ApiImplicitParams({
-			@ApiImplicitParam(name = "order_id", value = "订单id", required = true, dataType = SwaggerConstant.DATA_TYPE_INT, paramType = SwaggerConstant.PARAM_TYPE_QUERY, example = "0"),
-			@ApiImplicitParam(name = "goods_number", value = "商品数量", required = true, dataType = SwaggerConstant.DATA_TYPE_INT, paramType = SwaggerConstant.PARAM_TYPE_QUERY, example = "0"),
-			@ApiImplicitParam(name = "id", value = "订单项id", required = true, dataType = SwaggerConstant.DATA_TYPE_INT, paramType = SwaggerConstant.PARAM_TYPE_QUERY, example = "0"),
-	})
-	@RequestMapping(value = "/update-item", method = RequestMethod.POST)
 	@LoginCheck
-	public String updateItem(
-			@RequestParam("order_id") Long orderId,
-			@RequestParam(value = "goods_number") int goodsNumber,
-			@RequestParam(value = "id") int id
+	@PostMapping
+	public RestResult<Boolean> updateItem(
+			@RequestBody @Valid ItemUpdateAO itemUpdateAO
 	) {
-		boolean flag = orderServiceImpl.updateItem(id, goodsNumber, orderId);
-		return JsonUtil.object2Json(RestResult.success(flag));
+		boolean result = orderService.updateItem(itemUpdateAO);
+		return RestResult.success(result);
 	}
 
 	@ApiOperation("确认订单")

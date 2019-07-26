@@ -1,6 +1,7 @@
 package com.ft.br.service;
 
 import com.ft.br.model.ao.item.ItemAddAO;
+import com.ft.br.model.ao.item.ItemUpdateAO;
 import com.ft.br.model.ao.order.OrderAddUpdateAO;
 import com.ft.br.model.ao.order.OrderGetAO;
 import com.ft.br.model.ao.order.OrderListAO;
@@ -71,4 +72,12 @@ public interface OrderService {
 	 * @return true 删除成功
 	 */
 	boolean deleteItem(int itemId);
+
+	/**
+	 * 修改订单项
+	 *
+	 * @param itemUpdateAO 订单项信息
+	 * @return true 修改成功
+	 */
+	boolean updateItem(ItemUpdateAO itemUpdateAO);
 }
