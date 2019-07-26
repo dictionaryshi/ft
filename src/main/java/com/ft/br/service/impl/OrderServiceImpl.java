@@ -425,34 +425,6 @@ public class OrderServiceImpl implements OrderService {
 	}
 
 	/**
-	 * 订单成功
-	 *
-	 * @param orderId 订单id
-	 * @param userId  用户id
-	 * @return true:订单成功
-	 */
-	@UseMaster
-	public boolean success(Long orderId, int userId) {
-		OrderDO orderDO = orderMapper.selectByPrimaryKey(orderId);
-		OrderVO order = new OrderVO();
-		if (order == null) {
-			FtException.throwException("确认订单success失败, 订单不存在");
-		}
-
-		if (order.getStatus() != OrderStatusEnum.HAS_BEEN_CONFIRMED.getStatus().intValue()) {
-			FtException.throwException("确认订单success失败, 订单已经不是已确认状态了");
-		}
-
-		OrderDO update = new OrderDO();
-		update.setId(order.getId());
-		update.setOperator(userId);
-		update.setStatus(OrderStatusEnum.SUCCESS.getStatus());
-		orderMapper.updateByPrimaryKeySelective(update);
-
-		return true;
-	}
-
-	/**
 	 * 订单失败
 	 *
 	 * @param orderId 订单id
