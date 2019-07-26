@@ -159,7 +159,7 @@ public class OrderController {
 
 	@ApiOperation("修改订单项")
 	@LoginCheck
-	@PostMapping
+	@PostMapping("/update-item")
 	public RestResult<Boolean> updateItem(
 			@RequestBody @Valid ItemUpdateAO itemUpdateAO
 	) {
