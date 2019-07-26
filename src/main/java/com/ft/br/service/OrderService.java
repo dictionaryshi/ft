@@ -4,8 +4,11 @@ import com.ft.br.model.ao.item.ItemAddAO;
 import com.ft.br.model.ao.order.OrderAddUpdateAO;
 import com.ft.br.model.ao.order.OrderGetAO;
 import com.ft.br.model.ao.order.OrderListAO;
+import com.ft.br.model.bo.ItemBO;
 import com.ft.br.model.bo.OrderBO;
 import com.ft.db.model.PageResult;
+
+import java.util.List;
 
 /**
  * OrderService
@@ -52,4 +55,12 @@ public interface OrderService {
 	 * @return true 添加成功
 	 */
 	boolean addItem(ItemAddAO itemAO);
+
+	/**
+	 * 查询订单下的所有订单项信息
+	 *
+	 * @param orderId 订单id
+	 * @return 所有订单项信息
+	 */
+	List<ItemBO> listItems(long orderId);
 }
