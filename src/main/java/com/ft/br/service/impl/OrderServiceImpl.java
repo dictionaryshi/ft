@@ -243,40 +243,27 @@ public class OrderServiceImpl implements OrderService {
 		return itemBO;
 	}
 
-	public void checkItem(ItemDO item) {
-		Long orderId = item.getOrderId();
-		OrderVO order = new OrderVO();
-
-		if (order.getStatus() != OrderStatusEnum.WAIT_TO_CONFIRMED.getStatus().intValue()) {
-			FtException.throwException("校验订单项失败, 订单已经不是待确认状态了");
+	@UseMaster
+	@Override
+	public boolean deleteItem(int itemId) {
+		ItemDO itemDO = itemMapper.selectByPrimaryKey(itemId);
+		if (itemDO == null) {
+			FtException.throwException("订单项不存在");
 		}
 
-		if (item.getId() != null) {
-			ItemDO itemDO = itemMapper.selectByPrimaryKey(item.getId());
-			if (itemDO == null) {
-				FtException.throwException("校验订单项失败, 订单项不存在");
-			}
-
-			if (!itemDO.getOrderId().equals(orderId)) {
-				FtException.throwException("校验订单项失败, 订单项与订单不匹配");
-			}
+		long orderId = itemDO.getOrderId();
+		OrderDO orderDO = orderMapper.selectByPrimaryKey(orderId);
+		if (orderDO == null) {
+			FtException.throwException("订单不存在");
 		}
+		if (!ObjectUtil.equals(orderDO.getStatus(), OrderStatusEnum.WAIT_TO_CONFIRMED.getStatus())) {
+			FtException.throwException("只有待确认订单才可删除订单项");
+		}
+
+		return itemMapper.deleteByPrimaryKey(itemId) == 1;
 	}
 
-	/**
-	 * 删除订单项目
-	 *
-	 * @param id 订单项id
-	 * @return true:删除成功
-	 */
-	@UseMaster
-	public boolean deleteItem(int id, Long orderId) {
-		ItemDO item = new ItemDO();
-		item.setId(id);
-		item.setOrderId(orderId);
-		// 核查订单项
-		this.checkItem(item);
-		return itemMapper.deleteByPrimaryKey(id) == 1;
+	public void checkItem(ItemDO item) {
 	}
 
 	/**

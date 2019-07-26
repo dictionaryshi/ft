@@ -2,6 +2,7 @@ package com.ft.br.controller;
 
 import com.ft.br.constant.RedisKey;
 import com.ft.br.model.ao.item.ItemAddAO;
+import com.ft.br.model.ao.item.ItemDeleteAO;
 import com.ft.br.model.ao.item.ItemListAO;
 import com.ft.br.model.ao.order.OrderAddUpdateAO;
 import com.ft.br.model.ao.order.OrderGetAO;
@@ -136,8 +137,8 @@ public class OrderController {
 	}
 
 	@ApiOperation("查询订单项")
-	@GetMapping("/list-items")
 	@LoginCheck
+	@GetMapping("/list-items")
 	public RestResult<List<ItemBO>> listItems(
 			@Valid ItemListAO itemListAO
 	) {
@@ -146,24 +147,13 @@ public class OrderController {
 	}
 
 	@ApiOperation("删除订单项")
-	/**
-	 * 删除订单项目
-	 *
-	 * @param id 订单项id
-	 * @return 删除结果
-	 */
-	@ApiImplicitParams({
-			@ApiImplicitParam(name = "order_id", value = "订单id", required = true, dataType = SwaggerConstant.DATA_TYPE_INT, paramType = SwaggerConstant.PARAM_TYPE_QUERY, example = "0"),
-			@ApiImplicitParam(name = "id", value = "订单项id", required = true, dataType = SwaggerConstant.DATA_TYPE_INT, paramType = SwaggerConstant.PARAM_TYPE_QUERY, example = "0"),
-	})
-	@RequestMapping(value = "/delete-item", method = RequestMethod.POST)
 	@LoginCheck
-	public String deleteItem(
-			@RequestParam("order_id") Long orderId,
-			@RequestParam("id") int id
+	@PostMapping("/delete-item")
+	public RestResult<Boolean> deleteItem(
+			@RequestBody @Valid ItemDeleteAO itemDeleteAO
 	) {
-		boolean flag = orderServiceImpl.deleteItem(id, orderId);
-		return JsonUtil.object2Json(RestResult.success(flag));
+		boolean result = orderService.deleteItem(itemDeleteAO.getItemId());
+		return RestResult.success(result);
 	}
 
 	@ApiOperation("修改订单项")
