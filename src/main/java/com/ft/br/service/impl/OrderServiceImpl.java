@@ -440,6 +440,43 @@ public class OrderServiceImpl implements OrderService {
 		});
 	}
 
+	@UseMaster
+	@Transactional(value = DbConstant.DB_CONSIGN + DbConstant.TRAN_SACTION_MANAGER, propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED, rollbackFor = Throwable.class)
+	@Override
+	public boolean failOrder(Long orderId, int userId) {
+		String lockKey = RedisUtil.getRedisKey(RedisKey.REDIS_ORDER_UPDATE_LOCK, orderId + "");
+
+		try {
+			redisLock.lock(lockKey, 10_000L);
+
+			OrderDO orderDO = orderMapper.selectByPrimaryKey(orderId);
+			if (orderDO == null) {
+				FtException.throwException("订单不存在");
+			}
+
+			if (!ObjectUtil.equals(OrderStatusEnum.HAS_BEEN_CONFIRMED.getStatus(), orderDO.getStatus())) {
+				FtException.throwException("非已确认工单");
+			}
+
+			OrderDO update = new OrderDO();
+			update.setId(orderId);
+			update.setOperator(userId);
+			update.setStatus(OrderStatusEnum.FAIL.getStatus());
+			update.setFinalOperateTime(System.currentTimeMillis());
+
+			orderMapper.updateByPrimaryKeySelective(update);
+
+			this.backStock(orderId, userId);
+		} finally {
+			redisLock.unlock(lockKey);
+		}
+
+		return Boolean.TRUE;
+	}
+
+	private void backStock(Long orderId, int userId) {
+	}
+
 	/**
 	 * 订单失败
 	 *
