@@ -382,6 +382,8 @@ public class OrderServiceImpl implements OrderService {
 		} finally {
 			redisLock.unlock(lockKey);
 		}
+
+		return Boolean.TRUE;
 	}
 
 	/**
