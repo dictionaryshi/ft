@@ -9,7 +9,6 @@ import com.ft.rpc.api.model.RpcParam;
 import com.ft.rpc.api.model.RpcResult;
 import com.ft.util.ExcelUtil;
 import com.ft.util.JsonUtil;
-import com.ft.util.exception.FtException;
 import com.ft.util.model.RestResult;
 import com.ft.web.annotation.SignCheck;
 import lombok.extern.slf4j.Slf4j;
