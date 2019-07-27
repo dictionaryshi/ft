@@ -66,9 +66,6 @@ public class OrderServiceImpl implements OrderService {
 	private StockLogMapper stockLogMapper;
 
 	@Autowired
-	private ValueOperationsCache<String, String> valueOperationsCache;
-
-	@Autowired
 	private RedisLock redisLock;
 
 	@Autowired
@@ -440,55 +437,82 @@ public class OrderServiceImpl implements OrderService {
 		});
 	}
 
-	/**
-	 * 订单失败
-	 *
-	 * @param orderId 订单id
-	 * @param userId  用户id
-	 * @return true:确认订单失败成功
-	 */
 	@UseMaster
-	public boolean fail(Long orderId, int userId) {
+	@Transactional(value = DbConstant.DB_CONSIGN + DbConstant.TRAN_SACTION_MANAGER, propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED, rollbackFor = Throwable.class)
+	@Override
+	public boolean failOrder(Long orderId, int userId) {
+		String lockKey = RedisUtil.getRedisKey(RedisKey.REDIS_ORDER_UPDATE_LOCK, orderId + "");
 
-		OrderDO orderDO = orderMapper.selectByPrimaryKey(orderId);
-		OrderVO order = new OrderVO();
-		if (order == null) {
-			FtException.throwException("确认订单fail失败, 订单不存在");
+		try {
+			redisLock.lock(lockKey, 10_000L);
+
+			OrderDO orderDO = orderMapper.selectByPrimaryKey(orderId);
+			if (orderDO == null) {
+				FtException.throwException("订单不存在");
+			}
+
+			if (!ObjectUtil.equals(OrderStatusEnum.HAS_BEEN_CONFIRMED.getStatus(), orderDO.getStatus())) {
+				FtException.throwException("非已确认工单");
+			}
+
+			OrderDO update = new OrderDO();
+			update.setId(orderId);
+			update.setOperator(userId);
+			update.setStatus(OrderStatusEnum.FAIL.getStatus());
+			update.setFinalOperateTime(System.currentTimeMillis());
+
+			orderMapper.updateByPrimaryKeySelective(update);
+
+			this.backStock(orderId, userId);
+		} finally {
+			redisLock.unlock(lockKey);
 		}
 
-		if (order.getStatus() != OrderStatusEnum.HAS_BEEN_CONFIRMED.getStatus().intValue()) {
-			FtException.throwException("确认订单fail失败, 订单已经不是已确认状态了");
-		}
+		return Boolean.TRUE;
+	}
 
-		String lockKey = StringUtil.append(StringUtil.REDIS_SPLIT, "fail", "orderId", orderId + "");
-		Boolean flag = valueOperationsCache.setIfAbsent(lockKey, orderId + "", 5_000L, TimeUnit.MILLISECONDS);
-		if (!flag) {
-			FtException.throwException("确认订单fail失败, 请不要重复确认");
-		}
-
-		OrderDO update = new OrderDO();
-		update.setId(order.getId());
-		update.setOperator(userId);
-		update.setStatus(OrderStatusEnum.FAIL.getStatus());
-		orderMapper.updateByPrimaryKeySelective(update);
-
+	private void backStock(Long orderId, int userId) {
 		List<ItemDO> itemDOS = itemMapper.selectByOrderId(orderId);
-		// 将商品退回仓库
-		List<ItemVO> items = new ArrayList<>();
-		items.forEach(item -> {
-			goodsMapper.updateNumber(item.getGoodsId(), item.getGoodsNumber());
+		if (ObjectUtil.isEmpty(itemDOS)) {
+			LogBO logBO = LogUtil.log("订单项不存在, 入库失败",
+					LogAO.build("orderId", orderId + ""));
+			log.info(logBO.getLogPattern(), logBO.getParams());
+			return;
+		}
 
-			StockLogDO stockLogDO = new StockLogDO();
-			stockLogDO.setOperator(userId);
-			stockLogDO.setType(StockLogTypeEnum.IN.getType());
-			stockLogDO.setTypeDetail(StockLogTypeDetailEnum.IN_ORDER.getTypeDetail());
-			stockLogDO.setGoodsId(item.getGoodsId());
-			stockLogDO.setGoodsNumber(item.getGoodsNumber());
-			stockLogDO.setOrderId(orderId);
-			stockLogDO.setRemark("");
-			stockLogMapper.insertSelective(stockLogDO);
+		itemDOS.forEach(itemDO -> {
+			int goodsId = itemDO.getGoodsId();
+			int goodsNumber = itemDO.getGoodsNumber();
+
+			String lockKey = RedisUtil.getRedisKey(RedisKey.REDIS_GOODS_UPDATE_LOCK, goodsId + "");
+
+			try {
+				redisLock.lock(lockKey, 10_000L);
+
+				GoodsDO goodsDO = goodsMapper.selectByPrimaryKey(goodsId);
+				if (goodsDO == null) {
+					FtException.throwException("商品不存在");
+				}
+
+				StockLogDO stockLogDO = new StockLogDO();
+				stockLogDO.setOperator(userId);
+				stockLogDO.setType(StockLogTypeEnum.IN.getType());
+				stockLogDO.setTypeDetail(StockLogTypeDetailEnum.IN_ORDER.getTypeDetail());
+				stockLogDO.setGoodsId(goodsId);
+				stockLogDO.setBeforeStockNumber(goodsService.getStock(goodsId));
+				stockLogDO.setGoodsNumber(goodsNumber);
+
+				// 入库
+				goodsMapper.updateNumber(goodsId, goodsNumber);
+
+				stockLogDO.setAfterStockNumber(goodsService.getStock(goodsId));
+				stockLogDO.setOrderId(orderId);
+				stockLogDO.setItemId(itemDO.getId());
+
+				stockLogMapper.insertSelective(stockLogDO);
+			} finally {
+				redisLock.unlock(lockKey);
+			}
 		});
-
-		return true;
 	}
 }
