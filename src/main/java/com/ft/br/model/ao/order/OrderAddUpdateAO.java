@@ -47,5 +47,7 @@ public class OrderAddUpdateAO {
 	@ApiModelProperty(value = "订单备注")
 	private String remark;
 
+
+	@ApiModelProperty(value = "操作人", hidden = true, example = "10")
 	private Integer operator;
 }
