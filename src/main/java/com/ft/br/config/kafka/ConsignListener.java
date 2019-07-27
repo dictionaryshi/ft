@@ -3,6 +3,7 @@ package com.ft.br.config.kafka;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.ft.br.dao.LogMapper;
 import com.ft.dao.stock.model.LogDO;
+import com.ft.kafka.constant.KafkaConstant;
 import com.ft.util.JsonUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
@@ -25,7 +26,11 @@ public class ConsignListener {
 		this.logMapper = logMapper;
 	}
 
-	@KafkaListener(topics = {"${kafka.consign.topic}"}, containerFactory = "concurrentKafkaListenerContainerFactory", groupId = "${kafka.consign.groupId}")
+	@KafkaListener(
+			topics = {"${kafka.consign.topic}"},
+			containerFactory = KafkaConstant.CONCURRENT_KAFKA_LISTENER_CONTAINER_FACTORY_KEY,
+			groupId = "${kafka.consign.groupId}"
+	)
 	public void listen(
 			ConsumerRecord<String, String> record,
 			Acknowledgment acknowledgment
