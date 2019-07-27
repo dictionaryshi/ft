@@ -52,9 +52,6 @@ public class OrderController {
 	private OrderService orderService;
 
 	@Autowired
-	private OrderServiceImpl orderServiceImpl;
-
-	@Autowired
 	private IdService idService;
 
 	@Autowired
@@ -191,22 +188,13 @@ public class OrderController {
 	}
 
 	@ApiOperation("确认订单失败")
-	/**
-	 * 确认订单失败
-	 *
-	 * @return 订单确认失败结果
-	 */
-	@ApiImplicitParams({
-			@ApiImplicitParam(name = "order_id", value = "订单id", required = true, dataType = SwaggerConstant.DATA_TYPE_INT, paramType = SwaggerConstant.PARAM_TYPE_QUERY, example = "0"),
-	})
 	@LoginCheck
-	@RequestMapping(value = "/fail", method = RequestMethod.POST)
-	public String fail(
-			HttpServletRequest request,
-			@RequestParam("order_id") Long orderId
+	@PostMapping("/fail")
+	public RestResult<Boolean> fail(
+			@RequestBody @Valid OrderIdAO orderIdAO
 	) {
-		int userId = 0;
-		boolean flag = orderServiceImpl.fail(orderId, userId);
-		return JsonUtil.object2Json(RestResult.success(flag));
+		int userId = WebUtil.getCurrentUser().getId();
+		boolean result = orderService.failOrder(orderIdAO.getId(), userId);
+		return RestResult.success(result);
 	}
 }
