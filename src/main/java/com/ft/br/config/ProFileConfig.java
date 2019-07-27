@@ -15,6 +15,7 @@ import org.springframework.context.annotation.Scope;
  */
 @Configuration
 public class ProFileConfig {
+
 	/**
 	 * 获取User对象
 	 * Scope 多实例时, 启动容器时不会创建该对象
