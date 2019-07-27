@@ -89,4 +89,13 @@ public interface OrderService {
 	 * @return true 确认成功
 	 */
 	boolean orderSuccess(long orderId, int userId);
+
+	/**
+	 * 确认订单
+	 *
+	 * @param orderId 订单id
+	 * @param userId  用户id
+	 * @return true 确认成功
+	 */
+	boolean confirmOrder(Long orderId, int userId);
 }

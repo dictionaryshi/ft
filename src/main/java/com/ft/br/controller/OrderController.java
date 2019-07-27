@@ -180,24 +180,14 @@ public class OrderController {
 	}
 
 	@ApiOperation("确认订单")
-	/**
-	 * 确认订单
-	 *
-	 * @param orderId 订单id
-	 * @return 确认订单结果
-	 */
-	@ApiImplicitParams({
-			@ApiImplicitParam(name = "order_id", value = "订单id", required = true, dataType = SwaggerConstant.DATA_TYPE_INT, paramType = SwaggerConstant.PARAM_TYPE_QUERY, example = "0"),
-	})
 	@LoginCheck
-	@RequestMapping(value = "/confirm", method = RequestMethod.POST)
-	public String confirm(
-			HttpServletRequest request,
-			@RequestParam("order_id") Long orderId
+	@PostMapping("/confirm")
+	public RestResult<Boolean> confirm(
+			@RequestBody @Valid OrderIdAO orderIdAO
 	) {
-		int userId = 0;
-		boolean flag = orderServiceImpl.confirm(orderId, userId);
-		return JsonUtil.object2Json(RestResult.success(flag));
+		int userId = WebUtil.getCurrentUser().getId();
+		boolean result = orderService.confirmOrder(orderIdAO.getId(), userId);
+		return RestResult.success(result);
 	}
 
 	@ApiOperation("确认订单失败")
