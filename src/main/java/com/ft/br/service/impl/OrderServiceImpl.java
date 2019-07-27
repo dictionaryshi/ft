@@ -12,18 +12,18 @@ import com.ft.br.model.ao.order.OrderGetAO;
 import com.ft.br.model.ao.order.OrderListAO;
 import com.ft.br.model.bo.ItemBO;
 import com.ft.br.model.bo.OrderBO;
-import com.ft.br.model.vo.ItemVO;
-import com.ft.br.model.vo.OrderVO;
 import com.ft.br.service.GoodsService;
 import com.ft.br.service.OrderService;
 import com.ft.dao.stock.model.*;
 import com.ft.db.annotation.UseMaster;
 import com.ft.db.constant.DbConstant;
 import com.ft.db.model.PageResult;
-import com.ft.redis.base.ValueOperationsCache;
 import com.ft.redis.lock.RedisLock;
 import com.ft.redis.util.RedisUtil;
-import com.ft.util.*;
+import com.ft.util.DateUtil;
+import com.ft.util.JsonUtil;
+import com.ft.util.LogUtil;
+import com.ft.util.ObjectUtil;
 import com.ft.util.exception.FtException;
 import com.ft.util.model.LogAO;
 import com.ft.util.model.LogBO;
@@ -35,10 +35,8 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 /**
