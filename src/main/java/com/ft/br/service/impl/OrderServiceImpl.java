@@ -66,9 +66,6 @@ public class OrderServiceImpl implements OrderService {
 	private StockLogMapper stockLogMapper;
 
 	@Autowired
-	private ValueOperationsCache<String, String> valueOperationsCache;
-
-	@Autowired
 	private RedisLock redisLock;
 
 	@Autowired
@@ -475,57 +472,5 @@ public class OrderServiceImpl implements OrderService {
 	}
 
 	private void backStock(Long orderId, int userId) {
-	}
-
-	/**
-	 * 订单失败
-	 *
-	 * @param orderId 订单id
-	 * @param userId  用户id
-	 * @return true:确认订单失败成功
-	 */
-	@UseMaster
-	public boolean fail(Long orderId, int userId) {
-
-		OrderDO orderDO = orderMapper.selectByPrimaryKey(orderId);
-		OrderVO order = new OrderVO();
-		if (order == null) {
-			FtException.throwException("确认订单fail失败, 订单不存在");
-		}
-
-		if (order.getStatus() != OrderStatusEnum.HAS_BEEN_CONFIRMED.getStatus().intValue()) {
-			FtException.throwException("确认订单fail失败, 订单已经不是已确认状态了");
-		}
-
-		String lockKey = StringUtil.append(StringUtil.REDIS_SPLIT, "fail", "orderId", orderId + "");
-		Boolean flag = valueOperationsCache.setIfAbsent(lockKey, orderId + "", 5_000L, TimeUnit.MILLISECONDS);
-		if (!flag) {
-			FtException.throwException("确认订单fail失败, 请不要重复确认");
-		}
-
-		OrderDO update = new OrderDO();
-		update.setId(order.getId());
-		update.setOperator(userId);
-		update.setStatus(OrderStatusEnum.FAIL.getStatus());
-		orderMapper.updateByPrimaryKeySelective(update);
-
-		List<ItemDO> itemDOS = itemMapper.selectByOrderId(orderId);
-		// 将商品退回仓库
-		List<ItemVO> items = new ArrayList<>();
-		items.forEach(item -> {
-			goodsMapper.updateNumber(item.getGoodsId(), item.getGoodsNumber());
-
-			StockLogDO stockLogDO = new StockLogDO();
-			stockLogDO.setOperator(userId);
-			stockLogDO.setType(StockLogTypeEnum.IN.getType());
-			stockLogDO.setTypeDetail(StockLogTypeDetailEnum.IN_ORDER.getTypeDetail());
-			stockLogDO.setGoodsId(item.getGoodsId());
-			stockLogDO.setGoodsNumber(item.getGoodsNumber());
-			stockLogDO.setOrderId(orderId);
-			stockLogDO.setRemark("");
-			stockLogMapper.insertSelective(stockLogDO);
-		});
-
-		return true;
 	}
 }
