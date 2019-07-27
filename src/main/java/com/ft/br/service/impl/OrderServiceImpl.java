@@ -368,7 +368,7 @@ public class OrderServiceImpl implements OrderService {
 			}
 
 			if (!ObjectUtil.equals(OrderStatusEnum.WAIT_TO_CONFIRMED.getStatus(), orderDO.getStatus())) {
-				FtException.throwException("非待确认工单");
+				FtException.throwException("非待确认订单");
 			}
 
 			OrderDO update = new OrderDO();
@@ -451,8 +451,9 @@ public class OrderServiceImpl implements OrderService {
 				FtException.throwException("订单不存在");
 			}
 
-			if (!ObjectUtil.equals(OrderStatusEnum.HAS_BEEN_CONFIRMED.getStatus(), orderDO.getStatus())) {
-				FtException.throwException("非已确认工单");
+			if (!ObjectUtil.equals(OrderStatusEnum.HAS_BEEN_CONFIRMED.getStatus(), orderDO.getStatus())
+					&& !ObjectUtil.equals(OrderStatusEnum.SUCCESS.getStatus(), orderDO.getStatus())) {
+				FtException.throwException("非 已确认/成功 订单");
 			}
 
 			OrderDO update = new OrderDO();
