@@ -42,8 +42,6 @@ public class StockLogStorageAO {
 	private String remark;
 
 
-	/**
-	 * 操作人
-	 */
+	@ApiModelProperty(value = "操作人", hidden = true, example = "10")
 	private Integer operator;
 }
