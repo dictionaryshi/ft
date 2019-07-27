@@ -51,6 +51,6 @@ public class OrderBO {
 	@ApiModelProperty(value = "最终操作时间", example = DateUtil.TIMESTAMP_DEFAULT_TIME)
 	private String finalOperateTimeCH;
 
-	@ApiModelProperty(value = "订单创建时间", example = DateUtil.TIMESTAMP_DEFAULT_TIME)
+	@ApiModelProperty(value = "订单创建时间", required = true, example = DateUtil.TIMESTAMP_DEFAULT_TIME)
 	private String createdAtCH;
 }
