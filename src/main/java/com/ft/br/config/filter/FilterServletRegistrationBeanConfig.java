@@ -18,6 +18,7 @@ import java.util.Map;
  */
 @Configuration
 public class FilterServletRegistrationBeanConfig {
+
 	@Bean
 	public ServletRegistrationBean demoServlet() {
 		ServletRegistrationBean<DemoServlet> demoServlet = new ServletRegistrationBean<>(new DemoServlet(), "/demo/*");
