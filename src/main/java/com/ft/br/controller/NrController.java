@@ -85,12 +85,9 @@ public class NrController {
 			@RequestParam String username,
 			@RequestParam Integer age,
 			@RequestParam MultipartFile excel
-	) {
+	) throws Throwable {
 		try (InputStream in = excel.getInputStream()) {
 			return JsonUtil.object2Json(ExcelUtil.readExcel(in, false));
-		} catch (Exception e) {
-			log.error("upload exception==>{}", FtException.getExceptionStack(e));
-			return "error";
 		}
 	}
 
@@ -99,20 +96,8 @@ public class NrController {
 	 */
 	@GetMapping("/deadLock")
 	public RestResult<Boolean> deadLock() {
-		executorService.submit(() -> {
-			try {
-				ssoService.deadLock(1, 2);
-			} catch (Exception e) {
-				log.warn("deadLock1, exception==>{}", FtException.getExceptionStack(e));
-			}
-		});
-		executorService.submit(() -> {
-			try {
-				ssoService.deadLock(2, 1);
-			} catch (Exception e) {
-				log.warn("deadLock2, exception==>{}", FtException.getExceptionStack(e));
-			}
-		});
+		executorService.submit(() -> ssoService.deadLock(1, 2));
+		executorService.submit(() -> ssoService.deadLock(2, 1));
 		return RestResult.success(Boolean.TRUE);
 	}
 }
