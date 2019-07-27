@@ -472,5 +472,47 @@ public class OrderServiceImpl implements OrderService {
 	}
 
 	private void backStock(Long orderId, int userId) {
+		List<ItemDO> itemDOS = itemMapper.selectByOrderId(orderId);
+		if (ObjectUtil.isEmpty(itemDOS)) {
+			LogBO logBO = LogUtil.log("订单项不存在, 入库失败",
+					LogAO.build("orderId", orderId + ""));
+			log.info(logBO.getLogPattern(), logBO.getParams());
+			return;
+		}
+
+		itemDOS.forEach(itemDO -> {
+			int goodsId = itemDO.getGoodsId();
+			int goodsNumber = itemDO.getGoodsNumber();
+
+			String lockKey = RedisUtil.getRedisKey(RedisKey.REDIS_GOODS_UPDATE_LOCK, goodsId + "");
+
+			try {
+				redisLock.lock(lockKey, 10_000L);
+
+				GoodsDO goodsDO = goodsMapper.selectByPrimaryKey(goodsId);
+				if (goodsDO == null) {
+					FtException.throwException("商品不存在");
+				}
+
+				StockLogDO stockLogDO = new StockLogDO();
+				stockLogDO.setOperator(userId);
+				stockLogDO.setType(StockLogTypeEnum.IN.getType());
+				stockLogDO.setTypeDetail(StockLogTypeDetailEnum.IN_ORDER.getTypeDetail());
+				stockLogDO.setGoodsId(goodsId);
+				stockLogDO.setBeforeStockNumber(goodsService.getStock(goodsId));
+				stockLogDO.setGoodsNumber(goodsNumber);
+
+				// 入库
+				goodsMapper.updateNumber(goodsId, goodsNumber);
+
+				stockLogDO.setAfterStockNumber(goodsService.getStock(goodsId));
+				stockLogDO.setOrderId(orderId);
+				stockLogDO.setItemId(itemDO.getId());
+
+				stockLogMapper.insertSelective(stockLogDO);
+			} finally {
+				redisLock.unlock(lockKey);
+			}
+		});
 	}
 }
