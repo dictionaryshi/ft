@@ -1,6 +1,6 @@
 package com.ft.br;
 
-import com.ft.br.service.impl.GoodsServiceImpl;
+import com.ft.br.service.GoodsService;
 import com.ft.util.*;
 import com.ft.util.exception.FtException;
 import com.ft.util.thread.ThreadPoolUtil;
@@ -47,8 +47,9 @@ import java.util.*;
 @EnableDiscoveryClient
 @EnableFeignClients(basePackages = CommonUtil.BASE_PACKAGE)
 public class FtApplication {
+
 	@Autowired
-	private GoodsServiceImpl goodsService;
+	private GoodsService goodsService;
 
 	@Value("${spring.cloud.client.ip-address}")
 	private String ip;
@@ -95,17 +96,13 @@ public class FtApplication {
 
 	@GetMapping("/mail")
 	public String mail(HttpServletRequest request) throws Exception {
-		String cid = "monster";
+		List<Map<String, String>> dataList = new ArrayList<>();
 
-		String sheetTitle = "人员信息";
 		String nameKey = "姓名";
 		String ageKey = "年龄";
 		String dateKey = "日期";
-		List<String> columnChs = Arrays.asList(nameKey, ageKey, dateKey);
-		List<Map<String, String>> dataList = new ArrayList<>();
 
 		int target = 70;
-		int limit = 17;
 		for (int i = 0; i < target; i++) {
 			Map<String, String> scy = new HashMap<>(16);
 			scy.put(nameKey, "史春阳");
@@ -119,11 +116,15 @@ public class FtApplication {
 				InputStream jpegIn = new FileInputStream("/Users/shichunyang/Downloads/monster.jpeg");
 				ByteArrayOutputStream jpegOut = new ByteArrayOutputStream()
 		) {
+			String sheetTitle = "人员信息";
+			List<String> columnChs = Arrays.asList(nameKey, ageKey, dateKey);
+			int limit = 17;
 			ExcelUtil.createExcel(excelOut, sheetTitle, columnChs, dataList, limit);
 
 			IOUtil.copyLarge(jpegIn, jpegOut, new byte[1024 * 4]);
 
 			MailBO mailBO;
+			String cid = "monster";
 
 			Map<String, MailBO> inLines = new HashMap<>(16);
 			mailBO = new MailBO();
@@ -136,6 +137,7 @@ public class FtApplication {
 			mailBO.setContentType(request.getServletContext().getMimeType("*.xls"));
 			mailBO.setFileOutputStream(excelOut);
 			attachments.put("人员信息.xls", mailBO);
+
 			mailUtil.send(
 					new String[]{"903031015@qq.com"},
 					"903031015@qq.com",
@@ -144,8 +146,6 @@ public class FtApplication {
 					inLines,
 					attachments
 			);
-		} catch (Exception e) {
-			log.error("mail exception==>{}", FtException.getExceptionStack(e));
 		}
 
 		return "success";
