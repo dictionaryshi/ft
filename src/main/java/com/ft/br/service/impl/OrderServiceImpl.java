@@ -14,6 +14,7 @@ import com.ft.br.model.bo.ItemBO;
 import com.ft.br.model.bo.OrderBO;
 import com.ft.br.model.vo.ItemVO;
 import com.ft.br.model.vo.OrderVO;
+import com.ft.br.service.GoodsService;
 import com.ft.br.service.OrderService;
 import com.ft.dao.stock.model.*;
 import com.ft.db.annotation.UseMaster;
@@ -22,12 +23,10 @@ import com.ft.db.model.PageResult;
 import com.ft.redis.base.ValueOperationsCache;
 import com.ft.redis.lock.RedisLock;
 import com.ft.redis.util.RedisUtil;
-import com.ft.util.DateUtil;
-import com.ft.util.JsonUtil;
-import com.ft.util.ObjectUtil;
-import com.ft.util.StringUtil;
+import com.ft.util.*;
 import com.ft.util.exception.FtException;
 import com.ft.util.model.LogAO;
+import com.ft.util.model.LogBO;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -71,6 +70,9 @@ public class OrderServiceImpl implements OrderService {
 
 	@Autowired
 	private RedisLock redisLock;
+
+	@Autowired
+	private GoodsService goodsService;
 
 	@UseMaster
 	@Override
@@ -379,11 +381,63 @@ public class OrderServiceImpl implements OrderService {
 			update.setConfirmTime(System.currentTimeMillis());
 			orderMapper.updateByPrimaryKeySelective(update);
 
+			this.outStock(orderId, userId);
+
 		} finally {
 			redisLock.unlock(lockKey);
 		}
 
 		return Boolean.TRUE;
+	}
+
+	private void outStock(Long orderId, int userId) {
+		List<ItemDO> itemDOS = itemMapper.selectByOrderId(orderId);
+		if (ObjectUtil.isEmpty(itemDOS)) {
+			LogBO logBO = LogUtil.log("订单项不存在, 出库失败",
+					LogAO.build("orderId", orderId + ""));
+			log.info(logBO.getLogPattern(), logBO.getParams());
+			return;
+		}
+
+		itemDOS.forEach(itemDO -> {
+			int goodsId = itemDO.getGoodsId();
+			int goodsNumber = itemDO.getGoodsNumber();
+
+			String lockKey = RedisUtil.getRedisKey(RedisKey.REDIS_GOODS_UPDATE_LOCK, goodsId + "");
+
+			try {
+				redisLock.lock(lockKey, 10_000L);
+
+				GoodsDO goodsDO = goodsMapper.selectByPrimaryKey(goodsId);
+				if (goodsDO == null) {
+					FtException.throwException("商品不存在");
+				}
+
+				if (goodsNumber > goodsDO.getNumber()) {
+					FtException.throwException("商品库存不足",
+							LogAO.build("商品名称", goodsDO.getName()));
+				}
+
+				StockLogDO stockLogDO = new StockLogDO();
+				stockLogDO.setOperator(userId);
+				stockLogDO.setType(StockLogTypeEnum.OUT.getType());
+				stockLogDO.setTypeDetail(StockLogTypeDetailEnum.OUT_ORDER.getTypeDetail());
+				stockLogDO.setGoodsId(goodsId);
+				stockLogDO.setBeforeStockNumber(goodsService.getStock(goodsId));
+				stockLogDO.setGoodsNumber(goodsNumber);
+
+				// 出库
+				goodsMapper.updateNumber(goodsId, -goodsNumber);
+
+				stockLogDO.setAfterStockNumber(goodsService.getStock(goodsId));
+				stockLogDO.setOrderId(orderId);
+				stockLogDO.setItemId(itemDO.getId());
+
+				stockLogMapper.insertSelective(stockLogDO);
+			} finally {
+				redisLock.unlock(lockKey);
+			}
+		});
 	}
 
 	/**
