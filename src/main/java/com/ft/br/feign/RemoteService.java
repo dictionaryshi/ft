@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
  * @author shichunyang
  */
 @FeignClient(name = "feign", fallbackFactory = RemoteServiceFallbackFactory.class)
-@RequestMapping("/rpc")
+@RequestMapping(RestResult.API + "/rpc")
 public interface RemoteService {
 
 	@PutMapping("/put")
@@ -20,9 +20,8 @@ public interface RemoteService {
 			@RequestBody RpcParam rpcParam
 	);
 
-	@RequestMapping(value = "/get", method = RequestMethod.GET)
+	@GetMapping("/get")
 	RestResult<RpcResult> get(
-			@RequestParam(value = "username", required = false) String username,
-			@RequestParam(value = "age") Integer age
+			RpcParam rpcParam
 	);
 }
