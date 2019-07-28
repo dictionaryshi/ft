@@ -7,8 +7,12 @@ import com.ft.br.websocket.OrderWebSocket;
 import com.ft.dao.stock.model.UserDO;
 import com.ft.rpc.api.model.RpcParam;
 import com.ft.rpc.api.model.RpcResult;
+import com.ft.util.DateUtil;
 import com.ft.util.ExcelUtil;
 import com.ft.util.JsonUtil;
+import com.ft.util.LogUtil;
+import com.ft.util.model.LogAO;
+import com.ft.util.model.LogBO;
 import com.ft.util.model.RestResult;
 import com.ft.web.annotation.SignCheck;
 import lombok.extern.slf4j.Slf4j;
@@ -44,12 +48,22 @@ public class NrController {
 	@GetMapping("/feign")
 	public String feign() {
 		RpcParam rpcParam = new RpcParam();
-		rpcParam.setUsername("春阳");
+		rpcParam.setUsername("春阳put");
 		rpcParam.setAge(29);
-		rpcParam.setBirth(new Date());
+		rpcParam.setBirth(DateUtil.getCurrentDateStr());
 		RestResult<RpcResult> putResult = remoteService.put(rpcParam);
-		RestResult<RpcResult> getResult = remoteService.get("xt", 25);
-		log.info("putResult==>{}, getResult==>{}", JsonUtil.object2Json(putResult), JsonUtil.object2Json(getResult));
+
+		rpcParam = new RpcParam();
+		rpcParam.setUsername("春阳get");
+		rpcParam.setAge(30);
+		rpcParam.setBirth("2019-11-11 12:21:20");
+		RestResult<RpcResult> getResult = remoteService.get(rpcParam);
+
+		LogBO logBO = LogUtil.log("feign test",
+				LogAO.build("put result", JsonUtil.object2Json(putResult)),
+				LogAO.build("get result", JsonUtil.object2Json(getResult)));
+		log.info(logBO.getLogPattern(), logBO.getParams());
+
 		return JsonUtil.object2Json(putResult) + "_" + JsonUtil.object2Json(getResult);
 	}
 
