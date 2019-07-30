@@ -103,7 +103,8 @@ public class RedisWarningTask {
 				try {
 					mailUtil.send(new String[]{"903031015@qq.com"}, "903031015@qq.com", "流量警报", message, null, null);
 				} catch (Exception e) {
-					e.printStackTrace();
+					logBO = LogUtil.log("流量警报error", e);
+					log.error(logBO.getLogPattern(), logBO.getParams());
 				}
 			}
 
