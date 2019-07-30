@@ -15,6 +15,7 @@ import com.ft.util.model.LogAO;
 import com.ft.util.model.LogBO;
 import com.ft.util.model.RestResult;
 import com.ft.web.annotation.SignCheck;
+import com.ft.web.util.WebSocketUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -78,7 +79,7 @@ public class NrController {
 			@RequestParam Integer oid,
 			@RequestParam String msg
 	) {
-		OrderWebSocket.ORDER_WEB_SOCKET.entrySet().stream().filter(entry -> entry.getValue().equals(oid)).forEach(entry -> OrderWebSocket.sendMessage(entry.getKey(), msg));
+		OrderWebSocket.ORDER_WEB_SOCKET.entrySet().stream().filter(entry -> entry.getValue().equals(oid)).forEach(entry -> WebSocketUtil.sendMessage(entry.getKey(), msg));
 
 		try {
 			TimeUnit.SECONDS.sleep(5);
