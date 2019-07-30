@@ -96,6 +96,7 @@ public class FtApplication {
 	@Autowired
 	private MailUtil mailUtil;
 
+	@RedisLimit(key = "send_email_key", timeout = 120_000L, size = 1, useParam = false)
 	@GetMapping("/mail")
 	public String mail(HttpServletRequest request) throws Exception {
 		List<Map<String, String>> dataList = new ArrayList<>();
