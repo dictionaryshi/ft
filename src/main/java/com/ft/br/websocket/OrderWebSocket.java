@@ -2,8 +2,10 @@ package com.ft.br.websocket;
 
 import com.ft.br.service.impl.GoodsServiceImpl;
 import com.ft.util.JsonUtil;
+import com.ft.util.LogUtil;
 import com.ft.util.SpringContextUtil;
-import com.ft.util.exception.FtException;
+import com.ft.util.model.LogAO;
+import com.ft.util.model.LogBO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -11,6 +13,8 @@ import javax.websocket.*;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 import java.util.concurrent.ConcurrentHashMap;
+
+import static com.ft.web.util.WebSocketUtil.sendMessage;
 
 /**
  * 订单业务socket
@@ -27,34 +31,38 @@ public class OrderWebSocket {
 	public void onOpen(@PathParam("oid") Integer oid, Session session) {
 		ORDER_WEB_SOCKET.put(session, oid);
 
-		log.info("ORDER_WEB_SOCKET add, session==>{}, oid==>{}, count==>{}", session, oid, ORDER_WEB_SOCKET.size());
-		// 发送消息socket连接成功
+		LogBO logBO = LogUtil.log("socket add",
+				LogAO.build("oid", oid + ""),
+				LogAO.build("total", ORDER_WEB_SOCKET.size() + ""));
+		log.info(logBO.getLogPattern(), logBO.getParams());
 	}
 
 	@OnError
 	public void onError(Session session, Throwable throwable) {
-		log.error("session==>{}, oid==>{}, exception==>{}", session, ORDER_WEB_SOCKET.get(session), FtException.getExceptionStack(throwable));
+		LogBO logBO = LogUtil.log("socket error", throwable,
+				LogAO.build("oid", ORDER_WEB_SOCKET.get(session) + ""),
+				LogAO.build("total", ORDER_WEB_SOCKET.size() + ""));
+		log.warn(logBO.getLogPattern(), logBO.getParams());
 	}
 
 	@OnClose
 	public void onClose(Session session) {
-		Integer removeOid = ORDER_WEB_SOCKET.remove(session);
-		log.info("ORDER_WEB_SOCKET close, session==>{}, oid==>{}, count==>{}", session, removeOid, ORDER_WEB_SOCKET.size());
+		Integer oid = ORDER_WEB_SOCKET.remove(session);
+
+		LogBO logBO = LogUtil.log("socket close",
+				LogAO.build("oid", oid + ""),
+				LogAO.build("total", ORDER_WEB_SOCKET.size() + ""));
+		log.info(logBO.getLogPattern(), logBO.getParams());
 	}
 
 	@OnMessage
 	public void onMessage(Session session, String message) {
-		log.info("client==>{}, oid==>{}, msg==>{}", session, ORDER_WEB_SOCKET.get(session), message);
 		GoodsServiceImpl goodsService = SpringContextUtil.getBean(GoodsServiceImpl.class);
-		sendMessage(session, JsonUtil.object2Json(goodsService.get(ORDER_WEB_SOCKET.get(session))));
-	}
+		sendMessage(session, JsonUtil.object2Json(goodsService.get(ORDER_WEB_SOCKET.get(session))) + "_" + message);
 
-	public static void sendMessage(Session session, String message) {
-		try {
-			session.getBasicRemote().sendText(message);
-		} catch (Exception e) {
-			log.error("session==>{}, oid==>{}, message==>{}, exception==>{}",
-					session, ORDER_WEB_SOCKET.get(session), message, FtException.getExceptionStack(e));
-		}
+		LogBO logBO = LogUtil.log("socket message",
+				LogAO.build("oid", ORDER_WEB_SOCKET.get(session) + ""),
+				LogAO.build("total", ORDER_WEB_SOCKET.size() + ""));
+		log.info(logBO.getLogPattern(), logBO.getParams());
 	}
 }
