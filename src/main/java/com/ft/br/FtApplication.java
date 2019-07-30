@@ -1,6 +1,7 @@
 package com.ft.br;
 
 import com.ft.br.service.GoodsService;
+import com.ft.redis.annotation.RedisLimit;
 import com.ft.util.*;
 import com.ft.util.exception.FtException;
 import com.ft.util.thread.ThreadPoolUtil;
@@ -78,6 +79,7 @@ public class FtApplication {
 		);
 	}
 
+	@RedisLimit(key = "db_master_slave_key", timeout = 5_000L, size = 5, useParam = false)
 	@GetMapping("/db")
 	public String db() {
 		return JsonUtil.object2Json(goodsService.get(1));
