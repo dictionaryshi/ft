@@ -1,12 +1,11 @@
 package com.ft.br.websocket;
 
 import com.ft.br.service.impl.GoodsServiceImpl;
-import com.ft.util.JsonUtil;
-import com.ft.util.LogUtil;
-import com.ft.util.SpringContextUtil;
+import com.ft.util.*;
 import com.ft.util.model.LogAO;
 import com.ft.util.model.LogBO;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.MDC;
 import org.springframework.stereotype.Component;
 
 import javax.websocket.*;
@@ -57,6 +56,8 @@ public class OrderWebSocket {
 
 	@OnMessage
 	public void onMessage(Session session, String message) {
+		MDC.put(ThreadLocalMap.REQUEST_ID, CommonUtil.get32UUID());
+
 		GoodsServiceImpl goodsService = SpringContextUtil.getBean(GoodsServiceImpl.class);
 		sendMessage(session, JsonUtil.object2Json(goodsService.get(ORDER_WEB_SOCKET.get(session))) + "_" + message);
 
