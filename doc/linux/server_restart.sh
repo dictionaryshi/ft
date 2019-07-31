@@ -17,7 +17,7 @@ server_test_array=(
 )
 
 server_start_array=(
-    '-Xms256m -Xmx256m -Xmn128m -Xss256k -Xloggc:/data/gc/gc_ft_%t-log ft-0.0.1-SNAPSHOT.jar'
+    '-Xms256m -Xmx256m -Xmn128m -Xss256k -Xloggc:/data/gc/gc_ft_%t-log ft-1.0-SNAPSHOT.jar'
 )
 
 server_log_array=(
