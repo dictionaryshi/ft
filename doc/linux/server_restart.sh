@@ -9,7 +9,7 @@ gc_params="-XX:+UseConcMarkSweepGC -XX:+ExplicitGCInvokesConcurrentAndUnloadsCla
            -XX:+UseGCLogFileRotation -XX:NumberOfGCLogFiles=10 -XX:GCLogFileSize=10M -XX:+PrintStringTableStatistics -XX:+DisableExplicitGC "
 
 server_name_array=(
-    'ft-0.0.1-SNAPSHOT.jar'
+    'ft-1.0-SNAPSHOT.jar'
 )
 
 server_test_array=(
@@ -118,6 +118,6 @@ getProcessId(){
 while true
 do
 	server>>${log_file}
-	sleep 10
+	sleep 20
 done
 
