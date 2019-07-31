@@ -11,8 +11,7 @@ import org.springframework.web.bind.annotation.*;
  *
  * @author shichunyang
  */
-@FeignClient(name = "feign", fallbackFactory = RemoteServiceFallbackFactory.class)
-@RequestMapping(RestResult.API + "/rpc")
+@FeignClient(name = "feign", fallbackFactory = RemoteServiceFallbackFactory.class, path = RestResult.API + "/rpc")
 public interface RemoteService {
 
 	@PutMapping("/put")
