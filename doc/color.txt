@@ -4,15 +4,15 @@
 
 3.淡黄色:FFFFCC
 
-4.紫色:9876AA
+4.紫色(常量加粗):9876AA
 
-5.黄色:BBB529
+5.黄色(Annotations, Class Fields):BBB529
 
-6.粉色:E784A2
+6.粉色(Methods):E784A2
 
-7.天蓝色:419CB5
+7.天蓝色(Keyword):419CB5
 
-8.耦合色:9999FF
+8.耦合色(Parameters):9999FF
 
 http://idea.lanyus.com/
 -javaagent:JetbrainsCrack-3.1-release-enc.jar
