@@ -99,19 +99,20 @@ public class FtApplication {
 	@RedisLimit(key = "send_email_key", timeout = 120_000L, size = 1, useParam = false)
 	@GetMapping("/mail")
 	public String mail(HttpServletRequest request) throws Exception {
-		List<Map<String, String>> dataList = new ArrayList<>();
+		List<List<String>> rows = new ArrayList<>();
 
-		String nameKey = "姓名";
-		String ageKey = "年龄";
-		String dateKey = "日期";
+		List<String> columnCHs = new ArrayList<>();
+		columnCHs.add("姓名");
+		columnCHs.add("年龄");
+		columnCHs.add("日期");
 
 		int target = 70;
-		for (int i = 0; i < target; i++) {
-			Map<String, String> scy = new HashMap<>(16);
-			scy.put(nameKey, "史春阳");
-			scy.put(ageKey, (i + 1) + "");
-			scy.put(dateKey, DateUtil.date2Str(new Date(), DateUtil.DEFAULT_DATE_FORMAT));
-			dataList.add(scy);
+		for (int i = 1; i <= target; i++) {
+			List<String> columns = new ArrayList<>(16);
+			columns.add("史春阳" + i);
+			columns.add(i + "");
+			columns.add(DateUtil.date2Str(new Date(), DateUtil.DEFAULT_DATE_FORMAT));
+			rows.add(columns);
 		}
 
 		try (
@@ -120,9 +121,8 @@ public class FtApplication {
 				ByteArrayOutputStream jpegOut = new ByteArrayOutputStream()
 		) {
 			String sheetTitle = "人员信息";
-			List<String> columnChs = Arrays.asList(nameKey, ageKey, dateKey);
 			int limit = 17;
-			ExcelUtil.createExcel(excelOut, sheetTitle, columnChs, dataList, limit);
+			ExcelUtil.createExcel(excelOut, sheetTitle, columnCHs, rows, limit);
 
 			IOUtil.copyLarge(jpegIn, jpegOut, new byte[1024 * 4]);
 
