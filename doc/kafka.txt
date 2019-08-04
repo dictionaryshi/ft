@@ -27,10 +27,8 @@ vim kafka-server-start.sh
 
 RabbitMQ、RocketMQ、Kafka:
     1)单机吞吐量:RabbitMQ万级。RocketMQ、Kafka10万级, 支撑高吞吐。
-    2)topic数量对吞吐量的影响:RocketMQ在同等机器下, 可以支撑大量的topic。Kafka在同等机器下尽量保证topic数量不要过多。
-    3)时效性:RabbitMQ延迟最低。
-    4)可用性:Kafka一个数据多个副本, 少数机器宕机, 不会丢失数据, 不会导致不可用。
-    5)消息可靠性:RocketMQ、Kafka可以做到0丢失。
+    2)时效性:RabbitMQ延迟最低。(微秒级, 其它是毫秒级)
+    3)可用性:Kafka一个数据多个副本, 少数机器宕机, 不会丢失数据, 不会导致不可用。
 
 Kafka高可用:由多个broker组成, 创建一个topic, 这个topic可以划分为多个partition,
 每个partition可以存在于不同的broker上, 每个partition存放一部分数据。(一个topic数据分散放在多个机器上)
