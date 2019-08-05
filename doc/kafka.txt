@@ -30,6 +30,8 @@ RabbitMQ、RocketMQ、Kafka:
     2)时效性:RabbitMQ延迟最低。(微秒级, 其它是毫秒级)
     3)可用性:Kafka一个数据多个副本, 少数机器宕机, 不会丢失数据, 不会导致不可用。
 
+申请kafka topic 可以设置partition数量、副本数量、数据保存时间。
+
 Kafka高可用:由多个broker组成, 创建一个topic, 这个topic可以划分为多个partition,
 每个partition可以存在于不同的broker上, 每个partition存放一部分数据。(一个topic数据分散放在多个机器上)
 
@@ -71,7 +73,7 @@ zookeeper使用场景:
     4)只要别人建立了一把分布式锁，你就得不断轮询去尝试获取锁。
 
 同一个partition内的消息只能被同一个组中的一个consumer消费。当消费者数量多于partition的数量时, 多余的消费者空闲。
-也就是说如果只有一个partition你在同一组启动多少个consumer都没用, partition的数量决定了此topic在同一组中被可被均衡的程度, 例如partition = 4, 则可在同一组中被最多4个consumer均衡消费。
+partition的数量决定了此topic在同一组中被可被均衡的程度, 例如partition = 4, 则可在同一组中被最多4个consumer均衡消费。
 
 一旦consumer和kafka建立连接, consumer会以心跳的方式来通知kafka自己还活着, 如果session.timeout.ms内心跳未到达服务器, 服务器认为心跳丢失, 会做rebalance。
 
