@@ -58,7 +58,6 @@ public class OrderController {
 	private RedisLock redisLock;
 
 	@ApiOperation("获取订单id")
-	@LoginCheck
 	@GetMapping("/get-order-id")
 	public RestResult<Long> getOrderId() {
 		Long orderId = idService.getId();
