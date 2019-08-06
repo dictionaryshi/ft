@@ -1,0 +1,4 @@
+es          db
+index       数据库
+type        数据表
+document    一行数据
