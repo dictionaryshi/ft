@@ -1,0 +1,9 @@
+es          db
+index       数据库
+type        数据表
+document    一行数据
+
+es可以将一个索引中的数据切分为多个shard, 分布在多台服务器上存储, 提升吞吐量和性能。
+
+可以为每个shard创建多个replica副本, 保证es数据高可用。
+
