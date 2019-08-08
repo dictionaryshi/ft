@@ -18,3 +18,15 @@ es读数据过程:
     2)coordinate node对doc id进行哈希路由, 在primary shard以及其所有replica中随机选择一个。(负载均衡)
     3)接收请求的node返回document给coordinate node。
     4)coordinate node返回document给客户端。
+
+es SearchType:
+    1)query and fetch:向索引的所有shard都发出查询请求, 各分片返回的时候把document和计算后的排名信息(_score)一起返回。(性能最快, 排名不准, 查询量为用户查询量N * shard数)
+    2)query then fetch:向所有shard发出请求, 各分片只返回文档id和_score, 然后按照各分片返回的文档的_score进行重新排序和排名, 取前N个文档。(性能一般, 排名不准, 查询量与用户要求一致)
+    3)DFS query and fetch:在进行查询之前, 先对所有分片发送请求, 把所有分片中的词频和文档频率等打分依据全部汇总到一块。(性能一般, 排名准确, 查询量为用户查询量N * shard数)
+    4)DFS query then fetch:比2)多一个DFS过程。(性能最差, 排名准确, 查询数据量准确)
+
+es 搜索数据过程:
+    1)客户端发送请求到一个coordinate node。
+    2)协调节点将搜索请求转发到所有的shard上。(primary shard或replica shard)
+    3)query phase:每个shard将自己的搜索结果(doc id)和_score返回给协调节点, 由协调节点进行数据的合并、排序、分页等操作, 产生最终结果。
+    4)fetch phase:接着由协调节点根据doc id去各个节点上拉取实际的document数据, 最终返回给客户端。
