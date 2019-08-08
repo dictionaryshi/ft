@@ -30,3 +30,18 @@ es 搜索数据过程:
     2)协调节点将搜索请求转发到所有的shard上。(primary shard或replica shard)
     3)query phase:每个shard将自己的搜索结果(doc id)和_score返回给协调节点, 由协调节点进行数据的合并、排序、分页等操作, 产生最终结果。
     4)fetch phase:接着由协调节点根据doc id去各个节点上拉取实际的document数据, 最终返回给客户端。
+
+es 写数据底层原理:
+    1)先写入内存buffer, 同时将数据写入translog日志文件。在buffer里的时候数据是搜索不到的。
+    如果buffer快满了, 或者到一定时间, 就会将内存buffer中的数据refresh到一个新的segment file中。(先进入os cache)
+    每隔1秒钟, es将buffer中的数据写入一个新的segment file中, 每秒钟会产生一个新的磁盘文件segment file, 存储最近1秒内buffer中写入的数据。
+
+    2)buffer中的数据被refresh操作刷入os cache中, 这个数据就可以被搜索到了。
+    3)只要数据被输入到os cache中, buffer就会被清空。
+    4)translog会变得越来越大, 最后触发commit操作。将buffer中现有数据refresh到os cache中去, 清空buffer。
+    将一个commit point写入磁盘文件, 里面标识着这个commit point对应的所有segment file。
+    强行将os cache中目前所有的数据都fsync到磁盘文件中去。最后清空现有translog日志文件, 重启一个translog, 此时commit/flush操作完成。
+    默认30分钟自动执行一次flush, translog过大也会触发flush。refresh和flush都可以手动触发。
+
+    5)translog也是先写入os cache, 默认每隔5秒刷一次到磁盘中去, 所以有5秒的数据, 停留在buffer、translog os cache、segment file os cache中, 所以会有5秒数据丢失的风险。
+    6)数据写入segment file之后, 同时就建立好了倒排索引。
