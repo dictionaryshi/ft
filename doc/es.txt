@@ -7,3 +7,8 @@ es可以将一个索引中的数据切分为多个shard, 分布在多台服务�
 
 可以为每个shard创建多个replica副本, 保证es数据高可用。
 
+es写数据过程:
+    1)客户端选择一个node发送请求过去, 这个node就是coordinating node(协调节点)。
+    2)coordinating node对document进行路由, 将请求转发给对应的node(有primary shard的node)。
+    3)primary shard node处理请求, 然后将数据同步到replica node。
+    4)coordinating node如果发现primary node和所有replica node都搞定之后, 就返回响应结果给客户端。
