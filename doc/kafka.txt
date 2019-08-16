@@ -36,8 +36,9 @@ RabbitMQ、RocketMQ、Kafka:
 
 申请kafka topic 可以设置partition数量、副本数量、数据保存时间。
 
-Kafka高可用:由多个broker组成, 创建一个topic, 这个topic可以划分为多个partition,
-每个partition可以存在于不同的broker上, 每个partition存放一部分数据。(一个topic数据分散放在多个机器上)
+Kafka的高可用性:
+    1)Kafka的基本架构:由多个broker组成, 每个broker是一个节点。创建一个topic, 这个topic可以划分为多个partition, 每个partition可以存在于不同的broker上,
+    每个partition只放一部分数据。这就是天然的分布式消息队列, 一个topic的数据, 是分散放在多个机器上的, 每个机器只放一部分数据。
 
 每个partition的数据都会同步到其它机器上, 形成自己的多个replica副本。所有replica会选举一个leader出来, 那么生产和消费都跟这个leader打交道。
 然后其他replica就是follower。写的时候, leader会负责把数据同步到所有follower上去, 读的时候就直接读leader上的数据即可。
