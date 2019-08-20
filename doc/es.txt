@@ -34,7 +34,7 @@ es写数据过程:
     3)primary shard node处理请求, 然后将数据同步到replica node。
     4)coordinating node如果发现primary node和所有replica node都搞定之后, 就返回响应结果给客户端。
 
-es读数据过程:
+es读数据过程(通过doc id来查询, 会根据doc id进行hash, 判断出来当时把doc id分配到了哪个shard上面去, 从那个shard去查询):
     1)客户端发送请求到任意一个node(coordinate node)。
     2)coordinate node对doc id进行哈希路由, 在primary shard以及其所有replica中随机选择一个。(负载均衡)
     3)接收请求的node返回document给coordinate node。
