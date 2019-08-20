@@ -1,4 +1,5 @@
 lucene是最先进、功能最强大的搜索库。如果直接基于lucene开发, 非常复杂。
+lucene就是一个jar包, 里面包含了封装好的各种建立倒排索引的算法代码。通过lucene, 我们可以将已有的数据建立索引, lucene会在本地磁盘上面, 给我们组织索引的数据结构。
 
 elasticsearch基于lucene, 隐藏了lucene的复杂性, 提供了简单易用的restful api。
 分布式、支持PB级数据的文档存储引擎、搜索引擎和分析引擎。
