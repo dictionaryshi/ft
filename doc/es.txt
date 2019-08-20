@@ -57,8 +57,12 @@ es 写数据底层原理:
     如果buffer快满了, 或者到一定时间, 就会将内存buffer中的数据refresh到一个新的segment file中。(先进入os cache)
     每隔1秒钟, es将buffer中的数据写入一个新的segment file中, 每秒钟会产生一个新的磁盘文件segment file, 存储最近1秒内buffer中写入的数据。
 
-    2)buffer中的数据被refresh操作刷入os cache中, 这个数据就可以被搜索到了。
-    3)只要数据被输入到os cache中, buffer就会被清空。
+    2)只要buffer中的数据被refresh操作刷入os cache中, 这个数据就可以被搜索到了。
+
+    3)es是准实时的:默认是每隔1秒refresh一次的, 所以es是准实时的, 因为写入的数据1秒之后才能被看到。
+    可以通过es的restful api或者java api, 手动执行一次refresh操作, 就是手动将buffer中的数据刷入os cache中,
+    让数据立马就可以被搜索到。只要数据被输入os cache中, buffer就会被清空了, 因为不需要保留buffer了, 数据在translog里面已经持久化到磁盘去一份了。
+
     4)translog会变得越来越大, 最后触发commit操作。将buffer中现有数据refresh到os cache中去, 清空buffer。
     将一个commit point写入磁盘文件, 里面标识着这个commit point对应的所有segment file。
     强行将os cache中目前所有的数据都fsync到磁盘文件中去。最后清空现有translog日志文件, 重启一个translog, 此时commit/flush操作完成。
