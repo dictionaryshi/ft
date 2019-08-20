@@ -79,13 +79,16 @@ es 写数据底层原理:
     8)translog也是先写入os cache, 默认每隔5秒刷一次到磁盘中去, 所以有5秒的数据, 停留在buffer、translog os cache、segment file os cache中, 所以会有5秒数据丢失的风险。
     也可以将translog设置成每次写操作必须是直接fsync到磁盘, 但是性能会差很多。
 
-    6)数据写入segment file之后, 同时就建立好了倒排索引。
+    9)数据写入segment file之后, 同时就建立好了倒排索引。
 
 删除/更新数据底层原理:
-    1)如果是删除操作, commit的时候会生成一个.del文件, 里面将某个doc标识为deleted状态。
+    1)如果是删除操作, commit的时候会生成一个.del文件, 里面将某个doc标识为deleted状态, 那么搜索的时候根据.del文件就知道这个doc是否被删除了。
+
     2)如果是更新操作, 就是将原来的doc标识为deleted状态, 然后新写入一条数据。
-    3)默认情况下是1秒钟生成一个segment file, segment file会越来越多, 此时会定期执行merge, 将多个segment file合并成一个, 同时会将标识为deleted的doc给物理删除掉。
-    这里会写一个commit point, 标识所有新的segment file。
+
+    3)buffer每refresh一次, 就会产生一个segment file, 所以默认情况下是1秒钟一个segment file, 这样下来segment file会越来越多, 此时会定期执行merge。
+    每次merge的时候, 会将多个segment file合并成一个, 同时这里会将标识为deleted的doc给物理删除掉, 然后将新的segment file写入磁盘,
+    这里会写一个commit point, 标识所有新的segment file, 然后打开segment file供搜索使用, 同时删除旧的segment file。
 
 倒排索引:关键词到文档ID的映射。倒排索引中的所有词项对应一个或多个文档。倒排索引中的词项根据字典顺序升序排列。
 
