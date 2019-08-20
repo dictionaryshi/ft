@@ -146,25 +146,41 @@ redis实现高并发主要依靠主从架构, 一主多从, 一般来说, 很多
 
 redis高可用, 如果是做主从架构部署, 那么加上哨兵就可以了, 任何一个实例宕机, 可以进行主备切换。
 
+redis replication的核心机制:
+    1)redis采用异步方式复制数据到slave节点。
+    2)一个master node是可以配置多个slave node的。
+    3)slave node也可以连接其他的slave node。
+    4)slave node做复制的时候, 不会block master node的正常工作。
+    5)slave node 在做复制的时候, 也不会block对自己的查询操作, 它会用旧的数据集来提供服务, 但是复制完成的时候, 需要删除旧数据集, 加载新数据集, 这个时候就会暂停对外服务了。
+    6)slave node 主要用来进行横向扩容, 做读写分离, 扩容的slave node可以提高读的吞吐量。
+
+如果采用了主从架构, 那么建议必须开启master node的持久化, 不建议用slave node作为master node的数据热备, 如果你关掉master的持久化, 可能在master宕机重启的时候数据是空的,
+然后可能一经过复制slave node的数据也丢了。另外, master的各种备份方案, 也需要做。万一本地的所有文件丢失了, 从备份中挑选一份rdb去恢复master, 这样才能确保启动的时候, 是有数据的,
+即使采用了哨兵高可用机制, slave node可以自动接管master node, 但也可能sentinel还没检测到master failure, master node就自动重启了, 还是可能导致上面所有的slave node数据被清空。
+
+redis主从复制的核心原理:
+    1)当启动一个slave node的时候, 它会发送一个PSYNC命令给master node。
+
+    2)如果这是slave node初次连接到master node, 那么会触发一次full resynchronization全量复制。
+    此时master会启动一个后台线程, 开始生成一份RDB快照文件, 同时还会将从客户端client新收到的所有写命令缓存在内存中。
+    RDB文件生成完毕后, master会将这个RDB发送给slave, slave会先写入本地磁盘, 然后再从本地磁盘加载到内存中,
+    接着master会将内存中缓存的写命令发送到slave, slave也会同步这些数据。slave node如果跟master node有网络故障,
+    断开了连接, 会自动重连, 连接之后master node仅会复制给slave部分缺少的数据。
+
+主从复制的断点续传:
+    从redis 2.8开始, 就支持主从复制的断点续传, 如果主从复制过程中, 网络连接断掉了, 那么可以接着上次复制的地方, 继续复制下去, 而不是从头开始复制一份。
+    master node会在内存中维护一个backlog, master和slave都会保存一个replica offset还有一个master run id, offset就是保存在backlog中的。
+    如果master和slave网络连接断掉了, slave会让master从上次replica offset开始继续复制, 如果没有找到对应的offset, 那么就会执行一次resynchronization。
+    如果根据host + ip定位master node, 是不靠谱的, 如果master node重启或者数据出现了变化, 那么slave node应该根据不同的run id区分。
+
+过期key处理:slave不会过期key, 只会等待master过期key。如果master过期了一个key, 或者通过LRU淘汰了一个key, 那么会模拟一条del命令发送给slave。
+
 缓存雪崩:避免key集中过期。使用本地缓存。使用限流技术保护mysql。
 缓存穿透:将Null进行缓存。
 缓存击穿:将热点数据设置为永不过期, 或使用分布式锁, 等待第一个请求构建完缓存之后, 再释放锁。
 
 读的时候, 先读缓存, 缓存没有的话, 就读数据库, 然后取出数据后放入缓存, 同时返回响应。
 更新的时候, 先更新数据库, 然后再删除缓存。
-
-主从复制:当启动一个slave node的时候, 它会发送一个PSYNC命令给master node。
-如果这是slave node初次连接到 master node, 那么会触发一次full resynchronization全量复制。此时master会启动一个后台线程,
-开始生成一份RDB快照文件, 同时还会将从客户端client新收到的所有写命令缓存在内存中。RDB文件生成完毕后, master会将这个RDB发送给slave,
-slave会先写入本地磁盘, 然后再从本地磁盘加载到内存中, 接着master会将内存中缓存的写命令发送到slave, slave也会同步这些数据。
-slave node如果跟master node有网络故障, 断开了连接, 会自动重连, 连接之后master node仅会复制给slave部分缺少的数据。
-
-slave node做复制的时候, 不会block master node的正常工作, slave node在做复制的时候, 也不会block对自己的查询操作, 它会用旧的数据集来提供服务。
-但是复制完成的时候, 需要删除旧数据集, 加载新数据集, 这个时候就会暂停对外服务了。
-
-repl-diskless-sync yes (master在内存中直接创建 RDB, 然后发送给slave, 不会在自己本地落地磁盘)
-
-slave不会过期key, 只会等待master过期key。如果master过期了一个 key, 或者通过LRU淘汰了一个key, 那么会模拟一条del命令发送给slave。
 
 SLAVEOF 127.0.0.1 6379
 info replication
