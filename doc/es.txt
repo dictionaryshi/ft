@@ -15,6 +15,14 @@ es的核心概念:
     primary shard(建立索引时设置, 不能修改, 默认5个), replica shard(可随时修改数量, 默认1 个),
     默认每个索引10个shard, 5个primary shard, 5个replica shard, 最小的高可用配置, 是2 台服务器。
 
+es集群多个节点, 会自动选举一个节点为master节点, 这个master节点其实就是干一些管理的工作的,
+比如维护索引元数据、负责切换primary shard和replica shard身份等。要是master节点宕机了,
+那么会重新选举一个节点为master节点。
+
+如果是非master节点宕机了, 那么master节点会让那个宕机节点上的primary shard的身份转移到其他机器上的replica shard上去。
+接着你要是修复了那个宕机机器(重启了之后), master节点会控制将缺失的replica shard分配过去, 同步后续修改的数据,
+让集群恢复正常。
+
 es          db
 index       数据库
 type        数据表
