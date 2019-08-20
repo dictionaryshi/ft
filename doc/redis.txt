@@ -175,6 +175,27 @@ redis主从复制的核心原理:
 
 过期key处理:slave不会过期key, 只会等待master过期key。如果master过期了一个key, 或者通过LRU淘汰了一个key, 那么会模拟一条del命令发送给slave。
 
+复制的完整流程:
+    1)slave node启动时, 会在自己本地保存master node的信息, 包括master node的host和ip, 但是复制流程没开始。
+
+    2)slave node内部有个定时任务, 每秒检查是否有新的master node要连接和复制, 如果发现, 就跟master node建立socket网络连接。
+    然后slave node发送ping命令给master node。master node第一次执行全量复制, 将所有数据发给slave node。而在后续, master node持续将写命令, 异步复制给slave node。
+
+全量复制:
+    1)master执行bgsave, 在本地生成一份rdb快照文件。
+
+    2)master node将rdb快照文件发送给slave node, 如果rdb复制时间超过60秒(repl-timeout), 那么slave node就会认为复制失败,
+    可以适当调大这个参数(对于千兆网卡的机器, 一般每秒传输100MB, 6G文件, 很可能超过60s)
+
+    3)master node在生成rdb时, 会将所有新的写命令缓存在内存中, 在slave node保存了rdb之后, 再将新的写命令复制给slave node。
+
+    4)如果在复制期间, 内存缓冲区持续消耗超过64MB, 或者一次性超过256MB, 那么停止复制, 复制失败。
+        client-output-buffer-limit slave 256mb 64mb 60
+
+heartbeat:master默认每隔10秒发送一次heartbeat, slave node每隔1秒发送一个heartbeat。
+
+master每次接收到写命令之后, 先在内部写入数据, 然后异步发送给slave node。
+
 缓存雪崩:避免key集中过期。使用本地缓存。使用限流技术保护mysql。
 缓存穿透:将Null进行缓存。
 缓存击穿:将热点数据设置为永不过期, 或使用分布式锁, 等待第一个请求构建完缓存之后, 再释放锁。
