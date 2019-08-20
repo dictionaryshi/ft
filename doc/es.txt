@@ -63,12 +63,22 @@ es 写数据底层原理:
     可以通过es的restful api或者java api, 手动执行一次refresh操作, 就是手动将buffer中的数据刷入os cache中,
     让数据立马就可以被搜索到。只要数据被输入os cache中, buffer就会被清空了, 因为不需要保留buffer了, 数据在translog里面已经持久化到磁盘去一份了。
 
-    4)translog会变得越来越大, 最后触发commit操作。将buffer中现有数据refresh到os cache中去, 清空buffer。
-    将一个commit point写入磁盘文件, 里面标识着这个commit point对应的所有segment file。
-    强行将os cache中目前所有的数据都fsync到磁盘文件中去。最后清空现有translog日志文件, 重启一个translog, 此时commit/flush操作完成。
-    默认30分钟自动执行一次flush, translog过大也会触发flush。refresh和flush都可以手动触发。
+    4)重复上面的步骤, 新的数据不断进入buffer和translog, 不断将buffer数据写入一个又一个新的segment file中去,
+    每次refresh完buffer清空, translog保留。随着这个过程推进, translog会变得越来越大。当translog达到一定长度的时候, 就会触发commit操作。
 
-    5)translog也是先写入os cache, 默认每隔5秒刷一次到磁盘中去, 所以有5秒的数据, 停留在buffer、translog os cache、segment file os cache中, 所以会有5秒数据丢失的风险。
+    5)commit操作发生第一步, 就是将buffer中现有数据refresh到os cache中去, 清空buffer。
+    然后, 将一个commit point写入磁盘文件, 里面标识着这个commit point对应的所有segment file,
+    同时强行将os cache中目前所有的数据都fsync到磁盘文件中去。最后清空现有translog日志文件, 重启一个translog, 此时commit操作完成。
+
+    6)这个commit操作叫做flush。默认30分钟自动执行一次flush, 但如果translog过大, 也会触发flush。
+    flush操作就对应着commit的全过程, 我们可以通过es api, 手动执行flush操作, 手动将os cache中的数据fsync强刷到磁盘上去。
+
+    7)translog日志文件的作用:执行commit操作之前, 数据要么是停留在buffer中, 要么是停留在os cache中, 一旦这台机器死了, 内存中的数据就全丢了。
+    所以需要将数据对应的操作写入一个专门的日志文件translog中, 一旦此时机器宕机, 再次重启的时候, es会自动读取translog日志文件中的数据, 恢复到内存buffer和os cache中去。
+
+    8)translog也是先写入os cache, 默认每隔5秒刷一次到磁盘中去, 所以有5秒的数据, 停留在buffer、translog os cache、segment file os cache中, 所以会有5秒数据丢失的风险。
+    也可以将translog设置成每次写操作必须是直接fsync到磁盘, 但是性能会差很多。
+
     6)数据写入segment file之后, 同时就建立好了倒排索引。
 
 删除/更新数据底层原理:
