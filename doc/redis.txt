@@ -184,6 +184,18 @@ redis主从复制的核心原理:
 
     9)主节点发送上面两个步骤产生的buffer到从节点slave。
 
+    10)假设发生网络抖动或者别的情况, 暂时失去了连接。
+
+    11)这个时候, master还在继续往buffer里面写数据。
+
+    12)slave重新连接上了master。
+
+    13)slave向master发送自己的offset和run id。
+
+    14)master判断slave的offset是否在buffer的队列里面, 如果是, 那就返回continue给slave, 否则需要进行全量复制(因为这说明已经错过了很多数据了)。
+
+    15)master发送从slave的offset开始到缓冲区队列结尾的数据给slave。
+
 过期key处理:slave不会过期key, 只会等待master过期key。如果master过期了一个key, 或者通过LRU淘汰了一个key, 那么会模拟一条del命令发送给slave。
 
 heartbeat:master默认每隔10秒发送一次heartbeat, slave node每隔1秒发送一个heartbeat。
