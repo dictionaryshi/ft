@@ -190,6 +190,10 @@ heartbeat:master默认每隔10秒发送一次heartbeat, slave node每隔1秒发�
 
 master每次接收到写命令之后, 先在内部写入数据, 然后异步发送给slave node。
 
+redis全量复制时机:
+    1)redis slave首启动或者重启后, 连接master时。(master run id不存在/丢失)
+    2)master重启时。(run id改变)
+
 缓存雪崩:避免key集中过期。使用本地缓存。使用限流技术保护mysql。
 缓存穿透:将Null进行缓存。
 缓存击穿:将热点数据设置为永不过期, 或使用分布式锁, 等待第一个请求构建完缓存之后, 再释放锁。
