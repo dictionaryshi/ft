@@ -155,6 +155,7 @@ redis replication的核心机制:
     6)slave node 主要用来进行横向扩容, 做读写分离, 扩容的slave node可以提高读的吞吐量。
     7)每次启动redis都会分配一个run id, 重启之后run id改变。
     8)repl-backlog-size 1mb:复制缓冲区大小, 部分复制的时候, 如果offset在这个范围内, 则开始部分复制, 否则全量复制。
+    9)slave node内部有个定时任务, 每秒检查是否有新的master node要连接和复制, 如果发现, 就跟master node建立socket网络连接。
 
 如果采用了主从架构, 那么建议必须开启master node的持久化, 不建议用slave node作为master node的数据热备, 如果你关掉master的持久化, 可能在master宕机重启的时候数据是空的,
 然后可能一经过复制slave node的数据也丢了。另外, master的各种备份方案, 也需要做。万一本地的所有文件丢失了, 从备份中挑选一份rdb去恢复master, 这样才能确保启动的时候, 是有数据的,
@@ -181,12 +182,6 @@ redis主从复制的核心原理:
     9)主节点发送上面两个步骤产生的buffer到从节点slave。
 
 过期key处理:slave不会过期key, 只会等待master过期key。如果master过期了一个key, 或者通过LRU淘汰了一个key, 那么会模拟一条del命令发送给slave。
-
-复制的完整流程:
-    1)slave node启动时, 会在自己本地保存master node的信息, 包括master node的host和ip, 但是复制流程没开始。
-
-    2)slave node内部有个定时任务, 每秒检查是否有新的master node要连接和复制, 如果发现, 就跟master node建立socket网络连接。
-    然后slave node发送ping命令给master node。master node第一次执行全量复制, 将所有数据发给slave node。而在后续, master node持续将写命令, 异步复制给slave node。
 
 全量复制:
     1)master node将rdb快照文件发送给slave node, 如果rdb复制时间超过60秒(repl-timeout), 那么slave node就会认为复制失败,
