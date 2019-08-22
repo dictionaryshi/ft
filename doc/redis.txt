@@ -212,8 +212,12 @@ SLAVEOF no one
 Sentinel:
     port 26379
     sentinel monitor mymaster 127.0.0.1 6379 2
+    // Sentinel认为服务器已经断线所需的毫秒数。
     sentinel down-after-milliseconds mymaster 30000
+    // 在执行故障转移时, 最多可以有多少个从服务器同时对新的主服务器进行同步, 这个数字越小, 完成故障转移所需的时间就越长。从服务器在载入主服务器发来的RDB文件时,
+    会造成从服务器在一段时间内不能处理命令请求。如果全部从服务器一起对新的主服务器进行同步, 那么就可能会造成所有从服务器在短时间内全部不可用的情况出现。
     sentinel parallel-syncs mymaster 1
+    // 故障转移的超时时间。
     sentinel failover-timeout mymaster 180000
 
 缓存雪崩:避免key集中过期。使用本地缓存。使用限流技术保护mysql。
