@@ -209,6 +209,13 @@ SLAVEOF 127.0.0.1 6379
 info replication
 SLAVEOF no one
 
+Sentinel:
+    port 26379
+    sentinel monitor mymaster 127.0.0.1 6379 2
+    sentinel down-after-milliseconds mymaster 30000
+    sentinel parallel-syncs mymaster 1
+    sentinel failover-timeout mymaster 180000
+
 缓存雪崩:避免key集中过期。使用本地缓存。使用限流技术保护mysql。
 缓存穿透:将Null进行缓存。
 缓存击穿:将热点数据设置为永不过期, 或使用分布式锁, 等待第一个请求构建完缓存之后, 再释放锁。
