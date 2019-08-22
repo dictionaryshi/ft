@@ -211,6 +211,7 @@ SLAVEOF no one
 
 Sentinel:
     port 26379
+    // Sentinel去监视一个名为mymaster的主服务器, 这个主服务器的IP地址为127.0.0.1, 端口号为6379, 而将这个主服务器判断为失效至少需要2个Sentinel同意。
     sentinel monitor mymaster 127.0.0.1 6379 2
     // Sentinel认为服务器已经断线所需的毫秒数。
     sentinel down-after-milliseconds mymaster 30000
@@ -230,6 +231,32 @@ Sentinel:
 
     4)Redis Sentinel是一个分布式系统, 你可以在一个架构中运行多个Sentinel进程, 这些进程使用流言协议(gossip protocols)来接收关于主服务器是否下线的信息,
     并使用投票协议(agreement protocols)来决定是否执行自动故障迁移, 以及选择哪个从服务器作为新的主服务器。
+
+    5)一个Sentinel需要获得系统中多数(majority)Sentinel的支持, 才能发起一次自动故障迁移。
+
+    6)如果服务器在给定的毫秒数之内, 没有返回Sentinel发送的PING命令的回复, 或者返回一个错误, 那么Sentinel将这个服务器标记为主观下线(SDOWN)。
+    不过只有一个Sentinel将服务器标记为主观下线并不一定会引起服务器的自动故障迁移。只有在足够数量的Sentinel都将一个服务器标记为主观下线之后,
+    服务器才会被标记为客观下线(ODOWN), 这时自动故障迁移才会执行。
+
+    7)哨兵 + redis主从的部署架构, 是不保证数据零丢失的, 只能保证redis集群的高可用性。
+
+    8)每个Sentinel以每秒钟一次的频率向它所知的主服务器、从服务器以及其他Sentinel实例发送一个PING命令。
+    如果一个实例距离最后一次有效回复PING命令的时间超过down-after-milliseconds, 那么这个实例会被 Sentinel 标记为主观下线。
+
+    9)哨兵互相之间的发现, 是通过redis的pub/sub系统实现的, 每个哨兵都会往__sentinel__:hello这个channel里发送一个消息, 这时候所有其他哨兵都可以消费到这个消息, 并感知到其他的哨兵的存在。
+    每隔两秒钟, 每个哨兵都会往自己监控的某个master + slaves对应的__sentinel__:hello channel里发送一个消息, 内容是自己的host、ip和run id还有对这个master的监控配置。
+    每个哨兵也会去监听自己监控的每个master + slaves对应的__sentinel__:hello channel, 然后去感知到同样在监听这个master + slaves的其他哨兵的存在。
+    每个哨兵还会跟其他哨兵交换对master的监控配置, 互相进行监控配置的同步。
+
+    10)quorum和majority:每次一个哨兵要做主备切换, 首先需要quorum数量的哨兵认为odown, 然后选举出一个哨兵来做切换, 这个哨兵还需要得到majority哨兵的授权, 才能正式执行切换。
+    如果quorum < majority, 比如5个哨兵, majority就是3, quorum设置为2, 那么就3个哨兵授权就可以执行切换。
+    但是如果quorum >= majority, 那么必须quorum数量的哨兵都授权, 比如5个哨兵, quorum是5, 那么必须5个哨兵都同意授权, 才能执行切换。
+
+    11)configuration epoch:哨兵会对一套redis master + slaves进行监控, 有相应的监控的配置。
+    执行切换的那个哨兵, 会从要切换到的新master(salve -> master)那里得到一个configuration epoch, 这就是一个version号, 每次切换的version号都必须是唯一的。
+    如果第一个选举出的哨兵切换失败了, 那么其他哨兵, 会等待failover-timeout时间, 然后接替继续执行切换, 此时会重新获取一个新的configuration epoch, 作为新的version号。
+
+    12)configuration传播:哨兵完成切换之后, 会在自己本地更新生成最新的master配置, 然后同步给其他的哨兵, 就是通过之前说的pub/sub消息机制。
 
 缓存雪崩:避免key集中过期。使用本地缓存。使用限流技术保护mysql。
 缓存穿透:将Null进行缓存。
