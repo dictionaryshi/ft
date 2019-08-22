@@ -248,6 +248,14 @@ Sentinel:
     每个哨兵也会去监听自己监控的每个master + slaves对应的__sentinel__:hello channel, 然后去感知到同样在监听这个master + slaves的其他哨兵的存在。
     每个哨兵还会跟其他哨兵交换对master的监控配置, 互相进行监控配置的同步。
 
+    10)quorum和majority:每次一个哨兵要做主备切换, 首先需要quorum数量的哨兵认为odown, 然后选举出一个哨兵来做切换, 这个哨兵还需要得到majority哨兵的授权, 才能正式执行切换。
+    如果quorum < majority, 比如5个哨兵, majority就是3, quorum设置为2, 那么就3个哨兵授权就可以执行切换。
+    但是如果quorum >= majority, 那么必须quorum数量的哨兵都授权, 比如5个哨兵, quorum是5, 那么必须5个哨兵都同意授权, 才能执行切换。
+
+    11)configuration epoch:哨兵会对一套redis master + slaves进行监控, 有相应的监控的配置。
+    执行切换的那个哨兵, 会从要切换到的新master(salve -> master)那里得到一个configuration epoch, 这就是一个version号, 每次切换的version号都必须是唯一的。
+    如果第一个选举出的哨兵切换失败了, 那么其他哨兵, 会等待failover-timeout时间, 然后接替继续执行切换, 此时会重新获取一个新的configuration epoch, 作为新的version号。
+
 缓存雪崩:避免key集中过期。使用本地缓存。使用限流技术保护mysql。
 缓存穿透:将Null进行缓存。
 缓存击穿:将热点数据设置为永不过期, 或使用分布式锁, 等待第一个请求构建完缓存之后, 再释放锁。
