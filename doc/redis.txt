@@ -198,11 +198,16 @@ redis主从复制的核心原理:
 
 过期key处理:slave不会过期key, 只会等待master过期key。如果master过期了一个key, 或者通过LRU淘汰了一个key, 那么会模拟一条del命令发送给slave。
 
-heartbeat:master默认每隔10秒发送一次heartbeat, slave node每隔1秒发送一个heartbeat。
+主从节点互相都会发送heartbeat信息。
+master默认每隔10秒发送一次heartbeat, slave node每隔1秒发送一个heartbeat。
 
 redis全量复制时机:
     1)redis slave首启动或者重启后, 连接master时。(master run id不存在/丢失)
     2)master重启时。(run id改变)
+
+SLAVEOF 127.0.0.1 6379
+info replication
+SLAVEOF no one
 
 缓存雪崩:避免key集中过期。使用本地缓存。使用限流技术保护mysql。
 缓存穿透:将Null进行缓存。
@@ -210,10 +215,6 @@ redis全量复制时机:
 
 读的时候, 先读缓存, 缓存没有的话, 就读数据库, 然后取出数据后放入缓存, 同时返回响应。
 更新的时候, 先更新数据库, 然后再删除缓存。
-
-SLAVEOF 127.0.0.1 6379
-info replication
-SLAVEOF no one
 
 分布式寻址算法:
     1)hash算法:来了一个key, 首先计算hash值, 然后对节点数取模。然后打在不同的master节点上。
