@@ -258,6 +258,18 @@ Sentinel:
 
     12)configuration传播:哨兵完成切换之后, 会在自己本地更新生成最新的master配置, 然后同步给其他的哨兵, 就是通过之前说的pub/sub消息机制。
 
+    13)redis哨兵主备切换的数据丢失问题:
+        *master -> slave的复制是异步的, 所以可能有部分数据还没复制到slave, master就宕机了, 此时这部分数据就丢失了。
+
+        *脑裂导致的数据丢失:脑裂, 也就是说, 某个master所在机器突然脱离了正常的网络, 跟其他slave机器不能连接, 但是实际上master还运行着。
+        此时哨兵可能就会认为master宕机了, 然后开启选举, 将其他slave切换成了master。这个时候, 集群里就会有两个master, 也就是所谓的脑裂。
+        此时虽然某个slave被切换成了master, 但是可能client还没来得及切换到新的master, 还继续向旧master写数据。因此旧master再次恢复的时候,
+        会被作为一个slave挂到新的master上去, 自己的数据会清空, 重新从新的master复制数据。而新的master并没有后来client写入的数据, 因此, 这部分数据也就丢失了。
+
+    14)解决数据丢失:要求至少有1个slave, 数据复制和同步的延迟不能超过10秒。否则master不会再接收任何请求了。
+        min-slaves-to-write 1
+        min-slaves-max-lag 10
+
 缓存雪崩:避免key集中过期。使用本地缓存。使用限流技术保护mysql。
 缓存穿透:将Null进行缓存。
 缓存击穿:将热点数据设置为永不过期, 或使用分布式锁, 等待第一个请求构建完缓存之后, 再释放锁。
