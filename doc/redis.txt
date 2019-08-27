@@ -301,3 +301,6 @@ Cache Aside Pattern:
     增加一个master, 就将其他master的hash slot移动部分过去, 减少一个master, 就将它的hash slot移动到其他master上去。移动hash slot的成本是非常低的。
     客户端的api, 可以对指定的数据, 让他们走同一个hash slot, 通过hash tag来实现。任何一台机器宕机, 其它节点不受影响。因为key找的是hash slot, 不是机器。
 
+redis cluster, 10台机器, 5台机器部署了redis主实例, 另外5台机器部署了redis的从实例, 每个主实例挂了一个从实例, 5个节点对外提供读写服务,
+每个节点的读写高峰qps可能可以达到每秒5万, 5台机器最多是25万读写请求/s。
+
