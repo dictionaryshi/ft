@@ -273,6 +273,9 @@ redis cluster:
         在cluster-node-timeout内, 某个节点一直没有返回pong, 那么就被认为pfail。如果一个节点认为某个节点pfail了, 那么会在gossip ping消息中,
         ping给其他节点, 如果超过半数的节点都认为pfail了, 那么就会变成fail。
 
+    4)从节点选举:每个从节点, 都根据自己对master复制数据的offset, 来设置一个选举时间, offset越大(复制数据越多)的从节点, 选举时间越靠前, 优先进行选举。
+    所有的master node开始slave选举投票, 给要进行选举的slave进行投票, 如果大部分master node(N/2 + 1)都投票给了某个从节点, 那么选举通过, 那个从节点可以切换成master。
+
 缓存雪崩:避免key集中过期。使用本地缓存。使用限流技术保护mysql。
 缓存穿透:将Null进行缓存。
 缓存击穿:将热点数据设置为永不过期, 或使用分布式锁, 等待第一个请求构建完缓存之后, 再释放锁。
