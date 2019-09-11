@@ -359,11 +359,16 @@ InnoDB存储引擎, 多版本的并发控制协议(MVCC, 仅RC、RR支持):读�
     1)快照读:读取的是记录的可见版本, 不加锁。(可能是历史版本)
         select * from table where ? ; (SERIALIZABLE会加锁, 不存在快照读)
     2)当前读:读取的是记录的最新版本, 会加锁, 保证不能并发修改。
-        select * from table where ? lock in share mode;
-        select * from table where ? for update;
-        insert into table values(...);
-        update table set ? where ? ;
-        delete from table where ? ;
+        select * from table where ? lock in share mode;(S锁)
+        select * from table where ? for update;(X锁)
+        insert into table values(...);(X锁)
+        update table set ? where ? ;(X锁)
+        delete from table where ? ;(X锁)
+
+一个Update操作的具体流程:当Update SQL被发给MySQL后, MySQL Server会根据where条件, 读取第一条满足条件的记录, 然后InnoDB引擎会将第一条记录返回并加锁。
+待MySQL Server收到这条加锁的记录之后, 会再发起一个Update请求, 更新这条记录。一条记录操作完成, 再读取下一条记录, 直至没有满足条件的记录为止。
+
+Insert操作会稍微有些不同, 简单来说, 就是Insert操作可能会触发Unique Key的冲突检查, 也会进行一个当前读。
 
 只有事务执行完毕才会释放所有锁。
 
@@ -384,14 +389,21 @@ RR:开启事务时才会创建read view。
 
 delete from t1 where id = 10;
     1)id主键 + RC:id=10这条记录上加X锁。
+
     2)id唯一索引(name主键索引) + RC:unique索引上的id=10索引记录加上X锁, 聚簇索引上的name = "XXX"对应的主键索引项加X锁。
-    3)id非唯一索引 + RC:同上, 只是加锁的记录为多条。
+
+    3)id非唯一索引 + RC:同上, 只是加锁的记录为多条。(二级索引, 主键索引同时加锁)
+
     4)id无索引 + RC:由于id列上没有索引, 因此只能走聚簇索引, 进行全部扫描。将聚簇索引上所有的记录加上X锁,
     在实际的实现中, MySQL有一些改进, 会释放掉不满足条件的X锁。
 
     5)id主键 + RR:与(1)一致。
+
     6)id唯一索引 + RR:与(2)一致。
+
     7)id非唯一索引 + RR:id索引上的id = 10索引记录加上X锁, 同时加上GAP锁, 聚簇索引上的name = "XXX"对应的主键索引项加X锁。
+    首先, 通过id索引定位到第一条满足查询条件的记录, 加记录上的X锁, 加GAP上的GAP锁, 然后加主键聚簇索引上的记录X锁, 然后返回。然后读取下一条, 重复进行。
+
     8)id无索引 + RR:聚簇索引上的所有记录加X锁, 聚簇索引每条记录间的间隙加GAP锁。除了不加锁的快照读, 其他任何加锁的并发SQL, 不能更新、不能删除、不能插入。全表锁死。
     也可以通过一些机制, 来让不符合条件的记录提前释放X锁、GAP锁。
 
