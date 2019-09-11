@@ -359,11 +359,16 @@ InnoDB存储引擎, 多版本的并发控制协议(MVCC, 仅RC、RR支持):读�
     1)快照读:读取的是记录的可见版本, 不加锁。(可能是历史版本)
         select * from table where ? ; (SERIALIZABLE会加锁, 不存在快照读)
     2)当前读:读取的是记录的最新版本, 会加锁, 保证不能并发修改。
-        select * from table where ? lock in share mode;
-        select * from table where ? for update;
-        insert into table values(...);
-        update table set ? where ? ;
-        delete from table where ? ;
+        select * from table where ? lock in share mode;(S锁)
+        select * from table where ? for update;(X锁)
+        insert into table values(...);(X锁)
+        update table set ? where ? ;(X锁)
+        delete from table where ? ;(X锁)
+
+一个Update操作的具体流程:当Update SQL被发给MySQL后, MySQL Server会根据where条件, 读取第一条满足条件的记录, 然后InnoDB引擎会将第一条记录返回并加锁。
+待MySQL Server收到这条加锁的记录之后, 会再发起一个Update请求, 更新这条记录。一条记录操作完成, 再读取下一条记录, 直至没有满足条件的记录为止。
+
+Insert操作会稍微有些不同, 简单来说, 就是Insert操作可能会触发Unique Key的冲突检查, 也会进行一个当前读。
 
 只有事务执行完毕才会释放所有锁。
 
