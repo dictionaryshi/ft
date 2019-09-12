@@ -411,3 +411,5 @@ delete from t1 where id = 10;
 
 分表:减少单表数据量, 大幅提高sql性能。
 
+分库分表中间件:Sharding-JDBC、Mycat。
+
