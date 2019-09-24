@@ -1,5 +1,6 @@
 package com.ft.br;
 
+import com.ft.br.service.StockStorageService;
 import com.ft.dao.stock.model.UserDO;
 import com.ft.util.JsonUtil;
 import com.ft.util.SpringContextUtil;
@@ -20,6 +21,9 @@ public class SpringTest {
 
 	@Autowired
 	private ApplicationContext applicationContext;
+
+	@Autowired
+	private Map<String, StockStorageService> stockStorageServiceMap;
 
 	@Before
 	public void before() {
@@ -66,5 +70,10 @@ public class SpringTest {
 
 		Map<String, UserDO> userMap = SpringContextUtil.getBeansOfType(UserDO.class);
 		System.out.println(JsonUtil.object2Json(userMap));
+	}
+
+	@Test
+	public void stockStorageServiceMap() {
+		stockStorageServiceMap.forEach((key, value) -> System.out.println(key + "-" + value));
 	}
 }
