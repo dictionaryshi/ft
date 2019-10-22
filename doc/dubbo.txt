@@ -44,11 +44,10 @@ dubbo:缺省协议采用单一长连接和NIO异步通讯, 适合于小数据量
     通过单一连接, 保证单一消费者不会压死提供者, 长连接, 减少连接握手验证等, 并使用异步IO, 复用线程池, 防止C10K问题。
 
 dubbo负载均衡策略:
-    1)random loadbalance:默认策略。可以对provider不同实例设置不同的权重, 会按照权重来负载均衡, 权重越大分配流量越高, 一般就用这个默认的就可以了。
-    2)roundrobin loadbalance:均匀地将流量打到各个机器上去, 但是如果各个机器的性能不一样, 容易导致性能差的机器负载过高。
-    所以此时需要调整权重, 让性能差的机器承载权重小一些, 流量少一些。(解决机器配置低)
-    3)leastactive loadbalance:最小活跃数负载均衡。
-    4)consistanthash loadbalance:相同参数的请求一定分发到一个provider上去, provider挂掉的时候, 会基于虚拟节点均匀分配剩余的流量, 抖动不会太大。
+    1)Random LoadBalance
+    2)RoundRobin LoadBalance
+    3)LeastActive LoadBalance
+    4)ConsistentHash LoadBalance
 
 SPI:service provider interface。
 Protocol接口, 在系统运行的时候, dubbo会判断一下应该选哪个实现类来实例化。它会去找一个你配置的Protocol实现类, 如果找到, 那么直接使用它。
