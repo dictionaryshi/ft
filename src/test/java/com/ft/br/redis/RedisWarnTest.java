@@ -10,7 +10,7 @@ public class RedisWarnTest {
 	@Test
 	public void warnTest() {
 		String url = "http://localhost:9001";
-		Map<String, String> map = new HashMap<>(16);
+		Map<String, Object> map = new HashMap<>(16);
 		map.put("username", "scy");
 		for (int i = 0; i < 10000; i++) {
 			if (i < 50) {

@@ -28,7 +28,7 @@ public class HttpTest {
 		httpParam.setConnectTimeout(CONNECT_TIMEOUT);
 		httpParam.setReadTimeout(READ_TIMEOUT);
 
-		Map<String, String> textMap = new HashMap<String, String>(16) {
+		Map<String, Object> textMap = new HashMap<String, Object>(16) {
 			{
 				put("username", "史春阳");
 				put("age", "30");
@@ -60,7 +60,7 @@ public class HttpTest {
 
 		List<HttpParam> httpParams = new ArrayList<>();
 		for (int i = 1; i <= 10; i++) {
-			Map<String, String> params = new TreeMap<>();
+			Map<String, Object> params = new TreeMap<>();
 			params.put("oid", i + "");
 			params.put("msg", "签名测试+=%" + i);
 			RsaCheckUtil.initParam(params, "scy");

@@ -99,7 +99,7 @@ public class FtApplication {
 	@RedisLimit(key = "send_email_key", timeout = 120_000L, size = 1, useParam = false)
 	@GetMapping("/mail")
 	public String mail(HttpServletRequest request) throws Exception {
-		List<List<String>> rows = new ArrayList<>();
+		List<List<Object>> rows = new ArrayList<>();
 
 		List<String> columnCHs = new ArrayList<>();
 		columnCHs.add("姓名");
@@ -108,7 +108,7 @@ public class FtApplication {
 
 		int target = 70;
 		for (int i = 1; i <= target; i++) {
-			List<String> columns = new ArrayList<>(16);
+			List<Object> columns = new ArrayList<>(16);
 			columns.add("史春阳" + i);
 			columns.add(i + "");
 			columns.add(DateUtil.date2Str(new Date(), DateUtil.DEFAULT_DATE_FORMAT));
