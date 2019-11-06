@@ -60,11 +60,6 @@ public class NrController {
 		rpcParam.setBirth("2019-11-11 12:21:20");
 		RestResult<RpcResult> getResult = remoteService.get(rpcParam);
 
-		LogBO logBO = LogUtil.log("feign test",
-				LogAO.build("put result", JsonUtil.object2Json(putResult)),
-				LogAO.build("get result", JsonUtil.object2Json(getResult)));
-		log.info(logBO.getLogPattern(), logBO.getParams());
-
 		return JsonUtil.object2Json(putResult) + "_" + JsonUtil.object2Json(getResult);
 	}
 
