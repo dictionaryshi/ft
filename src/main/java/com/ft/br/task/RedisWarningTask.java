@@ -81,7 +81,7 @@ public class RedisWarningTask {
 			double flow = front + after;
 
 			double flowIncrement = after - front;
-			double flowIncrementRatio = BigDecimalUtil.divide(flowIncrement + "", front + "", 2).doubleValue();
+			double flowIncrementRatio = BigDecimalUtil.divide(flowIncrement, front, 2).doubleValue();
 			double targetRatio = 2.0;
 			int minimumFlow = 10;
 			if (flowIncrementRatio > targetRatio && flow > minimumFlow) {
