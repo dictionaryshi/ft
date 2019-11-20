@@ -192,7 +192,7 @@ public class OrderServiceImpl implements OrderService {
 		String orderLockKey = RedisUtil.getRedisKey(RedisKey.REDIS_ORDER_UPDATE_LOCK, orderDO.getId() + "");
 
 		try {
-			redisLock.lock(orderLockKey, 10_000L);
+			redisLock.lock(orderLockKey);
 
 			orderDO = orderMapper.selectByPrimaryKey(orderId);
 			if (!ObjectUtil.equals(orderDO.getStatus(), OrderStatusEnum.WAIT_TO_CONFIRMED.getStatus())) {
@@ -207,7 +207,7 @@ public class OrderServiceImpl implements OrderService {
 			String lockKey = RedisUtil.getRedisKey(RedisKey.REDIS_ITEM_ADD_LOCK, orderId + "_" + goodsId);
 
 			try {
-				redisLock.lock(lockKey, 10_000L);
+				redisLock.lock(lockKey);
 
 				ItemDO itemDO = itemMapper.selectByOrderIdAndGoodsId(orderId, goodsId);
 				if (itemDO != null) {
@@ -267,7 +267,7 @@ public class OrderServiceImpl implements OrderService {
 		String lockKey = RedisUtil.getRedisKey(RedisKey.REDIS_ORDER_UPDATE_LOCK, orderDO.getId() + "");
 
 		try {
-			redisLock.lock(lockKey, 10_000L);
+			redisLock.lock(lockKey);
 
 			orderDO = orderMapper.selectByPrimaryKey(orderId);
 			if (!ObjectUtil.equals(orderDO.getStatus(), OrderStatusEnum.WAIT_TO_CONFIRMED.getStatus())) {
@@ -299,7 +299,7 @@ public class OrderServiceImpl implements OrderService {
 		String lockKey = RedisUtil.getRedisKey(RedisKey.REDIS_ORDER_UPDATE_LOCK, orderDO.getId() + "");
 
 		try {
-			redisLock.lock(lockKey, 10_000L);
+			redisLock.lock(lockKey);
 
 			orderDO = orderMapper.selectByPrimaryKey(orderId);
 			if (!ObjectUtil.equals(orderDO.getStatus(), OrderStatusEnum.WAIT_TO_CONFIRMED.getStatus())) {
@@ -329,7 +329,7 @@ public class OrderServiceImpl implements OrderService {
 		String lockKey = RedisUtil.getRedisKey(RedisKey.REDIS_ORDER_UPDATE_LOCK, orderId + "");
 
 		try {
-			redisLock.lock(lockKey, 10_000L);
+			redisLock.lock(lockKey);
 
 			OrderDO orderDO = orderMapper.selectByPrimaryKey(orderId);
 			if (orderDO == null) {
@@ -358,7 +358,7 @@ public class OrderServiceImpl implements OrderService {
 		String lockKey = RedisUtil.getRedisKey(RedisKey.REDIS_ORDER_UPDATE_LOCK, orderId + "");
 
 		try {
-			redisLock.lock(lockKey, 10_000L);
+			redisLock.lock(lockKey);
 
 			OrderDO orderDO = orderMapper.selectByPrimaryKey(orderId);
 			if (orderDO == null) {
@@ -401,7 +401,7 @@ public class OrderServiceImpl implements OrderService {
 			String lockKey = RedisUtil.getRedisKey(RedisKey.REDIS_GOODS_UPDATE_LOCK, goodsId + "");
 
 			try {
-				redisLock.lock(lockKey, 10_000L);
+				redisLock.lock(lockKey);
 
 				GoodsDO goodsDO = goodsMapper.selectByPrimaryKey(goodsId);
 				if (goodsDO == null) {
@@ -442,7 +442,7 @@ public class OrderServiceImpl implements OrderService {
 		String lockKey = RedisUtil.getRedisKey(RedisKey.REDIS_ORDER_UPDATE_LOCK, orderId + "");
 
 		try {
-			redisLock.lock(lockKey, 10_000L);
+			redisLock.lock(lockKey);
 
 			OrderDO orderDO = orderMapper.selectByPrimaryKey(orderId);
 			if (orderDO == null) {
@@ -486,7 +486,7 @@ public class OrderServiceImpl implements OrderService {
 			String lockKey = RedisUtil.getRedisKey(RedisKey.REDIS_GOODS_UPDATE_LOCK, goodsId + "");
 
 			try {
-				redisLock.lock(lockKey, 10_000L);
+				redisLock.lock(lockKey);
 
 				GoodsDO goodsDO = goodsMapper.selectByPrimaryKey(goodsId);
 				if (goodsDO == null) {

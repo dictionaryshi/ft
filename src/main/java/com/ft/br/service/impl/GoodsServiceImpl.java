@@ -64,7 +64,7 @@ public class GoodsServiceImpl implements GoodsService {
 
 		String lockKey = RedisUtil.getRedisKey(RedisKey.REDIS_GOODS_ADD_LOCK, categoryId + "_" + name);
 		try {
-			redisLock.lock(lockKey, 10_000L);
+			redisLock.lock(lockKey);
 			if (goodsMapper.getGoodsByName(categoryId, name) != null) {
 				FtException.throwException("商品已经存在");
 			}
@@ -135,7 +135,7 @@ public class GoodsServiceImpl implements GoodsService {
 		String lockKey = RedisUtil.getRedisKey(RedisKey.REDIS_GOODS_UPDATE_LOCK, id + "");
 
 		try {
-			redisLock.lock(lockKey, 10_000L);
+			redisLock.lock(lockKey);
 
 			String name = goodsUpdateAO.getName();
 
