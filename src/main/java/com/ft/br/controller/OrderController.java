@@ -80,7 +80,7 @@ public class OrderController {
 		String lockKey = RedisUtil.getRedisKey(RedisKey.REDIS_ORDER_UPDATE_LOCK, orderAddAO.getId() + "");
 
 		try {
-			redisLock.lock(lockKey, 10_000L);
+			redisLock.lock(lockKey);
 
 			boolean result = orderService.createOrder(orderAddAO);
 

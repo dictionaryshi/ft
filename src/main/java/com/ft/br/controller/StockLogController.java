@@ -72,7 +72,7 @@ public class StockLogController {
 
 		String lockKey = RedisUtil.getRedisKey(RedisKey.REDIS_GOODS_UPDATE_LOCK, stockLogStorageAO.getGoodsId() + "");
 		try {
-			redisLock.lock(lockKey, 10_000L);
+			redisLock.lock(lockKey);
 
 			boolean result = stockStorageService.storage(stockLogStorageAO);
 

@@ -67,7 +67,7 @@ public class LoginRestController {
 	) {
 		String lockKey = RedisUtil.getRedisKey(RedisKey.REDIS_SSO_LOGIN_LOCK, loginAO.getUsername());
 		try {
-			redisLock.lock(lockKey, 10_000L);
+			redisLock.lock(lockKey);
 			String token = WebUtil.getToken(request);
 			if (!StringUtil.isNull(token)) {
 				CurrentUserAO currentUserAO = new CurrentUserAO();
