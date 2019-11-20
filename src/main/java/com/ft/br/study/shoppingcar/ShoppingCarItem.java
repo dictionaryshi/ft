@@ -31,6 +31,6 @@ public class ShoppingCarItem {
 	 * 小记
 	 */
 	public double getSubtotal() {
-		return BigDecimalUtil.multiply(price + "", count + "").doubleValue();
+		return BigDecimalUtil.multiply(price, count).doubleValue();
 	}
 }
