@@ -54,7 +54,7 @@ Minor GC过后, 剩余的存活对象的大小, 大于了Survivor区域的大小
 15.触发STW的Full GC:
     1)Perm空间不足(CMS默认情况下不会回收Perm区)
 
-    2)老年代空间不足, 需要尽快回收老年代里面的不再被使用的对象。(CMS失败的原因)
+    2)老年代空间不足, 需要尽快回收老年代里面的不再被使用的对象。(CMS执行时, 仍会有对象进入老年代, 若老年代空间不足, 则CMS失败)
 
     3)主动触发Full GC
 
@@ -68,6 +68,10 @@ Minor GC过后, 剩余的存活对象的大小, 大于了Survivor区域的大小
     这个阶段需要重新标记出这一类对象, 防止在下一阶段被清理掉, 这个过程也是需要STW的。特别需要注意一点, 这个阶段是以新生代中对象为根来判断对象是否存活的。
     4)并发清理, 进行并发的垃圾清理。
 
+-XX:CMSInitiatingOccupancyFraction:老年代使用占比为多少时, 触发CMS GC。
+-XX:+UseCMSCompactAtFullCollection:FULL GC后进行内存碎片整理。
+Concurrent Mode Failure:CMS失败。
+
 GC ROOTS:
     1)栈中局部变量引用的对象。
     2)方法区中的类静态属性引用的对象。
@@ -76,7 +80,7 @@ GC ROOTS:
 
 垃圾回收器:
     1)-XX:+UseSerialGC:串行垃圾回收器。(年轻代/老年代垃圾回收器, 是单线程垃圾回收器, 老年代使用标整算法)
-    2)-XX:+UseParNewGC:多线程并行年轻代垃圾回收器。(追求降低用户停顿时间)
+    2)-XX:+UseParNewGC:多线程并行年轻代垃圾回收器。(追求降低用户停顿时间) 使用-XX:ParallelGCThreads来调整线程数量。
     3)-XX:+UseParallelGC:多线程并行年轻代垃圾回收器。侧重于吞吐量。高效利用CPU, 适合后台运算。
     4)-XX:+UseParallelOldGC:多线程并行老年代垃圾回收器。侧重于吞吐量。高效利用CPU, 适合后台运算。
     5)-XX:+UseConcMarkSweepGC:并发标记清除老年代垃圾回收器。侧重短暂停顿。(CPU负担较大, CMS必须在老年代耗尽之前完成, 否则CMS失败将切换为SerialGC)
@@ -87,4 +91,6 @@ CPU吞吐量 = 运行代码时间 / (运行代码时间 + 垃圾收集时间)
 可达性分析法:所有和GC Roots直接或间接关联的对象都是有效对象。其它对象可以回收。
 
 若Full GC后, 内存仍然不足, 则java.lang.OutOfMemoryError: Java heap space。
+
+新生代内存调优:尽量让Minor GC后的存活对象可以在Survivor区放下。
 
