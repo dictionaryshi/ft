@@ -76,7 +76,7 @@ GC ROOTS:
 
 垃圾回收器:
     1)-XX:+UseSerialGC:串行垃圾回收器。(年轻代/老年代垃圾回收器, 是单线程垃圾回收器, 老年代使用标整算法)
-    2)-XX:+UseParNewGC:多线程并行年轻代垃圾回收器。(追求降低用户停顿时间)
+    2)-XX:+UseParNewGC:多线程并行年轻代垃圾回收器。(追求降低用户停顿时间) 使用-XX:ParallelGCThreads来调整线程数量。
     3)-XX:+UseParallelGC:多线程并行年轻代垃圾回收器。侧重于吞吐量。高效利用CPU, 适合后台运算。
     4)-XX:+UseParallelOldGC:多线程并行老年代垃圾回收器。侧重于吞吐量。高效利用CPU, 适合后台运算。
     5)-XX:+UseConcMarkSweepGC:并发标记清除老年代垃圾回收器。侧重短暂停顿。(CPU负担较大, CMS必须在老年代耗尽之前完成, 否则CMS失败将切换为SerialGC)
