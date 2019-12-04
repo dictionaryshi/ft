@@ -69,6 +69,8 @@ Minor GC过后, 剩余的存活对象的大小, 大于了Survivor区域的大小
     4)并发清理, 进行并发的垃圾清理。
 
 -XX:CMSInitiatingOccupancyFraction:老年代使用占比为多少时, 触发CMS GC。
+-XX:+UseCMSCompactAtFullCollection:FULL GC后进行内存碎片整理。
+Concurrent Mode Failure:CMS失败。
 
 GC ROOTS:
     1)栈中局部变量引用的对象。
