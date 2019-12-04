@@ -92,3 +92,5 @@ CPU吞吐量 = 运行代码时间 / (运行代码时间 + 垃圾收集时间)
 
 若Full GC后, 内存仍然不足, 则java.lang.OutOfMemoryError: Java heap space。
 
+新生代内存调优:尽量让Minor GC后的存活对象可以在Survivor区放下。
+
