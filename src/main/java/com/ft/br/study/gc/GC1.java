@@ -21,3 +21,8 @@ public class GC1 {
 		byte[] array2 = new byte[1024 * 1024 * 2];
 	}
 }
+/*
+
+0.094: [GC (Allocation Failure) 0.094: [ParNew: 3596K->301K(4608K), 0.0004948 secs] 3596K->301K(9728K), 0.0005602 secs] [Times: user=0.00 sys=0.00, real=0.01 secs]
+
+ */
