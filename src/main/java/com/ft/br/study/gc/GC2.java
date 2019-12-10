@@ -17,8 +17,9 @@ public class GC2 {
 		array1 = new byte[2 * 1024 * 1024];
 		array1 = null;
 
-		byte[] array2 = new byte[128 * 1024];
+		byte[] array2 = new byte[500 * 1024];
 
+		// array3在Eden创建前, 发生一次YGC, array1被回收掉, array2被转移到Survivor区(GC年龄:1)。
 		byte[] array3 = new byte[2 * 1024 * 1024];
 
 		array3 = new byte[2 * 1024 * 1024];
@@ -26,6 +27,7 @@ public class GC2 {
 		array3 = new byte[128 * 1024];
 		array3 = null;
 
+		// array4在Eden创建前, 发生一次YGC, array3被回收掉。array2因动态年龄晋升到老年代。
 		byte[] array4 = new byte[2 * 1024 * 1024];
 	}
 }
