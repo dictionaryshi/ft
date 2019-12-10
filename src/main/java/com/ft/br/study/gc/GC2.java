@@ -20,6 +20,7 @@ public class GC2 {
 		byte[] array2 = new byte[500 * 1024];
 
 		// array3在Eden创建前, 发生一次YGC, array1被回收掉, array2被转移到Survivor区(GC年龄:1)。
+		// 0.086: [GC (Allocation Failure) 0.086: [ParNew: 7152K->802K(9216K), 0.0011895 secs] 7152K->802K(19456K), 0.0012673 secs] [Times: user=0.00 sys=0.00, real=0.00 secs]
 		byte[] array3 = new byte[2 * 1024 * 1024];
 
 		array3 = new byte[2 * 1024 * 1024];
@@ -28,6 +29,7 @@ public class GC2 {
 		array3 = null;
 
 		// array4在Eden创建前, 发生一次YGC, array3被回收掉。array2因动态年龄晋升到老年代。
+		// 0.088: [GC (Allocation Failure) 0.088: [ParNew: 7108K->0K(9216K), 0.0032393 secs] 7108K->788K(19456K), 0.0032733 secs] [Times: user=0.01 sys=0.00, real=0.00 secs]
 		byte[] array4 = new byte[2 * 1024 * 1024];
 	}
 }
