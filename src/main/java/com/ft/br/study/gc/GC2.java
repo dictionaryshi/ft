@@ -32,4 +32,16 @@ public class GC2 {
 		// 0.088: [GC (Allocation Failure) 0.088: [ParNew: 7108K->0K(9216K), 0.0032393 secs] 7108K->788K(19456K), 0.0032733 secs] [Times: user=0.01 sys=0.00, real=0.00 secs]
 		byte[] array4 = new byte[2 * 1024 * 1024];
 	}
+
+	private static void survivor() {
+		byte[] array1 = new byte[2 * 1024 * 1024];
+		array1 = new byte[2 * 1024 * 1024];
+		array1 = new byte[2 * 1024 * 1024];
+
+		byte[] array2 = new byte[500 * 1024];
+		array2 = null;
+
+		// array3在Eden创建前, 发生一次YGC, array2被回收掉, array1因Survivor区放不下晋升到老年代。未知对象转移到Survivor区。
+		byte[] array3 = new byte[2 * 1024 * 1024];
+	}
 }
