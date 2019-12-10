@@ -42,6 +42,7 @@ public class GC2 {
 		array2 = null;
 
 		// array3在Eden创建前, 发生一次YGC, array2被回收掉, array1因Survivor区放不下晋升到老年代。未知对象转移到Survivor区。
+		// 0.082: [GC (Allocation Failure) 0.082: [ParNew: 7152K->289K(9216K), 0.0014203 secs] 7152K->2339K(19456K), 0.0014869 secs] [Times: user=0.00 sys=0.01, real=0.00 secs]
 		byte[] array3 = new byte[2 * 1024 * 1024];
 	}
 }
