@@ -44,26 +44,6 @@
 
         <dependency>
             <groupId>com.ft</groupId>
-            <artifactId>ft-util</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.ft</groupId>
-            <artifactId>ft-web</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.ft</groupId>
-            <artifactId>ft-db</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.ft</groupId>
-            <artifactId>ft-redis</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.ft</groupId>
             <artifactId>ft-dao-stock</artifactId>
         </dependency>
 
