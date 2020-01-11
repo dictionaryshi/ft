@@ -35,41 +35,49 @@ public class RuleBO {
 	 * 包含
 	 */
 	private List<Object> in;
+	private String inErrorMessage;
 
 	/**
 	 * 不包含
 	 */
 	private List<Object> ni;
+	private String niErrorMessage;
 
 	/**
 	 * 等于
 	 */
 	private Object eq;
+	private String eqErrorMessage;
 
 	/**
 	 * 不等于
 	 */
 	private Object ne;
+	private String neErrorMessage;
 
 	/**
 	 * 大于
 	 */
 	private Number gt;
+	private String gtErrorMessage;
 
 	/**
 	 * 小于
 	 */
 	private Number lt;
+	private String ltErrorMessage;
 
 	/**
 	 * 大于等于
 	 */
 	private Number ge;
+	private String geErrorMessage;
 
 	/**
 	 * 小于等于
 	 */
 	private Number le;
+	private String leErrorMessage;
 
 	/**
 	 * 或者
