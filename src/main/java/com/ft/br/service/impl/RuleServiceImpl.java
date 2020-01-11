@@ -90,6 +90,16 @@ public class RuleServiceImpl implements RuleService {
 			}
 		}
 
+		Object eq = rule.getEq();
+		if (eq != null) {
+			if (!ObjectUtil.equals(eq, objectValue)) {
+				String errorMessage = this.or(rule, objectMap, rule.getEqErrorMessage());
+				if (errorMessage != null) {
+					return errorMessage;
+				}
+			}
+		}
+
 		List<RuleBO> ands = rule.getAnd();
 		if (!ObjectUtil.isEmpty(ands)) {
 			// 所有条件已通过, 那么校验and逻辑
@@ -165,6 +175,15 @@ public class RuleServiceImpl implements RuleService {
 		ruleBO.setPropertyName("price");
 		ruleBO.setNi(Arrays.asList(50000, 60000));
 		ruleBO.setNiErrorMessage("不能包含特定价格");
+		rules.add(ruleBO);
+		System.out.println(ruleService.valid(rules, "{\"price\":50000}"));
+
+		rules = new ArrayList<>();
+		ruleBO = new RuleBO();
+		ruleBO.setPropertyType(1);
+		ruleBO.setPropertyName("price");
+		ruleBO.setEq(40000);
+		ruleBO.setEqErrorMessage("不等于指定价格");
 		rules.add(ruleBO);
 		System.out.println(ruleService.valid(rules, "{\"price\":50000}"));
 	}
