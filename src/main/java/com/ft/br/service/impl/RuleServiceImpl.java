@@ -30,6 +30,17 @@ public class RuleServiceImpl implements RuleService {
 			return "未配置规则";
 		}
 
+		for (RuleBO rule : rules) {
+			String errorMessage = this.validRule(rule, objectMap);
+			if (errorMessage != null) {
+				return errorMessage;
+			}
+		}
+
+		return null;
+	}
+
+	private String validRule(RuleBO rule, Map<String, Object> objectMap) {
 		return null;
 	}
 }
