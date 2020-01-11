@@ -198,22 +198,13 @@ public class RuleServiceImpl implements RuleService {
 	public static void main(String[] args) {
 		RuleService ruleService = new RuleServiceImpl();
 
-		List<RuleBO> rules = new ArrayList<>();
-		RuleBO ruleBO = new RuleBO();
-		ruleBO.setPropertyType(1);
-		ruleBO.setPropertyName("price");
-		ruleBO.setEq(40000);
-		ruleBO.setEqErrorMessage("不等于指定价格");
-		rules.add(ruleBO);
-		System.out.println(ruleService.valid(rules, "{\"price\":50000}"));
+		List<RuleBO> rules;
+		RuleBO ruleBO;
 
 		rules = new ArrayList<>();
 		ruleBO = new RuleBO();
-		ruleBO.setPropertyType(1);
-		ruleBO.setPropertyName("price");
-		ruleBO.setNe(50000);
-		ruleBO.setNeErrorMessage("千万不能等于某个价格");
 		rules.add(ruleBO);
-		System.out.println(ruleService.valid(rules, "{\"price\":50000}"));
+		String objJson = "";
+		System.out.println(ruleService.valid(rules, objJson));
 	}
 }
