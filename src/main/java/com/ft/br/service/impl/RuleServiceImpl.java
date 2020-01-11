@@ -63,12 +63,7 @@ public class RuleServiceImpl implements RuleService {
 		return null;
 	}
 
-	private String validRuleNumber(RuleBO rule, Map<String, Object> objectMap) {
-		Number objectValue = (Number) objectMap.get(rule.getPropertyName());
-		if (objectValue == null) {
-			return "对象不存在该属性, property=>" + rule.getPropertyName();
-		}
-
+	private String validRuleObject(RuleBO rule, Map<String, Object> objectMap, Object objectValue) {
 		List<Object> targetValues = rule.getIn();
 		if (!ObjectUtil.isEmpty(targetValues)) {
 			if (!targetValues.contains(objectValue)) {
@@ -107,6 +102,20 @@ public class RuleServiceImpl implements RuleService {
 					return errorMessage;
 				}
 			}
+		}
+
+		return null;
+	}
+
+	private String validRuleNumber(RuleBO rule, Map<String, Object> objectMap) {
+		Number objectValue = (Number) objectMap.get(rule.getPropertyName());
+		if (objectValue == null) {
+			return "对象不存在该属性, property=>" + rule.getPropertyName();
+		}
+
+		String error = this.validRuleObject(rule, objectMap, objectValue);
+		if (error != null) {
+			return error;
 		}
 
 		Number gt = rule.getGt();
