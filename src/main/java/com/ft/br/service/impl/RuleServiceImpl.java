@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.ft.br.model.bo.RuleBO;
 import com.ft.br.service.RuleService;
 import com.ft.util.JsonUtil;
+import com.ft.util.ObjectUtil;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
@@ -23,6 +24,10 @@ public class RuleServiceImpl implements RuleService {
 		});
 		if (objectMap == null) {
 			return "对象json解析失败";
+		}
+
+		if (ObjectUtil.isEmpty(rules)) {
+			return "未配置规则";
 		}
 
 		return null;
