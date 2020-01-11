@@ -80,6 +80,16 @@ public class RuleServiceImpl implements RuleService {
 			}
 		}
 
+		List<Object> ni = rule.getNi();
+		if (!ObjectUtil.isEmpty(ni)) {
+			if (ni.contains(objectValue)) {
+				String errorMessage = this.or(rule, objectMap, rule.getNiErrorMessage());
+				if (errorMessage != null) {
+					return errorMessage;
+				}
+			}
+		}
+
 		List<RuleBO> ands = rule.getAnd();
 		if (!ObjectUtil.isEmpty(ands)) {
 			// 所有条件已通过, 那么校验and逻辑
@@ -137,15 +147,24 @@ public class RuleServiceImpl implements RuleService {
 		ruleBO.setPropertyType(1);
 		ruleBO.setPropertyName("price");
 		ruleBO.setIn(Arrays.asList(30000, 40000, 60000));
-		ruleBO.setInErrorMessage("指定价格不存在, 50000");
+		ruleBO.setInErrorMessage("指定价格不存在");
 		List<RuleBO> ors = new ArrayList<>();
 		RuleBO or = new RuleBO();
 		or.setPropertyType(1);
 		or.setPropertyName("price");
 		or.setIn(Arrays.asList(30000, 40000, 60000));
-		or.setInErrorMessage("价格又不存在");
+		or.setInErrorMessage("指定价格又不存在");
 		ors.add(or);
 		ruleBO.setOr(ors);
+		rules.add(ruleBO);
+		System.out.println(ruleService.valid(rules, "{\"price\":50000}"));
+
+		rules = new ArrayList<>();
+		ruleBO = new RuleBO();
+		ruleBO.setPropertyType(1);
+		ruleBO.setPropertyName("price");
+		ruleBO.setNi(Arrays.asList(50000, 60000));
+		ruleBO.setNiErrorMessage("不能包含特定价格");
 		rules.add(ruleBO);
 		System.out.println(ruleService.valid(rules, "{\"price\":50000}"));
 	}
