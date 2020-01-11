@@ -60,7 +60,12 @@ public class RuleServiceImpl implements RuleService {
 	}
 
 	private String validRuleString(RuleBO rule, Map<String, Object> objectMap) {
-		return null;
+		String objectValue = (String) objectMap.get(rule.getPropertyName());
+		if (objectValue == null) {
+			return "对象不存在该属性, property=>" + rule.getPropertyName();
+		}
+
+		return this.validRuleObject(rule, objectMap, objectValue);
 	}
 
 	private String validRuleObject(RuleBO rule, Map<String, Object> objectMap, Object objectValue) {
