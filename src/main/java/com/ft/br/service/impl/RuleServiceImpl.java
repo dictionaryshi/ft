@@ -9,7 +9,6 @@ import com.ft.util.ObjectUtil;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -61,6 +60,55 @@ public class RuleServiceImpl implements RuleService {
 	}
 
 	private String validRuleString(RuleBO rule, Map<String, Object> objectMap) {
+		String objectValue = (String) objectMap.get(rule.getPropertyName());
+		if (objectValue == null) {
+			return "对象不存在该属性, property=>" + rule.getPropertyName();
+		}
+
+		return this.validRuleObject(rule, objectMap, objectValue);
+	}
+
+	private String validRuleObject(RuleBO rule, Map<String, Object> objectMap, Object objectValue) {
+		List<Object> targetValues = rule.getIn();
+		if (!ObjectUtil.isEmpty(targetValues)) {
+			if (!targetValues.contains(objectValue)) {
+				String errorMessage = this.or(rule, objectMap, rule.getInErrorMessage());
+				if (errorMessage != null) {
+					return errorMessage;
+				}
+			}
+		}
+
+		List<Object> ni = rule.getNi();
+		if (!ObjectUtil.isEmpty(ni)) {
+			if (ni.contains(objectValue)) {
+				String errorMessage = this.or(rule, objectMap, rule.getNiErrorMessage());
+				if (errorMessage != null) {
+					return errorMessage;
+				}
+			}
+		}
+
+		Object eq = rule.getEq();
+		if (eq != null) {
+			if (!ObjectUtil.equals(eq, objectValue)) {
+				String errorMessage = this.or(rule, objectMap, rule.getEqErrorMessage());
+				if (errorMessage != null) {
+					return errorMessage;
+				}
+			}
+		}
+
+		Object ne = rule.getNe();
+		if (ne != null) {
+			if (ObjectUtil.equals(ne, objectValue)) {
+				String errorMessage = this.or(rule, objectMap, rule.getNeErrorMessage());
+				if (errorMessage != null) {
+					return errorMessage;
+				}
+			}
+		}
+
 		return null;
 	}
 
@@ -70,10 +118,45 @@ public class RuleServiceImpl implements RuleService {
 			return "对象不存在该属性, property=>" + rule.getPropertyName();
 		}
 
-		List<Object> targetValues = rule.getIn();
-		if (!ObjectUtil.isEmpty(targetValues)) {
-			if (!targetValues.contains(objectValue)) {
-				String errorMessage = this.or(rule, objectMap, rule.getInErrorMessage());
+		String error = this.validRuleObject(rule, objectMap, objectValue);
+		if (error != null) {
+			return error;
+		}
+
+		Number gt = rule.getGt();
+		if (gt != null) {
+			if (objectValue.doubleValue() <= gt.doubleValue()) {
+				String errorMessage = this.or(rule, objectMap, rule.getGtErrorMessage());
+				if (errorMessage != null) {
+					return errorMessage;
+				}
+			}
+		}
+
+		Number lt = rule.getLt();
+		if (lt != null) {
+			if (objectValue.doubleValue() >= lt.doubleValue()) {
+				String errorMessage = this.or(rule, objectMap, rule.getLtErrorMessage());
+				if (errorMessage != null) {
+					return errorMessage;
+				}
+			}
+		}
+
+		Number ge = rule.getGe();
+		if (ge != null) {
+			if (objectValue.doubleValue() < ge.doubleValue()) {
+				String errorMessage = this.or(rule, objectMap, rule.getGeErrorMessage());
+				if (errorMessage != null) {
+					return errorMessage;
+				}
+			}
+		}
+
+		Number le = rule.getLe();
+		if (le != null) {
+			if (objectValue.doubleValue() > le.doubleValue()) {
+				String errorMessage = this.or(rule, objectMap, rule.getLeErrorMessage());
 				if (errorMessage != null) {
 					return errorMessage;
 				}
@@ -115,38 +198,13 @@ public class RuleServiceImpl implements RuleService {
 	public static void main(String[] args) {
 		RuleService ruleService = new RuleServiceImpl();
 
-		System.out.println(ruleService.valid(null, "ab"));
-		System.out.println(ruleService.valid(null, "{}"));
-
-		List<RuleBO> rules = new ArrayList<>();
-		RuleBO ruleBO = new RuleBO();
-		ruleBO.setPropertyType(0);
-		rules.add(ruleBO);
-		System.out.println(ruleService.valid(rules, "{}"));
+		List<RuleBO> rules;
+		RuleBO ruleBO;
 
 		rules = new ArrayList<>();
 		ruleBO = new RuleBO();
-		ruleBO.setPropertyType(1);
-		ruleBO.setPropertyName("price");
 		rules.add(ruleBO);
-		System.out.println(ruleService.valid(rules, "{}"));
-
-		rules = new ArrayList<>();
-		ruleBO = new RuleBO();
-		ruleBO.setDescription("价格规则校验");
-		ruleBO.setPropertyType(1);
-		ruleBO.setPropertyName("price");
-		ruleBO.setIn(Arrays.asList(30000, 40000, 60000));
-		ruleBO.setInErrorMessage("指定价格不存在, 50000");
-		List<RuleBO> ors = new ArrayList<>();
-		RuleBO or = new RuleBO();
-		or.setPropertyType(1);
-		or.setPropertyName("price");
-		or.setIn(Arrays.asList(30000, 40000, 60000));
-		or.setInErrorMessage("价格又不存在");
-		ors.add(or);
-		ruleBO.setOr(ors);
-		rules.add(ruleBO);
-		System.out.println(ruleService.valid(rules, "{\"price\":50000}"));
+		String objJson = "";
+		System.out.println(ruleService.valid(rules, objJson));
 	}
 }
