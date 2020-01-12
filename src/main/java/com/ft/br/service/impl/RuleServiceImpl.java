@@ -4,13 +4,12 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.ft.br.constant.RulePropertyTypeEnum;
 import com.ft.br.model.bo.RuleBO;
 import com.ft.br.service.RuleService;
+import com.ft.util.CollectionUtil;
 import com.ft.util.JsonUtil;
 import com.ft.util.ObjectUtil;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 规则引擎
@@ -56,6 +55,32 @@ public class RuleServiceImpl implements RuleService {
 	}
 
 	private String validRuleCollection(RuleBO rule, Map<String, Object> objectMap) {
+		@SuppressWarnings("unchecked")
+		Collection<Object> collection = (Collection<Object>) objectMap.get(rule.getPropertyName());
+		if (collection == null) {
+			return "对象不存在该属性, property=>" + rule.getPropertyName();
+		}
+
+		List<Object> in = rule.getIn();
+		if (!ObjectUtil.isEmpty(in)) {
+			if (!collection.containsAll(in)) {
+				String errorMessage = this.or(rule, objectMap, rule.getInErrorMessage());
+				if (errorMessage != null) {
+					return errorMessage;
+				}
+			}
+		}
+
+		List<Object> ni = rule.getNi();
+		if (!ObjectUtil.isEmpty(ni)) {
+			if (!CollectionUtil.disjoint(collection, ni)) {
+				String errorMessage = this.or(rule, objectMap, rule.getNiErrorMessage());
+				if (errorMessage != null) {
+					return errorMessage;
+				}
+			}
+		}
+
 		return null;
 	}
 
@@ -193,18 +218,5 @@ public class RuleServiceImpl implements RuleService {
 		}
 
 		return sb.toString();
-	}
-
-	public static void main(String[] args) {
-		RuleService ruleService = new RuleServiceImpl();
-
-		List<RuleBO> rules;
-		RuleBO ruleBO;
-
-		rules = new ArrayList<>();
-		ruleBO = new RuleBO();
-		rules.add(ruleBO);
-		String objJson = "";
-		System.out.println(ruleService.valid(rules, objJson));
 	}
 }
