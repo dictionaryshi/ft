@@ -9,27 +9,18 @@ import java.util.Map;
  * @author shichunyang
  */
 public class LongestSubstring {
+
 	public static int lengthOfLongestSubstring(String s) {
-		if (s == null || s.length() == 0) {
-			return 0;
-		}
-		char[] chars = s.toCharArray();
-		int len = chars.length;
-		int p = 0, q = 0;
-		int max = 0;
+		int n = s.length(), ans = 0;
 		Map<Character, Integer> map = new HashMap<>(16);
-		while (q < len) {
-			if (map.containsKey(chars[q])) {
-				// 防止p指针回溯
-				p = Math.max(p, map.get(chars[q]) + 1);
+		for (int j = 0, i = 0; j < n; j++) {
+			if (map.containsKey(s.charAt(j))) {
+				i = Math.max(map.get(s.charAt(j)), i);
 			}
-
-			map.put(chars[q], q);
-			max = Math.max(max, q - p + 1);
-			++q;
+			ans = Math.max(ans, j - i + 1);
+			map.put(s.charAt(j), j + 1);
 		}
-
-		return max;
+		return ans;
 	}
 
 	public static void main(String[] args) {
