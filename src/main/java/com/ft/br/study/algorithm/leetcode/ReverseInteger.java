@@ -1,4 +1,4 @@
-package com.ft.br.study.algorithm;
+package com.ft.br.study.algorithm.leetcode;
 
 /**
  * ReverseInteger
