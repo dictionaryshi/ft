@@ -19,38 +19,47 @@ public class AddTwoNumber {
 		}
 	}
 
+	/**
+	 * 输入：(2 -> 4 -> 3) + (5 -> 6 -> 4)
+	 * 输出：7 -> 0 -> 8
+	 * 原因：342 + 465 = 807
+	 */
 	public static ListNode addTwoNumber(ListNode l1, ListNode l2) {
-		ListNode res = new ListNode(-1);
-		// 当前操作节点
-		ListNode cur = res;
-		// 商
-		int quotient = 0;
-		while (l1 != null || l2 != null || quotient != 0) {
-			int t = (l1 == null ? 0 : l1.val) + (l2 == null ? 0 : l2.val) + quotient;
-			quotient = t / 10;
-			// 余数
-			ListNode node = new ListNode(t % 10);
-			cur.next = node;
-			cur = node;
-			l1 = (l1 == null) ? null : l1.next;
-			l2 = (l2 == null) ? null : l2.next;
+		ListNode head = new ListNode(-1);
+		ListNode p = l1, q = l2, curr = head;
+		int carry = 0;
+		while (p != null || q != null) {
+			int x = (p != null) ? p.val : 0;
+			int y = (q != null) ? q.val : 0;
+			int sum = carry + x + y;
+			// 十位
+			carry = sum / 10;
+			// 将个位存起来
+			curr.next = new ListNode(sum % 10);
+			curr = curr.next;
+			if (p != null) {
+				p = p.next;
+			}
+			if (q != null) {
+				q = q.next;
+			}
 		}
-		return res.next;
+		if (carry > 0) {
+			curr.next = new ListNode(carry);
+		}
+		return head.next;
 	}
 
 	public static void main(String[] args) {
 		ListNode two = new ListNode(2);
 		ListNode four = new ListNode(4);
-		ListNode three = new ListNode(3);
 		two.next = four;
-		four.next = three;
+		four.next = new ListNode(3);
 
 		ListNode five = new ListNode(5);
 		ListNode six = new ListNode(6);
-		ListNode seven = new ListNode(7);
-
 		five.next = six;
-		six.next = seven;
+		six.next = new ListNode(4);
 
 		System.out.println(JsonUtil.object2Json(two));
 		System.out.println(JsonUtil.object2Json(five));
