@@ -175,3 +175,9 @@ G1非常适合大内存机器。
 
 Young GC一般不会对系统造成影响, 若Young GC过慢则应该使用G1来优化。
 
+jstat -gc PID
+S0C:From Survivor区的大小。
+S1C:To Survivor区的大小。
+S0U:From Survivor区当前使用的内存大小。
+S1U:To Survivor区当前使用的内存大小。
+
