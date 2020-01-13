@@ -11,7 +11,8 @@ import java.util.Map;
  *
  * @author shichunyang
  */
-public class LeetCode1 {
+public class TwoSum {
+
 	public static int[] twoSum(int[] numbers, int target) {
 		Map<Integer, Integer> record = new HashMap<>(16);
 
