@@ -9,21 +9,19 @@ public class ReverseInteger {
 	/**
 	 * 反转数字
 	 *
-	 * @param number 原始数字
+	 * @param x 原始数字
 	 * @return 反转后的数字
 	 */
-	public static int reverse(int number) {
-		long result = 0;
-
-		for (; number != 0; number = number / 10) {
-			result = result * 10 + number % 10;
+	public static int reverse(int x) {
+		int rev = 0;
+		while (x != 0) {
+			// 个位
+			int pop = x % 10;
+			// 十位
+			x /= 10;
+			rev = rev * 10 + pop;
 		}
-
-		if (result > Integer.MAX_VALUE || result < Integer.MIN_VALUE) {
-			return 0;
-		}
-
-		return (int) result;
+		return rev;
 	}
 
 	public static int convert(String str) {
