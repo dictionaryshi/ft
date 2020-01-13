@@ -19,7 +19,7 @@ public class LeetCode1 {
 			int findNumber = target - numbers[i];
 			if (record.containsKey(findNumber)) {
 				int findIndex = record.get(findNumber);
-				return new int[]{i, findIndex};
+				return new int[]{findIndex, i};
 			}
 			record.put(numbers[i], i);
 		}
