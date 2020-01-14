@@ -175,7 +175,7 @@ G1非常适合大内存机器。
 
 Young GC一般不会对系统造成影响, 若Young GC过慢则应该使用G1来优化。
 
-jstat -gc PID
+jstat -gc PID 1000 10 // 每秒执行一次, 执行10次
 S0C:From Survivor区的大小。
 S1C:To Survivor区的大小。
 S0U:From Survivor区当前使用的内存大小。
@@ -191,4 +191,9 @@ YGCT:Young GC的耗时。
 FGC:系统运行迄今为止的Full GC次数。
 FGCT:Full GC的耗时。
 GCT:所有GC的总耗时。
+
+jstat可以分析的数据:
+    1)新生代对象增长的速率:观察每隔一段时间jvm中的Eden区对象占用变化。
+    2)Young GC的触发频率和每次耗时:知道Eden的增长速率就能推断YGC的频率, YGC耗时 = YGC总耗时/YGC发生次数。
+    3)老年代对象的增长速率、Full GC频率、Full GC耗时。
 
