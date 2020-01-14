@@ -33,6 +33,9 @@ public class ReverseInteger {
 		return result;
 	}
 
+	/**
+	 * 判断是否是回文数字
+	 */
 	public boolean isPalindrome(int x) {
 		if (x < 0) {
 			return false;
