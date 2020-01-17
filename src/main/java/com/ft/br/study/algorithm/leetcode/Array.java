@@ -26,6 +26,20 @@ public class Array {
 	}
 
 	/**
+	 * 删除数组中指定元素
+	 */
+	public int removeElement(int[] nums, int val) {
+		int i = 0;
+		for (int j = 0; j < nums.length; j++) {
+			if (nums[j] != val) {
+				nums[i] = nums[j];
+				i++;
+			}
+		}
+		return i;
+	}
+
+	/**
 	 * 查找两个有序数组的中位
 	 */
 	public double findMedianSortedArrays(int[] a, int[] b) {
