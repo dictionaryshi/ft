@@ -7,6 +7,7 @@ package com.ft.br.study.algorithm.leetcode;
  */
 @SuppressWarnings("unchecked")
 public class Linked {
+
 	private static class Node {
 		int value;
 		Node next;
@@ -15,6 +16,25 @@ public class Linked {
 			this.value = value;
 			this.next = next;
 		}
+	}
+
+	/**
+	 * 删除链表倒数第n个元素
+	 */
+	public Node removeNthFromEnd(Node head, int n) {
+		Node dummy = new Node(0, null);
+		dummy.next = head;
+		Node first = dummy;
+		Node second = dummy;
+		for (int i = 1; i <= n + 1; i++) {
+			first = first.next;
+		}
+		while (first != null) {
+			first = first.next;
+			second = second.next;
+		}
+		second.next = second.next.next;
+		return dummy.next;
 	}
 
 	public static void print(Node head) {
@@ -63,32 +83,6 @@ public class Linked {
 		head.next.next = head;
 		head.next = null;
 		return reverseNode;
-	}
-
-	/**
-	 * 查找倒数第k个元素
-	 */
-	public static Node find(Node head, int k) {
-		if (k < 1 || head == null) {
-			return null;
-		}
-
-		Node fast = head;
-		Node slow = head;
-
-		for (int i = 0; i < k; i++) {
-			if (fast == null) {
-				return null;
-			}
-			fast = fast.next;
-		}
-
-		while (fast != null) {
-			fast = fast.next;
-			slow = slow.next;
-		}
-
-		return slow;
 	}
 
 	public static Node merge(Node head1, Node head2) {
