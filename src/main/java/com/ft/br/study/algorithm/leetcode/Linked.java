@@ -125,6 +125,21 @@ public class Linked {
 		return Boolean.TRUE;
 	}
 
+	/**
+	 * 获取链表交点
+	 */
+	public Node getIntersectionNode(Node headA, Node headB) {
+		if (headA == null || headB == null) {
+			return null;
+		}
+		Node pA = headA, pB = headB;
+		while (pA != pB) {
+			pA = pA == null ? headB : pA.next;
+			pB = pB == null ? headA : pB.next;
+		}
+		return pA;
+	}
+
 	public static void main(String[] args) {
 		Node node5 = new Node(1, null);
 		Node node4 = new Node(3, node5);
