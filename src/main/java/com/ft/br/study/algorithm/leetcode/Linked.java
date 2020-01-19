@@ -1,5 +1,10 @@
 package com.ft.br.study.algorithm.leetcode;
 
+import lombok.Data;
+
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * 链表
  *
@@ -8,6 +13,7 @@ package com.ft.br.study.algorithm.leetcode;
 @SuppressWarnings("unchecked")
 public class Linked {
 
+	@Data
 	private static class Node {
 		int value;
 		Node next;
@@ -90,45 +96,33 @@ public class Linked {
 		return size;
 	}
 
-	public static boolean hasCycle(Node head) {
-		Node fast = head;
-		Node slow = head;
-
-		while (fast != null && fast.next != null) {
-			fast = fast.next.next;
-			slow = slow.next;
-			if (fast == slow) {
-				return true;
+	public boolean hasCycle(Node head) {
+		Set<Node> nodesSeen = new HashSet<>();
+		while (head != null) {
+			if (nodesSeen.contains(head)) {
+				return Boolean.TRUE;
+			} else {
+				nodesSeen.add(head);
 			}
+			head = head.next;
 		}
-		return false;
+		return Boolean.FALSE;
 	}
 
-	public static Node getFirstNodeInCycle(Node head) {
+	public boolean hasCycle2(Node head) {
+		if (head == null || head.next == null) {
+			return Boolean.FALSE;
+		}
 		Node slow = head;
-		Node fast = head;
-
-		// 找到快慢指针相遇点
-		while (fast != null && fast.next != null) {
+		Node fast = head.next;
+		while (slow != fast) {
+			if (fast == null || fast.next == null) {
+				return Boolean.FALSE;
+			}
 			slow = slow.next;
 			fast = fast.next.next;
-			if (slow == fast) {
-				break;
-			}
 		}
-
-		// 没有环的情况
-		if (fast == null || fast.next == null) {
-			return null;
-		}
-
-		slow = head;
-		while (slow != fast) {
-			slow = slow.next;
-			fast = fast.next;
-		}
-
-		return fast;
+		return Boolean.TRUE;
 	}
 
 	public static void main(String[] args) {
