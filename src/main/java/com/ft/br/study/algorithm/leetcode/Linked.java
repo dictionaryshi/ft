@@ -49,14 +49,24 @@ public class Linked {
 		return prev;
 	}
 
-	public Node reverseList2(Node head) {
-		if (head == null || head.next == null) {
-			return head;
+	public Node mergeTwoLists2(Node l1, Node l2) {
+		Node preHead = new Node(-1, null);
+
+		Node prev = preHead;
+		while (l1 != null && l2 != null) {
+			if (l1.value <= l2.value) {
+				prev.next = l1;
+				l1 = l1.next;
+			} else {
+				prev.next = l2;
+				l2 = l2.next;
+			}
+			prev = prev.next;
 		}
-		Node p = reverseList2(head.next);
-		head.next.next = head;
-		head.next = null;
-		return p;
+
+		prev.next = l1 == null ? l2 : l1;
+
+		return preHead.next;
 	}
 
 	public static void print(Node head) {
@@ -78,25 +88,6 @@ public class Linked {
 			current = current.next;
 		}
 		return size;
-	}
-
-	public static Node merge(Node head1, Node head2) {
-		if (head1 == null) {
-			return head2;
-		}
-		if (head2 == null) {
-			return head1;
-		}
-
-		Node mergeHead;
-		if (head1.value < head2.value) {
-			mergeHead = head1;
-			mergeHead.next = merge(head1.next, head2);
-		} else {
-			mergeHead = head2;
-			mergeHead.next = merge(head1, head2.next);
-		}
-		return mergeHead;
 	}
 
 	public static boolean hasCycle(Node head) {
