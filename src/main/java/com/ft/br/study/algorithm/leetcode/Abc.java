@@ -1,4 +1,4 @@
-package com.ft.br.study.juc;
+package com.ft.br.study.algorithm.leetcode;
 
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
