@@ -37,6 +37,28 @@ public class Linked {
 		return dummy.next;
 	}
 
+	public Node reverseList(Node head) {
+		Node prev = null;
+		Node curr = head;
+		while (curr != null) {
+			Node nextTemp = curr.next;
+			curr.next = prev;
+			prev = curr;
+			curr = nextTemp;
+		}
+		return prev;
+	}
+
+	public Node reverseList2(Node head) {
+		if (head == null || head.next == null) {
+			return head;
+		}
+		Node p = reverseList2(head.next);
+		head.next.next = head;
+		head.next = null;
+		return p;
+	}
+
 	public static void print(Node head) {
 		while (head != null) {
 			System.out.print(head.value + " ");
@@ -56,33 +78,6 @@ public class Linked {
 			current = current.next;
 		}
 		return size;
-	}
-
-	public static Node reverse1(Node head) {
-		if (head == null || head.next == null) {
-			return head;
-		}
-
-		Node reverseNode = null;
-		while (head != null) {
-			Node tempNode = head;
-			head = head.next;
-			tempNode.next = reverseNode;
-			reverseNode = tempNode;
-		}
-
-		return reverseNode;
-	}
-
-	public static Node reverse2(Node head) {
-		if (head == null || head.next == null) {
-			return head;
-		}
-
-		Node reverseNode = reverse2(head.next);
-		head.next.next = head;
-		head.next = null;
-		return reverseNode;
 	}
 
 	public static Node merge(Node head1, Node head2) {
