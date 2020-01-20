@@ -56,4 +56,42 @@ public class StringLeetCode {
 		}
 		return true;
 	}
+
+	/**
+	 * 字符串关键字加粗
+	 */
+	public String boldWords(String[] words, String str) {
+		boolean[] isBold = new boolean[str.length()];
+		for (String word : words) {
+			int n = str.indexOf(word, 0);
+			while (n != -1) {
+				for (int i = n; i < n + word.length(); i++) {
+					isBold[i] = true;
+				}
+				n = str.indexOf(word, n + 1);
+			}
+		}
+		StringBuilder sb = new StringBuilder();
+		if (isBold[0]) {
+			sb.append("<b>");
+		}
+		for (int i = 0; i < isBold.length; i++) {
+			sb.append(str.charAt(i));
+			if (i == isBold.length - 1) {
+				if (isBold[i]) {
+					sb.append("</b>");
+				}
+				break;
+			}
+
+			if (!isBold[i] && isBold[i + 1]) {
+				sb.append("<b>");
+			}
+
+			if (isBold[i] && !isBold[i + 1]) {
+				sb.append("</b>");
+			}
+		}
+		return sb.toString();
+	}
 }
