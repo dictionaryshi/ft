@@ -66,3 +66,5 @@ export PATH="$JAVA_HOME/bin:$PATH" (声明环境变量)
 # date;httpCode=$(curl -s -o /dev/null -m 10 --connect-timeout 10 http://127.0.0.1:80/ -w %{http_code});date (检测url并获取响应码)
 # echo $httpCode
 
+// 统计词频
+# cat words.txt | xargs -n 1 | sort | uniq -c | sort -nr | awk '{print $2" "$1}'
