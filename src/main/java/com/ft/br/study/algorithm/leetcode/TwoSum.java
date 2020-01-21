@@ -57,6 +57,22 @@ public class TwoSum {
 		return sb.toString();
 	}
 
+	/**
+	 * 上楼
+	 */
+	public int climbStairs(int n) {
+		if (n == 1) {
+			return 1;
+		}
+		int[] dp = new int[n + 1];
+		dp[1] = 1;
+		dp[2] = 2;
+		for (int i = 3; i <= n; i++) {
+			dp[i] = dp[i - 1] + dp[i - 2];
+		}
+		return dp[n];
+	}
+
 	public static void main(String[] args) {
 		int[] numbers = {11, 7, 11, 15};
 		System.out.println(Arrays.toString(twoSum(numbers, 22)));
