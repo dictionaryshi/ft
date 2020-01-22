@@ -48,21 +48,12 @@ public class Sort {
 		// 剩下的最后一个数不需要比较
 		for (int i = 0; i < length - 1; i++) {
 
-			// 本次存储最大元素的索引
-			int maxIndex = length - 1 - i;
-
-			// 最大元素所在的索引
-			int index = 0;
-
 			for (int j = 0; j < length - 1 - i; j++) {
 				if (nums[j + 1] < nums[j]) {
-					if (nums[index] < nums[j]) {
-						index = j;
-					}
+					exchange(nums, j, j + 1);
 				}
 			}
 
-			exchange(nums, index, maxIndex);
 		}
 
 		List<Integer> result = new ArrayList<>();
