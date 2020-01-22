@@ -65,49 +65,6 @@ public class Sort {
 	}
 
 	/**
-	 * 冒泡排序算法
-	 *
-	 * @param arr 要排序的数组
-	 */
-	public static void bubbleSort(Comparable[] arr) {
-		int length = arr.length;
-		// 剩下的最后一个数不需要比较
-		for (int i = 0; i < length - 1; i++) {
-
-			// 本次存储最大元素的索引
-			int maxIndex = length - 1 - i;
-
-			// 最大元素所在的索引
-			int index = 0;
-
-			for (int j = 0; j < length - 1 - i; j++) {
-				if (less(arr[j + 1], arr[j])) {
-					if (less(arr[index], arr[j])) {
-						index = j;
-					}
-				}
-			}
-
-			exch(arr, index, maxIndex);
-		}
-	}
-
-	/**
-	 * 插入排序
-	 *
-	 * @param arr 要排序的数组
-	 */
-	public static void insertionSort(Comparable[] arr) {
-		int length = arr.length;
-		for (int i = 1; i < length; i++) {
-			// 将arr[i]插入到arr[i - 1]、arr[i - 2]、arr[i - 3]...之中
-			for (int j = i; j > 0 && less(arr[j], arr[j - 1]); j--) {
-				exch(arr, j, j - 1);
-			}
-		}
-	}
-
-	/**
 	 * 将二叉堆中元素进行上浮处理
 	 *
 	 * @param arr 二叉堆

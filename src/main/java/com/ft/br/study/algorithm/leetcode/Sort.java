@@ -39,4 +39,27 @@ public class Sort {
 		}
 		return result;
 	}
+
+	/**
+	 * 冒泡排序
+	 */
+	public List<Integer> sortArray2(int[] nums) {
+		int length = nums.length;
+		// 剩下的最后一个数不需要比较
+		for (int i = 0; i < length - 1; i++) {
+
+			for (int j = 0; j < length - 1 - i; j++) {
+				if (nums[j + 1] < nums[j]) {
+					exchange(nums, j, j + 1);
+				}
+			}
+
+		}
+
+		List<Integer> result = new ArrayList<>();
+		for (int num : nums) {
+			result.add(num);
+		}
+		return result;
+	}
 }
