@@ -96,4 +96,22 @@ public class Array {
 		}
 		System.arraycopy(nums2, 0, nums1, 0, len2 + 1);
 	}
+
+	/**
+	 * 买股票最大利润
+	 * 输入: [7,1,5,3,6,4]
+	 * 输出: 5
+	 */
+	public int maxProfit(int[] prices) {
+		int minPrice = Integer.MAX_VALUE;
+		int maxProfit = 0;
+		for (int i = 0; i < prices.length; i++) {
+			if (prices[i] < minPrice) {
+				minPrice = prices[i];
+			} else if (prices[i] - minPrice > maxProfit) {
+				maxProfit = prices[i] - minPrice;
+			}
+		}
+		return maxProfit;
+	}
 }
