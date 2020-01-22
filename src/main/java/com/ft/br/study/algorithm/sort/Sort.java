@@ -65,26 +65,6 @@ public class Sort {
 	}
 
 	/**
-	 * 选择排序
-	 *
-	 * @param arr 要排序的数组
-	 */
-	public static void selectionSort(Comparable[] arr) {
-		int length = arr.length;
-		for (int i = 0; i < length; i++) {
-			// i为当前最小元素的存储位置
-			int min = i;
-
-			for (int j = i + 1; j < length; j++) {
-				if (less(arr[j], arr[min])) {
-					min = j;
-				}
-			}
-			exch(arr, i, min);
-		}
-	}
-
-	/**
 	 * 冒泡排序算法
 	 *
 	 * @param arr 要排序的数组
