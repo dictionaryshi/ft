@@ -17,17 +17,6 @@ public class BinaryTreeNode<T> {
 	private BinaryTreeNode right;
 
 	/**
-	 * 中序
-	 */
-	public void inOrder(BinaryTreeNode root) {
-		if (null != root) {
-			inOrder(root.getLeft());
-			System.out.print(root.getData() + "\t");
-			inOrder(root.getRight());
-		}
-	}
-
-	/**
 	 * 后序
 	 */
 	public void postOrder(BinaryTreeNode root) {
