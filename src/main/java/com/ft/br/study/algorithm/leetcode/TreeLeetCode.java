@@ -96,4 +96,42 @@ public class TreeLeetCode {
 		}
 		return result;
 	}
+
+	/**
+	 * 后序(左、右、中)
+	 */
+	public List<Integer> postorderTraversal(TreeNode root) {
+		List<Integer> result = new ArrayList<>();
+		postorderTraversal(root, result);
+		return result;
+	}
+
+	private void postorderTraversal(TreeNode node, List<Integer> result) {
+		if (node != null) {
+			postorderTraversal(node.left, result);
+			postorderTraversal(node.right, result);
+			result.add(node.val);
+		}
+	}
+
+	public List<Integer> postorderTraversal2(TreeNode root) {
+		LinkedList<TreeNode> stack = new LinkedList<>();
+		LinkedList<Integer> output = new LinkedList<>();
+		if (root == null) {
+			return output;
+		}
+
+		stack.add(root);
+		while (!stack.isEmpty()) {
+			TreeNode node = stack.pollLast();
+			output.addFirst(node.val);
+			if (node.left != null) {
+				stack.add(node.left);
+			}
+			if (node.right != null) {
+				stack.add(node.right);
+			}
+		}
+		return output;
+	}
 }
