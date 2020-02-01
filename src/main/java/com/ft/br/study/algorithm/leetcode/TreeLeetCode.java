@@ -134,4 +134,28 @@ public class TreeLeetCode {
 		}
 		return output;
 	}
+
+	/**
+	 * 分层遍历
+	 */
+	public List<List<Integer>> levelOrder(TreeNode root) {
+		List<List<Integer>> levelResult = new ArrayList<>();
+		dfs(root, 0, levelResult);
+		return levelResult;
+	}
+
+	private void dfs(TreeNode root, int level, List<List<Integer>> levelResult) {
+		if (root == null) {
+			return;
+		}
+
+		// 添加一个新的ArrayList表示新的一层
+		if (level >= levelResult.size()) {
+			levelResult.add(new ArrayList<>());
+		}
+
+		levelResult.get(level).add(root.val);
+		dfs(root.left, level + 1, levelResult);
+		dfs(root.right, level + 1, levelResult);
+	}
 }
