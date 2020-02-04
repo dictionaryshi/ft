@@ -197,3 +197,5 @@ jstat可以分析的数据:
     2)Young GC的触发频率和每次耗时:知道Eden的增长速率就能推断YGC的频率, YGC耗时 = YGC总耗时/YGC发生次数。
     3)老年代对象的增长速率、Full GC频率、Full GC耗时。
 
+尽量让每次Young GC后的存活对象小于Survivor区域的50%, 都留存在年轻代里。尽量别让对象进入老年代。尽量减少Full GC的频率, 避免频繁Full GC对JVM性能的影响。
+
