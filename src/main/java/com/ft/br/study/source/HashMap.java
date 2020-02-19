@@ -163,14 +163,12 @@ public class HashMap<K, V> {
 				: (number > 1) ? Integer.highestOneBit((number - 1) << 1) : 1;
 	}
 
-	final int hash(Object k) {
-		int h = 0;
-
-		h ^= k.hashCode();
-
-		h ^= (h >>> 20) ^ (h >>> 12);
-
-		return h ^ (h >>> 7) ^ (h >>> 4);
+	/**
+	 * 高16位和低16位做亦或运算(保证和length做取模运算的时候高16和低16都能参与到运算中)
+	 */
+	static final int hash(Object key) {
+		int h;
+		return (key == null) ? 0 : (h = key.hashCode()) ^ (h >>> 16);
 	}
 
 	static int indexFor(int h, int length) {
