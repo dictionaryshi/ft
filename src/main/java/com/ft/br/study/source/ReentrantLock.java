@@ -1,5 +1,6 @@
-package com.ft.br.study.juc;
+package com.ft.br.study.source;
 
+import com.ft.br.study.juc.CasTest;
 import sun.misc.Unsafe;
 
 import java.util.concurrent.TimeUnit;
