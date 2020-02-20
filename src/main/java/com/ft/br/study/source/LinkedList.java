@@ -1,6 +1,5 @@
 package com.ft.br.study.source;
 
-import java.util.Collection;
 import java.util.NoSuchElementException;
 
 /**
@@ -11,7 +10,6 @@ import java.util.NoSuchElementException;
 public class LinkedList<E> {
 
 	private transient int size = 0;
-
 	private transient int modCount = 0;
 
 	/**
@@ -120,84 +118,6 @@ public class LinkedList<E> {
 		if (!isPositionIndex(index)) {
 			throw new IndexOutOfBoundsException(outOfBoundsMsg(index));
 		}
-	}
-
-	/**
-	 * 在指定索引处, 批量添加元素
-	 *
-	 * @param index 指定索引
-	 * @param c     批量元素
-	 * @return true:添加成功
-	 */
-	public boolean addAll(int index, Collection<? extends E> c) {
-		// 检查索引合法性(允许超一位)
-		checkPositionIndex(index);
-
-		Object[] a = c.toArray();
-		int numNew = a.length;
-		if (numNew == 0) {
-			return false;
-		}
-
-		// succ保存的是index索引的元素
-		Node<E> pred, succ;
-		if (index == size) {
-			// index为超一位索引, 那么当前位置元素为null
-			succ = null;
-			pred = last;
-		} else {
-			// 查找index索引对象
-			succ = node(index);
-			pred = succ.prev;
-		}
-
-		for (Object o : a) {
-			@SuppressWarnings("unchecked") E e = (E) o;
-			// 创建新的结点对象, 并指定新结点的前一个结点对象
-			Node<E> newNode = new Node<>(pred, e, null);
-			if (pred == null) {
-				first = newNode;
-			} else {
-				// 为上一个结点, 指定后一个结点对象(新创建的结点对象)
-				pred.next = newNode;
-			}
-			// pred从此指向新结点对象
-			pred = newNode;
-		}
-
-		if (succ == null) {
-			// index为超一位索引, 那么最后一个结点应该是最后一个新结点对象
-			last = pred;
-		} else {
-			// 为最后一个新结点对象指定下一个结点对象(index索引对象)
-			pred.next = succ;
-			// 为index索引对象指定上一个结点对象(最后一个新结点对象)
-			succ.prev = pred;
-		}
-
-		size += numNew;
-		modCount++;
-		return true;
-	}
-
-	/**
-	 * 批量添加结点对象
-	 *
-	 * @param c 批量对象
-	 * @return true:添加成功
-	 */
-	public boolean addAll(Collection<? extends E> c) {
-		return addAll(size, c);
-	}
-
-	/**
-	 * 创建链表的同时添加元素
-	 *
-	 * @param c 批量元素
-	 */
-	public LinkedList(Collection<? extends E> c) {
-		this();
-		addAll(c);
 	}
 
 	/**
@@ -572,32 +492,6 @@ public class LinkedList<E> {
 	}
 
 	/**
-	 * 从后向前遍历元素
-	 *
-	 * @param o 指定元素
-	 * @return 索引
-	 */
-	public int lastIndexOf(Object o) {
-		int index = size;
-		if (o == null) {
-			for (Node<E> x = last; x != null; x = x.prev) {
-				index--;
-				if (x.item == null) {
-					return index;
-				}
-			}
-		} else {
-			for (Node<E> x = last; x != null; x = x.prev) {
-				index--;
-				if (o.equals(x.item)) {
-					return index;
-				}
-			}
-		}
-		return -1;
-	}
-
-	/**
 	 * 链表转换成数组
 	 *
 	 * @return 数组
@@ -636,5 +530,4 @@ public class LinkedList<E> {
 
 		return a;
 	}
-
 }
