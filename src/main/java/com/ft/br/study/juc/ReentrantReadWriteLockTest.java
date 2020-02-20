@@ -8,10 +8,6 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 /**
  * 读写锁应用
- * 如果有一个线程加了写锁, 那么其他线程就不能加写锁了
- * 如果有线程加了写锁, 其他线程就不能加读锁了
- * 如果有线程加了读锁, 别的线程是可以随意同时加读锁的
- * 如果一个线程加了读锁, 此时其他线程是不可以加写锁的
  *
  * @author shichunyang
  */
