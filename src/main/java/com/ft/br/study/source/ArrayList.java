@@ -1,7 +1,6 @@
 package com.ft.br.study.source;
 
 import java.util.Arrays;
-import java.util.Collection;
 
 /**
  * ArrayList
@@ -19,11 +18,6 @@ public class ArrayList<E> {
 	private static final int DEFAULT_CAPACITY = 10;
 
 	/**
-	 * 空数组对象
-	 */
-	private static final Object[] EMPTY_ELEMENTDATA = {};
-
-	/**
 	 * 默认空数组对象
 	 */
 	private static final Object[] DEFAULTCAPACITY_EMPTY_ELEMENTDATA = {};
@@ -32,47 +26,8 @@ public class ArrayList<E> {
 
 	private int size;
 
-	public ArrayList(int initialCapacity) {
-
-		if (initialCapacity > 0) {
-			this.elementData = new Object[initialCapacity];
-		} else if (initialCapacity == 0) {
-			this.elementData = EMPTY_ELEMENTDATA;
-		} else {
-			throw new RuntimeException();
-		}
-	}
-
 	public ArrayList() {
 		this.elementData = DEFAULTCAPACITY_EMPTY_ELEMENTDATA;
-	}
-
-	public ArrayList(Collection<? extends E> c) {
-		elementData = c.toArray();
-		if ((size = elementData.length) != 0) {
-
-			// 如果数组不是Object[]类型, 那么将数组转成Object[]类型
-			if (elementData.getClass() != Object[].class) {
-				elementData = Arrays.copyOf(elementData, size, Object[].class);
-			}
-		} else {
-			// 赋值为空数组
-			this.elementData = EMPTY_ELEMENTDATA;
-		}
-	}
-
-	/**
-	 * 去掉数组中空闲的空间
-	 */
-	public void trimToSize() {
-		// 数据结构改变次数+1
-		modCount++;
-		// 当元素个数小于数组长度时
-		if (size < elementData.length) {
-			elementData = (size == 0)
-					? EMPTY_ELEMENTDATA
-					: Arrays.copyOf(elementData, size);
-		}
 	}
 
 	private static final int MAX_ARRAY_SIZE = Integer.MAX_VALUE - 8;
@@ -184,29 +139,6 @@ public class ArrayList<E> {
 			}
 		} else {
 			for (int i = 0; i < size; i++) {
-				if (o.equals(elementData[i])) {
-					return i;
-				}
-			}
-		}
-		return -1;
-	}
-
-	/**
-	 * 从右到左查找元素
-	 *
-	 * @param o 指定元素
-	 * @return 指定元素在数组中的索引
-	 */
-	public int lastIndexOf(Object o) {
-		if (o == null) {
-			for (int i = size - 1; i >= 0; i--) {
-				if (elementData[i] == null) {
-					return i;
-				}
-			}
-		} else {
-			for (int i = size - 1; i >= 0; i--) {
 				if (o.equals(elementData[i])) {
 					return i;
 				}
@@ -367,46 +299,6 @@ public class ArrayList<E> {
 	}
 
 	/**
-	 * 根据数组索引删除元素
-	 *
-	 * @param index 数组索引
-	 */
-	private void fastRemove(int index) {
-		modCount++;
-		int numMoved = size - index - 1;
-		if (numMoved > 0) {
-			System.arraycopy(elementData, index + 1, elementData, index,
-					numMoved);
-		}
-		elementData[--size] = null;
-	}
-
-	/**
-	 * 在数组中删除指定对象(若对象存在多个, 只删除第一次出现的)
-	 *
-	 * @param o 指定对象
-	 * @return true:删除成功
-	 */
-	public boolean remove(Object o) {
-		if (o == null) {
-			for (int index = 0; index < size; index++) {
-				if (elementData[index] == null) {
-					fastRemove(index);
-					return true;
-				}
-			}
-		} else {
-			for (int index = 0; index < size; index++) {
-				if (o.equals(elementData[index])) {
-					fastRemove(index);
-					return true;
-				}
-			}
-		}
-		return false;
-	}
-
-	/**
 	 * 清空数组, 并让GC回收数组元素对象
 	 */
 	public void clear() {
@@ -418,47 +310,5 @@ public class ArrayList<E> {
 		}
 
 		size = 0;
-	}
-
-	/**
-	 * 批量添加元素到数组中
-	 *
-	 * @param c 要添加的元素集合
-	 * @return true:添加成功
-	 */
-	public boolean addAll(Collection<? extends E> c) {
-		Object[] a = c.toArray();
-		int numNew = a.length;
-		// 对数组进行扩容
-		ensureCapacityInternal(size + numNew);
-		System.arraycopy(a, 0, elementData, size, numNew);
-		size += numNew;
-		return numNew != 0;
-	}
-
-	/**
-	 * 在指定索引处批量添加元素(索引值允许超出1个)
-	 *
-	 * @param index 指定的索引位置
-	 * @param c     要添加的元素集合
-	 * @return true:添加成功
-	 */
-	public boolean addAll(int index, Collection<? extends E> c) {
-		rangeCheckForAdd(index);
-
-		Object[] a = c.toArray();
-		int numNew = a.length;
-		// 对数组进行扩容
-		ensureCapacityInternal(size + numNew);
-
-		// 要移动的元素个数
-		int numMoved = size - index;
-		if (numMoved > 0) {
-			System.arraycopy(elementData, index, elementData, index + numNew,
-					numMoved);
-		}
-		System.arraycopy(a, 0, elementData, index, numNew);
-		size += numNew;
-		return numNew != 0;
 	}
 }
