@@ -111,24 +111,6 @@ public class HashMap<K, V> {
 		}
 
 		@Override
-		public final boolean equals(Object o) {
-			if (!(o instanceof Map.Entry)) {
-				return false;
-			}
-			Map.Entry e = (Map.Entry) o;
-			Object k1 = getKey();
-			Object k2 = e.getKey();
-			if (k1 == k2 || (k1 != null && k1.equals(k2))) {
-				Object v1 = getValue();
-				Object v2 = e.getValue();
-				if (v1 == v2 || (v1 != null && v1.equals(v2))) {
-					return true;
-				}
-			}
-			return false;
-		}
-
-		@Override
 		public final int hashCode() {
 			return Objects.hashCode(getKey()) ^ Objects.hashCode(getValue());
 		}
@@ -136,12 +118,6 @@ public class HashMap<K, V> {
 		@Override
 		public final String toString() {
 			return getKey() + "=" + getValue();
-		}
-
-		void recordAccess(HashMap<K, V> m) {
-		}
-
-		void recordRemoval(HashMap<K, V> m) {
 		}
 	}
 
@@ -204,10 +180,6 @@ public class HashMap<K, V> {
 		return null;
 	}
 
-	public boolean containsKey(Object key) {
-		return getEntry(key) != null;
-	}
-
 	final Entry<K, V> getEntry(Object key) {
 		if (size == 0) {
 			return null;
@@ -241,7 +213,6 @@ public class HashMap<K, V> {
 			if (e.hash == hash && ((k = e.key) == key || key.equals(k))) {
 				V oldValue = e.value;
 				e.value = value;
-				e.recordAccess(this);
 				return oldValue;
 			}
 		}
@@ -256,7 +227,6 @@ public class HashMap<K, V> {
 			if (e.key == null) {
 				V oldValue = e.value;
 				e.value = value;
-				e.recordAccess(this);
 				return oldValue;
 			}
 		}
