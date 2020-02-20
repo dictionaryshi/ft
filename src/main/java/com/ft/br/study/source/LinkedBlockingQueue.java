@@ -43,6 +43,9 @@ public class LinkedBlockingQueue<E> {
 		}
 	}
 
+	/**
+	 * 向尾部添加元素(容量满时返回false)
+	 */
 	public boolean offer(E e) {
 		if (e == null) {
 			throw new NullPointerException();
@@ -66,12 +69,17 @@ public class LinkedBlockingQueue<E> {
 		} finally {
 			putLock.unlock();
 		}
+
+		// 说明队列有了一个元素, 通知队列有元素了
 		if (c == 0) {
 			signalNotEmpty();
 		}
 		return c >= 0;
 	}
 
+	/**
+	 * 向尾部添加元素(容量满时反复尝试一段时间)
+	 */
 	public boolean offer(E e, long timeout, TimeUnit unit)
 			throws InterruptedException {
 
@@ -98,6 +106,8 @@ public class LinkedBlockingQueue<E> {
 		} finally {
 			putLock.unlock();
 		}
+
+		// 说明队列有了一个元素, 通知队列有元素了
 		if (c == 0) {
 			signalNotEmpty();
 		}
@@ -118,6 +128,9 @@ public class LinkedBlockingQueue<E> {
 		}
 	}
 
+	/**
+	 * 删除头部元素, 队列为空时返回null
+	 */
 	public E poll() {
 		final AtomicInteger count = this.count;
 		if (count.get() == 0) {
@@ -138,12 +151,17 @@ public class LinkedBlockingQueue<E> {
 		} finally {
 			takeLock.unlock();
 		}
+
+		// 说明删除了一个元素, 通知队列没满
 		if (c == capacity) {
 			signalNotFull();
 		}
 		return x;
 	}
 
+	/**
+	 * 删除头部元素, 若队列为空则尝试一段时间
+	 */
 	public E poll(long timeout, TimeUnit unit) throws InterruptedException {
 		E x = null;
 		int c = -1;
@@ -166,6 +184,8 @@ public class LinkedBlockingQueue<E> {
 		} finally {
 			takeLock.unlock();
 		}
+
+		// 说明删除了一个元素, 通知队列没满
 		if (c == capacity) {
 			signalNotFull();
 		}
@@ -192,6 +212,9 @@ public class LinkedBlockingQueue<E> {
 		}
 	}
 
+	/**
+	 * 尾部插入元素, 队列满时阻塞
+	 */
 	public void put(E e) throws InterruptedException {
 		if (e == null) {
 			throw new NullPointerException();
@@ -218,6 +241,9 @@ public class LinkedBlockingQueue<E> {
 		}
 	}
 
+	/**
+	 * 头部删除元素, 队列空时阻塞
+	 */
 	public E take() throws InterruptedException {
 		E x;
 		int c = -1;
