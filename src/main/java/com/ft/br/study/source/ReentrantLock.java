@@ -51,6 +51,9 @@ public class ReentrantLock {
 			}
 		}
 
+		/**
+		 * true:获取锁成功
+		 */
 		@Override
 		protected final boolean tryAcquire(int acquires) {
 			return nonfairTryAcquire(acquires);
@@ -65,6 +68,9 @@ public class ReentrantLock {
 			acquire(1);
 		}
 
+		/**
+		 * true:获取到锁了
+		 */
 		@Override
 		protected final boolean tryAcquire(int acquires) {
 			final Thread current = Thread.currentThread();
@@ -191,6 +197,9 @@ public class ReentrantLock {
 			return exclusiveOwnerThread;
 		}
 
+		/**
+		 * 设置当前持有锁的线程
+		 */
 		final void setExclusiveOwnerThread(Thread thread) {
 			exclusiveOwnerThread = thread;
 		}
@@ -208,6 +217,9 @@ public class ReentrantLock {
 			throw new UnsupportedOperationException();
 		}
 
+		/**
+		 * true:获取锁成功
+		 */
 		final boolean nonfairTryAcquire(int acquires) {
 			final Thread current = Thread.currentThread();
 			int c = getState();
@@ -224,6 +236,9 @@ public class ReentrantLock {
 			return false;
 		}
 
+		/**
+		 * 将node添加到队尾
+		 */
 		private Node addWaiter(Node mode) {
 			Node node = new Node(Thread.currentThread(), mode);
 			Node pred = tail;
@@ -255,12 +270,16 @@ public class ReentrantLock {
 			}
 		}
 
+		/**
+		 * 方法正常结束说明当前线程已经获取到锁了。返回true代表当前线程已中断并且已清除中断标记。
+		 */
 		final boolean acquireQueued(final Node node, int arg) {
 			boolean failed = true;
 			try {
 				boolean interrupted = false;
 				for (; ; ) {
 					final Node p = node.predecessor();
+					// 若当前任务的前一个节点是头节点, 则尝试获取一次锁
 					if (p == head && tryAcquire(arg)) {
 						setHead(node);
 						p.next = null;
@@ -285,6 +304,9 @@ public class ReentrantLock {
 			node.prev = null;
 		}
 
+		/**
+		 * true:代表当前线程可以执行阻塞了
+		 */
 		private static boolean shouldParkAfterFailedAcquire(Node pred, Node node) {
 			int ws = pred.waitStatus;
 			if (ws == Node.SIGNAL) {
@@ -301,8 +323,13 @@ public class ReentrantLock {
 			return false;
 		}
 
+		/**
+		 * true:当前线程已中断, 并且已经清除中断标志。此时线程恢复运行
+		 */
 		private boolean parkAndCheckInterrupt() {
+			// 阻塞当前线程
 			LockSupport.park(this);
+			// 清除当前线程的中断标志
 			return Thread.interrupted();
 		}
 
@@ -362,14 +389,28 @@ public class ReentrantLock {
 			}
 		}
 
+		/**
+		 * 给当前线程做一个中断标记
+		 */
 		static void selfInterrupt() {
 			Thread.currentThread().interrupt();
 		}
 
+		/**
+		 * 判断当前线程前是否还有其它线程等待获取锁(true:有)
+		 */
 		final boolean hasQueuedPredecessors() {
+			// tail head 初始为null
 			Node t = tail;
 			Node h = head;
 			Node s;
+			/*
+				if (compareAndSetHead(new Node())) {
+						// 这里还没有执行的情况
+						tail = head;
+				}
+				h.next == null 代表其它线程正在入队
+			 */
 			return h != t &&
 					((s = h.next) == null || s.thread != Thread.currentThread());
 		}
