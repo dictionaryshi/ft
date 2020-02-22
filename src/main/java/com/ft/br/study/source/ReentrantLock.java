@@ -191,6 +191,9 @@ public class ReentrantLock {
 			return exclusiveOwnerThread;
 		}
 
+		/**
+		 * 设置当前持有锁的线程
+		 */
 		final void setExclusiveOwnerThread(Thread thread) {
 			exclusiveOwnerThread = thread;
 		}
