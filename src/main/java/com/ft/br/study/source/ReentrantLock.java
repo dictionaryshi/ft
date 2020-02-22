@@ -365,6 +365,9 @@ public class ReentrantLock {
 			}
 		}
 
+		/**
+		 * 给当前线程做一个中断标记
+		 */
 		static void selfInterrupt() {
 			Thread.currentThread().interrupt();
 		}
