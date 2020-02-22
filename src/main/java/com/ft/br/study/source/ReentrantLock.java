@@ -211,6 +211,9 @@ public class ReentrantLock {
 			throw new UnsupportedOperationException();
 		}
 
+		/**
+		 * true:获取锁成功
+		 */
 		final boolean nonfairTryAcquire(int acquires) {
 			final Thread current = Thread.currentThread();
 			int c = getState();
