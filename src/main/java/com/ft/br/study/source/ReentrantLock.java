@@ -506,6 +506,9 @@ public class ReentrantLock {
 			return false;
 		}
 
+		/**
+		 * true:所有重入锁释放完毕。
+		 */
 		final boolean tryRelease(int releases) {
 			int c = getState() - releases;
 			if (Thread.currentThread() != getExclusiveOwnerThread()) {
