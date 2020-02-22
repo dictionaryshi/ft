@@ -406,6 +406,7 @@ public class ReentrantLock {
 						// 这里还没有执行的情况
 						tail = head;
 				}
+				h.next == null 代表其它线程正在入队
 			 */
 			return h != t &&
 					((s = h.next) == null || s.thread != Thread.currentThread());
