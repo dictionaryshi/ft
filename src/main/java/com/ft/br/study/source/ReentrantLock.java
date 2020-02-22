@@ -267,6 +267,9 @@ public class ReentrantLock {
 			}
 		}
 
+		/**
+		 * 方法正常结束说明当前线程已经获取到锁了。返回true代表当前线程已中断并且已清除中断标记。
+		 */
 		final boolean acquireQueued(final Node node, int arg) {
 			boolean failed = true;
 			try {
