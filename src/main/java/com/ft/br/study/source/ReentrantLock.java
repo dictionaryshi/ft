@@ -393,6 +393,9 @@ public class ReentrantLock {
 			Thread.currentThread().interrupt();
 		}
 
+		/**
+		 * 判断当前线程前是否还有其它线程等待获取锁(true:有)
+		 */
 		final boolean hasQueuedPredecessors() {
 			Node t = tail;
 			Node h = head;
