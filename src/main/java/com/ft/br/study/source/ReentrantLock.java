@@ -273,6 +273,7 @@ public class ReentrantLock {
 				boolean interrupted = false;
 				for (; ; ) {
 					final Node p = node.predecessor();
+					// 若当前任务的前一个节点是头节点, 则尝试获取一次锁
 					if (p == head && tryAcquire(arg)) {
 						setHead(node);
 						p.next = null;
@@ -313,8 +314,13 @@ public class ReentrantLock {
 			return false;
 		}
 
+		/**
+		 * true:当前线程已中断, 并且已经清除中断标志。此时线程恢复运行
+		 */
 		private boolean parkAndCheckInterrupt() {
+			// 阻塞当前线程
 			LockSupport.park(this);
+			// 清除当前线程的中断标志
 			return Thread.interrupted();
 		}
 
