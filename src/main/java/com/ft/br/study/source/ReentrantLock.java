@@ -233,6 +233,9 @@ public class ReentrantLock {
 			return false;
 		}
 
+		/**
+		 * 将node添加到队尾
+		 */
 		private Node addWaiter(Node mode) {
 			Node node = new Node(Thread.currentThread(), mode);
 			Node pred = tail;
