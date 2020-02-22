@@ -298,6 +298,9 @@ public class ReentrantLock {
 			node.prev = null;
 		}
 
+		/**
+		 * true:代表当前线程可以执行阻塞了
+		 */
 		private static boolean shouldParkAfterFailedAcquire(Node pred, Node node) {
 			int ws = pred.waitStatus;
 			if (ws == Node.SIGNAL) {
