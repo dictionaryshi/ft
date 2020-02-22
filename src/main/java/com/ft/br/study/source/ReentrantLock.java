@@ -68,6 +68,9 @@ public class ReentrantLock {
 			acquire(1);
 		}
 
+		/**
+		 * true:获取到锁了
+		 */
 		@Override
 		protected final boolean tryAcquire(int acquires) {
 			final Thread current = Thread.currentThread();
