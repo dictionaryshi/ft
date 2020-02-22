@@ -397,9 +397,16 @@ public class ReentrantLock {
 		 * 判断当前线程前是否还有其它线程等待获取锁(true:有)
 		 */
 		final boolean hasQueuedPredecessors() {
+			// tail head 初始为null
 			Node t = tail;
 			Node h = head;
 			Node s;
+			/*
+				if (compareAndSetHead(new Node())) {
+						// 这里还没有执行的情况
+						tail = head;
+				}
+			 */
 			return h != t &&
 					((s = h.next) == null || s.thread != Thread.currentThread());
 		}
