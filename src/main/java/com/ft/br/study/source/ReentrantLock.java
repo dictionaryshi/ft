@@ -51,6 +51,9 @@ public class ReentrantLock {
 			}
 		}
 
+		/**
+		 * true:获取锁成功
+		 */
 		@Override
 		protected final boolean tryAcquire(int acquires) {
 			return nonfairTryAcquire(acquires);
