@@ -29,6 +29,8 @@ public class Array {
 
 	/**
 	 * 删除数组中指定元素
+	 *
+	 * @return 剩余元素个数
 	 */
 	public int removeElement(int[] nums, int val) {
 		int i = 0;
