@@ -20,25 +20,18 @@ import java.util.*;
 public class RuleServiceImpl implements RuleService {
 
 	@Override
-	public String valid(List<RuleBO> rules, String objJson) {
+	public String valid(RuleBO rule, String objJson) {
 		Map<String, Object> objectMap = JsonUtil.json2Object(objJson, new TypeReference<Map<String, Object>>() {
 		});
 		if (objectMap == null) {
 			return "对象json解析失败, json=>" + objJson;
 		}
 
-		if (ObjectUtil.isEmpty(rules)) {
+		if (rule == null) {
 			return "未配置校验规则";
 		}
 
-		for (RuleBO rule : rules) {
-			String errorMessage = this.validRule(rule, objectMap);
-			if (errorMessage != null) {
-				return errorMessage;
-			}
-		}
-
-		return null;
+		return this.validRule(rule, objectMap);
 	}
 
 	private String validRule(RuleBO rule, Map<String, Object> objectMap) {

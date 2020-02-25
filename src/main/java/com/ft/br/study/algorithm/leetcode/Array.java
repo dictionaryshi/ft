@@ -8,7 +8,9 @@ package com.ft.br.study.algorithm.leetcode;
 public class Array {
 
 	/**
-	 * 删除排序数组中的重复项
+	 * 删除排序数组中的重复项(重复元素放在数组末尾)
+	 *
+	 * @return 不重复的元素个数
 	 */
 	public int removeDuplicates(int[] nums) {
 		if (nums.length == 0) {
@@ -27,6 +29,8 @@ public class Array {
 
 	/**
 	 * 删除数组中指定元素
+	 *
+	 * @return 剩余元素个数
 	 */
 	public int removeElement(int[] nums, int val) {
 		int i = 0;
