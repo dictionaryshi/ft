@@ -33,7 +33,7 @@
     boolean:1个字节。
 
 14.不同数据类型之间运算时, 小类型默认转换成大类型。boolean类型不能参与运算。
-byte, short和char参与运算时, 他们之间不能相互转换。(int, long, float, double)
+byte, short和char参与运算时, 他们之间不能相互转换。(只能转换为:int、long、float、double)
 
 15.大括号包围的部分叫做代码块。代码块执行完毕后, 定义在代码块中的局部变量的内存会被释放。
 使用局部代码块可以提高程序性能。
