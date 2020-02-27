@@ -66,22 +66,12 @@ final修饰后, 堆内存中存储的是一个常量, 可以通过反编译工�
 
 37.数组一旦创建不能够增删元素。
 
-38.二维数组的内存==>int[][] arr = new int[3][2];
-
-    1)在栈内存为arr开辟内存空间。
-    2)在堆内存中为二维数组的实体开辟一个内存空间。(3个索引的初始化值为null)
-    3)在堆内存中为一维数组的实体开辟3个内存空间。(每个实体对应的2个索引初始化值为0)
-    4)将每个一维数组的实体地址值赋值给二维数组的索引。
-    5)将二维数组的地址值赋值给arr。(初始化完毕)
-
 39.java.lang.String:
-
     1)public boolean matches(String regex) {} //判断字符串是否符合正则表达式的规则。
     2)public String[] split(String regex) {} // 分割字符串
     3)public String replaceAll(String regex, String replacement) {}
 
 40.类的初始化时机:
-
     1)创建类的实例。
     2)访问类的静态变量, 或者为静态变量赋值。
     3)调用类的静态方法。
