@@ -1,5 +1,3 @@
-1.编译Java文件, 有多少个类就生成多少个.class文件。
-
 3.一个JAVA文件中只能有一个public修饰的类。而且java文件名必须与该类名称保持一致。
 
 4.JAVA语言平台:javaSE, javaEE。
