@@ -24,12 +24,12 @@ Eden区满时, 进行Minor GC, 当Eden和一个Survivor区中依然存活的对�
 因为即使Minor GC之后所有对象都存活, Survivor区放不下了, 也可以转移到老年代去。
 但是假如执行Minor GC之前, 发现老年代的可用内存已经小于了新生代的全部对象大小了, 就会看"-XX:-HandlePromotionFailure"参数是否设置了。
 如果设置了, 那么看看老年代的内存大小, 是否大于之前每一次Minor GC后进入老年代的对象的平均大小。
-如果否, 或者没有设置"-XX:-HandlePromotionFailure", 此时会先进行Full GC, 然后再进行Minor GC。
+如果否, 或者没有设置"-XX:-HandlePromotionFailure", 此时会先进行Major GC, 然后再进行Minor GC。
 如果是, 那么就是说可以冒点风险尝试一下Minor GC, Minor GC过后, 剩余的存活对象的大小, 是小于Survivor区的大小的, 那么此时存活对象进入Survivor区域即可。
 Minor GC过后, 剩余的存活对象的大小, 是大于Survivor区域的大小, 但是是小于老年代可用内存大小的, 此时就直接进入老年代即可。
 Minor GC过后, 剩余的存活对象的大小, 大于了Survivor区域的大小, 也大于了老年代可用内存的大小。此时老年代都放不下这些存活对象了, 就会发生"Handle Promotion Failure"的情况,
-这个时候就会触发一次"Full GC"。
-如果要是Full GC过后, 老年代还是没有足够的空间存放Minor GC过后的剩余存活对象, 那么此时就会导致所谓的"OOM"内存溢出了。
+这个时候就会触发一次"Major GC"。
+如果要是Major GC过后, 老年代还是没有足够的空间存放Minor GC过后的剩余存活对象, 那么此时就会导致所谓的"OOM"内存溢出了。
 
 7.老年代:在新生代中经历了N次垃圾回收后仍然存活的对象, 就会被放到年老代, 该区域中对象存活率高。
 
