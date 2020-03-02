@@ -309,7 +309,7 @@ rows:大致估算, 找到所需记录要读取的行数。(越少越好)
 Extra:重要的额外信息。
     1)Using filesort:排序时没有使用索引。(order by和group by 会引起此问题)
     2)Using temporary:产生临时表。(group by 会引起此问题)
-    3)Using index:使用了覆盖索引, 没有访问数据行。
+    3)Using index:使用了索引。
     4)Using where:使用了where过滤。
     5)using join buffer:使用了连接缓存。
 
