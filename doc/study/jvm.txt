@@ -15,31 +15,7 @@ jstack 6772 | grep 1abc -A 100
 // 查看java进程
 jps -l
 
-// 查看java启动参数
-jinfo -flags 17346
-
-jinfo -flag MaxMetaspaceSize 17346
-jinfo -flag InitialHeapSize 17346
-jinfo -flag MaxHeapSize 17346
-jinfo -flag NewSize 17346
-jinfo -flag OldSize 17346
-
--Xms256m (默认物理内存1 / 64)
--Xmx256m (默认物理内存1 / 4)
-
 查看linux系统负载:uptime
-
-vmstat -n 2 3 (每两秒采样一次, 共采样3次)
-    -procs:
-        1)r:代表CPU运行队列中的进程数。整个系统CPU运行队列中进程数不能超过总CPU核数的2倍, 否则代表系统压力过大。
-        2)b:代表被阻塞的进程数。(IO操作等)
-    -cpu:
-        1)us:us值比较高时, 说明用户进程消耗的CPU时间较多, 如果长期大于50%, 需要考虑优化应用程序。
-        2)sy:sy值比较高时, 说明系统进程消耗的CPU时间较多, 如果us + sy超过80%, 就表明CPU资源存在不足。
-
-mpstat -P ALL 2
-pidstat -u 2 -p 进程号
-pidstat -r 2 -p 进程号
 
 jvm的区域划分:程序计数器、虚拟机栈、堆、方法区、本地方法栈。
     1)程序计数器:每个线程都有一个程序计数器, 是一块较小的内存空间, 记录字节码指令的地址。多线程情况下, 程序计数器记录的是当前线程执行的位置。
