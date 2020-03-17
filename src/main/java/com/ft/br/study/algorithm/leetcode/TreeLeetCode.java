@@ -221,6 +221,9 @@ public class TreeLeetCode {
 	private Map<Integer, Integer> depth;
 	private Map<Integer, TreeNode> parent;
 
+	/**
+	 * 判断是否为堂兄弟节点, 根结点不同但是深度一样
+	 */
 	public boolean isCousins(TreeNode root, int x, int y) {
 		depth = new HashMap<>(16);
 		parent = new HashMap<>(16);
