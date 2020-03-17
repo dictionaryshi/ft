@@ -255,6 +255,9 @@ public class TreeLeetCode {
 		}
 	}
 
+	/**
+	 * 求数组的所有子集
+	 */
 	public List<List<Integer>> subsets(int[] nums) {
 		for (n = 0; n < nums.length + 1; n++) {
 			backtrack(0, new ArrayList<>(), nums);
