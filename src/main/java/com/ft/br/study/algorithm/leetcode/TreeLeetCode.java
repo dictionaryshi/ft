@@ -239,4 +239,49 @@ public class TreeLeetCode {
 			dfs(node.right, node);
 		}
 	}
+
+	private List<List<Integer>> output = new ArrayList<>();
+	private int n;
+
+	public void backtrack(int first, ArrayList<Integer> curr, int[] nums) {
+		if (curr.size() == n) {
+			output.add(new ArrayList<>(curr));
+		}
+
+		for (int i = first; i < nums.length; i++) {
+			curr.add(nums[i]);
+			backtrack(i + 1, curr, nums);
+			curr.remove(curr.size() - 1);
+		}
+	}
+
+	/**
+	 * 求数组的所有子集
+	 */
+	public List<List<Integer>> subsets(int[] nums) {
+		for (n = 0; n < nums.length + 1; n++) {
+			backtrack(0, new ArrayList<>(), nums);
+		}
+		return output;
+	}
+
+	/**
+	 * 求1-n的k个组合
+	 */
+	public void backtrack(int first, ArrayList<Integer> curr, int n, int k) {
+		if (curr.size() == k) {
+			output.add(new ArrayList<>(curr));
+		}
+
+		for (int i = first; i < n + 1; ++i) {
+			curr.add(i);
+			backtrack(i + 1, curr, n, k);
+			curr.remove(curr.size() - 1);
+		}
+	}
+
+	public List<List<Integer>> combine(int n, int k) {
+		backtrack(1, new ArrayList<>(), n, k);
+		return output;
+	}
 }
