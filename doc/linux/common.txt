@@ -166,3 +166,5 @@ top (P:按CPU使用排序, M:按内存使用排序)
 
 sudo passwd (Mac设置初始root密码)
 
+awk "NR==10" file.txt // 打印第10行内容
+
