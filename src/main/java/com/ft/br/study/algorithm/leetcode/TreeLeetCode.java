@@ -265,6 +265,9 @@ public class TreeLeetCode {
 		return output;
 	}
 
+	/**
+	 * 求1-n的k个组合
+	 */
 	public void backtrack(int first, ArrayList<Integer> curr, int n, int k) {
 		if (curr.size() == k) {
 			output.add(new ArrayList<>(curr));
