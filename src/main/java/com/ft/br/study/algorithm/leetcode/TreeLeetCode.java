@@ -1,9 +1,6 @@
 package com.ft.br.study.algorithm.leetcode;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Stack;
+import java.util.*;
 
 /**
  * TreeLeetCode
@@ -204,5 +201,42 @@ public class TreeLeetCode {
 		int R = depth(node.right);
 		ans = Math.max(ans, L + R + 1);
 		return Math.max(L, R) + 1;
+	}
+
+	/**
+	 * 给定一个二叉树和一个目标和, 判断该树中是否存在根节点到叶子节点的路径, 这条路径上所有节点值相加等于目标和。
+	 */
+	public boolean hasPathSum(TreeNode root, int sum) {
+		if (root == null) {
+			return false;
+		}
+
+		sum -= root.val;
+		if ((root.left == null) && (root.right == null)) {
+			return (sum == 0);
+		}
+		return hasPathSum(root.left, sum) || hasPathSum(root.right, sum);
+	}
+
+	private Map<Integer, Integer> depth;
+	private Map<Integer, TreeNode> parent;
+
+	/**
+	 * 判断是否为堂兄弟节点, 根结点不同但是深度一样
+	 */
+	public boolean isCousins(TreeNode root, int x, int y) {
+		depth = new HashMap<>(16);
+		parent = new HashMap<>(16);
+		dfs(root, null);
+		return (depth.get(x).equals(depth.get(y)) && parent.get(x) != parent.get(y));
+	}
+
+	public void dfs(TreeNode node, TreeNode par) {
+		if (node != null) {
+			depth.put(node.val, par != null ? 1 + depth.get(par.val) : 0);
+			parent.put(node.val, par);
+			dfs(node.left, node);
+			dfs(node.right, node);
+		}
 	}
 }
