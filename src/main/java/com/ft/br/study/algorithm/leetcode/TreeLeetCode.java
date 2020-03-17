@@ -264,4 +264,21 @@ public class TreeLeetCode {
 		}
 		return output;
 	}
+
+	public void backtrack(int first, ArrayList<Integer> curr, int n, int k) {
+		if (curr.size() == k) {
+			output.add(new ArrayList<>(curr));
+		}
+
+		for (int i = first; i < n + 1; ++i) {
+			curr.add(i);
+			backtrack(i + 1, curr, n, k);
+			curr.remove(curr.size() - 1);
+		}
+	}
+
+	public List<List<Integer>> combine(int n, int k) {
+		backtrack(1, new ArrayList<>(), n, k);
+		return output;
+	}
 }
