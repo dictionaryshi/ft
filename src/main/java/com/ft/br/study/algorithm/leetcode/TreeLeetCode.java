@@ -1,9 +1,6 @@
 package com.ft.br.study.algorithm.leetcode;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Stack;
+import java.util.*;
 
 /**
  * TreeLeetCode
@@ -219,5 +216,24 @@ public class TreeLeetCode {
 			return (sum == 0);
 		}
 		return hasPathSum(root.left, sum) || hasPathSum(root.right, sum);
+	}
+
+	private Map<Integer, Integer> depth;
+	private Map<Integer, TreeNode> parent;
+
+	public boolean isCousins(TreeNode root, int x, int y) {
+		depth = new HashMap<>(16);
+		parent = new HashMap<>(16);
+		dfs(root, null);
+		return (depth.get(x).equals(depth.get(y)) && parent.get(x) != parent.get(y));
+	}
+
+	public void dfs(TreeNode node, TreeNode par) {
+		if (node != null) {
+			depth.put(node.val, par != null ? 1 + depth.get(par.val) : 0);
+			parent.put(node.val, par);
+			dfs(node.left, node);
+			dfs(node.right, node);
+		}
 	}
 }
