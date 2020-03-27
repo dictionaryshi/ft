@@ -23,4 +23,5 @@ CopyOnWriteArrayList
 HashMap
 LinkedBlockingQueue
 ReentrantLock
+PriorityQueue
 JUC
