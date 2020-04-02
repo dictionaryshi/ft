@@ -1,7 +1,6 @@
 package com.ft.br.study.juc;
 
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -9,7 +8,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class QueueTest {
 	public static void main(String[] args) {
-		BlockingQueue<Integer> blockingQueue = new ArrayBlockingQueue<>(2);
+		LinkedBlockingQueue<Integer> blockingQueue = new LinkedBlockingQueue<>(2);
 		// 队列满时, 调用add方法抛出异常
 		boolean f1 = blockingQueue.add(1);
 		boolean f2 = blockingQueue.add(2);
@@ -37,7 +36,7 @@ public class QueueTest {
 		}
 
 
-		blockingQueue = new ArrayBlockingQueue<>(2);
+		blockingQueue = new LinkedBlockingQueue<>(2);
 		boolean offer1 = blockingQueue.offer(1);
 		boolean offer2 = blockingQueue.offer(2);
 		// 队列满时返回false
@@ -54,7 +53,7 @@ public class QueueTest {
 		first = blockingQueue.peek();
 
 
-		blockingQueue = new ArrayBlockingQueue<>(2);
+		blockingQueue = new LinkedBlockingQueue<>(2);
 		try {
 			boolean offer4 = blockingQueue.offer(1, 5L, TimeUnit.SECONDS);
 			boolean offer5 = blockingQueue.offer(2, 5L, TimeUnit.SECONDS);
