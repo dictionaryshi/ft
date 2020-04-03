@@ -67,22 +67,6 @@ public class ReverseInteger {
 		return (int) res * sign;
 	}
 
-	/**
-	 * 判断是否是回文数字
-	 */
-	public boolean isPalindrome(int x) {
-		if (x < 0) {
-			return false;
-		}
-		int res = 0;
-		int y = x;
-		while (y != 0) {
-			res = res * 10 + y % 10;
-			y /= 10;
-		}
-		return res == x;
-	}
-
 	public static void main(String[] args) {
 		System.out.println(convert("257"));
 		System.out.println(reverse(257));
