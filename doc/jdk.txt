@@ -19,6 +19,10 @@
 
 9.echo $JAVA_HOME
 
+https://site.ip138.com/
+151.101.76.133 raw.githubusercontent.com
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+
 yum -y install git
 yum -y install zsh
 yum -y update nss curl libcurl
