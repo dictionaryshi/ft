@@ -19,6 +19,9 @@
 
 9.echo $JAVA_HOME
 
+MAC关闭SIP: csrutil disable
+sudo mount -uw /
+
 https://site.ip138.com/
 151.101.76.133 raw.githubusercontent.com
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
