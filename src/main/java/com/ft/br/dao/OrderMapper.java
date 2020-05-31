@@ -21,67 +21,67 @@ import java.util.List;
 @Mapper
 public interface OrderMapper extends OrderDOMapper {
 
-	class SqlBuilder {
-		private void pageWhere(SQL sql, OrderListAO ao) {
-			if (ao.getId() != null) {
-				sql.WHERE("id = #{id}");
-			}
+    class SqlBuilder {
+        private void pageWhere(SQL sql, OrderListAO ao) {
+            if (ao.getId() != null) {
+                sql.WHERE("id = #{id}");
+            }
 
-			if (ao.getStatus() != null) {
-				sql.WHERE("status = #{status}");
-			}
+            if (ao.getStatus() != null) {
+                sql.WHERE("status = #{status}");
+            }
 
-			if (!StringUtil.isNull(ao.getStartTime())) {
-				sql.WHERE("created_at >= #{startTime}");
-			}
+            if (!StringUtil.isNull(ao.getStartTime())) {
+                sql.WHERE("created_at >= #{startTime}");
+            }
 
-			if (!StringUtil.isNull(ao.getEndTime())) {
-				sql.WHERE("created_at <= #{endTime}");
-			}
-		}
+            if (!StringUtil.isNull(ao.getEndTime())) {
+                sql.WHERE("created_at <= #{endTime}");
+            }
+        }
 
-		public String countPagination(OrderListAO ao) {
-			SQL sql = new SQL();
+        public String countPagination(OrderListAO ao) {
+            SQL sql = new SQL();
 
-			sql.SELECT("count(1)");
+            sql.SELECT("count(1)");
 
-			sql.FROM("`order_goods`");
+            sql.FROM("`order_goods`");
 
-			this.pageWhere(sql, ao);
+            this.pageWhere(sql, ao);
 
-			return sql.toString();
-		}
+            return sql.toString();
+        }
 
-		public String listPagination(OrderListAO ao) {
-			SQL sql = new SQL();
+        public String listPagination(OrderListAO ao) {
+            SQL sql = new SQL();
 
-			sql.SELECT("*");
+            sql.SELECT("*");
 
-			sql.FROM("`order_goods`");
+            sql.FROM("`order_goods`");
 
-			this.pageWhere(sql, ao);
+            this.pageWhere(sql, ao);
 
-			sql.ORDER_BY("id desc");
+            sql.ORDER_BY("id desc");
 
-			return MybatisUtil.limit(sql, ao);
-		}
-	}
+            return MybatisUtil.limit(sql, ao);
+        }
+    }
 
-	/**
-	 * 查询符合条件的数量
-	 *
-	 * @param orderListAO 条件
-	 * @return 数量
-	 */
-	@SelectProvider(type = SqlBuilder.class, method = "countPagination")
-	int countPagination(OrderListAO orderListAO);
+    /**
+     * 查询符合条件的数量
+     *
+     * @param orderListAO 条件
+     * @return 数量
+     */
+    @SelectProvider(type = SqlBuilder.class, method = "countPagination")
+    int countPagination(OrderListAO orderListAO);
 
-	/**
-	 * 分页查询订单
-	 *
-	 * @param orderListAO 条件
-	 * @return 订单记录
-	 */
-	@SelectProvider(type = SqlBuilder.class, method = "listPagination")
-	List<OrderDO> listPagination(OrderListAO orderListAO);
+    /**
+     * 分页查询订单
+     *
+     * @param orderListAO 条件
+     * @return 订单记录
+     */
+    @SelectProvider(type = SqlBuilder.class, method = "listPagination")
+    List<OrderDO> listPagination(OrderListAO orderListAO);
 }

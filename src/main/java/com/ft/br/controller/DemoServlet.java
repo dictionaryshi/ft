@@ -18,15 +18,15 @@ import java.util.Enumeration;
  */
 @Slf4j
 public class DemoServlet extends HttpServlet {
-	@Override
-	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		HttpUtil.httpCode(request, response, null);
-		Enumeration<String> initParameterNames = this.getInitParameterNames();
-		while (initParameterNames.hasMoreElements()) {
-			String initParameterName = initParameterNames.nextElement();
-			String initParameterValue = this.getInitParameter(initParameterName);
-			log.info("{} => {}", initParameterName, initParameterValue);
-			response.getWriter().println(initParameterName + " => " + initParameterValue);
-		}
-	}
+    @Override
+    public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        HttpUtil.httpCode(request, response, null);
+        Enumeration<String> initParameterNames = this.getInitParameterNames();
+        while (initParameterNames.hasMoreElements()) {
+            String initParameterName = initParameterNames.nextElement();
+            String initParameterValue = this.getInitParameter(initParameterName);
+            log.info("{} => {}", initParameterName, initParameterValue);
+            response.getWriter().println(initParameterName + " => " + initParameterValue);
+        }
+    }
 }

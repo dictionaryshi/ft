@@ -39,181 +39,181 @@ import java.util.stream.Collectors;
 @Service("com.ft.br.service.impl.GoodsServiceImpl")
 public class GoodsServiceImpl implements GoodsService {
 
-	@Autowired
-	private GoodsMapper goodsMapper;
+    @Autowired
+    private GoodsMapper goodsMapper;
 
-	@Autowired
-	private CategoryMapper categoryMapper;
+    @Autowired
+    private CategoryMapper categoryMapper;
 
-	@Autowired
-	private CategoryService categoryService;
+    @Autowired
+    private CategoryService categoryService;
 
-	@Autowired
-	private RedisLock redisLock;
+    @Autowired
+    private RedisLock redisLock;
 
-	@UseMaster
-	@Override
-	public boolean add(GoodsAddAO goodsAddAO) {
-		int categoryId = goodsAddAO.getCategoryId();
-		String name = goodsAddAO.getName();
+    @UseMaster
+    @Override
+    public boolean add(GoodsAddAO goodsAddAO) {
+        int categoryId = goodsAddAO.getCategoryId();
+        String name = goodsAddAO.getName();
 
-		CategoryDO categoryDO = categoryMapper.selectByPrimaryKey(categoryId);
-		if (categoryDO == null) {
-			FtException.throwException("商品分类不存在");
-		}
+        CategoryDO categoryDO = categoryMapper.selectByPrimaryKey(categoryId);
+        if (categoryDO == null) {
+            FtException.throwException("商品分类不存在");
+        }
 
-		String lockKey = RedisUtil.getRedisKey(RedisKey.REDIS_GOODS_ADD_LOCK, categoryId + "_" + name);
-		try {
-			redisLock.lock(lockKey);
-			if (goodsMapper.getGoodsByName(categoryId, name) != null) {
-				FtException.throwException("商品已经存在");
-			}
+        String lockKey = RedisUtil.getRedisKey(RedisKey.REDIS_GOODS_ADD_LOCK, categoryId + "_" + name);
+        try {
+            redisLock.lock(lockKey);
+            if (goodsMapper.getGoodsByName(categoryId, name) != null) {
+                FtException.throwException("商品已经存在");
+            }
 
-			GoodsDO goodsDO = new GoodsDO();
-			goodsDO.setName(name);
-			goodsDO.setCategory(categoryId);
+            GoodsDO goodsDO = new GoodsDO();
+            goodsDO.setName(name);
+            goodsDO.setCategory(categoryId);
 
-			return goodsMapper.insertSelective(goodsDO) == 1;
-		} finally {
-			redisLock.unlock(lockKey);
-		}
-	}
+            return goodsMapper.insertSelective(goodsDO) == 1;
+        } finally {
+            redisLock.unlock(lockKey);
+        }
+    }
 
-	@Override
-	public GoodsBO get(GoodsGetAO goodsGetAO) {
-		int id = goodsGetAO.getId();
-		GoodsDO goodsDO = this.get(id);
-		if (goodsDO == null) {
-			return null;
-		}
+    @Override
+    public GoodsBO get(GoodsGetAO goodsGetAO) {
+        int id = goodsGetAO.getId();
+        GoodsDO goodsDO = this.get(id);
+        if (goodsDO == null) {
+            return null;
+        }
 
-		GoodsBO goodsBO = new GoodsBO();
-		goodsBO.setId(goodsDO.getId());
-		goodsBO.setGoodsName(goodsDO.getName());
-		goodsBO.setStockNumber(goodsDO.getNumber());
-		goodsBO.setCategoryId(goodsDO.getCategory());
+        GoodsBO goodsBO = new GoodsBO();
+        goodsBO.setId(goodsDO.getId());
+        goodsBO.setGoodsName(goodsDO.getName());
+        goodsBO.setStockNumber(goodsDO.getNumber());
+        goodsBO.setCategoryId(goodsDO.getCategory());
 
-		CategoryBO categoryBO = categoryService.getById(goodsDO.getCategory());
-		if (categoryBO != null) {
-			goodsBO.setCategoryName(categoryBO.getName());
-		}
+        CategoryBO categoryBO = categoryService.getById(goodsDO.getCategory());
+        if (categoryBO != null) {
+            goodsBO.setCategoryName(categoryBO.getName());
+        }
 
-		return goodsBO;
-	}
+        return goodsBO;
+    }
 
-	@Override
-	public GoodsDO get(int id) {
-		return goodsMapper.selectByPrimaryKey(id);
-	}
+    @Override
+    public GoodsDO get(int id) {
+        return goodsMapper.selectByPrimaryKey(id);
+    }
 
-	@Override
-	public List<GoodsBO> listByCategoryId(int categoryId) {
-		Map<Integer, GoodsDO> goodsMap = goodsMapper.selectByCategory(categoryId);
+    @Override
+    public List<GoodsBO> listByCategoryId(int categoryId) {
+        Map<Integer, GoodsDO> goodsMap = goodsMapper.selectByCategory(categoryId);
 
-		List<Integer> categoryIds = goodsMap.values().stream().map(GoodsDO::getCategory).distinct().collect(Collectors.toList());
-		Map<Integer, String> categoryNameMap = categoryService.listCategoryNameByIds(categoryIds);
+        List<Integer> categoryIds = goodsMap.values().stream().map(GoodsDO::getCategory).distinct().collect(Collectors.toList());
+        Map<Integer, String> categoryNameMap = categoryService.listCategoryNameByIds(categoryIds);
 
-		return goodsMap.values().stream().map(goodsDO -> this.goodsDO2GoodsBO(goodsDO, categoryNameMap)).collect(Collectors.toList());
-	}
+        return goodsMap.values().stream().map(goodsDO -> this.goodsDO2GoodsBO(goodsDO, categoryNameMap)).collect(Collectors.toList());
+    }
 
-	@UseMaster
-	@Override
-	public boolean update(GoodsUpdateAO goodsUpdateAO) {
-		int id = goodsUpdateAO.getId();
+    @UseMaster
+    @Override
+    public boolean update(GoodsUpdateAO goodsUpdateAO) {
+        int id = goodsUpdateAO.getId();
 
-		GoodsDO goodsDO = goodsMapper.selectByPrimaryKey(id);
-		if (goodsDO == null) {
-			FtException.throwException("商品不存在");
-		}
+        GoodsDO goodsDO = goodsMapper.selectByPrimaryKey(id);
+        if (goodsDO == null) {
+            FtException.throwException("商品不存在");
+        }
 
-		int categoryId = goodsUpdateAO.getCategoryId();
-		CategoryBO categoryBO = categoryService.getById(categoryId);
-		if (categoryBO == null) {
-			FtException.throwException("商品分类不存在");
-		}
+        int categoryId = goodsUpdateAO.getCategoryId();
+        CategoryBO categoryBO = categoryService.getById(categoryId);
+        if (categoryBO == null) {
+            FtException.throwException("商品分类不存在");
+        }
 
-		String lockKey = RedisUtil.getRedisKey(RedisKey.REDIS_GOODS_UPDATE_LOCK, id + "");
+        String lockKey = RedisUtil.getRedisKey(RedisKey.REDIS_GOODS_UPDATE_LOCK, id + "");
 
-		try {
-			redisLock.lock(lockKey);
+        try {
+            redisLock.lock(lockKey);
 
-			String name = goodsUpdateAO.getName();
+            String name = goodsUpdateAO.getName();
 
-			goodsDO = goodsMapper.getGoodsByName(categoryId, name);
-			if (goodsDO != null) {
-				FtException.throwException("商品分类关系已存在");
-			}
+            goodsDO = goodsMapper.getGoodsByName(categoryId, name);
+            if (goodsDO != null) {
+                FtException.throwException("商品分类关系已存在");
+            }
 
-			GoodsDO update = new GoodsDO();
-			update.setId(id);
-			update.setName(name);
-			update.setCategory(categoryId);
+            GoodsDO update = new GoodsDO();
+            update.setId(id);
+            update.setName(name);
+            update.setCategory(categoryId);
 
-			return goodsMapper.updateByPrimaryKeySelective(update) == 1;
-		} finally {
-			redisLock.unlock(lockKey);
-		}
-	}
+            return goodsMapper.updateByPrimaryKeySelective(update) == 1;
+        } finally {
+            redisLock.unlock(lockKey);
+        }
+    }
 
-	@Override
-	public PageResult<GoodsBO> listByPage(GoodsListAO goodsListAO) {
-		int total = goodsMapper.countPaging(goodsListAO);
+    @Override
+    public PageResult<GoodsBO> listByPage(GoodsListAO goodsListAO) {
+        int total = goodsMapper.countPaging(goodsListAO);
 
-		PageResult<GoodsBO> pageResult = new PageResult<>();
-		pageResult.setPage(goodsListAO.getPage());
-		pageResult.setLimit(goodsListAO.getLimit());
-		pageResult.setTotal(total);
-		pageResult.setList(Lists.newArrayList());
-		if (total <= 0) {
-			return pageResult;
-		}
+        PageResult<GoodsBO> pageResult = new PageResult<>();
+        pageResult.setPage(goodsListAO.getPage());
+        pageResult.setLimit(goodsListAO.getLimit());
+        pageResult.setTotal(total);
+        pageResult.setList(Lists.newArrayList());
+        if (total <= 0) {
+            return pageResult;
+        }
 
-		List<GoodsDO> goodsDOs = goodsMapper.listPaging(goodsListAO);
+        List<GoodsDO> goodsDOs = goodsMapper.listPaging(goodsListAO);
 
-		List<Integer> categoryIds = goodsDOs.stream().map(GoodsDO::getCategory).distinct().collect(Collectors.toList());
-		Map<Integer, String> categoryNameMap = categoryService.listCategoryNameByIds(categoryIds);
+        List<Integer> categoryIds = goodsDOs.stream().map(GoodsDO::getCategory).distinct().collect(Collectors.toList());
+        Map<Integer, String> categoryNameMap = categoryService.listCategoryNameByIds(categoryIds);
 
-		List<GoodsBO> list = goodsDOs.stream().map(goodsDO -> this.goodsDO2GoodsBO(goodsDO, categoryNameMap)).collect(Collectors.toList());
-		pageResult.setList(list);
+        List<GoodsBO> list = goodsDOs.stream().map(goodsDO -> this.goodsDO2GoodsBO(goodsDO, categoryNameMap)).collect(Collectors.toList());
+        pageResult.setList(list);
 
-		return pageResult;
-	}
+        return pageResult;
+    }
 
-	private GoodsBO goodsDO2GoodsBO(GoodsDO goodsDO, Map<Integer, String> categoryNameMap) {
-		GoodsBO goodsBO = new GoodsBO();
-		goodsBO.setId(goodsDO.getId());
-		goodsBO.setGoodsName(goodsDO.getName());
-		goodsBO.setStockNumber(goodsDO.getNumber());
-		goodsBO.setCategoryId(goodsDO.getCategory());
+    private GoodsBO goodsDO2GoodsBO(GoodsDO goodsDO, Map<Integer, String> categoryNameMap) {
+        GoodsBO goodsBO = new GoodsBO();
+        goodsBO.setId(goodsDO.getId());
+        goodsBO.setGoodsName(goodsDO.getName());
+        goodsBO.setStockNumber(goodsDO.getNumber());
+        goodsBO.setCategoryId(goodsDO.getCategory());
 
-		String categoryName = categoryNameMap.get(goodsDO.getCategory());
-		goodsBO.setCategoryName(categoryName);
+        String categoryName = categoryNameMap.get(goodsDO.getCategory());
+        goodsBO.setCategoryName(categoryName);
 
-		return goodsBO;
-	}
+        return goodsBO;
+    }
 
-	@Override
-	public Map<Integer, String> listGoodsNamesByIds(List<Integer> ids) {
-		Map<Integer, String> resultMap = new HashMap<>(16);
+    @Override
+    public Map<Integer, String> listGoodsNamesByIds(List<Integer> ids) {
+        Map<Integer, String> resultMap = new HashMap<>(16);
 
-		if (ObjectUtil.isEmpty(ids)) {
-			return resultMap;
-		}
+        if (ObjectUtil.isEmpty(ids)) {
+            return resultMap;
+        }
 
-		String idStr = StringUtil.join(ids, ",");
-		Map<Integer, GoodsDO> goodsDOMap = goodsMapper.selectByIds(idStr);
-		goodsDOMap.forEach((id, goodsDO) -> resultMap.put(id, goodsDO.getName()));
+        String idStr = StringUtil.join(ids, ",");
+        Map<Integer, GoodsDO> goodsDOMap = goodsMapper.selectByIds(idStr);
+        goodsDOMap.forEach((id, goodsDO) -> resultMap.put(id, goodsDO.getName()));
 
-		return resultMap;
-	}
+        return resultMap;
+    }
 
-	@Override
-	public Integer getStock(int goodsId) {
-		GoodsDO goodsDO = goodsMapper.selectByPrimaryKey(goodsId);
-		if (goodsDO == null) {
-			return null;
-		}
+    @Override
+    public Integer getStock(int goodsId) {
+        GoodsDO goodsDO = goodsMapper.selectByPrimaryKey(goodsId);
+        if (goodsDO == null) {
+            return null;
+        }
 
-		return goodsDO.getNumber();
-	}
+        return goodsDO.getNumber();
+    }
 }

@@ -19,30 +19,30 @@ import java.util.Map;
 @Component
 public interface UserMapper extends UserDOMapper {
 
-	/**
-	 * 根据用户名查询用户信息
-	 *
-	 * @param username 用户名
-	 * @return 用户信息
-	 */
-	@Select("select * from `user` where username = #{username} limit 1")
-	UserDO getUserByUserName(String username);
+    /**
+     * 根据用户名查询用户信息
+     *
+     * @param username 用户名
+     * @return 用户信息
+     */
+    @Select("select * from `user` where username = #{username} limit 1")
+    UserDO getUserByUserName(String username);
 
-	/**
-	 * 死锁测试
-	 *
-	 * @param id 主键
-	 * @return 用户信息
-	 */
-	@Select("select * from `user` where id = #{id} for update")
-	UserDO deadLock(int id);
+    /**
+     * 死锁测试
+     *
+     * @param id 主键
+     * @return 用户信息
+     */
+    @Select("select * from `user` where id = #{id} for update")
+    UserDO deadLock(int id);
 
-	@MapKey("id")
-	@Select({
-			"select ",
-			"* ",
-			"from user ",
-			"where id in (${idStr}) "
-	})
-	Map<Integer, UserDO> selectByIds(@Param("idStr") String idStr);
+    @MapKey("id")
+    @Select({
+            "select ",
+            "* ",
+            "from user ",
+            "where id in (${idStr}) "
+    })
+    Map<Integer, UserDO> selectByIds(@Param("idStr") String idStr);
 }

@@ -13,14 +13,14 @@ import org.springframework.context.annotation.Configuration;
 @Configuration("com.ft.br.config.processor.SpringLifeServicePostProcessorConfig")
 public class SpringLifeServicePostProcessorConfig extends BaseBeanPostProcessor<SpringLifeService> {
 
-	@Override
-	protected void before(SpringLifeService bean, String beanName) throws BeansException {
-		System.out.println("SpringLifeBean " + 4);
-	}
+    @Override
+    protected void before(SpringLifeService bean, String beanName) throws BeansException {
+        System.out.println("SpringLifeBean " + 4);
+    }
 
-	@Override
-	protected void after(SpringLifeService springLifeService, String beanName) throws BeansException {
-		int orderStatus = springLifeService.getStatus();
-		System.out.println("SpringLifeBean " + 8);
-	}
+    @Override
+    protected void after(SpringLifeService springLifeService, String beanName) throws BeansException {
+        int orderStatus = springLifeService.getStatus();
+        System.out.println("SpringLifeBean " + 8);
+    }
 }

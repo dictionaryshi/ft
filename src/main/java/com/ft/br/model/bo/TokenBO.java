@@ -17,9 +17,9 @@ import lombok.ToString;
 @Setter
 @ToString
 public class TokenBO {
-	@ApiModelProperty(value = "sso token", required = true)
-	private String token;
+    @ApiModelProperty(value = "sso token", required = true)
+    private String token;
 
-	@ApiModelProperty(value = "登陆用户信息", required = true)
-	private UserBO user;
+    @ApiModelProperty(value = "登陆用户信息", required = true)
+    private UserBO user;
 }

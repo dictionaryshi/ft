@@ -20,31 +20,31 @@ import org.springframework.stereotype.Component;
 @Component
 public class ConsignListener {
 
-	private LogMapper logMapper;
+    private LogMapper logMapper;
 
-	public ConsignListener(LogMapper logMapper) {
-		this.logMapper = logMapper;
-	}
+    public ConsignListener(LogMapper logMapper) {
+        this.logMapper = logMapper;
+    }
 
-	@KafkaListener(
-			topics = {"${kafka.consign.topic}"},
-			containerFactory = KafkaConstant.CONCURRENT_KAFKA_LISTENER_CONTAINER_FACTORY_KEY,
-			groupId = "${kafka.consign.groupId}"
-	)
-	public void listen(
-			ConsumerRecord<String, String> record,
-			Acknowledgment acknowledgment
-	) {
-		try {
-			LogDO logDO = JsonUtil.json2Object(record.value(), new TypeReference<LogDO>() {
-			});
-			if (logDO == null) {
-				return;
-			}
+    @KafkaListener(
+            topics = {"${kafka.consign.topic}"},
+            containerFactory = KafkaConstant.CONCURRENT_KAFKA_LISTENER_CONTAINER_FACTORY_KEY,
+            groupId = "${kafka.consign.groupId}"
+    )
+    public void listen(
+            ConsumerRecord<String, String> record,
+            Acknowledgment acknowledgment
+    ) {
+        try {
+            LogDO logDO = JsonUtil.json2Object(record.value(), new TypeReference<LogDO>() {
+            });
+            if (logDO == null) {
+                return;
+            }
 
-			logMapper.insertSelective(logDO);
-		} finally {
-			acknowledgment.acknowledge();
-		}
-	}
+            logMapper.insertSelective(logDO);
+        } finally {
+            acknowledgment.acknowledge();
+        }
+    }
 }

@@ -14,7 +14,6 @@ import com.ft.redis.base.ValueOperationsCache;
 import com.ft.redis.util.RedisUtil;
 import com.ft.util.*;
 import com.ft.util.exception.FtException;
-import com.ft.util.model.LogAO;
 import com.ft.util.model.LogBO;
 import com.ft.web.model.UserBO;
 import lombok.extern.slf4j.Slf4j;
@@ -37,121 +36,121 @@ import java.util.concurrent.TimeUnit;
 @Service(value = "com.ft.br.service.impl.SsoServiceImpl")
 public class SsoServiceImpl implements SsoService {
 
-	@Autowired
-	private ValueOperationsCache<String, String> valueOperationsCache;
+    @Autowired
+    private ValueOperationsCache<String, String> valueOperationsCache;
 
-	@Autowired
-	private UserMapper userMapper;
+    @Autowired
+    private UserMapper userMapper;
 
-	@Override
-	@Transactional(value = DbConstant.DB_CONSIGN + DbConstant.TRAN_SACTION_MANAGER, propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED, rollbackFor = Throwable.class)
-	public void deadLock(int lockId1, int lockId2) {
-		userMapper.deadLock(lockId1);
-		userMapper.deadLock(lockId2);
-	}
+    @Override
+    @Transactional(value = DbConstant.DB_CONSIGN + DbConstant.TRANSACTION_MANAGER, propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED, rollbackFor = Throwable.class)
+    public void deadLock(int lockId1, int lockId2) {
+        userMapper.deadLock(lockId1);
+        userMapper.deadLock(lockId2);
+    }
 
-	@Override
-	public CodeBO getCode() {
-		CodeBO codeBO = new CodeBO();
+    @Override
+    public CodeBO getCode() {
+        CodeBO codeBO = new CodeBO();
 
-		String codeId = CommonUtil.get32UUID();
-		codeBO.setCodeId(codeId);
+        String codeId = CommonUtil.get32Uuid();
+        codeBO.setCodeId(codeId);
 
-		ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-		String code = ImageUtil.getImage(byteArrayOutputStream);
-		String img = Base64.getEncoder().encodeToString(byteArrayOutputStream.toByteArray());
-		codeBO.setImg(img);
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        String code = ImageUtil.getImage(byteArrayOutputStream);
+        String img = Base64.getEncoder().encodeToString(byteArrayOutputStream.toByteArray());
+        codeBO.setImg(img);
 
-		// code codeId做关系绑定
-		String codeIdKey = RedisUtil.getRedisKey(RedisKey.REDIS_VERIFICATION_CODE, codeId);
-		valueOperationsCache.setIfAbsent(codeIdKey, code, 300_000L, TimeUnit.MILLISECONDS);
+        // code codeId做关系绑定
+        String codeIdKey = RedisUtil.getRedisKey(RedisKey.REDIS_VERIFICATION_CODE, codeId);
+        valueOperationsCache.setIfAbsent(codeIdKey, code, 300_000L, TimeUnit.MILLISECONDS);
 
-		return codeBO;
-	}
+        return codeBO;
+    }
 
-	@Override
-	public TokenBO login(LoginAO loginAO) {
-		// 校验code
-		String errorMessage = this.checkCode(loginAO);
-		if (errorMessage != null) {
-			FtException.throwException(errorMessage);
-		}
+    @Override
+    public TokenBO login(LoginAO loginAO) {
+        // 校验code
+        String errorMessage = this.checkCode(loginAO);
+        if (errorMessage != null) {
+            FtException.throwException(errorMessage);
+        }
 
-		// 校验用户名 密码
-		UserBO userBO = this.checkUserAndPassword(loginAO);
+        // 校验用户名 密码
+        UserBO userBO = this.checkUserAndPassword(loginAO);
 
-		// token 用户信息绑定
-		String token = CommonUtil.get32UUID();
-		String tokenKey = RedisUtil.getRedisKey(RedisKey.REDIS_LOGIN_TOKEN, token);
-		valueOperationsCache.setIfAbsent(tokenKey, JsonUtil.object2Json(userBO), 3600_000L, TimeUnit.MILLISECONDS);
+        // token 用户信息绑定
+        String token = CommonUtil.get32Uuid();
+        String tokenKey = RedisUtil.getRedisKey(RedisKey.REDIS_LOGIN_TOKEN, token);
+        valueOperationsCache.setIfAbsent(tokenKey, JsonUtil.object2Json(userBO), 3600_000L, TimeUnit.MILLISECONDS);
 
-		TokenBO tokenBO = new TokenBO();
-		tokenBO.setToken(token);
-		tokenBO.setUser(userBO);
+        TokenBO tokenBO = new TokenBO();
+        tokenBO.setToken(token);
+        tokenBO.setUser(userBO);
 
-		return tokenBO;
-	}
+        return tokenBO;
+    }
 
-	private UserBO checkUserAndPassword(LoginAO loginAO) {
-		UserDO userDO = userMapper.getUserByUserName(loginAO.getUsername());
-		if (userDO == null) {
-			LogBO logBO = LogUtil.log("用户名不存在",
-					LogAO.build("username", loginAO.getUsername()));
-			log.info(logBO.getLogPattern(), logBO.getParams());
-			FtException.throwException("用户名或密码不正确");
-		}
+    private UserBO checkUserAndPassword(LoginAO loginAO) {
+        UserDO userDO = userMapper.getUserByUserName(loginAO.getUsername());
+        if (userDO == null) {
+            LogBO logBO = LogUtil.log("用户名不存在",
+                    "username", loginAO.getUsername());
+            log.info(logBO.getLogPattern(), logBO.getParams());
+            FtException.throwException("用户名或密码不正确");
+        }
 
-		String md5Password = EncodeUtil.md5Encode(loginAO.getPassword());
-		if (!ObjectUtil.equals(md5Password, userDO.getPassword())) {
-			FtException.throwException("用户名或密码不正确");
-		}
+        String md5Password = EncodeUtil.md5Encode(loginAO.getPassword());
+        if (!ObjectUtil.equals(md5Password, userDO.getPassword())) {
+            FtException.throwException("用户名或密码不正确");
+        }
 
-		UserBO userBO = new UserBO();
-		userBO.setId(userDO.getId());
-		userBO.setUsername(userDO.getUsername());
-		userBO.setCreatedAt(userDO.getCreatedAt());
-		userBO.setUpdatedAt(userDO.getUpdatedAt());
+        UserBO userBO = new UserBO();
+        userBO.setId(userDO.getId());
+        userBO.setUsername(userDO.getUsername());
+        userBO.setCreatedAt(userDO.getCreatedAt());
+        userBO.setUpdatedAt(userDO.getUpdatedAt());
 
-		return userBO;
-	}
+        return userBO;
+    }
 
-	private String checkCode(LoginAO loginAO) {
-		String errorMessage = "验证码不正确";
+    private String checkCode(LoginAO loginAO) {
+        String errorMessage = "验证码不正确";
 
-		// 校验code
-		String codeId = loginAO.getCodeId();
-		String codeIdKey = RedisUtil.getRedisKey(RedisKey.REDIS_VERIFICATION_CODE, codeId);
-		String redisCode = valueOperationsCache.get(codeIdKey);
-		if (StringUtil.isNull(redisCode)) {
-			LogBO logBO = LogUtil.log("验证码不存在或已过期",
-					LogAO.build("codeId", codeId));
-			log.info(logBO.getLogPattern(), logBO.getParams());
-			return errorMessage;
-		}
+        // 校验code
+        String codeId = loginAO.getCodeId();
+        String codeIdKey = RedisUtil.getRedisKey(RedisKey.REDIS_VERIFICATION_CODE, codeId);
+        String redisCode = valueOperationsCache.get(codeIdKey);
+        if (StringUtil.isNull(redisCode)) {
+            LogBO logBO = LogUtil.log("验证码不存在或已过期",
+                    "codeId", codeId);
+            log.info(logBO.getLogPattern(), logBO.getParams());
+            return errorMessage;
+        }
 
-		if (!redisCode.equalsIgnoreCase(loginAO.getCode())) {
-			LogBO logBO = LogUtil.log("验证码比对不一致",
-					LogAO.build("code", loginAO.getCode()),
-					LogAO.build("redisCode", redisCode));
-			log.info(logBO.getLogPattern(), logBO.getParams());
-			return errorMessage;
-		}
+        if (!redisCode.equalsIgnoreCase(loginAO.getCode())) {
+            LogBO logBO = LogUtil.log("验证码比对不一致",
+                    "code", loginAO.getCode(),
+                    "redisCode", redisCode);
+            log.info(logBO.getLogPattern(), logBO.getParams());
+            return errorMessage;
+        }
 
-		return null;
-	}
+        return null;
+    }
 
-	@Override
-	public UserBO currentUser(CurrentUserAO currentUserAO) {
-		String tokenKey = RedisUtil.getRedisKey(RedisKey.REDIS_LOGIN_TOKEN, currentUserAO.getToken());
-		String userJson = valueOperationsCache.get(tokenKey);
+    @Override
+    public UserBO currentUser(CurrentUserAO currentUserAO) {
+        String tokenKey = RedisUtil.getRedisKey(RedisKey.REDIS_LOGIN_TOKEN, currentUserAO.getToken());
+        String userJson = valueOperationsCache.get(tokenKey);
 
-		if (StringUtil.isNull(userJson)) {
-			return null;
-		}
+        if (StringUtil.isNull(userJson)) {
+            return null;
+        }
 
-		valueOperationsCache.expire(tokenKey, 3600_000L, TimeUnit.MILLISECONDS);
+        valueOperationsCache.expire(tokenKey, 3600_000L, TimeUnit.MILLISECONDS);
 
-		return JsonUtil.json2Object(userJson, new TypeReference<UserBO>() {
-		});
-	}
+        return JsonUtil.json2Object(userJson, new TypeReference<UserBO>() {
+        });
+    }
 }

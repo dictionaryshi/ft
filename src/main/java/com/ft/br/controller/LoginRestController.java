@@ -36,73 +36,73 @@ import javax.validation.Valid;
 @RequestMapping(RestResult.API + "/sso")
 public class LoginRestController {
 
-	@Value("${cookieDomain}")
-	private String cookieDomain;
+    @Value("${cookieDomain}")
+    private String cookieDomain;
 
-	@Autowired
-	private SsoService ssoService;
+    @Autowired
+    private SsoService ssoService;
 
-	@Autowired
-	private RedisLock redisLock;
+    @Autowired
+    private RedisLock redisLock;
 
-	/**
-	 * 图片验证码
-	 */
-	@ApiOperation("获取图片验证码")
-	@GetMapping("/code")
-	public RestResult<CodeBO> code() {
-		CodeBO codeBO = ssoService.getCode();
-		return RestResult.success(codeBO);
-	}
+    /**
+     * 图片验证码
+     */
+    @ApiOperation("获取图片验证码")
+    @GetMapping("/code")
+    public RestResult<CodeBO> code() {
+        CodeBO codeBO = ssoService.getCode();
+        return RestResult.success(codeBO);
+    }
 
-	/**
-	 * 登录
-	 */
-	@ApiOperation("用户登录")
-	@PostMapping("/login")
-	public RestResult<TokenBO> login(
-			@RequestBody @Valid LoginAO loginAO,
-			HttpServletRequest request,
-			HttpServletResponse response
-	) {
-		String lockKey = RedisUtil.getRedisKey(RedisKey.REDIS_SSO_LOGIN_LOCK, loginAO.getUsername());
-		try {
-			redisLock.lock(lockKey);
-			String token = WebUtil.getToken(request);
-			if (!StringUtil.isNull(token)) {
-				CurrentUserAO currentUserAO = new CurrentUserAO();
-				currentUserAO.setToken(token);
+    /**
+     * 登录
+     */
+    @ApiOperation("用户登录")
+    @PostMapping("/login")
+    public RestResult<TokenBO> login(
+            @RequestBody @Valid LoginAO loginAO,
+            HttpServletRequest request,
+            HttpServletResponse response
+    ) {
+        String lockKey = RedisUtil.getRedisKey(RedisKey.REDIS_SSO_LOGIN_LOCK, loginAO.getUsername());
+        try {
+            redisLock.lock(lockKey);
+            String token = WebUtil.getToken(request);
+            if (!StringUtil.isNull(token)) {
+                CurrentUserAO currentUserAO = new CurrentUserAO();
+                currentUserAO.setToken(token);
 
-				UserBO userBO = ssoService.currentUser(currentUserAO);
-				if (userBO != null) {
-					TokenBO tokenBO = new TokenBO();
-					tokenBO.setUser(userBO);
-					return RestResult.success(tokenBO);
-				}
-			}
+                UserBO userBO = ssoService.currentUser(currentUserAO);
+                if (userBO != null) {
+                    TokenBO tokenBO = new TokenBO();
+                    tokenBO.setUser(userBO);
+                    return RestResult.success(tokenBO);
+                }
+            }
 
-			TokenBO tokenBO = ssoService.login(loginAO);
+            TokenBO tokenBO = ssoService.login(loginAO);
 
-			String domain = this.cookieDomain;
-			CookieUtil.addCookie(response, WebUtil.COOKIE_LOGIN, tokenBO.getToken(), CookieUtil.MAX_AGE_BROWSER, domain, true);
+            String domain = this.cookieDomain;
+            CookieUtil.addCookie(response, WebUtil.COOKIE_LOGIN, tokenBO.getToken(), CookieUtil.MAX_AGE_BROWSER, domain, true);
 
-			return RestResult.success(tokenBO);
-		} finally {
-			redisLock.unlock(lockKey);
-		}
-	}
+            return RestResult.success(tokenBO);
+        } finally {
+            redisLock.unlock(lockKey);
+        }
+    }
 
-	/**
-	 * 查询当前登录用户信息
-	 *
-	 * @return 当前登录用户信息
-	 */
-	@ApiOperation("查询当前登录用户信息")
-	@GetMapping("/current-user")
-	public RestResult<UserBO> user(
-			@Valid CurrentUserAO currentUserAO
-	) {
-		UserBO userBO = ssoService.currentUser(currentUserAO);
-		return RestResult.success(userBO);
-	}
+    /**
+     * 查询当前登录用户信息
+     *
+     * @return 当前登录用户信息
+     */
+    @ApiOperation("查询当前登录用户信息")
+    @GetMapping("/current-user")
+    public RestResult<UserBO> user(
+            @Valid CurrentUserAO currentUserAO
+    ) {
+        UserBO userBO = ssoService.currentUser(currentUserAO);
+        return RestResult.success(userBO);
+    }
 }

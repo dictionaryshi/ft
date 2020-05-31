@@ -9,15 +9,15 @@ import lombok.Data;
  */
 @Data
 public class City {
-	private Integer id;
+    private Integer id;
 
-	private String name;
+    private String name;
 
-	private String description;
+    private String description;
 
-	public City(int id, String name, String description) {
-		this.id = id;
-		this.name = name;
-		this.description = description;
-	}
+    public City(int id, String name, String description) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+    }
 }

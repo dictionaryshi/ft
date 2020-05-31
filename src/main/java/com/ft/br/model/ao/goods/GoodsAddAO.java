@@ -20,11 +20,11 @@ import javax.validation.constraints.NotNull;
 @ToString
 public class GoodsAddAO {
 
-	@NotBlank(message = "商品名称不为空")
-	@ApiModelProperty(value = "商品名称", required = true)
-	private String name;
+    @NotBlank(message = "商品名称不为空")
+    @ApiModelProperty(value = "商品名称", required = true)
+    private String name;
 
-	@NotNull(message = "分类id不为null")
-	@ApiModelProperty(value = "分类id", required = true, example = "10")
-	private Integer categoryId;
+    @NotNull(message = "分类id不为null")
+    @ApiModelProperty(value = "分类id", required = true, example = "10")
+    private Integer categoryId;
 }

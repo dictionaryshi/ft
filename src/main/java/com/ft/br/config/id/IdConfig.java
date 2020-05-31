@@ -12,8 +12,8 @@ import org.springframework.context.annotation.Configuration;
 @Configuration("com.ft.br.config.id.IdConfig")
 public class IdConfig {
 
-	@Bean("com.ft.util.plugin.Snowflake")
-	public Snowflake snowflake() {
-		return new Snowflake(0);
-	}
+    @Bean("com.ft.util.plugin.Snowflake")
+    public Snowflake snowflake() {
+        return new Snowflake(0);
+    }
 }

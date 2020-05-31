@@ -11,6 +11,6 @@ import javax.validation.constraints.NotBlank;
  */
 @Data
 public class ValidChildren {
-	@NotBlank(message = "activityDetailName 不为空")
-	private String activityDetailName;
+    @NotBlank(message = "activityDetailName 不为空")
+    private String activityDetailName;
 }

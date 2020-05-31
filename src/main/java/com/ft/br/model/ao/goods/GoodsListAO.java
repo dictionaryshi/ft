@@ -18,6 +18,6 @@ import lombok.ToString;
 @ToString
 public class GoodsListAO extends PageParam {
 
-	@ApiModelProperty(value = "分类id", example = "10")
-	private Integer categoryId;
+    @ApiModelProperty(value = "分类id", example = "10")
+    private Integer categoryId;
 }

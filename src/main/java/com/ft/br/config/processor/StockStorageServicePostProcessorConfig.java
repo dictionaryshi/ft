@@ -13,8 +13,8 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class StockStorageServicePostProcessorConfig extends BaseBeanPostProcessor<StockStorageService> {
 
-	@Override
-	public void after(StockStorageService bean, String beanName) throws BeansException {
-		StockStorageService.STOCK_STORAGE_SERVICE_MAP.put(bean.type(), bean);
-	}
+    @Override
+    public void after(StockStorageService bean, String beanName) throws BeansException {
+        StockStorageService.STOCK_STORAGE_SERVICE_MAP.put(bean.type(), bean);
+    }
 }

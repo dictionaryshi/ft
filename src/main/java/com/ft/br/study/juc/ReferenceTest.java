@@ -8,19 +8,19 @@ import java.util.WeakHashMap;
  * 3.弱引用对象:只要被GC扫描到就会回收。
  */
 public class ReferenceTest {
-	private static void weakHashMapTest() {
-		WeakHashMap<Integer, String> weakHashMap = new WeakHashMap<>();
-		Integer key = 256;
-		weakHashMap.put(key, "weakHashMap");
+    private static void weakHashMapTest() {
+        WeakHashMap<Integer, String> weakHashMap = new WeakHashMap<>();
+        Integer key = 256;
+        weakHashMap.put(key, "weakHashMap");
 
-		key = null;
+        key = null;
 
-		System.out.println(weakHashMap);
-		System.gc();
-		System.out.println(weakHashMap);
-	}
+        System.out.println(weakHashMap);
+        System.gc();
+        System.out.println(weakHashMap);
+    }
 
-	public static void main(String[] args) {
-		weakHashMapTest();
-	}
+    public static void main(String[] args) {
+        weakHashMapTest();
+    }
 }
