@@ -16,7 +16,6 @@ import com.ft.dao.stock.model.StockLogDO;
 import com.ft.db.model.PageResult;
 import com.ft.util.ObjectUtil;
 import com.ft.util.exception.FtException;
-import com.ft.util.model.LogAO;
 import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -98,7 +97,7 @@ public class StockLogServiceImpl implements StockLogService {
         GoodsDO goodsDO = goodsService.get(goodsId);
         if (goodsDO == null) {
             FtException.throwException("商品不存在",
-                    LogAO.build("goodsId", goodsId + ""));
+                    "goodsId", goodsId + "");
         }
 
         Long orderId = stockLogStorageAO.getOrderId();
@@ -106,7 +105,7 @@ public class StockLogServiceImpl implements StockLogService {
             OrderDO orderDO = orderMapper.selectByPrimaryKey(orderId);
             if (orderDO == null) {
                 FtException.throwException("订单不存在",
-                        LogAO.build("orderId", orderId + ""));
+                        "orderId", orderId + "");
             }
         }
 

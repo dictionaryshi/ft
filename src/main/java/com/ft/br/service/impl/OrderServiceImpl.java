@@ -25,7 +25,6 @@ import com.ft.util.JsonUtil;
 import com.ft.util.LogUtil;
 import com.ft.util.ObjectUtil;
 import com.ft.util.exception.FtException;
-import com.ft.util.model.LogAO;
 import com.ft.util.model.LogBO;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
@@ -81,7 +80,7 @@ public class OrderServiceImpl implements OrderService {
         OrderDO orderDO = ObjectUtil.copy(orderAddAO, OrderDO.class);
         if (orderDO == null) {
             FtException.throwException("订单信息copy失败",
-                    LogAO.build("orderAddAO", JsonUtil.object2Json(orderAddAO)));
+                    "orderAddAO", JsonUtil.object2Json(orderAddAO));
         }
 
         orderDO.setStatus(OrderStatusEnum.WAIT_TO_CONFIRMED.getStatus());
@@ -103,7 +102,7 @@ public class OrderServiceImpl implements OrderService {
         OrderDO update = ObjectUtil.copy(orderAddUpdateAO, OrderDO.class);
         if (update == null) {
             FtException.throwException("订单信息copy失败",
-                    LogAO.build("orderAddUpdateAO", JsonUtil.object2Json(orderAddUpdateAO)));
+                    "orderAddUpdateAO", JsonUtil.object2Json(orderAddUpdateAO));
         }
 
         orderMapper.updateByPrimaryKeySelective(update);
@@ -352,7 +351,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @UseMaster
-    @Transactional(value = DbConstant.DB_CONSIGN + DbConstant.TRAN_SACTION_MANAGER, propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED, rollbackFor = Throwable.class)
+    @Transactional(value = DbConstant.DB_CONSIGN + DbConstant.TRANSACTION_MANAGER, propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED, rollbackFor = Throwable.class)
     @Override
     public boolean confirmOrder(Long orderId, int userId) {
         String lockKey = RedisUtil.getRedisKey(RedisKey.REDIS_ORDER_UPDATE_LOCK, orderId + "");
@@ -389,7 +388,7 @@ public class OrderServiceImpl implements OrderService {
         List<ItemDO> itemDOS = itemMapper.selectByOrderId(orderId);
         if (ObjectUtil.isEmpty(itemDOS)) {
             LogBO logBO = LogUtil.log("订单项不存在, 出库失败",
-                    LogAO.build("orderId", orderId + ""));
+                    "orderId", orderId + "");
             log.info(logBO.getLogPattern(), logBO.getParams());
             return;
         }
@@ -410,7 +409,7 @@ public class OrderServiceImpl implements OrderService {
 
                 if (goodsNumber > goodsDO.getNumber()) {
                     FtException.throwException("商品库存不足",
-                            LogAO.build("商品名称", goodsDO.getName()));
+                            "商品名称", goodsDO.getName());
                 }
 
                 StockLogDO stockLogDO = new StockLogDO();
@@ -436,7 +435,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @UseMaster
-    @Transactional(value = DbConstant.DB_CONSIGN + DbConstant.TRAN_SACTION_MANAGER, propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED, rollbackFor = Throwable.class)
+    @Transactional(value = DbConstant.DB_CONSIGN + DbConstant.TRANSACTION_MANAGER, propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED, rollbackFor = Throwable.class)
     @Override
     public boolean failOrder(Long orderId, int userId) {
         String lockKey = RedisUtil.getRedisKey(RedisKey.REDIS_ORDER_UPDATE_LOCK, orderId + "");
@@ -474,7 +473,7 @@ public class OrderServiceImpl implements OrderService {
         List<ItemDO> itemDOS = itemMapper.selectByOrderId(orderId);
         if (ObjectUtil.isEmpty(itemDOS)) {
             LogBO logBO = LogUtil.log("订单项不存在, 入库失败",
-                    LogAO.build("orderId", orderId + ""));
+                    "orderId", orderId + "");
             log.info(logBO.getLogPattern(), logBO.getParams());
             return;
         }

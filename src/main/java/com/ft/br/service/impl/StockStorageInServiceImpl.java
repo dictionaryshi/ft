@@ -39,7 +39,7 @@ public class StockStorageInServiceImpl implements StockStorageService {
     }
 
     @UseMaster
-    @Transactional(value = DbConstant.DB_CONSIGN + DbConstant.TRAN_SACTION_MANAGER, propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED, rollbackFor = Throwable.class)
+    @Transactional(value = DbConstant.DB_CONSIGN + DbConstant.TRANSACTION_MANAGER, propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED, rollbackFor = Throwable.class)
     @Override
     public boolean storage(StockLogStorageAO stockLogStorageAO) {
         StockLogDO stockLogDO = new StockLogDO();

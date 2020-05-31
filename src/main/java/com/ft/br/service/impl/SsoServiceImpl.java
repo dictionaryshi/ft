@@ -14,7 +14,6 @@ import com.ft.redis.base.ValueOperationsCache;
 import com.ft.redis.util.RedisUtil;
 import com.ft.util.*;
 import com.ft.util.exception.FtException;
-import com.ft.util.model.LogAO;
 import com.ft.util.model.LogBO;
 import com.ft.web.model.UserBO;
 import lombok.extern.slf4j.Slf4j;
@@ -44,7 +43,7 @@ public class SsoServiceImpl implements SsoService {
     private UserMapper userMapper;
 
     @Override
-    @Transactional(value = DbConstant.DB_CONSIGN + DbConstant.TRAN_SACTION_MANAGER, propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED, rollbackFor = Throwable.class)
+    @Transactional(value = DbConstant.DB_CONSIGN + DbConstant.TRANSACTION_MANAGER, propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED, rollbackFor = Throwable.class)
     public void deadLock(int lockId1, int lockId2) {
         userMapper.deadLock(lockId1);
         userMapper.deadLock(lockId2);
@@ -54,7 +53,7 @@ public class SsoServiceImpl implements SsoService {
     public CodeBO getCode() {
         CodeBO codeBO = new CodeBO();
 
-        String codeId = CommonUtil.get32UUID();
+        String codeId = CommonUtil.get32Uuid();
         codeBO.setCodeId(codeId);
 
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
@@ -81,7 +80,7 @@ public class SsoServiceImpl implements SsoService {
         UserBO userBO = this.checkUserAndPassword(loginAO);
 
         // token 用户信息绑定
-        String token = CommonUtil.get32UUID();
+        String token = CommonUtil.get32Uuid();
         String tokenKey = RedisUtil.getRedisKey(RedisKey.REDIS_LOGIN_TOKEN, token);
         valueOperationsCache.setIfAbsent(tokenKey, JsonUtil.object2Json(userBO), 3600_000L, TimeUnit.MILLISECONDS);
 
@@ -96,7 +95,7 @@ public class SsoServiceImpl implements SsoService {
         UserDO userDO = userMapper.getUserByUserName(loginAO.getUsername());
         if (userDO == null) {
             LogBO logBO = LogUtil.log("用户名不存在",
-                    LogAO.build("username", loginAO.getUsername()));
+                    "username", loginAO.getUsername());
             log.info(logBO.getLogPattern(), logBO.getParams());
             FtException.throwException("用户名或密码不正确");
         }
@@ -124,15 +123,15 @@ public class SsoServiceImpl implements SsoService {
         String redisCode = valueOperationsCache.get(codeIdKey);
         if (StringUtil.isNull(redisCode)) {
             LogBO logBO = LogUtil.log("验证码不存在或已过期",
-                    LogAO.build("codeId", codeId));
+                    "codeId", codeId);
             log.info(logBO.getLogPattern(), logBO.getParams());
             return errorMessage;
         }
 
         if (!redisCode.equalsIgnoreCase(loginAO.getCode())) {
             LogBO logBO = LogUtil.log("验证码比对不一致",
-                    LogAO.build("code", loginAO.getCode()),
-                    LogAO.build("redisCode", redisCode));
+                    "code", loginAO.getCode(),
+                    "redisCode", redisCode);
             log.info(logBO.getLogPattern(), logBO.getParams());
             return errorMessage;
         }

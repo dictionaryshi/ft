@@ -3,11 +3,10 @@ package com.ft.br.task;
 import com.ft.redis.base.SetOperationsCache;
 import com.ft.redis.base.ZSetOperationsCache;
 import com.ft.redis.plugin.RedisWarning;
-import com.ft.util.BigDecimalUtil;
 import com.ft.util.DateUtil;
 import com.ft.util.LogUtil;
+import com.ft.util.NumberUtil;
 import com.ft.util.ObjectUtil;
-import com.ft.util.model.LogAO;
 import com.ft.util.model.LogBO;
 import com.ft.web.plugin.MailUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -81,16 +80,16 @@ public class RedisWarningTask {
             double flow = front + after;
 
             double flowIncrement = after - front;
-            double flowIncrementRatio = BigDecimalUtil.divide(flowIncrement, front, 2).doubleValue();
+            double flowIncrementRatio = NumberUtil.divide(flowIncrement, front, 2).doubleValue();
             double targetRatio = 2.0;
             int minimumFlow = 10;
             if (flowIncrementRatio > targetRatio && flow > minimumFlow) {
                 LogBO logBO = LogUtil.log("流量报警",
-                        LogAO.build("applicationName", warnKey),
-                        LogAO.build("flow", flow + ""),
-                        LogAO.build("front", front + ""),
-                        LogAO.build("after", after + ""),
-                        LogAO.build("flowIncrementRatio", flowIncrementRatio + ""));
+                        "applicationName", warnKey,
+                        "flow", flow + "",
+                        "front", front + "",
+                        "after", after + "",
+                        "flowIncrementRatio", flowIncrementRatio + "");
                 log.info(logBO.getLogPattern(), logBO.getParams());
                 String message = "服务==>" + warnKey
                         + ", 时间==>" + DateUtil.date2Str(DateUtil.getCurrentDate(), DateUtil.DATE_PATTERN_MILLISECOND)

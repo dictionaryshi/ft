@@ -10,9 +10,6 @@ import com.ft.rpc.api.model.RpcResult;
 import com.ft.util.DateUtil;
 import com.ft.util.ExcelUtil;
 import com.ft.util.JsonUtil;
-import com.ft.util.LogUtil;
-import com.ft.util.model.LogAO;
-import com.ft.util.model.LogBO;
 import com.ft.util.model.RestResult;
 import com.ft.web.annotation.SignCheck;
 import com.ft.web.util.WebSocketUtil;
@@ -96,7 +93,7 @@ public class NrController {
             @RequestParam MultipartFile excel
     ) throws Throwable {
         try (InputStream in = excel.getInputStream()) {
-            return JsonUtil.object2Json(ExcelUtil.readExcel(in, false));
+            return JsonUtil.object2Json(ExcelUtil.readExcel(in, false, "#"));
         }
     }
 

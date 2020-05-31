@@ -11,7 +11,6 @@ import com.ft.dao.stock.model.StockLogDO;
 import com.ft.db.annotation.UseMaster;
 import com.ft.db.constant.DbConstant;
 import com.ft.util.exception.FtException;
-import com.ft.util.model.LogAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
@@ -41,7 +40,7 @@ public class StockStorageOutServiceImpl implements StockStorageService {
     }
 
     @UseMaster
-    @Transactional(value = DbConstant.DB_CONSIGN + DbConstant.TRAN_SACTION_MANAGER, propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED, rollbackFor = Throwable.class)
+    @Transactional(value = DbConstant.DB_CONSIGN + DbConstant.TRANSACTION_MANAGER, propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED, rollbackFor = Throwable.class)
     @Override
     public boolean storage(StockLogStorageAO stockLogStorageAO) {
         StockLogDO stockLogDO = new StockLogDO();
@@ -63,8 +62,8 @@ public class StockStorageOutServiceImpl implements StockStorageService {
 
         if (goodsNumber > beforeStockNumber) {
             FtException.throwException("商品库存数量不足",
-                    LogAO.build("goodsId", goodsId + ""),
-                    LogAO.build("stockNumber", beforeStockNumber + ""));
+                    "goodsId", goodsId + "",
+                    "stockNumber", beforeStockNumber + "");
         }
 
         // 操作库存
