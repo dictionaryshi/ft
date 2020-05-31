@@ -19,25 +19,25 @@ import java.util.Map;
 @Configuration
 public class FilterServletRegistrationBeanConfig {
 
-	@Bean
-	public ServletRegistrationBean demoServlet() {
-		ServletRegistrationBean<DemoServlet> demoServlet = new ServletRegistrationBean<>(new DemoServlet(), "/demo/*");
-		Map<String, String> parameters = new HashMap<>(16);
-		parameters.put("username", "root");
-		parameters.put("password", "一只飞的猪");
-		demoServlet.setInitParameters(parameters);
-		return demoServlet;
-	}
+    @Bean
+    public ServletRegistrationBean demoServlet() {
+        ServletRegistrationBean<DemoServlet> demoServlet = new ServletRegistrationBean<>(new DemoServlet(), "/demo/*");
+        Map<String, String> parameters = new HashMap<>(16);
+        parameters.put("username", "root");
+        parameters.put("password", "一只飞的猪");
+        demoServlet.setInitParameters(parameters);
+        return demoServlet;
+    }
 
-	//	@Bean
-	public FilterRegistrationBean characterEncodingFilter() {
-		FilterRegistrationBean<CharacterEncodingFilter> characterEncodingFilter = new FilterRegistrationBean<>();
-		characterEncodingFilter.setFilter(new CharacterEncodingFilter("UTF-8", true, true));
+    //	@Bean
+    public FilterRegistrationBean characterEncodingFilter() {
+        FilterRegistrationBean<CharacterEncodingFilter> characterEncodingFilter = new FilterRegistrationBean<>();
+        characterEncodingFilter.setFilter(new CharacterEncodingFilter("UTF-8", true, true));
 
-		Map<String, String> parameters = new HashMap<>(16);
-		characterEncodingFilter.setInitParameters(parameters);
+        Map<String, String> parameters = new HashMap<>(16);
+        characterEncodingFilter.setInitParameters(parameters);
 
-		characterEncodingFilter.setUrlPatterns(Collections.singletonList("/*"));
-		return characterEncodingFilter;
-	}
+        characterEncodingFilter.setUrlPatterns(Collections.singletonList("/*"));
+        return characterEncodingFilter;
+    }
 }

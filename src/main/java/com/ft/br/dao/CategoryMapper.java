@@ -19,30 +19,30 @@ import java.util.Map;
 @Component
 public interface CategoryMapper extends CategoryDOMapper {
 
-	/**
-	 * 查询所有分类数据
-	 *
-	 * @return 所有分类数据
-	 */
-	@Select("select * from `category`")
-	@MapKey("id")
-	Map<Integer, CategoryDO> selectAllCategories();
+    /**
+     * 查询所有分类数据
+     *
+     * @return 所有分类数据
+     */
+    @Select("select * from `category`")
+    @MapKey("id")
+    Map<Integer, CategoryDO> selectAllCategories();
 
-	/**
-	 * 根据名称查询分类信息
-	 *
-	 * @param name 分类名称
-	 * @return 分类信息
-	 */
-	@Select("select * from `category` where `name` = #{name} limit 1")
-	CategoryDO getCategoryByName(String name);
+    /**
+     * 根据名称查询分类信息
+     *
+     * @param name 分类名称
+     * @return 分类信息
+     */
+    @Select("select * from `category` where `name` = #{name} limit 1")
+    CategoryDO getCategoryByName(String name);
 
-	@MapKey("id")
-	@Select({
-			"select ",
-			"* ",
-			"from category ",
-			"where id in (${ids}) "
-	})
-	Map<Integer, CategoryDO> listByIds(@Param("ids") String ids);
+    @MapKey("id")
+    @Select({
+            "select ",
+            "* ",
+            "from category ",
+            "where id in (${ids}) "
+    })
+    Map<Integer, CategoryDO> listByIds(@Param("ids") String ids);
 }

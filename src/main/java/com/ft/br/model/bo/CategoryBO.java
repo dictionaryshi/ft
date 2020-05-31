@@ -17,9 +17,9 @@ import lombok.ToString;
 @ToString
 public class CategoryBO {
 
-	@ApiModelProperty(value = "分类id", required = true)
-	private Integer id;
+    @ApiModelProperty(value = "分类id", required = true)
+    private Integer id;
 
-	@ApiModelProperty(value = "分类名称", required = true)
-	private String name;
+    @ApiModelProperty(value = "分类名称", required = true)
+    private String name;
 }

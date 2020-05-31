@@ -22,32 +22,32 @@ import javax.validation.constraints.Size;
 @ToString
 public class OrderAddUpdateAO {
 
-	@NotNull(message = "订单id不为null")
-	@ApiModelProperty(value = "订单id", required = true, example = "2237867")
-	private Long id;
+    @NotNull(message = "订单id不为null")
+    @ApiModelProperty(value = "订单id", required = true, example = "2237867")
+    private Long id;
 
-	@NotBlank(message = "客户姓名不为空")
-	@ApiModelProperty(value = "客户姓名", required = true)
-	private String username;
+    @NotBlank(message = "客户姓名不为空")
+    @ApiModelProperty(value = "客户姓名", required = true)
+    private String username;
 
-	@NotBlank(message = "客户手机号不为空")
-	@Size(min = 11, max = 11, message = "手机号必须为11位")
-	@ApiModelProperty(value = "客户手机号", required = true)
-	private String phone;
+    @NotBlank(message = "客户手机号不为空")
+    @Size(min = 11, max = 11, message = "手机号必须为11位")
+    @ApiModelProperty(value = "客户手机号", required = true)
+    private String phone;
 
-	@NotBlank(message = "送货地址不为空")
-	@ApiModelProperty(value = "送货地址", required = true)
-	private String address;
+    @NotBlank(message = "送货地址不为空")
+    @ApiModelProperty(value = "送货地址", required = true)
+    private String address;
 
-	@NotNull(message = "订单总金额不为NULL")
-	@DecimalMin(value = "0", message = "订单金额最小为0")
-	@ApiModelProperty(value = "订单总金额(元)", required = true, example = "25000")
-	private Integer totalAmount;
+    @NotNull(message = "订单总金额不为NULL")
+    @DecimalMin(value = "0", message = "订单金额最小为0")
+    @ApiModelProperty(value = "订单总金额(元)", required = true, example = "25000")
+    private Integer totalAmount;
 
-	@ApiModelProperty(value = "订单备注")
-	private String remark;
+    @ApiModelProperty(value = "订单备注")
+    private String remark;
 
 
-	@ApiModelProperty(value = "操作人", hidden = true, example = "10")
-	private Integer operator;
+    @ApiModelProperty(value = "操作人", hidden = true, example = "10")
+    private Integer operator;
 }

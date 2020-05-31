@@ -20,21 +20,21 @@ import java.util.Map;
 @Service("com.ft.br.service.impl.UserServiceImpl")
 public class UserServiceImpl implements UserService {
 
-	@Autowired
-	private UserMapper userMapper;
+    @Autowired
+    private UserMapper userMapper;
 
-	@Override
-	public Map<Integer, String> listUserNamesByIds(List<Integer> ids) {
-		Map<Integer, String> resultMap = new HashMap<>(16);
+    @Override
+    public Map<Integer, String> listUserNamesByIds(List<Integer> ids) {
+        Map<Integer, String> resultMap = new HashMap<>(16);
 
-		if (ObjectUtil.isEmpty(ids)) {
-			return resultMap;
-		}
+        if (ObjectUtil.isEmpty(ids)) {
+            return resultMap;
+        }
 
-		String idStr = StringUtil.join(ids, ",");
-		Map<Integer, UserDO> userDOMap = userMapper.selectByIds(idStr);
-		userDOMap.forEach((id, userDO) -> resultMap.put(id, userDO.getUsername()));
+        String idStr = StringUtil.join(ids, ",");
+        Map<Integer, UserDO> userDOMap = userMapper.selectByIds(idStr);
+        userDOMap.forEach((id, userDO) -> resultMap.put(id, userDO.getUsername()));
 
-		return resultMap;
-	}
+        return resultMap;
+    }
 }

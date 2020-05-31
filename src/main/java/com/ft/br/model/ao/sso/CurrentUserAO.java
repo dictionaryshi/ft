@@ -18,7 +18,7 @@ import javax.validation.constraints.NotBlank;
 @Getter
 @ToString
 public class CurrentUserAO {
-	@NotBlank(message = "sso token不为空")
-	@ApiModelProperty(value = "sso token", required = true)
-	private String token;
+    @NotBlank(message = "sso token不为空")
+    @ApiModelProperty(value = "sso token", required = true)
+    private String token;
 }

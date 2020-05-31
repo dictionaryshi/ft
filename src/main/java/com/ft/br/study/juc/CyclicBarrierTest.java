@@ -13,24 +13,24 @@ import java.util.concurrent.TimeUnit;
  * @author shichunyang
  */
 public class CyclicBarrierTest {
-	public static void main(String[] args) throws Exception {
-		int totalThread = 10;
-		CyclicBarrier cyclicBarrier = new CyclicBarrier(totalThread, () -> System.out.println("all thread ready"));
-		String poolName = "cyclicBarrier";
-		ExecutorService executorService = ThreadPoolUtil.getThreadPool(poolName, 10, 20, 300, TimeUnit.SECONDS, 50, null);
-		for (int i = 0; i < totalThread; i++) {
-			executorService.execute(() -> {
-				System.out.println("before, thread==>" + Thread.currentThread().getName());
-				try {
-					cyclicBarrier.await();
-				} catch (InterruptedException | BrokenBarrierException e) {
-					if (e instanceof InterruptedException) {
-						Thread.currentThread().interrupt();
-					}
-				}
-				System.out.println("after, thread==>" + Thread.currentThread().getName());
-			});
-		}
-		ThreadPoolUtil.shutdown(executorService, poolName);
-	}
+    public static void main(String[] args) throws Exception {
+        int totalThread = 10;
+        CyclicBarrier cyclicBarrier = new CyclicBarrier(totalThread, () -> System.out.println("all thread ready"));
+        String poolName = "cyclicBarrier";
+        ExecutorService executorService = ThreadPoolUtil.getThreadPool(poolName, 10, 20, 300, TimeUnit.SECONDS, 50, null);
+        for (int i = 0; i < totalThread; i++) {
+            executorService.execute(() -> {
+                System.out.println("before, thread==>" + Thread.currentThread().getName());
+                try {
+                    cyclicBarrier.await();
+                } catch (InterruptedException | BrokenBarrierException e) {
+                    if (e instanceof InterruptedException) {
+                        Thread.currentThread().interrupt();
+                    }
+                }
+                System.out.println("after, thread==>" + Thread.currentThread().getName());
+            });
+        }
+        ThreadPoolUtil.shutdown(executorService, poolName);
+    }
 }

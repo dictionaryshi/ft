@@ -16,9 +16,9 @@ import lombok.ToString;
 @Getter
 @ToString
 public class CodeBO {
-	@ApiModelProperty(value = "图片验证码唯一标识", required = true)
-	private String codeId;
+    @ApiModelProperty(value = "图片验证码唯一标识", required = true)
+    private String codeId;
 
-	@ApiModelProperty(value = "图片验证码base64字符串", required = true)
-	private String img;
+    @ApiModelProperty(value = "图片验证码base64字符串", required = true)
+    private String img;
 }

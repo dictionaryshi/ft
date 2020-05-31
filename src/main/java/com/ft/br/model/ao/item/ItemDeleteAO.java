@@ -19,7 +19,7 @@ import javax.validation.constraints.NotNull;
 @ToString
 public class ItemDeleteAO {
 
-	@NotNull(message = "订单项id不为null")
-	@ApiModelProperty(value = "订单项id", required = true, example = "10")
-	private Integer itemId;
+    @NotNull(message = "订单项id不为null")
+    @ApiModelProperty(value = "订单项id", required = true, example = "10")
+    private Integer itemId;
 }

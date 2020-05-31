@@ -19,7 +19,7 @@ import javax.validation.constraints.NotNull;
 @ToString
 public class GoodsGetAO {
 
-	@NotNull(message = "商品id不为null")
-	@ApiModelProperty(value = "商品id", required = true, example = "10")
-	private Integer id;
+    @NotNull(message = "商品id不为null")
+    @ApiModelProperty(value = "商品id", required = true, example = "10")
+    private Integer id;
 }

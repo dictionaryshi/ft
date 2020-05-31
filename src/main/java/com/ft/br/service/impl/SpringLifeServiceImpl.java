@@ -19,62 +19,62 @@ import javax.annotation.PreDestroy;
  */
 @Data
 public class SpringLifeServiceImpl implements SpringLifeService, BeanNameAware, BeanFactoryAware, ApplicationContextAware, InitializingBean, DisposableBean {
-	private String username;
+    private String username;
 
-	@Autowired
-	private OrderServiceImpl orderService;
+    @Autowired
+    private OrderServiceImpl orderService;
 
-	public SpringLifeServiceImpl(String username) {
-		this.username = username;
-		System.out.println(this.username + " " + "构造方法初始化");
-	}
+    public SpringLifeServiceImpl(String username) {
+        this.username = username;
+        System.out.println(this.username + " " + "构造方法初始化");
+    }
 
-	@Override
-	public void setBeanName(String name) {
-		System.out.println(this.username + " " + "Autowired结束, orderService==>" + orderService);
-		System.out.println(this.username + " " + 1);
-	}
+    @Override
+    public void setBeanName(String name) {
+        System.out.println(this.username + " " + "Autowired结束, orderService==>" + orderService);
+        System.out.println(this.username + " " + 1);
+    }
 
-	@Override
-	public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
-		System.out.println(this.username + " " + 2);
-	}
+    @Override
+    public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
+        System.out.println(this.username + " " + 2);
+    }
 
-	@Override
-	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-		System.out.println(this.username + " " + 3);
-	}
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        System.out.println(this.username + " " + 3);
+    }
 
-	@PostConstruct
-	public void postConstruct() {
-		System.out.println(this.username + " " + 5);
-	}
+    @PostConstruct
+    public void postConstruct() {
+        System.out.println(this.username + " " + 5);
+    }
 
-	@Override
-	public void afterPropertiesSet() throws Exception {
-		System.out.println(this.username + " " + 6);
-	}
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        System.out.println(this.username + " " + 6);
+    }
 
-	public void init() {
-		System.out.println(this.username + " " + 7);
-	}
+    public void init() {
+        System.out.println(this.username + " " + 7);
+    }
 
-	@PreDestroy
-	public void preDestroy() {
-		System.out.println(this.username + " " + 9);
-	}
+    @PreDestroy
+    public void preDestroy() {
+        System.out.println(this.username + " " + 9);
+    }
 
-	@Override
-	public void destroy() throws Exception {
-		System.out.println(this.username + " " + 10);
-	}
+    @Override
+    public void destroy() throws Exception {
+        System.out.println(this.username + " " + 10);
+    }
 
-	public void customDestroy() {
-		System.out.println(this.username + " " + 11);
-	}
+    public void customDestroy() {
+        System.out.println(this.username + " " + 11);
+    }
 
-	@Override
-	public int getStatus() {
-		return OrderStatusEnum.SUCCESS.getStatus();
-	}
+    @Override
+    public int getStatus() {
+        return OrderStatusEnum.SUCCESS.getStatus();
+    }
 }

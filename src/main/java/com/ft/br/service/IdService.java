@@ -7,10 +7,10 @@ package com.ft.br.service;
  */
 public interface IdService {
 
-	/**
-	 * 获取id
-	 *
-	 * @return id
-	 */
-	Long getId();
+    /**
+     * 获取id
+     *
+     * @return id
+     */
+    Long getId();
 }

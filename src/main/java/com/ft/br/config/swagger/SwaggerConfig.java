@@ -19,12 +19,12 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableSwagger2
 public class SwaggerConfig {
 
-	@Bean
-	public Docket createRestApi() {
-		return SwaggerUtil.docket(
-				SwaggerUtil.apiInfo("温馨家具API", "前后端分离参考文档", "http://www.baidu.com", "史春阳", "http://www.google.com", "903031015@qq.com", "V1.0"),
-				"wx",
-				PathSelectors.regex("/api.*")
-		);
-	}
+    @Bean
+    public Docket createRestApi() {
+        return SwaggerUtil.docket(
+                SwaggerUtil.apiInfo("温馨家具API", "前后端分离参考文档", "http://www.baidu.com", "史春阳", "http://www.google.com", "903031015@qq.com", "V1.0"),
+                "wx",
+                PathSelectors.regex("/api.*")
+        );
+    }
 }

@@ -19,7 +19,7 @@ import javax.validation.constraints.NotBlank;
 @ToString
 public class CategoryAddAO {
 
-	@NotBlank(message = "分类名称不能为空")
-	@ApiModelProperty(value = "分类名称", required = true)
-	private String name;
+    @NotBlank(message = "分类名称不能为空")
+    @ApiModelProperty(value = "分类名称", required = true)
+    private String name;
 }

@@ -24,46 +24,46 @@ import static com.ft.web.util.WebSocketUtil.sendMessage;
 @Component
 @ServerEndpoint(value = "/order/socket/{oid}")
 public class OrderWebSocket {
-	public static final ConcurrentHashMap<Session, Integer> ORDER_WEB_SOCKET = new ConcurrentHashMap<>();
+    public static final ConcurrentHashMap<Session, Integer> ORDER_WEB_SOCKET = new ConcurrentHashMap<>();
 
-	@OnOpen
-	public void onOpen(@PathParam("oid") Integer oid, Session session) {
-		ORDER_WEB_SOCKET.put(session, oid);
+    @OnOpen
+    public void onOpen(@PathParam("oid") Integer oid, Session session) {
+        ORDER_WEB_SOCKET.put(session, oid);
 
-		LogBO logBO = LogUtil.log("socket add",
-				LogAO.build("oid", oid + ""),
-				LogAO.build("total", ORDER_WEB_SOCKET.size() + ""));
-		log.info(logBO.getLogPattern(), logBO.getParams());
-	}
+        LogBO logBO = LogUtil.log("socket add",
+                LogAO.build("oid", oid + ""),
+                LogAO.build("total", ORDER_WEB_SOCKET.size() + ""));
+        log.info(logBO.getLogPattern(), logBO.getParams());
+    }
 
-	@OnError
-	public void onError(Session session, Throwable throwable) {
-		LogBO logBO = LogUtil.log("socket error", throwable,
-				LogAO.build("oid", ORDER_WEB_SOCKET.get(session) + ""),
-				LogAO.build("total", ORDER_WEB_SOCKET.size() + ""));
-		log.warn(logBO.getLogPattern(), logBO.getParams());
-	}
+    @OnError
+    public void onError(Session session, Throwable throwable) {
+        LogBO logBO = LogUtil.log("socket error", throwable,
+                LogAO.build("oid", ORDER_WEB_SOCKET.get(session) + ""),
+                LogAO.build("total", ORDER_WEB_SOCKET.size() + ""));
+        log.warn(logBO.getLogPattern(), logBO.getParams());
+    }
 
-	@OnClose
-	public void onClose(Session session) {
-		Integer oid = ORDER_WEB_SOCKET.remove(session);
+    @OnClose
+    public void onClose(Session session) {
+        Integer oid = ORDER_WEB_SOCKET.remove(session);
 
-		LogBO logBO = LogUtil.log("socket close",
-				LogAO.build("oid", oid + ""),
-				LogAO.build("total", ORDER_WEB_SOCKET.size() + ""));
-		log.info(logBO.getLogPattern(), logBO.getParams());
-	}
+        LogBO logBO = LogUtil.log("socket close",
+                LogAO.build("oid", oid + ""),
+                LogAO.build("total", ORDER_WEB_SOCKET.size() + ""));
+        log.info(logBO.getLogPattern(), logBO.getParams());
+    }
 
-	@OnMessage
-	public void onMessage(Session session, String message) {
-		MDC.put(ThreadLocalMap.REQUEST_ID, CommonUtil.get32UUID());
+    @OnMessage
+    public void onMessage(Session session, String message) {
+        MDC.put(ThreadLocalMap.REQUEST_ID, CommonUtil.get32UUID());
 
-		GoodsServiceImpl goodsService = SpringContextUtil.getBean(GoodsServiceImpl.class);
-		sendMessage(session, JsonUtil.object2Json(goodsService.get(ORDER_WEB_SOCKET.get(session))) + "_" + message);
+        GoodsServiceImpl goodsService = SpringContextUtil.getBean(GoodsServiceImpl.class);
+        sendMessage(session, JsonUtil.object2Json(goodsService.get(ORDER_WEB_SOCKET.get(session))) + "_" + message);
 
-		LogBO logBO = LogUtil.log("socket message",
-				LogAO.build("oid", ORDER_WEB_SOCKET.get(session) + ""),
-				LogAO.build("total", ORDER_WEB_SOCKET.size() + ""));
-		log.info(logBO.getLogPattern(), logBO.getParams());
-	}
+        LogBO logBO = LogUtil.log("socket message",
+                LogAO.build("oid", ORDER_WEB_SOCKET.get(session) + ""),
+                LogAO.build("total", ORDER_WEB_SOCKET.size() + ""));
+        log.info(logBO.getLogPattern(), logBO.getParams());
+    }
 }

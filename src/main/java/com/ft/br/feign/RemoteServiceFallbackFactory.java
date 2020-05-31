@@ -21,28 +21,28 @@ import org.springframework.stereotype.Component;
 @Component
 public class RemoteServiceFallbackFactory implements FallbackFactory<RemoteService> {
 
-	@Override
-	public RemoteService create(Throwable throwable) {
-		return new RemoteService() {
-			@Override
-			public RestResult<RpcResult> put(RpcParam rpcParam) {
-				LogBO logBO = LogUtil.log("put down", throwable,
-						LogAO.build("params", JsonUtil.object2Json(rpcParam)));
-				log.info(logBO.getLogPattern(), logBO.getParams());
+    @Override
+    public RemoteService create(Throwable throwable) {
+        return new RemoteService() {
+            @Override
+            public RestResult<RpcResult> put(RpcParam rpcParam) {
+                LogBO logBO = LogUtil.log("put down", throwable,
+                        LogAO.build("params", JsonUtil.object2Json(rpcParam)));
+                log.info(logBO.getLogPattern(), logBO.getParams());
 
-				return RestResult.fail(CommonResponseConstant.ERROR_CODE.getCode(), "put down",
-						LogAO.build("params", JsonUtil.object2Json(rpcParam)));
-			}
+                return RestResult.fail(CommonResponseConstant.ERROR_CODE.getCode(), "put down",
+                        LogAO.build("params", JsonUtil.object2Json(rpcParam)));
+            }
 
-			@Override
-			public RestResult<RpcResult> get(RpcParam rpcParam) {
-				LogBO logBO = LogUtil.log("get down", throwable,
-						LogAO.build("params", JsonUtil.object2Json(rpcParam)));
-				log.info(logBO.getLogPattern(), logBO.getParams());
+            @Override
+            public RestResult<RpcResult> get(RpcParam rpcParam) {
+                LogBO logBO = LogUtil.log("get down", throwable,
+                        LogAO.build("params", JsonUtil.object2Json(rpcParam)));
+                log.info(logBO.getLogPattern(), logBO.getParams());
 
-				return RestResult.fail(CommonResponseConstant.ERROR_CODE.getCode(), "get down",
-						LogAO.build("params", JsonUtil.object2Json(rpcParam)));
-			}
-		};
-	}
+                return RestResult.fail(CommonResponseConstant.ERROR_CODE.getCode(), "get down",
+                        LogAO.build("params", JsonUtil.object2Json(rpcParam)));
+            }
+        };
+    }
 }

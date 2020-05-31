@@ -37,76 +37,76 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 public class NrController {
 
-	@Autowired
-	private RemoteService remoteService;
+    @Autowired
+    private RemoteService remoteService;
 
-	@Autowired
-	private SsoService ssoService;
+    @Autowired
+    private SsoService ssoService;
 
-	@Autowired
-	private ExecutorService executorService;
+    @Autowired
+    private ExecutorService executorService;
 
-	@GetMapping("/feign")
-	public String feign() {
-		RpcParam rpcParam = new RpcParam();
-		rpcParam.setUsername("春阳put");
-		rpcParam.setAge(29);
-		rpcParam.setBirth(DateUtil.getCurrentDateStr());
-		RestResult<RpcResult> putResult = remoteService.put(rpcParam);
+    @GetMapping("/feign")
+    public String feign() {
+        RpcParam rpcParam = new RpcParam();
+        rpcParam.setUsername("春阳put");
+        rpcParam.setAge(29);
+        rpcParam.setBirth(DateUtil.getCurrentDateStr());
+        RestResult<RpcResult> putResult = remoteService.put(rpcParam);
 
-		rpcParam = new RpcParam();
-		rpcParam.setUsername("春阳get");
-		rpcParam.setAge(30);
-		rpcParam.setBirth("2019-11-11 12:21:20");
-		RestResult<RpcResult> getResult = remoteService.get(rpcParam);
+        rpcParam = new RpcParam();
+        rpcParam.setUsername("春阳get");
+        rpcParam.setAge(30);
+        rpcParam.setBirth("2019-11-11 12:21:20");
+        RestResult<RpcResult> getResult = remoteService.get(rpcParam);
 
-		return JsonUtil.object2Json(putResult) + "_" + JsonUtil.object2Json(getResult);
-	}
+        return JsonUtil.object2Json(putResult) + "_" + JsonUtil.object2Json(getResult);
+    }
 
-	@PutMapping("/valid-model")
-	public String valid(@RequestBody @Valid ValidParent validParent) {
-		return JsonUtil.object2Json(validParent);
-	}
+    @PutMapping("/valid-model")
+    public String valid(@RequestBody @Valid ValidParent validParent) {
+        return JsonUtil.object2Json(validParent);
+    }
 
-	@SignCheck
-	@PostMapping("/socket/push")
-	public RestResult<UserDO> push(
-			@RequestParam Integer oid,
-			@RequestParam String msg
-	) {
-		OrderWebSocket.ORDER_WEB_SOCKET.entrySet().stream().filter(entry -> entry.getValue().equals(oid)).forEach(entry -> WebSocketUtil.sendMessage(entry.getKey(), msg));
+    @SignCheck
+    @PostMapping("/socket/push")
+    public RestResult<UserDO> push(
+            @RequestParam Integer oid,
+            @RequestParam String msg
+    ) {
+        OrderWebSocket.ORDER_WEB_SOCKET.entrySet().stream().filter(entry -> entry.getValue().equals(oid)).forEach(entry -> WebSocketUtil.sendMessage(entry.getKey(), msg));
 
-		try {
-			TimeUnit.SECONDS.sleep(5);
-		} catch (InterruptedException e) {
-			Thread.currentThread().interrupt();
-		}
+        try {
+            TimeUnit.SECONDS.sleep(5);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
 
-		UserDO userDO = new UserDO();
-		userDO.setId(oid);
-		userDO.setUsername(msg);
-		userDO.setCreatedAt(new Date());
-		return RestResult.success(userDO);
-	}
+        UserDO userDO = new UserDO();
+        userDO.setId(oid);
+        userDO.setUsername(msg);
+        userDO.setCreatedAt(new Date());
+        return RestResult.success(userDO);
+    }
 
-	@PostMapping("/upload")
-	public String upload(
-			@RequestParam String username,
-			@RequestParam Integer age,
-			@RequestParam MultipartFile excel
-	) throws Throwable {
-		try (InputStream in = excel.getInputStream()) {
-			return JsonUtil.object2Json(ExcelUtil.readExcel(in, false));
-		}
-	}
+    @PostMapping("/upload")
+    public String upload(
+            @RequestParam String username,
+            @RequestParam Integer age,
+            @RequestParam MultipartFile excel
+    ) throws Throwable {
+        try (InputStream in = excel.getInputStream()) {
+            return JsonUtil.object2Json(ExcelUtil.readExcel(in, false));
+        }
+    }
 
-	/**
-	 * mysql死锁:使用in (1, 2)解决。
-	 */
-	@GetMapping("/deadLock")
-	public RestResult<Boolean> deadLock() {
-		executorService.submit(() -> ssoService.deadLock(1, 2));
-		executorService.submit(() -> ssoService.deadLock(2, 1));
-		return RestResult.success(Boolean.TRUE);
-	}
+    /**
+     * mysql死锁:使用in (1, 2)解决。
+     */
+    @GetMapping("/deadLock")
+    public RestResult<Boolean> deadLock() {
+        executorService.submit(() -> ssoService.deadLock(1, 2));
+        executorService.submit(() -> ssoService.deadLock(2, 1));
+        return RestResult.success(Boolean.TRUE);
+    }
 }

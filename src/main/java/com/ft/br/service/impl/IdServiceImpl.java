@@ -13,11 +13,11 @@ import org.springframework.stereotype.Service;
 @Service("com.ft.br.service.impl.IdServiceImpl")
 public class IdServiceImpl implements IdService {
 
-	@Autowired
-	private Snowflake snowflake;
+    @Autowired
+    private Snowflake snowflake;
 
-	@Override
-	public Long getId() {
-		return snowflake.get();
-	}
+    @Override
+    public Long getId() {
+        return snowflake.get();
+    }
 }

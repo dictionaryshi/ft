@@ -12,20 +12,20 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public interface StockStorageService {
 
-	Map<Integer, StockStorageService> STOCK_STORAGE_SERVICE_MAP = new ConcurrentHashMap<>();
+    Map<Integer, StockStorageService> STOCK_STORAGE_SERVICE_MAP = new ConcurrentHashMap<>();
 
-	/**
-	 * 获取操作类型(1:入库, 2出库)
-	 *
-	 * @return 操作类型
-	 */
-	int type();
+    /**
+     * 获取操作类型(1:入库, 2出库)
+     *
+     * @return 操作类型
+     */
+    int type();
 
-	/**
-	 * 出入库操作
-	 *
-	 * @param stockLogStorageAO 操作参数
-	 * @return true 操作成功
-	 */
-	boolean storage(StockLogStorageAO stockLogStorageAO);
+    /**
+     * 出入库操作
+     *
+     * @param stockLogStorageAO 操作参数
+     * @return true 操作成功
+     */
+    boolean storage(StockLogStorageAO stockLogStorageAO);
 }

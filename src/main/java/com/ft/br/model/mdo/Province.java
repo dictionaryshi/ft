@@ -12,18 +12,18 @@ import java.util.Set;
  */
 @Data
 public class Province {
-	private Integer id;
+    private Integer id;
 
-	private String name;
+    private String name;
 
-	private Set<City> cities = new HashSet<>();
+    private Set<City> cities = new HashSet<>();
 
-	public Province(int id, String name) {
-		this.id = id;
-		this.name = name;
-	}
+    public Province(int id, String name) {
+        this.id = id;
+        this.name = name;
+    }
 
-	public void addCity(City city) {
-		cities.add(city);
-	}
+    public void addCity(City city) {
+        cities.add(city);
+    }
 }

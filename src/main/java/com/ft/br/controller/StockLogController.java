@@ -35,50 +35,50 @@ import javax.validation.Valid;
 @Slf4j
 public class StockLogController {
 
-	@Autowired
-	private StockLogService stockLogService;
+    @Autowired
+    private StockLogService stockLogService;
 
-	@Autowired
-	private RedisLock redisLock;
+    @Autowired
+    private RedisLock redisLock;
 
-	@ApiOperation("分页查询库存操作记录")
-	@LoginCheck
-	@PageParamCheck
-	@GetMapping("/list")
-	public RestResult<PageResult<StockLogBO>> list(
-			@Valid StockLogListAO stockLogListAO
-	) {
-		PageResult<StockLogBO> pageResult = stockLogService.listByPage(stockLogListAO);
-		return RestResult.success(pageResult);
-	}
+    @ApiOperation("分页查询库存操作记录")
+    @LoginCheck
+    @PageParamCheck
+    @GetMapping("/list")
+    public RestResult<PageResult<StockLogBO>> list(
+            @Valid StockLogListAO stockLogListAO
+    ) {
+        PageResult<StockLogBO> pageResult = stockLogService.listByPage(stockLogListAO);
+        return RestResult.success(pageResult);
+    }
 
-	@ApiOperation("出/入库操作")
-	@LoginCheck
-	@PostMapping("/storage")
-	public RestResult<Boolean> storage(
-			@RequestBody @Valid StockLogStorageAO stockLogStorageAO
-	) {
-		int operator = WebUtil.getCurrentUser().getId();
-		stockLogStorageAO.setOperator(operator);
+    @ApiOperation("出/入库操作")
+    @LoginCheck
+    @PostMapping("/storage")
+    public RestResult<Boolean> storage(
+            @RequestBody @Valid StockLogStorageAO stockLogStorageAO
+    ) {
+        int operator = WebUtil.getCurrentUser().getId();
+        stockLogStorageAO.setOperator(operator);
 
-		stockLogService.check(stockLogStorageAO);
+        stockLogService.check(stockLogStorageAO);
 
-		int type = stockLogStorageAO.getType();
-		StockStorageService stockStorageService = StockStorageService.STOCK_STORAGE_SERVICE_MAP.get(type);
-		if (stockStorageService == null) {
-			FtException.throwException("操作类型不正确",
-					LogAO.build("type", type + ""));
-		}
+        int type = stockLogStorageAO.getType();
+        StockStorageService stockStorageService = StockStorageService.STOCK_STORAGE_SERVICE_MAP.get(type);
+        if (stockStorageService == null) {
+            FtException.throwException("操作类型不正确",
+                    LogAO.build("type", type + ""));
+        }
 
-		String lockKey = RedisUtil.getRedisKey(RedisKey.REDIS_GOODS_UPDATE_LOCK, stockLogStorageAO.getGoodsId() + "");
-		try {
-			redisLock.lock(lockKey);
+        String lockKey = RedisUtil.getRedisKey(RedisKey.REDIS_GOODS_UPDATE_LOCK, stockLogStorageAO.getGoodsId() + "");
+        try {
+            redisLock.lock(lockKey);
 
-			boolean result = stockStorageService.storage(stockLogStorageAO);
+            boolean result = stockStorageService.storage(stockLogStorageAO);
 
-			return RestResult.success(result);
-		} finally {
-			redisLock.unlock(lockKey);
-		}
-	}
+            return RestResult.success(result);
+        } finally {
+            redisLock.unlock(lockKey);
+        }
+    }
 }

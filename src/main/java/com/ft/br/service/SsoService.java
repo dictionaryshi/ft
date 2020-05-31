@@ -12,34 +12,34 @@ import com.ft.web.model.UserBO;
  * @author shichunyang
  */
 public interface SsoService {
-	/**
-	 * 死锁测试
-	 *
-	 * @param lockId1 锁定id
-	 * @param lockId2 锁定id
-	 */
-	void deadLock(int lockId1, int lockId2);
+    /**
+     * 死锁测试
+     *
+     * @param lockId1 锁定id
+     * @param lockId2 锁定id
+     */
+    void deadLock(int lockId1, int lockId2);
 
-	/**
-	 * 获取图片验证码
-	 *
-	 * @return 图片验证码
-	 */
-	CodeBO getCode();
+    /**
+     * 获取图片验证码
+     *
+     * @return 图片验证码
+     */
+    CodeBO getCode();
 
-	/**
-	 * 登陆
-	 *
-	 * @param loginAO 登录录入数据
-	 * @return sso token
-	 */
-	TokenBO login(LoginAO loginAO);
+    /**
+     * 登陆
+     *
+     * @param loginAO 登录录入数据
+     * @return sso token
+     */
+    TokenBO login(LoginAO loginAO);
 
-	/**
-	 * 获取当前用户信息
-	 *
-	 * @param currentUserAO token
-	 * @return 当前登陆用户信息
-	 */
-	UserBO currentUser(CurrentUserAO currentUserAO);
+    /**
+     * 获取当前用户信息
+     *
+     * @param currentUserAO token
+     * @return 当前登陆用户信息
+     */
+    UserBO currentUser(CurrentUserAO currentUserAO);
 }

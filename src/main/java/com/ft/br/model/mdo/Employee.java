@@ -12,22 +12,22 @@ import java.util.List;
  */
 @Data
 public class Employee {
-	private String name;
-	private Integer age;
+    private String name;
+    private Integer age;
 
-	public Employee(String name, int age) {
-		this.name = name;
-		this.age = age;
-	}
+    public Employee(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
 
-	public Employee() {
-	}
+    public Employee() {
+    }
 
-	public static final List<Employee> LIST = Arrays.asList(
-			new Employee("张三", 30),
-			new Employee("李四", 20),
-			new Employee("王五", 10),
-			new Employee("赵六", 50),
-			new Employee("田七", 40)
-	);
+    public static final List<Employee> LIST = Arrays.asList(
+            new Employee("张三", 30),
+            new Employee("李四", 20),
+            new Employee("王五", 10),
+            new Employee("赵六", 50),
+            new Employee("田七", 40)
+    );
 }

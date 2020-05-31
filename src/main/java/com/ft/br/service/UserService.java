@@ -10,11 +10,11 @@ import java.util.Map;
  */
 public interface UserService {
 
-	/**
-	 * 批量获取用户名
-	 *
-	 * @param ids 用户id集合
-	 * @return 用户名集合
-	 */
-	Map<Integer, String> listUserNamesByIds(List<Integer> ids);
+    /**
+     * 批量获取用户名
+     *
+     * @param ids 用户id集合
+     * @return 用户名集合
+     */
+    Map<Integer, String> listUserNamesByIds(List<Integer> ids);
 }
