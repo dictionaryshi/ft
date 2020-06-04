@@ -10,6 +10,7 @@ import com.ft.br.service.StockStorageService;
 import com.ft.dao.stock.model.StockLogDO;
 import com.ft.db.annotation.UseMaster;
 import com.ft.db.constant.DbConstant;
+import com.ft.util.LogUtil;
 import com.ft.util.exception.FtException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -61,9 +62,9 @@ public class StockStorageOutServiceImpl implements StockStorageService {
         stockLogDO.setGoodsNumber(goodsNumber);
 
         if (goodsNumber > beforeStockNumber) {
-            FtException.throwException("商品库存数量不足",
+            FtException.throwException(LogUtil.build("商品库存数量不足",
                     "goodsId", goodsId + "",
-                    "stockNumber", beforeStockNumber + "");
+                    "stockNumber", beforeStockNumber + ""));
         }
 
         // 操作库存

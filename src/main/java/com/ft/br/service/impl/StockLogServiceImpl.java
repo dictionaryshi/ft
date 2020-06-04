@@ -14,6 +14,7 @@ import com.ft.dao.stock.model.GoodsDO;
 import com.ft.dao.stock.model.OrderDO;
 import com.ft.dao.stock.model.StockLogDO;
 import com.ft.db.model.PageResult;
+import com.ft.util.LogUtil;
 import com.ft.util.ObjectUtil;
 import com.ft.util.exception.FtException;
 import com.google.common.collect.Lists;
@@ -96,16 +97,16 @@ public class StockLogServiceImpl implements StockLogService {
         int goodsId = stockLogStorageAO.getGoodsId();
         GoodsDO goodsDO = goodsService.get(goodsId);
         if (goodsDO == null) {
-            FtException.throwException("商品不存在",
-                    "goodsId", goodsId + "");
+            FtException.throwException(LogUtil.build("商品不存在",
+                    "goodsId", goodsId + ""));
         }
 
         Long orderId = stockLogStorageAO.getOrderId();
         if (orderId != null) {
             OrderDO orderDO = orderMapper.selectByPrimaryKey(orderId);
             if (orderDO == null) {
-                FtException.throwException("订单不存在",
-                        "orderId", orderId + "");
+                FtException.throwException(LogUtil.build("订单不存在",
+                        "orderId", orderId + ""));
             }
         }
 

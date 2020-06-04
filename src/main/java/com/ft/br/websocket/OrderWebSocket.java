@@ -2,7 +2,6 @@ package com.ft.br.websocket;
 
 import com.ft.br.service.impl.GoodsServiceImpl;
 import com.ft.util.*;
-import com.ft.util.model.LogBO;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
 import org.springframework.stereotype.Component;
@@ -29,28 +28,25 @@ public class OrderWebSocket {
     public void onOpen(@PathParam("oid") Integer oid, Session session) {
         ORDER_WEB_SOCKET.put(session, oid);
 
-        LogBO logBO = LogUtil.log("socket add",
+        log.info(LogUtil.build("socket add",
                 "oid", oid + "",
-                "total", ORDER_WEB_SOCKET.size() + "");
-        log.info(logBO.getLogPattern(), logBO.getParams());
+                "total", ORDER_WEB_SOCKET.size() + ""));
     }
 
     @OnError
     public void onError(Session session, Throwable throwable) {
-        LogBO logBO = LogUtil.log("socket error", throwable,
+        log.warn(LogUtil.build("socket error", throwable,
                 "oid", ORDER_WEB_SOCKET.get(session) + "",
-                "total", ORDER_WEB_SOCKET.size() + "");
-        log.warn(logBO.getLogPattern(), logBO.getParams());
+                "total", ORDER_WEB_SOCKET.size() + ""));
     }
 
     @OnClose
     public void onClose(Session session) {
         Integer oid = ORDER_WEB_SOCKET.remove(session);
 
-        LogBO logBO = LogUtil.log("socket close",
+        log.info(LogUtil.build("socket close",
                 "oid", oid + "",
-                "total", ORDER_WEB_SOCKET.size() + "");
-        log.info(logBO.getLogPattern(), logBO.getParams());
+                "total", ORDER_WEB_SOCKET.size() + ""));
     }
 
     @OnMessage
@@ -60,9 +56,8 @@ public class OrderWebSocket {
         GoodsServiceImpl goodsService = SpringContextUtil.getBean(GoodsServiceImpl.class);
         sendMessage(session, JsonUtil.object2Json(goodsService.get(ORDER_WEB_SOCKET.get(session))) + "_" + message);
 
-        LogBO logBO = LogUtil.log("socket message",
+        log.info(LogUtil.build("socket message",
                 "oid", ORDER_WEB_SOCKET.get(session) + "",
-                "total", ORDER_WEB_SOCKET.size() + "");
-        log.info(logBO.getLogPattern(), logBO.getParams());
+                "total", ORDER_WEB_SOCKET.size() + ""));
     }
 }

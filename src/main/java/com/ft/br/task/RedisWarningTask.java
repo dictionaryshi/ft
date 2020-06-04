@@ -7,7 +7,6 @@ import com.ft.util.DateUtil;
 import com.ft.util.LogUtil;
 import com.ft.util.NumberUtil;
 import com.ft.util.ObjectUtil;
-import com.ft.util.model.LogBO;
 import com.ft.web.plugin.MailUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -84,13 +83,12 @@ public class RedisWarningTask {
             double targetRatio = 2.0;
             int minimumFlow = 10;
             if (flowIncrementRatio > targetRatio && flow > minimumFlow) {
-                LogBO logBO = LogUtil.log("流量报警",
+                log.info(LogUtil.build("流量报警",
                         "applicationName", warnKey,
                         "flow", flow + "",
                         "front", front + "",
                         "after", after + "",
-                        "flowIncrementRatio", flowIncrementRatio + "");
-                log.info(logBO.getLogPattern(), logBO.getParams());
+                        "flowIncrementRatio", flowIncrementRatio + ""));
                 String message = "服务==>" + warnKey
                         + ", 时间==>" + DateUtil.date2Str(DateUtil.getCurrentDate(), DateUtil.DATE_PATTERN_MILLISECOND)
                         + ", 5秒内流量陡增超过200%"
@@ -102,8 +100,7 @@ public class RedisWarningTask {
                 try {
                     mailUtil.send(new String[]{"903031015@qq.com"}, "903031015@qq.com", "流量警报", message, null, null);
                 } catch (Exception e) {
-                    logBO = LogUtil.log("流量警报error", e);
-                    log.error(logBO.getLogPattern(), logBO.getParams());
+                    log.error(LogUtil.build("流量警报error", e));
                 }
             }
 

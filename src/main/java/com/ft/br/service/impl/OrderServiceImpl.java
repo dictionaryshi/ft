@@ -25,7 +25,6 @@ import com.ft.util.JsonUtil;
 import com.ft.util.LogUtil;
 import com.ft.util.ObjectUtil;
 import com.ft.util.exception.FtException;
-import com.ft.util.model.LogBO;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -79,8 +78,8 @@ public class OrderServiceImpl implements OrderService {
 
         OrderDO orderDO = ObjectUtil.copy(orderAddAO, OrderDO.class);
         if (orderDO == null) {
-            FtException.throwException("订单信息copy失败",
-                    "orderAddAO", JsonUtil.object2Json(orderAddAO));
+            FtException.throwException(LogUtil.build("订单信息copy失败",
+                    "orderAddAO", JsonUtil.object2Json(orderAddAO)));
         }
 
         orderDO.setStatus(OrderStatusEnum.WAIT_TO_CONFIRMED.getStatus());
@@ -101,8 +100,8 @@ public class OrderServiceImpl implements OrderService {
 
         OrderDO update = ObjectUtil.copy(orderAddUpdateAO, OrderDO.class);
         if (update == null) {
-            FtException.throwException("订单信息copy失败",
-                    "orderAddUpdateAO", JsonUtil.object2Json(orderAddUpdateAO));
+            FtException.throwException(LogUtil.build("订单信息copy失败",
+                    "orderAddUpdateAO", JsonUtil.object2Json(orderAddUpdateAO)));
         }
 
         orderMapper.updateByPrimaryKeySelective(update);
@@ -387,9 +386,8 @@ public class OrderServiceImpl implements OrderService {
     private void outStock(Long orderId, int userId) {
         List<ItemDO> itemDOS = itemMapper.selectByOrderId(orderId);
         if (ObjectUtil.isEmpty(itemDOS)) {
-            LogBO logBO = LogUtil.log("订单项不存在, 出库失败",
-                    "orderId", orderId + "");
-            log.info(logBO.getLogPattern(), logBO.getParams());
+            log.info(LogUtil.build("订单项不存在, 出库失败",
+                    "orderId", orderId + ""));
             return;
         }
 
@@ -408,8 +406,8 @@ public class OrderServiceImpl implements OrderService {
                 }
 
                 if (goodsNumber > goodsDO.getNumber()) {
-                    FtException.throwException("商品库存不足",
-                            "商品名称", goodsDO.getName());
+                    FtException.throwException(LogUtil.build("商品库存不足",
+                            "商品名称", goodsDO.getName()));
                 }
 
                 StockLogDO stockLogDO = new StockLogDO();
@@ -472,9 +470,8 @@ public class OrderServiceImpl implements OrderService {
     private void backStock(Long orderId, int userId) {
         List<ItemDO> itemDOS = itemMapper.selectByOrderId(orderId);
         if (ObjectUtil.isEmpty(itemDOS)) {
-            LogBO logBO = LogUtil.log("订单项不存在, 入库失败",
-                    "orderId", orderId + "");
-            log.info(logBO.getLogPattern(), logBO.getParams());
+            log.info(LogUtil.build("订单项不存在, 入库失败",
+                    "orderId", orderId + ""));
             return;
         }
 
