@@ -10,6 +10,7 @@ import com.ft.db.annotation.PageParamCheck;
 import com.ft.db.model.PageResult;
 import com.ft.redis.lock.RedisLock;
 import com.ft.redis.util.RedisUtil;
+import com.ft.util.LogUtil;
 import com.ft.util.exception.FtException;
 import com.ft.util.model.RestResult;
 import com.ft.web.annotation.LoginCheck;
@@ -65,8 +66,8 @@ public class StockLogController {
         int type = stockLogStorageAO.getType();
         StockStorageService stockStorageService = StockStorageService.STOCK_STORAGE_SERVICE_MAP.get(type);
         if (stockStorageService == null) {
-            FtException.throwException("操作类型不正确",
-                    "type", type + "");
+            FtException.throwException(LogUtil.build("操作类型不正确",
+                    "type", type + ""));
         }
 
         String lockKey = RedisUtil.getRedisKey(RedisKey.REDIS_GOODS_UPDATE_LOCK, stockLogStorageAO.getGoodsId() + "");

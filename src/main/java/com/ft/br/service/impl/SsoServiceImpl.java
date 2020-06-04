@@ -14,7 +14,6 @@ import com.ft.redis.base.ValueOperationsCache;
 import com.ft.redis.util.RedisUtil;
 import com.ft.util.*;
 import com.ft.util.exception.FtException;
-import com.ft.util.model.LogBO;
 import com.ft.web.model.UserBO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -94,9 +93,8 @@ public class SsoServiceImpl implements SsoService {
     private UserBO checkUserAndPassword(LoginAO loginAO) {
         UserDO userDO = userMapper.getUserByUserName(loginAO.getUsername());
         if (userDO == null) {
-            LogBO logBO = LogUtil.log("用户名不存在",
-                    "username", loginAO.getUsername());
-            log.info(logBO.getLogPattern(), logBO.getParams());
+            log.info(LogUtil.build("用户名不存在",
+                    "username", loginAO.getUsername()));
             FtException.throwException("用户名或密码不正确");
         }
 
@@ -122,17 +120,15 @@ public class SsoServiceImpl implements SsoService {
         String codeIdKey = RedisUtil.getRedisKey(RedisKey.REDIS_VERIFICATION_CODE, codeId);
         String redisCode = valueOperationsCache.get(codeIdKey);
         if (StringUtil.isNull(redisCode)) {
-            LogBO logBO = LogUtil.log("验证码不存在或已过期",
-                    "codeId", codeId);
-            log.info(logBO.getLogPattern(), logBO.getParams());
+            log.info(LogUtil.build("验证码不存在或已过期",
+                    "codeId", codeId));
             return errorMessage;
         }
 
         if (!redisCode.equalsIgnoreCase(loginAO.getCode())) {
-            LogBO logBO = LogUtil.log("验证码比对不一致",
+            log.info(LogUtil.build("验证码比对不一致",
                     "code", loginAO.getCode(),
-                    "redisCode", redisCode);
-            log.info(logBO.getLogPattern(), logBO.getParams());
+                    "redisCode", redisCode));
             return errorMessage;
         }
 
