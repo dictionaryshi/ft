@@ -63,7 +63,7 @@ public class HttpTest {
             Map<String, Object> params = new TreeMap<>();
             params.put("oid", i + "");
             params.put("msg", "签名测试+=%" + i);
-            RsaCheckUtil.initParam(params, "scy");
+            RsaCheckUtil.sign(params, "scy");
 
             HttpParam httpParam = new HttpParam();
             httpParam.setUrl(url);
