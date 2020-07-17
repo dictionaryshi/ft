@@ -7,7 +7,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.spring.web.plugins.Docket;
-import springfox.documentation.swagger2.annotations.EnableSwagger2WebMvc;
 
 /**
  * SwaggerConfig
@@ -16,7 +15,6 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2WebMvc;
  */
 @Profile(value = {SpringContextUtil.ENV_DEV, SpringContextUtil.ENV_STAG})
 @Configuration
-@EnableSwagger2WebMvc
 public class SwaggerConfig {
 
     @Bean
