@@ -1,6 +1,7 @@
 package com.ft.br;
 
 import com.ft.util.thread.ThreadPoolUtil;
+import com.ft.web.model.HttpOptions;
 import com.ft.web.model.HttpParam;
 import com.ft.web.model.HttpUploadBO;
 import com.ft.web.util.HttpThreadUtil;
@@ -24,9 +25,7 @@ public class HttpTest {
         String url = "http://localhost:9001/upload";
         HttpParam httpParam = new HttpParam();
         httpParam.setUrl(url);
-        httpParam.setResponseCharset(DEFAULT_RESPONSE_CHARSET);
-        httpParam.setConnectTimeout(CONNECT_TIMEOUT);
-        httpParam.setReadTimeout(READ_TIMEOUT);
+        httpParam.setOptions(HttpOptions.build());
 
         Map<String, Object> textMap = new HashMap<String, Object>(16) {
             {
@@ -67,8 +66,7 @@ public class HttpTest {
 
             HttpParam httpParam = new HttpParam();
             httpParam.setUrl(url);
-            httpParam.setConnectTimeout(10_000);
-            httpParam.setReadTimeout(10_000);
+            httpParam.setOptions(HttpOptions.build());
             httpParam.setTextMap(params);
             httpParam.setBatchKey(i + "");
             httpParams.add(httpParam);
