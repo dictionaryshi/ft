@@ -14,10 +14,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
-import org.springframework.cloud.client.ServiceInstance;
-import org.springframework.cloud.client.discovery.DiscoveryClient;
-import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
-import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.retry.annotation.Backoff;
@@ -47,8 +43,6 @@ import java.util.*;
 @Slf4j
 @EnableScheduling
 @EnableRetry
-@EnableDiscoveryClient
-@EnableFeignClients(basePackages = CommonUtil.BASE_PACKAGE)
 public class FtApplication {
 
     @Autowired
@@ -154,17 +148,6 @@ public class FtApplication {
         }
 
         return "success";
-    }
-
-    @Autowired
-    private DiscoveryClient discoveryClient;
-
-    @GetMapping("/discovery")
-    public String discovery() {
-        List<String> services = discoveryClient.getServices();
-        System.out.println(JsonUtil.object2Json(services));
-        List<ServiceInstance> serviceInstances = discoveryClient.getInstances("business");
-        return JsonUtil.object2Json(serviceInstances);
     }
 
     /**

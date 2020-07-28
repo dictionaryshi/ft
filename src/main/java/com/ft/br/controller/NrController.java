@@ -1,13 +1,9 @@
 package com.ft.br.controller;
 
-import com.ft.br.feign.RemoteService;
 import com.ft.br.model.dto.ValidParent;
 import com.ft.br.service.SsoService;
 import com.ft.br.websocket.OrderWebSocket;
 import com.ft.dao.stock.model.UserDO;
-import com.ft.rpc.api.model.RpcParam;
-import com.ft.rpc.api.model.RpcResult;
-import com.ft.util.DateUtil;
 import com.ft.util.ExcelUtil;
 import com.ft.util.JsonUtil;
 import com.ft.util.model.RestResult;
@@ -35,30 +31,10 @@ import java.util.concurrent.TimeUnit;
 public class NrController {
 
     @Autowired
-    private RemoteService remoteService;
-
-    @Autowired
     private SsoService ssoService;
 
     @Autowired
     private ExecutorService executorService;
-
-    @GetMapping("/feign")
-    public String feign() {
-        RpcParam rpcParam = new RpcParam();
-        rpcParam.setUsername("春阳put");
-        rpcParam.setAge(29);
-        rpcParam.setBirth(DateUtil.getCurrentDateStr());
-        RestResult<RpcResult> putResult = remoteService.put(rpcParam);
-
-        rpcParam = new RpcParam();
-        rpcParam.setUsername("春阳get");
-        rpcParam.setAge(30);
-        rpcParam.setBirth("2019-11-11 12:21:20");
-        RestResult<RpcResult> getResult = remoteService.get(rpcParam);
-
-        return JsonUtil.object2Json(putResult) + "_" + JsonUtil.object2Json(getResult);
-    }
 
     @PutMapping("/valid-model")
     public String valid(@RequestBody @Valid ValidParent validParent) {
