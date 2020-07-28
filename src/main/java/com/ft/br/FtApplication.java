@@ -48,9 +48,6 @@ public class FtApplication {
     @Autowired
     private GoodsService goodsService;
 
-    @Value("${spring.cloud.client.ip-address}")
-    private String ip;
-
     @Value("${server.port}")
     private Integer port;
 
@@ -64,7 +61,7 @@ public class FtApplication {
                 new HashMap<String, Object>(16) {
                     {
                         put("profile", profile);
-                        put("ip", ip);
+                        put("ip", IpUtil.getIp());
                         put("port", port);
                         put("cpu", osmb.getAvailableProcessors());
                         put("os", osmb.getName());
