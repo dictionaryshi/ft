@@ -6,14 +6,8 @@
 </head>
 <body>
 </body>
-<script src="native.js"></script>
 <script>
-    if ("WebSocket" in window) {
-    } else {
-        alert("浏览器不支持socket");
-    }
-
-    var socket = new WebSocket("ws://localhost:9001/order/socket/" + getParam("oid"));
+    const socket = new WebSocket("ws://localhost:9001/order/socket/1");
     socket.onopen = function () {
         socket.send("hello world!!!");
     };
