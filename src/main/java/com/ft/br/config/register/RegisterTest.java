@@ -1,9 +1,7 @@
 package com.ft.br.config.register;
 
-import com.ft.util.ClassUtil;
-import com.ft.util.DateUtil;
-import com.ft.util.ReflectionsUtil;
-import com.ft.util.StringUtil;
+import com.ft.br.model.mdo.City;
+import com.ft.util.*;
 import com.google.common.collect.Sets;
 import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.beans.BeansException;
@@ -13,11 +11,11 @@ import org.springframework.beans.factory.config.RuntimeBeanReference;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.BeanDefinitionRegistryPostProcessor;
+import org.springframework.boot.context.properties.bind.Bindable;
+import org.springframework.boot.context.properties.bind.Binder;
 import org.springframework.stereotype.Component;
 
-import java.util.Arrays;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Stream;
 
 /**
@@ -74,6 +72,8 @@ public class RegisterTest implements BeanDefinitionRegistryPostProcessor {
 
             }, field -> !Objects.isNull(ClassUtil.findAnnotation(field, Register.class)));
         });
+
+        List<City> cities = Binder.get(SpringContextUtil.getEnvironment()).bind(City.PREFIX, Bindable.listOf(City.class)).orElse(Collections.emptyList());
     }
 
     @Override
