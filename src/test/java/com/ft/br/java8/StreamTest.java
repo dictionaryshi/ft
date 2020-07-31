@@ -8,6 +8,7 @@ import org.junit.Test;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 public class StreamTest {
@@ -226,5 +227,10 @@ public class StreamTest {
 
         Map<Integer, UserDO> userMap = Stream.of(u1, u2, u3, u4).collect(Collectors.toMap(UserDO::getId, Function.identity(), (oldValue, newValue) -> newValue));
         System.out.println(JsonUtil.object2Json(userMap));
+    }
+
+    @Test
+    public void range() {
+        IntStream.range(0, 10).forEach(System.out::println);
     }
 }
