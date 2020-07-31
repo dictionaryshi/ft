@@ -1,14 +1,21 @@
 package com.ft.br.model.mdo;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 /**
  * City
  *
  * @author shichunyang
  */
-@Data
+@Getter
+@Setter
+@ToString
 public class City {
+
+    public static final String PREFIX = "customize.cities";
+
     private Integer id;
 
     private String name;
