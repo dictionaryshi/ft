@@ -20,15 +20,6 @@ import java.util.Map;
 public interface UserMapper extends UserDOMapper {
 
     /**
-     * 根据用户名查询用户信息
-     *
-     * @param username 用户名
-     * @return 用户信息
-     */
-    @Select("select * from `user` where username = #{username} limit 1")
-    UserDO getUserByUserName(String username);
-
-    /**
      * 死锁测试
      *
      * @param id 主键
