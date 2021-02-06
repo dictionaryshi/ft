@@ -1,9 +1,0 @@
-com:
-  ft:
-    profile: dev-chunyang
-
-server:
-  port: 9001
-
-cookieDomain: taobao.com
-
