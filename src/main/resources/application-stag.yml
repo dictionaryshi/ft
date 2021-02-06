@@ -1,9 +1,0 @@
-com:
-  ft:
-    profile: stag-xuting
-
-server:
-  port: 9001
-
-cookieDomain: taobao.com
-
