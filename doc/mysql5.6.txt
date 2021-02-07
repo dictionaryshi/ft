@@ -31,7 +31,7 @@ character-set-server=utf8mb4
 [mysql]
 default-character-set=utf8mb4
 
-CREATE USER warehouse_read@'%' IDENTIFIED BY 'flzx@3qc';
+CREATE USER warehouse_read@'%' IDENTIFIED BY 'Flzx@3qc';
 GRANT SELECT ON *.* TO warehouse_read@'%';
 
 查看数据库编码:mysql> SHOW VARIABLES LIKE '%char%';
