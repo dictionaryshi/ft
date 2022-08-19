@@ -56,3 +56,5 @@ git配色:
 
 jdk  kafka  maven  nginx  redis  zookeeper
 
+mvn dependency:tree | grep fastjson
+
