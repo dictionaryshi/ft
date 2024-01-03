@@ -72,8 +72,6 @@ public class RegisterTest implements BeanDefinitionRegistryPostProcessor {
 
             }, field -> !Objects.isNull(ClassUtil.findAnnotation(field, Register.class)));
         });
-
-        List<City> cities = Binder.get(SpringContextUtil.getEnvironment()).bind(City.PREFIX, Bindable.listOf(City.class)).orElse(Collections.emptyList());
     }
 
     @Override
